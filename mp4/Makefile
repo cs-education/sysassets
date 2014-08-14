@@ -13,9 +13,11 @@ clean:
 	rm -rf *.ogv *.webm
 
 %.ogv : %.mp4
+	rm -f $@ 
 	$(FFMPEG) -i $< $(FFMPEG_OGG_FLAGS=) $@
 
 %.webm : %.mp4
+	rm -f $@ 
 	$(FFMPEG) -i $< $(FFMPEG_WEBM_FLAGS=) $@
 
 
