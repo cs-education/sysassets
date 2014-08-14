@@ -78,7 +78,32 @@ Open another file with an illegal filename (e.g. "").
 Use perror to send the error message to your log file.
 Verify the contents of your log file using "cat errors.txt" in the terminal window.
 <a href="http://angrave.github.io/sys/compile.html" target="_blank">Go</a>
-</pre></body>
+</pre>
+
+<h1>Not all bytes are 8 bits?<h1>
+
+<h2>Watch</h2><video id="div_video" class="video-js vjs-default-skin" controls preload="auto" width="960" height="540" poster="" data-setup="{}">  
+  <source src="http://angrave.github.io/sysassets/mp4/0050-NotAllBytesAre8Bits.mp4"  type="video/mp4"></video>
+<h2>Play</h2>
+Use limits.h to answer: What is the largest value that you can store in a short and long on your system?
+Use sizeof() operator to answer: How many bytes are a short, long, float and double?
+
+<h1>Follow the int pointer</h1>
+<h2>Watch</h2><video id="div_video" class="video-js vjs-default-skin" controls preload="auto" width="960" height="540" poster="" data-setup="{}">  
+  <source src="http://angrave.github.io/sysassets/mp4/0060-FollowTheIntPointer.mp4"  type="video/mp4"></video>
+<h2>Play</h2>
+int data[5] = {10,30,60,50,40};
+Can you ...
+Print the contents of an int array using only * to read the array values?
+Swap the data from the last entry into the first entry using '[]' syntax? 
+
+<h1>Until we reach the end, the character string must go on</h1>
+<h2>Watch</h2><video id="div_video" class="video-js vjs-default-skin" controls preload="auto" width="960" height="540" poster="" data-setup="{}">  
+  <source src="http://angrave.github.io/sysassets/mp4/0070-CharacterPointers-v2.mp4"  type="video/mp4"></video>
+<h2>Play</h2>
+Can you use print("%c %d\n", *ptr, *ptr) to print out the characters of the message "A B C 0123" (one character per line)
+Can you write a C program that uses char* pointers to print a message in reverse? e.g. "dlroW olleH" should be printed as "Hello World"
+</body>
 </html>
 
 
