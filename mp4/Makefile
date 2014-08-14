@@ -1,14 +1,21 @@
 
 SOURCES=$(wildcard *mp4)
-OBJECTS=$(SOURCES:.mp4=.ogv)
+OGG_FILES=$(SOURCES:.mp4=.ogv)
+WEBM_FILES=$(SOURCES:.mp4=.webm)
+  
 FFMPEG=ffmpeg
-FFMPEGFLAGS=-c:v libtheora -c:a libvorbis
-FFMPEG_OUT_FLAGS=-qscale:v 7
+FFMPEG_OGG_FLAGS=-c:v libtheora -c:a libvorbis -qscale:v 7
+FFMPEG_WEBM_FLAGS=-q:v 7 -c:v libvpx -c:a libvorbis 
 
-all: $(OBJECTS)
+all: $(OGG_FILES) $(WEBM_FILES)
 
 clean:
-	rm -rf *.ogv
+	rm -rf *.ogv *.webm
 
 %.ogv : %.mp4
-	$(FFMPEG) -i $< $(FFMPEGFLAGS) $(FFMPEG_OUT_FLAGS) $@
+	$(FFMPEG) -i $< $(FFMPEG_OGG_FLAGS=) $@
+
+%.webm : %.mp4
+	$(FFMPEG) -i $< $(FFMPEG_WEBM_FLAGS=) $@
+
+
