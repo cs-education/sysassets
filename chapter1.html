@@ -31,7 +31,13 @@ Hint you&apos;ll need an &num;include and a 'main' function that returns an int.
 <source src="http://angrave.github.io/sysassets/mp4/0020-HelloStdErr-24fps600kbs.mp4"  type="video/mp4">
 <source src="http://angrave.github.io/sysassets/mp4/0020-HelloStdErr-24fps600kbs.webm"  type="video/webm">
 <source src="http://angrave.github.io/sysassets/mp4/0020-HelloStdErr-24fps600kbs.ogv"  type="video/ogg">
-</video>
+</video><br>
+<pre>
+Comments: In the video I say &quot;C has no boolean type.&quot That's a bit of a half-truth. 
+If you're using a more modern specification of C, C99 or newer, you can now #include stdbool.h 
+which includes a definition of a type 'bool' but it just
+defines 'true' to be integer 1 and 'false' to be integer 0!
+</pre>
 <h2>Play</h2>
 <pre>Spot the mistake(s) in the following code
 for(len = 0; len &lt;5 ; len++) {
@@ -40,6 +46,10 @@ for(len = 0; len &lt;5 ; len++) {
 }
 And use your corrected version in a complete C program to print the following seven lines. 
 Return the value 7. Verify that your program returns 7 typing &quot;echo $?&quot; in the terminal window after your program has just run.
+Return the value 1023. 
+Why does &quot;echo $?&quot; in the terminal window after your program has just run not print 1023? 
+Hint: Some testing or web searching can tell you how many bits are actually used.
+
 I think
 I thin
 I thi
