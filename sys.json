@@ -1,0 +1,37 @@
+
+[
+{ keys: {"Vidbase1" : "http://..." }
+
+},
+
+{
+"name":"Chapter 1",
+"challenge_html": "chapter1documentation.html",
+"sections": [
+{
+   name:"Hello World (System call style)",
+   activities: [
+{ "type": "video", "file:","Vidbase1/mp4/0100-CharArraySearching", topics:"a\nb\nc\n"}, 
+{type:play, "code":"int main() {return 0;}","gcc_opts":"-lm", prog_args:"",text_div:"chapter1_1div" }
+   ]
+
+}
+
+
+]
+
+}
+
+]
+
+
+chapter1documentation.html
+<description>Introducing Sys Prog</description>
+<div id=chapter1_1div>
+	<h1>time to play</h1>
+	<div>Here's some code and a picture</div>
+	<pre>bashdbhasbdasd asjd<
+	asdjahsjdkashd</rep>
+	Good luck!
+	Imagine there's a picture here. <img src=somewhere title=apicture/>
+</div>
