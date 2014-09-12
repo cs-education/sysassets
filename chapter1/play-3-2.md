@@ -1,6 +1,6 @@
-# Writing to files - 1 #
-Use your favorite search engine to find the man page for `open` (hint: try "man open").
-Can you create a program from scratch to create a file `message.txt`, write the short message "hello!" and close the file handle?
-Your text file should only be readable by you.
-If you run your program again (e.g. `./program` in the terminal window)
-Verify the contents of the file using `cat message.txt` in the terminal window.
+# Writing to files - 2 #
+Modify the program so that
+
+* Anyone can read your text file (hint: which mode flag corresponds to "others have read permission"?)
+* Rather than truncate the file back to zero length each time, new text is appended to the end.
+  For example, running your program twice, and then `cat message.txt` you should see "hello!hello!".

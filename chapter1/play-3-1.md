@@ -1,5 +1,6 @@
-# Hello World (System call style) #
-Starting with an empty file, can you write a complete C program to print out your favorite haiku poem, saying or famous CS quote?
-Use `write` system call to print your text.
-Your main method should return an integer value zero (to mean it completed successfully).
-Hint you'll need an `#include` and a `main` function that returns an int.
+# Writing to files - 1 #
+Use your favorite search engine to find the man page for `open` (hint: try "man open").
+Can you create a program from scratch to create a file `message.txt`, write the short message "hello!" and close the file handle?
+Your text file should only be readable by you.
+If you run your program again (e.g. `./program` in the terminal window)
+Verify the contents of the file using `cat message.txt` in the terminal window.

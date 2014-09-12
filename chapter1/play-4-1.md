@@ -1,6 +1,6 @@
-# Writing to files - 1 #
-Use your favorite search engine to find the man page for `open` (hint: try "man open").
-Can you create a program from scratch to create a file `message.txt`, write the short message "hello!" and close the file handle?
-Your text file should only be readable by you.
-If you run your program again (e.g. `./program` in the terminal window)
-Verify the contents of the file using `cat message.txt` in the terminal window.
+# Not everything is a system call #
+Send standard error to a file `errors.txt` (Hint: 'close' and 'open' are useful).
+The file should always be truncated.
+Open another file with an illegal filename (e.g. `""`).
+Use perror to send the error message to your log file.
+Verify the contents of your log file using `cat errors.txt` in the terminal window.
