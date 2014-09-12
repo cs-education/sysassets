@@ -1,37 +1,86 @@
-
-[
-{ keys: {"Vidbase1" : "http://..." }
-
-},
-
 {
-"name":"Chapter 1",
-"challenge_html": "chapter1documentation.html",
-"sections": [
-{
-   name:"Hello World (System call style)",
-   activities: [
-{ "type": "video", "file:","Vidbase1/mp4/0100-CharArraySearching", topics:"a\nb\nc\n"}, 
-{type:play, "code":"int main() {return 0;}","gcc_opts":"-lm", prog_args:"",text_div:"chapter1_1div" }
-   ]
-
+    "chapters": [
+        {
+            "name": "Chapter 1",
+            "description": "In which our intrepid hero battles standard out, standard error, file descriptors and writing to files.",
+            "sections": [
+                {
+                    "name": "Hello World (System call style)",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "/mp4/0010-HelloWorld-v2",
+                            "topics": "a\nb\nc\n"
+                        },
+                        {
+                            "type": "play",
+                            "code": "int main() {return 0;}",
+                            "gccOptions": "-lm -Wall -fmax-errors=10 -Wextra",
+                            "programCommandLineArgs": "",
+                            "docFile": "chapter1/play-1-1.md"
+                        }
+                    ]
+                },
+                {
+                    "name": "Hello Standard Error Stream",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "/mp4/0020-HelloStdErr-24fps600kbs",
+                            "topics": "a\nb\nc\n",
+                            "docFile": "chapter1/0020-HelloStdErr-Doc.md"
+                        },
+                        {
+                            "type": "play",
+                            "code": "int main() {return 0;}",
+                            "gccOptions": "-lm -Wall -fmax-errors=10 -Wextra",
+                            "programCommandLineArgs": "",
+                            "docFile": "chapter1/play-2-1.md"
+                        }
+                    ]
+                },
+                {
+                    "name": "Writing to files",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "/mp4/0030-OpenCreateAFile-650kb",
+                            "topics": "a\nb\nc\n"
+                        },
+                        {
+                            "type": "play",
+                            "code": "int main() {return 0;}",
+                            "gccOptions": "-lm -Wall -fmax-errors=10 -Wextra",
+                            "programCommandLineArgs": "",
+                            "docFile": "chapter1/play-3-1.md"
+                        },
+                        {
+                            "type": "play",
+                            "code": "int main() {return 0;}",
+                            "gccOptions": "-lm -Wall -fmax-errors=10 -Wextra",
+                            "programCommandLineArgs": "",
+                            "docFile": "chapter1/play-3-2.md"
+                        }
+                    ]
+                },
+                {
+                    "name": "Not everything is a system call",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "/mp4/0040-OpenErrorsPrintf-600kbs",
+                            "topics": "a\nb\nc\n"
+                        },
+                        {
+                            "type": "play",
+                            "code": "int main() {return 0;}",
+                            "gccOptions": "-lm -Wall -fmax-errors=10 -Wextra",
+                            "programCommandLineArgs": "",
+                            "docFile": "chapter1/play-4-1.md"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }
-
-
-]
-
-}
-
-]
-
-
-chapter1documentation.html
-<description>Introducing Sys Prog</description>
-<div id=chapter1_1div>
-	<h1>time to play</h1>
-	<div>Here's some code and a picture</div>
-	<pre>bashdbhasbdasd asjd<
-	asdjahsjdkashd</rep>
-	Good luck!
-	Imagine there's a picture here. <img src=somewhere title=apicture/>
-</div>
