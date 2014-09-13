@@ -126,6 +126,48 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "Chapter 3",
+            "description": "Program arguments, environment variables, working with character arrays (strings)",
+            "sections": [
+                {
+                    "name": "Program arguments argc argv",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0080-ProgramArguments"
+                        }
+                    ]
+                },
+                {
+                    "name": "Environment Variables",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0090-Environment"
+                        }
+                    ]
+                },
+                {
+                    "name": "String searching (Strings are just char arrays)",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0100-CharArraySearching"
+                        }
+                    ]
+                },
+                {
+                    "name": "Lifetime of automatic variables",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0110-PointersToAutomaticVariables-v2"
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
