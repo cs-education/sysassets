@@ -168,6 +168,48 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "Chapter 4",
+            "description": "Heap and stack memory. Working with structs.",
+            "sections": [
+                {
+                    "name": "Malloc, heap and time",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0120-TimeForMallocingHeapMemory"
+                        }
+                    ]
+                },
+                {
+                    "name": "Heap allocation Gotchas",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0130-HeapGotchas-DanglingPointersAndDoubleFree"
+                        }
+                    ]
+                },
+                {
+                    "name": "struct, typedefs and a linked list",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0140-StructTypedefLinkedList"
+                        }
+                    ]
+                },
+                {
+                    "name": "Duplicating strings, memory allocation and deallocation of structures",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0150-CreatingLinksStrdup"
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
