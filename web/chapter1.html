@@ -1,0 +1,105 @@
+<html>
+<head>
+<link href='http://fonts.googleapis.com/css?family=Poiret+One|Audiowide' rel='stylesheet' type='text/css'>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<link href="http://vjs.zencdn.net/4.7/video-js.css" rel="stylesheet">
+<script src="http://vjs.zencdn.net/4.7/video.js"></script>
+<style>
+h1 {font-family: 'Poiret One', cursive;}
+h2 {font-family: 'Audiowide', cursive;}
+</style>
+</head>
+
+
+<body>
+<h1>1.1 Hello World (System call style)</h1>
+<h2>Watch</h2><video id="div_video"  controls preload="none" width="960" height="540" class="video-js vjs-default-skin vjs-big-play-centered"  poster="" data-setup="{}">  
+  <source src="http://angrave.github.io/sysassets/mp4/0010-HelloWorld-v2.mp4"  type="video/mp4">
+  <source src="http://angrave.github.io/sysassets/mp4/0010-HelloWorld-v2.webm"  type="video/webm">
+  <source src="http://angrave.github.io/sysassets/mp4/0010-HelloWorld-v2.ogv"  type="video/ogg">
+</video>
+<h2>Play</h2>
+<pre>Starting with an empty file, can you write a complete C program to print out your favorite haiku poem, saying or famous CS quote? 
+Use 'write' system call to print your text.
+Your main method should return an integer value zero (to mean it completed successfully).
+Hint you&apos;ll need an &num;include and a 'main' function that returns an int.</p>
+<a href="http://angrave.github.io/sys/" target="_blank">Go</a>(opens a new window)
+</pre>
+
+<h1>1.2 Hello Standard Error Stream</h1>
+<h2>Watch</h2><video id="div_video"  controls preload="none" width="960" height="540" class="video-js vjs-default-skin vjs-big-play-centered"  poster="" data-setup="{}">  
+<source src="http://angrave.github.io/sysassets/mp4/0020-HelloStdErr-24fps600kbs.mp4"  type="video/mp4">
+<source src="http://angrave.github.io/sysassets/mp4/0020-HelloStdErr-24fps600kbs.webm"  type="video/webm">
+<source src="http://angrave.github.io/sysassets/mp4/0020-HelloStdErr-24fps600kbs.ogv"  type="video/ogg">
+</video><br>
+<pre>
+Comments: In the video I say &quot;C has no boolean type.&quot That's a bit of a half-truth. 
+If you're using a more modern specification of C, C99 or newer, you can now #include stdbool.h 
+which includes a definition of a type 'bool' but it just
+defines 'true' to be integer 1 and 'false' to be integer 0!
+</pre>
+<h2>Play</h2>
+<pre>Spot the mistake(s) in the following code
+for(len = 0; len &lt;5 ; len++) {
+  write(STDOUT_FNO,"I think", 6);
+  write(STDOUT_FILENUM,"\n", 6);
+}
+And use your corrected version in a complete C program to print the following seven lines. 
+Return the value 7. Verify that your program returns 7 typing &quot;echo $?&quot; in the terminal window after your program has just run.
+Return the value 1023. 
+Why does &quot;echo $?&quot; in the terminal window after your program has just run not print 1023? 
+Hint: Some testing or web searching can tell you how many bits are actually used.
+
+I think
+I thin
+I thi
+I th
+I t
+I 
+I
+<a href="http://angrave.github.io/sys/" target="_blank">Go</a>(opens a new window)
+</pre>
+
+<h1>1.3 Writing to files</h1>
+<h2>Watch</h2><video id="div_video"  controls preload="none" width="960" height="540" class="video-js vjs-default-skin vjs-big-play-centered"  poster="" data-setup="{}">  
+  <source src="http://angrave.github.io/sysassets/mp4/0030-OpenCreateAFile-650kb.mp4"  type="video/mp4">
+  <source src="http://angrave.github.io/sysassets/mp4/0030-OpenCreateAFile-650kb.webm"  type="video/webm">
+  <source src="http://angrave.github.io/sysassets/mp4/0030-OpenCreateAFile-650kb.ogv"  type="video/ogg"></video>
+<h2>Play</h2>
+<h3>Part 1</h3>
+<pre>Use your favorite search engine to find the man page for open (hint try "man open")
+Can you create a program from scratch to create a file "message.txt", write a short message "hello!" and close the file handle.
+Your text file should only be readable by you.
+If you run your program again (e.g. "./program" in the terminal window)
+Verify the contents of the file using "cat message.txt" in the terminal window.
+<a href="http://angrave.github.io/sys/" target="_blank">Go</a>
+</pre>
+
+<h3>Part 2</h3>
+<pre>Modify the program so that 
+Anyone can read your text file (hint which mode flag corresponds to "others have read permission")
+Rather than truncate the file back to zero length each time, new text is appended to the end.
+For example, running your program twice, and then "cat message.txt" you should see "hello!hello!"
+<a href="http://angrave.github.io/sys/" target="_blank">Go</a>
+</pre>
+
+<h1>1.4 Not everything is a system call</h1>
+<h2>Watch</h2><video id="div_video"  controls preload="none" width="960" height="540" class="video-js vjs-default-skin vjs-big-play-centered"  poster="" data-setup="{}">  
+<source src="http://angrave.github.io/sysassets/mp4/0040-OpenErrorsPrintf-600kbs.mp4"  type="video/mp4">
+<source src="http://angrave.github.io/sysassets/mp4/0040-OpenErrorsPrintf-600kbs.webm"  type="video/webm">
+<source src="http://angrave.github.io/sysassets/mp4/0040-OpenErrorsPrintf-600kbs.ogv"  type="video/ogg"></video>
+<h2>Play</h2>
+<pre>
+Send standard error to a file 'errors.txt' Hint: 'close' and 'open' are useful.
+The file should always be truncated
+Open another file with an illegal filename (e.g. "").
+Use perror to send the error message to your log file.
+Verify the contents of your log file using "cat errors.txt" in the terminal window.
+<a href="http://angrave.github.io/sys/" target="_blank">Go</a>
+</pre>
+
+</body>
+</html>
+
+
+
