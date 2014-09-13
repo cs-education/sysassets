@@ -243,6 +243,30 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "Chapter 6",
+            "description": "Introducing signals and process forking",
+            "sections": [
+                {
+                    "name": "Introducing signals and forks",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0190-SIGINT-SIGALRM"
+                        }
+                    ]
+                },
+                {
+                    "name": "Introducing fork and waitpid",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0200-forkwaitpid-forkbomb"
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
