@@ -210,6 +210,39 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "Chapter 5",
+            "description": "Text input and output and parsing using getchar, gets, getline",
+            "sections": [
+                {
+                    "name": "Reading characters, Trouble with gets",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0160-getputchar-gets-puts-v2"
+                        }
+                    ]
+                },
+                {
+                    "name": "Introducing sscanf and friends",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0170-scanf-intro"
+                        }
+                    ]
+                },
+                {
+                    "name": "getline is useful",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0180-getline"
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
