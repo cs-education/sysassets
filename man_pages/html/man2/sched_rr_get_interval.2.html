@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SCHED_RR_GET_INTERVAL</TITLE>
+</HEAD><BODY>
+<H1>SCHED_RR_GET_INTERVAL</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-04-28<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+sched_rr_get_interval - get the SCHED_RR interval for the named process
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/sched.h">sched.h</A>&gt;</B>
+
+<P>
+<B>int sched_rr_get_interval(pid_t </B><I>pid</I><B>, struct timespec * </B><I>tp</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>sched_rr_get_interval</B>()
+
+writes into the
+<I>timespec</I>
+
+structure pointed to by
+<I>tp</I>
+
+the round-robin time quantum for the process identified by
+<I>pid</I>.
+
+The specified process should be running under the
+<B>SCHED_RR</B>
+
+scheduling policy.
+<P>
+The
+<I>timespec</I>
+
+structure has the following form:
+<P>
+
+<PRE>
+struct timespec {
+    time_t tv_sec;    /* seconds */
+    long   tv_nsec;   /* nanoseconds */
+};
+</PRE>
+
+
+<P>
+If
+<I>pid</I>
+
+is zero, the time quantum for the calling process is written into
+<I>*tp</I>.
+
+
+
+
+
+
+
+
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>sched_rr_get_interval</B>()
+
+returns 0.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EFAULT</B>
+
+<DD>
+Problem with copying information to user space.
+<DT><B>EINVAL</B>
+
+<DD>
+Invalid pid.
+<DT><B>ENOSYS</B>
+
+<DD>
+The system call is not yet implemented (only on rather old kernels).
+<DT><B>ESRCH</B>
+
+<DD>
+Could not find a process with the ID
+<I>pid</I>.
+
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+POSIX systems on which
+<B>sched_rr_get_interval</B>()
+
+is available define
+<B>_POSIX_PRIORITY_SCHEDULING</B>
+
+in
+<I>&lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</I>.
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Linux notes</H3>
+
+POSIX does not specify any mechanism for controlling the size of the
+round-robin time quantum.
+Older Linux kernels provide a (nonportable) method of doing this.
+The quantum can be controlled by adjusting the process's nice value (see
+<B><A HREF="../man2/setpriority.2.html">setpriority</A></B>(2)).
+
+Assigning a negative (i.e., high) nice value results in a longer quantum;
+assigning a positive (i.e., low) nice value results in a shorter quantum.
+The default quantum is 0.1 seconds;
+the degree to which changing the nice value affects the
+quantum has varied somewhat across kernel versions.
+This method of adjusting the quantum was removed
+
+starting with Linux 2.6.24.
+<P>
+Linux 3.9 added
+
+a new mechanism for adjusting (and viewing) the
+<B>SCHED_RR</B>
+
+quantum: the
+<I>/proc/sys/kernel/sched_rr_timeslice_ms</I>
+
+file exposes the quantum as a millisecond value, whose default is 100.
+Writing 0 to this file resets the quantum to the default value.
+
+
+
+
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man7/sched.7.html">sched</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Linux notes</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

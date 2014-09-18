@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of PTHREAD_SETAFFINITY_NP</TITLE>
+</HEAD><BODY>
+<H1>PTHREAD_SETAFFINITY_NP</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-05-23<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+pthread_setaffinity_np, pthread_getaffinity_np - set/get
+CPU affinity of a thread
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#define _GNU_SOURCE</B>             /* See <A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A>(7) */
+<B>#include &lt;<A HREF="file:///usr/include/pthread.h">pthread.h</A>&gt;</B>
+
+<B>int pthread_setaffinity_np(pthread_t </B><I>thread</I><B>, size_t </B><I>cpusetsize</I><B>,</B>
+<B>                           const cpu_set_t *</B><I>cpuset</I><B>);</B>
+<B>int pthread_getaffinity_np(pthread_t </B><I>thread</I><B>, size_t </B><I>cpusetsize</I><B>,</B>
+<B>                           cpu_set_t *</B><I>cpuset</I><B>);</B>
+
+Compile and link with <I>-pthread</I>.
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>pthread_setaffinity_np</B>()
+
+function
+sets the CPU affinity mask of the thread
+<I>thread</I>
+
+to the CPU set pointed to by
+<I>cpuset</I>.
+
+If the call is successful,
+and the thread is not currently running on one of the CPUs in
+<I>cpuset</I>,
+
+then it is migrated to one of those CPUs.
+<P>
+The
+<B>pthread_getaffinity_np</B>()
+
+function returns the CPU affinity mask of the thread
+<I>thread</I>
+
+in the buffer pointed to by
+<I>cpuset</I>.
+
+<P>
+For more details on CPU affinity masks, see
+<B><A HREF="../man2/sched_setaffinity.2.html">sched_setaffinity</A></B>(2).
+
+For a description of a set of macros
+that can be used to manipulate and inspect CPU sets, see
+<B><A HREF="../man3/CPU_SET.3.html">CPU_SET</A></B>(3).
+
+<P>
+The argument
+<I>cpusetsize</I>
+
+is the length (in bytes) of the buffer pointed to by
+<I>cpuset</I>.
+
+Typically, this argument would be specified as
+<I>sizeof(cpu_set_t)</I>.
+
+(It may be some other value, if using the macros described in
+<B><A HREF="../man3/CPU_SET.3.html">CPU_SET</A></B>(3)
+
+for dynamically allocating a CPU set.)
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these functions return 0;
+on error, they return a nonzero error number.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EFAULT</B>
+
+<DD>
+A supplied memory address was invalid.
+<DT><B>EINVAL</B>
+
+<DD>
+(<B>pthread_setaffinity_np</B>())
+
+The affinity bit mask
+<I>mask</I>
+
+contains no processors that are currently physically on the system
+and permitted to the thread according to any restrictions that
+may be imposed by the &quot;cpuset&quot; mechanism described in
+<B><A HREF="../man7/cpuset.7.html">cpuset</A></B>(7).
+
+<DT><B>EINVAL</B>
+
+<DD>
+(<B>pthread_setaffinity_np</B>())
+
+<I>cpuset</I>
+
+specified a CPU that was outside the set supported by the kernel.
+(The kernel configuration option
+<B>CONFIG_NR_CPUS</B>
+
+
+
+
+
+defines the range of the set supported by the kernel data type
+
+used to represent CPU sets.)
+
+
+<DT><B>EINVAL</B>
+
+<DD>
+(<B>pthread_getaffinity_np</B>())
+
+<I>cpusetsize</I>
+
+is smaller than the size of the affinity mask used by the kernel.
+<DT><B>ESRCH</B>
+
+<DD>
+No thread with the ID
+<I>thread</I>
+
+could be found.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+These functions are provided by glibc since version 2.3.4.
+<A NAME="lbAH">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>pthread_setaffinity_np</B>()
+
+and
+<B>pthread_getaffinity_np</B>()
+
+functions are thread-safe.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+These functions are nonstandard GNU extensions;
+hence the suffix &quot;_np&quot; (nonportable) in the names.
+<A NAME="lbAK">&nbsp;</A>
+<H2>NOTES</H2>
+
+After a call to
+<B>pthread_setaffinity_np</B>(),
+
+the set of CPUs on which the thread will actually run is
+the intersection of the set specified in the
+<I>cpuset</I>
+
+argument and the set of CPUs actually present on the system.
+The system may further restrict the set of CPUs on which the thread
+runs if the &quot;cpuset&quot; mechanism described in
+<B><A HREF="../man7/cpuset.7.html">cpuset</A></B>(7)
+
+is being used.
+These restrictions on the actual set of CPUs on which the thread
+will run are silently imposed by the kernel.
+<P>
+These functions are implemented on top of the
+<B><A HREF="../man2/sched_setaffinity.2.html">sched_setaffinity</A></B>(2)
+
+and
+<B><A HREF="../man2/sched_getaffinity.2.html">sched_getaffinity</A></B>(2)
+
+system calls.
+<P>
+In glibc 2.3.3 only,
+versions of these functions were provided that did not have a
+<I>cpusetsize</I>
+
+argument.
+Instead the CPU set size given to the underlying system calls was always
+<I>sizeof(cpu_set_t)</I>.
+
+<P>
+A new thread created by
+<B><A HREF="../man3/pthread_create.3.html">pthread_create</A></B>(3)
+
+inherits a copy of its creator's CPU affinity mask.
+<A NAME="lbAL">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+In the following program, the main thread uses
+<B>pthread_setaffinity_np</B>()
+
+to set its CPU affinity mask to include CPUs 0 to 7
+(which may not all be available on the system),
+and then calls
+<B>pthread_getaffinity_np</B>()
+
+to check the resulting CPU affinity mask of the thread.
+<P>
+<PRE>
+#define _GNU_SOURCE
+#include &lt;<A HREF="file:///usr/include/pthread.h">pthread.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/errno.h">errno.h</A>&gt;
+
+#define handle_error_en(en, msg) \
+        do { errno = en; perror(msg); exit(EXIT_FAILURE); } while (0)
+
+int
+main(int argc, char *argv[])
+{
+    int s, j;
+    cpu_set_t cpuset;
+    pthread_t thread;
+
+    thread = pthread_self();
+
+    /* Set affinity mask to include CPUs 0 to 7 */
+
+    CPU_ZERO(&amp;cpuset);
+    for (j = 0; j &lt; 8; j++)
+        CPU_SET(j, &amp;cpuset);
+
+    s = pthread_setaffinity_np(thread, sizeof(cpu_set_t), &amp;cpuset);
+    if (s != 0)
+        handle_error_en(s, &quot;pthread_setaffinity_np&quot;);
+
+    /* Check the actual affinity mask assigned to the thread */
+
+    s = pthread_getaffinity_np(thread, sizeof(cpu_set_t), &amp;cpuset);
+    if (s != 0)
+        handle_error_en(s, &quot;pthread_getaffinity_np&quot;);
+
+    printf(&quot;Set returned by pthread_getaffinity_np() contained:\n&quot;);
+    for (j = 0; j &lt; CPU_SETSIZE; j++)
+        if (CPU_ISSET(j, &amp;cpuset))
+            printf(&quot;    CPU %d\n&quot;, j);
+
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+<A NAME="lbAM">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/sched_setaffinity.2.html">sched_setaffinity</A></B>(2),
+
+<B><A HREF="../man3/pthread_attr_setaffinity_np.3.html">pthread_attr_setaffinity_np</A></B>(3),
+
+<B><A HREF="../man3/pthread_self.3.html">pthread_self</A></B>(3),
+
+<B><A HREF="../man3/sched_getcpu.3.html">sched_getcpu</A></B>(3),
+
+<B><A HREF="../man7/cpuset.7.html">cpuset</A></B>(7),
+
+<B><A HREF="../man7/pthreads.7.html">pthreads</A></B>(7),
+
+<B><A HREF="../man7/sched.7.html">sched</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAK">NOTES</A><DD>
+<DT><A HREF="#lbAL">EXAMPLE</A><DD>
+<DT><A HREF="#lbAM">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:01 GMT, September 18, 2014
+</BODY>
+</HTML>

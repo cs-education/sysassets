@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of WCSCHR</TITLE>
+</HEAD><BODY>
+<H1>WCSCHR</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-12-02<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+wcschr - search a wide character in a wide-character string
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/wchar.h">wchar.h</A>&gt;</B>
+
+<B>wchar_t *wcschr(const wchar_t *</B><I>wcs</I><B>, wchar_t </B><I>wc</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>wcschr</B>()
+
+function is the wide-character equivalent
+of the
+<B><A HREF="../man3/strchr.3.html">strchr</A></B>(3)
+
+function.
+It searches the first occurrence of
+<I>wc</I>
+
+in the wide-character
+string pointed to by
+<I>wcs</I>.
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>wcschr</B>()
+
+function returns a pointer to the first occurrence of
+<I>wc</I>
+
+in the wide-character string pointed to by
+<I>wcs</I>,
+
+or NULL if
+<I>wc</I>
+
+does not occur in the string.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>wcschr</B>()
+
+function is thread-safe.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+C99.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/strchr.3.html">strchr</A></B>(3),
+
+<B><A HREF="../man3/wcspbrk.3.html">wcspbrk</A></B>(3),
+
+<B><A HREF="../man3/wcsrchr.3.html">wcsrchr</A></B>(3),
+
+<B><A HREF="../man3/wcsstr.3.html">wcsstr</A></B>(3),
+
+<B><A HREF="../man3/wmemchr.3.html">wmemchr</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAG">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:55 GMT, September 18, 2014
+</BODY>
+</HTML>

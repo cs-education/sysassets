@@ -1,0 +1,379 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MEMUSAGE</TITLE>
+</HEAD><BODY>
+<H1>MEMUSAGE</H1>
+Section: Linux user manual (1)<BR>Updated: 2014-09-06<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+memusage - profile memory usage of a program
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>memusage</B> [<I>option</I>]... <I>program</I> [<I>programoption</I>]...
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>memusage</B>
+
+is a bash script which profiles memory usage of the program,
+<I>program</I>.
+
+It preloads the
+<B>libmemusage.so</B>
+
+library into the caller's environment (via the
+<B>LD_PRELOAD</B>
+
+environment variable; see
+<B><A HREF="../man8/ld.so.8.html">ld.so</A></B>(8)).
+
+The
+<B>libmemusage.so</B>
+
+library traces memory allocation by intercepting calls to
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3),
+
+<B><A HREF="../man3/calloc.3.html">calloc</A></B>(3),
+
+<B><A HREF="../man3/free.3.html">free</A></B>(3),
+
+and
+<B><A HREF="../man3/realloc.3.html">realloc</A></B>(3);
+
+optionally, calls to
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2),
+
+<B><A HREF="../man2/mremap.2.html">mremap</A></B>(2),
+
+and
+<B><A HREF="../man2/munmap.2.html">munmap</A></B>(2)
+
+can also be intercepted.
+<P>
+
+<B>memusage</B>
+
+can output the collected data in textual form, or it can use
+<B><A HREF="../man1/memusagestat.1.html">memusagestat</A></B>(1)
+
+(see the
+<B>-p</B>
+
+option,  below)
+to create a PNG file containing graphical representation
+of the collected data.
+<A NAME="lbAE">&nbsp;</A>
+<H3>Memory usage summary</H3>
+
+The &quot;Memory usage summary&quot; line output by
+<B>memusage</B>
+
+contains three fields:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>heap total</B><DD>
+Sum of <I>size</I> arguments of all
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3)
+
+calls,
+products of arguments (<I>nmemb</I>*<I>size</I>) of all
+<B><A HREF="../man3/calloc.3.html">calloc</A></B>(3)
+
+calls,
+and sum of <I>length</I> arguments of all
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)
+
+calls.
+In the case of
+<B><A HREF="../man3/realloc.3.html">realloc</A></B>(3)
+
+and
+<B><A HREF="../man2/mremap.2.html">mremap</A></B>(2),
+
+if the new size of an allocation is larger than the previous size,
+the sum of all such differences (new size minus old size) is added.
+<DT><B>heap peak</B>
+
+<DD>
+Maximum of all <I>size</I> arguments of
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3),
+
+all products of <I>nmemb</I>*<I>size</I> of
+<B><A HREF="../man3/calloc.3.html">calloc</A></B>(3),
+
+all <I>size</I> arguments of
+<B><A HREF="../man3/realloc.3.html">realloc</A></B>(3),
+
+<I>length</I>
+
+arguments of
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2),
+
+and
+<I>new_size</I> arguments of
+<B><A HREF="../man2/mremap.2.html">mremap</A></B>(2).
+
+<DT><B>stack peak</B>
+
+<DD>
+Before the first call to any monitored function,
+the stack pointer address (base stack pointer) is saved.
+After each function call, the actual stack pointer address is read and
+the difference from the base stack pointer computed.
+The maximum of these differences is then the stack peak.
+</DL>
+</DL>
+
+<P>
+
+Immediately following this summary line, a table shows the number calls,
+total memory allocated or deallocated,
+and number of failed calls for each intercepted function.
+For
+<B><A HREF="../man3/realloc.3.html">realloc</A></B>(3)
+
+and
+<B><A HREF="../man2/mremap.2.html">mremap</A></B>(2),
+
+the additional field &quot;nomove&quot; shows reallocations that
+changed the address of a block,
+and the additional &quot;dec&quot; field shows reallocations that
+decreased the size of the block.
+For
+<B><A HREF="../man3/realloc.3.html">realloc</A></B>(3),
+
+the additional field &quot;free&quot; shows reallocations that
+caused a block to be freed (i.e., the reallocated size was 0).
+<P>
+<P>
+The &quot;realloc/total memory&quot; of the table output by
+<B>memusage</B>
+
+does not reflect cases where
+<B><A HREF="../man3/realloc.3.html">realloc</A></B>(3)
+
+is used to reallocate a block of memory
+to have a smaller size than previously.
+This can cause sum of all &quot;total memory&quot; cells (excluding &quot;free&quot;)
+to be larger than the &quot;free/total memory&quot; cell.
+<A NAME="lbAF">&nbsp;</A>
+<H3>Histogram for block sizes</H3>
+
+The &quot;Histogram for block sizes&quot; provides a breakdown of memory
+allocations into various bucket sizes.
+<A NAME="lbAG">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-n&nbsp;</B><I>name</I><B></B>,&nbsp;<B>--progname=</B><I>name</I>
+
+<DD>
+Name of the program file to profile.
+<DT><B>-p&nbsp;</B><I>file</I><B></B>,&nbsp;<B>--png=</B><I>file</I>
+
+<DD>
+Generate PNG graphic and store it in
+<I>file</I>.
+
+<DT><B>-d&nbsp;</B><I>file</I><B></B>,&nbsp;<B>--data=</B><I>file</I>
+
+<DD>
+Generate binary data file and store it in
+<I>file</I>.
+
+<DT><B>-u</B>,&nbsp;<B>--unbuffered</B>
+
+<DD>
+Do not buffer output.
+<DT><B>-b&nbsp;</B><I>size</I><B></B>,&nbsp;<B>--buffer=</B><I>size</I>
+
+<DD>
+Collect
+<I>size</I>
+
+entries before writing them out.
+<DT><B>--no-timer</B>
+
+<DD>
+Disable timer-based
+(<B>SIGPROF</B>)
+
+sampling of stack pointer value.
+<DT><B>-m</B>,&nbsp;<B>--mmap</B>
+
+<DD>
+Also trace
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2),
+
+<B><A HREF="../man2/mremap.2.html">mremap</A></B>(2),
+
+and
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2).
+
+<DT><B>-?</B>,&nbsp;<B>--help</B>
+
+<DD>
+Print help and exit.
+<DT><B>--usage</B>
+
+<DD>
+Print a short usage message and exit.
+<DT><B>-V</B>,&nbsp;<B>--version</B>
+
+<DD>
+Print version information and exit.
+<DT>The following options only apply when generating graphical output:<DD>
+<DT><B>-t</B>,&nbsp;<B>--time-based</B>
+
+<DD>
+Use time (rather than number of function calls) as the scale for the X axis.
+<DT><B>-T</B>,&nbsp;<B>--total</B>
+
+<DD>
+Also draw a graph of total memory use.
+<DT><B>--title=</B><I>name</I>
+
+<DD>
+Use
+<I>name</I>
+
+as the title of the graph.
+<DT><B>-x&nbsp;</B><I>size</I><B></B>,&nbsp;<B>--x-size=</B><I>size</I>
+
+<DD>
+Make the graph
+<I>size</I>
+
+pixels wide.
+<DT><B>-y&nbsp;</B><I>size</I><B></B>,&nbsp;<B>--y-size=</B><I>size</I>
+
+<DD>
+Make the graph
+<I>size</I>
+
+pixels high.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>EXIT STATUS</H2>
+
+Exit status is equal to the exit status of profiled program.
+<A NAME="lbAI">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+Below is a simple program that reallocates a block of
+memory in cycles that rise to a peak before then cyclically
+reallocating the memory in smaller blocks that return to zero.
+After compiling the program and running the following commands,
+a graph of the memory usage of the program can be found in the file
+<I>memusage.png</I>:
+
+<P>
+
+<PRE>
+$ <B>memusage --data=memusage.dat ./a.out</B>
+...
+Memory usage summary: heap total: 45200, heap peak: 6440, stack peak: 224
+        total calls  total memory  failed calls
+ malloc|         1           400             0
+realloc|        40         44800             0  (nomove:40, dec:19, free:0)
+ calloc|         0             0             0
+   free|         1           440
+Histogram for block sizes:
+  192-207             1   2% ================
+...
+ 2192-2207            1   2% ================
+ 2240-2255            2   4% =================================
+ 2832-2847            2   4% =================================
+ 3440-3455            2   4% =================================
+ 4032-4047            2   4% =================================
+ 4640-4655            2   4% =================================
+ 5232-5247            2   4% =================================
+ 5840-5855            2   4% =================================
+ 6432-6447            1   2% ================
+$ <B>memusagestat memusage.dat memusage.png</B>
+</PRE>
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H3>Program source</H3>
+
+<PRE>
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+
+#define CYCLES 20
+
+int
+main(int argc, char *argv[])
+{
+     int i, j;
+     int *p;
+
+     printf(&quot;malloc: %zd\n&quot;, sizeof(int) * 100);
+     p = malloc(sizeof(int) * 100);
+
+     for (i = 0; i &lt; CYCLES; i++) {
+         if (i &lt; CYCLES / 2)
+             j = i;
+         else
+             j--;
+
+         printf(&quot;realloc: %zd\n&quot;, sizeof(int) * (j * 50 + 110));
+         p = realloc(p, sizeof(int) * (j * 50 + 100));
+
+         printf(&quot;realloc: %zd\n&quot;, sizeof(int) * ((j+1) * 150 + 110));
+         p = realloc(p, sizeof(int) * ((j + 1) * 150 + 110));
+     }
+
+     free(p);
+     exit(EXIT_SUCCESS);
+}
+</PRE>
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>BUGS</H2>
+
+To report bugs, see
+
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/memusagestat.1.html">memusagestat</A></B>(1),
+
+<B><A HREF="../man1/mtrace.1.html">mtrace</A></B>(1)
+
+<B><A HREF="../man8/ld.so.8.html">ld.so</A></B>(8)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">Memory usage summary</A><DD>
+<DT><A HREF="#lbAF">Histogram for block sizes</A><DD>
+</DL>
+<DT><A HREF="#lbAG">OPTIONS</A><DD>
+<DT><A HREF="#lbAH">EXIT STATUS</A><DD>
+<DT><A HREF="#lbAI">EXAMPLE</A><DD>
+<DL>
+<DT><A HREF="#lbAJ">Program source</A><DD>
+</DL>
+<DT><A HREF="#lbAK">BUGS</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:44 GMT, September 18, 2014
+</BODY>
+</HTML>

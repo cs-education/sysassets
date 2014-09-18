@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of CATGETS</TITLE>
+</HEAD><BODY>
+<H1>CATGETS</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-06-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+catgets - get message from a message catalog
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/nl_types.h">nl_types.h</A>&gt;</B>
+
+<B>char *catgets(nl_catd </B><I>catalog</I><B>, int </B><I>set_number</I><B>, int </B><I>message_number</I><B>,</B>
+<B>              const char *</B><I>message</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>catgets</B>()
+
+reads the message
+<I>message_number</I>,
+
+in set
+<I>set_number</I>,
+
+from the message catalog identified by
+<I>catalog</I>,
+
+where
+<I>catalog</I>
+
+is a catalog descriptor returned from an earlier call to
+<B><A HREF="../man3/catopen.3.html">catopen</A></B>(3).
+
+The fourth argument,
+<I>message</I>,
+
+points to a default message string which will be returned by
+<B>catgets</B>()
+
+if the identified message catalog is not currently available.
+The
+message-text is contained in an internal buffer area and should be copied by
+the application if it is to be saved or modified.
+The return string is
+always terminated with a null byte ('\0').
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+<P>
+
+On success,
+<B>catgets</B>()
+
+returns a pointer to an internal buffer area
+containing the null-terminated message string.
+On failure,
+<B>catgets</B>()
+
+returns the value
+<I>message</I>.
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>catgets</B>()
+
+function is thread-safe.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+The
+<B>catgets</B>()
+
+function is available only in libc.so.4.4.4c and above.
+The Jan 1987 X/Open Portability Guide specifies a more subtle
+error return:
+<I>message</I>
+
+is returned if the message catalog specified by
+<I>catalog</I>
+
+is not available, while an empty string is returned
+when the message catalog is available but does not contain
+the specified message.
+These two possible error returns seem to be discarded in SUSv2
+in favor of always returning
+<I>message</I>.
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/catopen.3.html">catopen</A></B>(3),
+
+<B><A HREF="../man3/setlocale.3.html">setlocale</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAG">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:19 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of CREATE_MODULE</TITLE>
+</HEAD><BODY>
+<H1>CREATE_MODULE</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-05-10<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+create_module - create a loadable module entry
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/linux/module.h">linux/module.h</A>&gt;</B>
+
+<B>caddr_t create_module(const char *</B><I>name</I><B>, size_t </B><I>size</I><B>);</B>
+</PRE>
+
+<P>
+<I>Note</I>:
+
+No declaration of this function is provided in glibc headers; see NOTES.
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<I>Note</I>:
+
+This system call is present only in kernels before Linux 2.6.
+<P>
+<B>create_module</B>()
+
+attempts to create a loadable module entry and reserve the kernel memory
+that will be needed to hold the module.
+This system call requires privilege.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, returns the kernel address at which the module will reside.
+On error, -1 is returned and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EEXIST</B>
+
+<DD>
+A module by that name already exists.
+<DT><B>EFAULT</B>
+
+<DD>
+<I>name</I>
+
+is outside the program's accessible address space.
+<DT><B>EINVAL</B>
+
+<DD>
+The requested size is too small even for the module header information.
+<DT><B>ENOMEM</B>
+
+<DD>
+The kernel could not allocate a contiguous block of memory large
+enough for the module.
+<DT><B>ENOSYS</B>
+
+<DD>
+<B>create_module</B>()
+
+is not supported in this version of the kernel
+(e.g., the kernel is version 2.6 or later).
+<DT><B>EPERM</B>
+
+<DD>
+The caller was not privileged
+(did not have the
+<B>CAP_SYS_MODULE</B>
+
+capability).
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+This system call is present on Linux only up until kernel 2.4;
+it was removed in Linux 2.6.
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>create_module</B>()
+
+is Linux-specific.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+The
+<B>create_module</B>()
+
+system call is not supported by glibc.
+No declaration is provided in glibc headers, but,
+through a quirk of history, glibc does export an ABI for this system call.
+Therefore, in order to employ this system call,
+it is sufficient to manually declare the interface in your code;
+alternatively, you can invoke the system call using
+<B><A HREF="../man2/syscall.2.html">syscall</A></B>(2).
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/delete_module.2.html">delete_module</A></B>(2),
+
+<B><A HREF="../man2/init_module.2.html">init_module</A></B>(2),
+
+<B><A HREF="../man2/query_module.2.html">query_module</A></B>(2)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:50 GMT, September 18, 2014
+</BODY>
+</HTML>

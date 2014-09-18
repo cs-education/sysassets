@@ -1,0 +1,317 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of READ</TITLE>
+</HEAD><BODY>
+<H1>READ</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-05-04<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+read - read from a file descriptor
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<B>ssize_t read(int </B><I>fd</I><B>, void *</B><I>buf</I><B>, size_t </B><I>count</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>read</B>()
+
+attempts to read up to
+<I>count</I>
+
+bytes from file descriptor
+<I>fd</I>
+
+into the buffer starting at
+<I>buf</I>.
+
+<P>
+On files that support seeking,
+the read operation commences at the current file offset,
+and the file offset is incremented by the number of bytes read.
+If the current file offset is at or past the end of file,
+no bytes are read, and
+<B>read</B>()
+
+returns zero.
+<P>
+If
+<I>count</I>
+
+is zero,
+<B>read</B>()
+
+<I>may</I>
+
+detect the errors described below.
+In the absence of any errors,
+or if
+<B>read</B>()
+
+does not check for errors, a
+<B>read</B>()
+
+with a
+<I>count</I>
+
+of 0 returns zero and has no other effects.
+<P>
+If
+<I>count</I>
+
+is greater than
+<B>SSIZE_MAX</B>,
+
+the result is unspecified.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, the number of bytes read is returned (zero indicates end of
+file), and the file position is advanced by this number.
+It is not an error if this number is smaller than the number of bytes
+requested; this may happen for example because fewer bytes are actually
+available right now (maybe because we were close to end-of-file, or
+because we are reading from a pipe, or from a terminal), or because
+<B>read</B>()
+
+was interrupted by a signal.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+In this case, it is left unspecified whether
+the file position (if any) changes.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EAGAIN</B>
+
+<DD>
+The file descriptor
+<I>fd</I>
+
+refers to a file other than a socket and has been marked nonblocking
+(<B>O_NONBLOCK</B>),
+
+and the read would block.
+<DT><B>EAGAIN</B> or <B>EWOULDBLOCK</B>
+
+<DD>
+
+The file descriptor
+<I>fd</I>
+
+refers to a socket and has been marked nonblocking
+(<B>O_NONBLOCK</B>),
+
+and the read would block.
+POSIX.1-2001 allows either error to be returned for this case,
+and does not require these constants to have the same value,
+so a portable application should check for both possibilities.
+<DT><B>EBADF</B>
+
+<DD>
+<I>fd</I>
+
+is not a valid file descriptor or is not open for reading.
+<DT><B>EFAULT</B>
+
+<DD>
+<I>buf</I>
+
+is outside your accessible address space.
+<DT><B>EINTR</B>
+
+<DD>
+The call was interrupted by a signal before any data was read; see
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7).
+
+<DT><B>EINVAL</B>
+
+<DD>
+<I>fd</I>
+
+is attached to an object which is unsuitable for reading;
+or the file was opened with the
+<B>O_DIRECT</B>
+
+flag, and either the address specified in
+<I>buf</I>,
+
+the value specified in
+<I>count</I>,
+
+or the current file offset is not suitably aligned.
+<DT><B>EINVAL</B>
+
+<DD>
+<I>fd</I>
+
+was created via a call to
+<B><A HREF="../man2/timerfd_create.2.html">timerfd_create</A></B>(2)
+
+and the wrong size buffer was given to
+<B>read</B>();
+
+see
+<B><A HREF="../man2/timerfd_create.2.html">timerfd_create</A></B>(2)
+
+for further information.
+<DT><B>EIO</B>
+
+<DD>
+I/O error.
+This will happen for example when the process is in a
+background process group, tries to read from its controlling terminal,
+and either it is ignoring or blocking
+<B>SIGTTIN</B>
+
+or its process group
+is orphaned.
+It may also occur when there is a low-level I/O error
+while reading from a disk or tape.
+<DT><B>EISDIR</B>
+
+<DD>
+<I>fd</I>
+
+refers to a directory.
+</DL>
+<P>
+
+Other errors may occur, depending on the object connected to
+<I>fd</I>.
+
+POSIX allows a
+<B>read</B>()
+
+that is interrupted after reading some data
+to return -1 (with
+<I>errno</I>
+
+set to
+<B>EINTR</B>)
+
+or to return the number of bytes already read.
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, 4.3BSD, POSIX.1-2001.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+On NFS filesystems, reading small amounts of data will update the
+timestamp only the first time, subsequent calls may not do so.
+This is caused
+by client side attribute caching, because most if not all NFS clients
+leave st_atime (last file access time)
+updates to the server and client side reads satisfied from the
+client's cache will not cause st_atime updates on the server as there are no
+server side reads.
+UNIX semantics can be obtained by disabling client
+side attribute caching, but in most situations this will substantially
+increase server load and decrease performance.
+<A NAME="lbAI">&nbsp;</A>
+<H2>BUGS</H2>
+
+According to POSIX.1-2008/SUSv4 Section XSI 2.9.7
+(&quot;Thread Interactions with Regular File Operations&quot;):
+<P>
+<DL COMPACT><DT><DD>
+All of the following functions shall be atomic with respect to
+each other in the effects specified in POSIX.1-2008 when they
+operate on regular files or symbolic links: ...
+</DL>
+
+<P>
+Among the APIs subsequently listed are
+<B>read</B>()
+
+and
+<B><A HREF="../man2/readv.2.html">readv</A></B>(2).
+
+And among the effects that should be atomic across threads (and processes)
+are updates of the file offset.
+However, on Linux before version 3.14,
+this was not the case: if two processes that share
+an open file description (see
+<B><A HREF="../man2/open.2.html">open</A></B>(2))
+
+perform a
+<B>read</B>()
+
+(or
+<B><A HREF="../man2/readv.2.html">readv</A></B>(2))
+
+at the same time, then the I/O operations were not atomic
+with respect updating the file offset,
+with the result that the reads in the two processes
+might (incorrectly) overlap in the blocks of data that they obtained.
+This problem was fixed in Linux 3.14.
+
+
+
+
+
+
+
+
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/close.2.html">close</A></B>(2),
+
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2),
+
+<B><A HREF="../man2/ioctl.2.html">ioctl</A></B>(2),
+
+<B><A HREF="../man2/lseek.2.html">lseek</A></B>(2),
+
+<B><A HREF="../man2/open.2.html">open</A></B>(2),
+
+<B><A HREF="../man2/pread.2.html">pread</A></B>(2),
+
+<B><A HREF="../man2/readdir.2.html">readdir</A></B>(2),
+
+<B><A HREF="../man2/readlink.2.html">readlink</A></B>(2),
+
+<B><A HREF="../man2/readv.2.html">readv</A></B>(2),
+
+<B><A HREF="../man2/select.2.html">select</A></B>(2),
+
+<B><A HREF="../man2/write.2.html">write</A></B>(2),
+
+<B><A HREF="../man3/fread.3.html">fread</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">BUGS</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

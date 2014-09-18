@@ -1,0 +1,2048 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of OPEN</TITLE>
+</HEAD><BODY>
+<H1>OPEN</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-07-08<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+open, openat, creat - open and possibly create a file
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;</B>
+
+<B>int open(const char *</B><I>pathname</I><B>, int </B><I>flags</I><B>);</B>
+<B>int open(const char *</B><I>pathname</I><B>, int </B><I>flags</I><B>, mode_t </B><I>mode</I><B>);</B>
+
+<B>int creat(const char *</B><I>pathname</I><B>, mode_t </B><I>mode</I><B>);</B>
+
+<B>int openat(int </B><I>dirfd</I><B>, const char *</B><I>pathname</I><B>, int </B><I>flags</I><B>);</B>
+<B>int openat(int </B><I>dirfd</I><B>, const char *</B><I>pathname</I><B>, int </B><I>flags</I><B>, mode_t </B><I>mode</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>openat</B>():
+
+
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Since glibc 2.10:<DD>
+_XOPEN_SOURCE&nbsp;&gt;=&nbsp;700 || _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+<DT>Before glibc 2.10:<DD>
+_ATFILE_SOURCE
+</DL>
+</DL>
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+Given a
+<I>pathname</I>
+
+for a file,
+<B>open</B>()
+
+returns a file descriptor, a small, nonnegative integer
+for use in subsequent system calls
+(<B><A HREF="../man2/read.2.html">read</A></B>(2), <B><A HREF="../man2/write.2.html">write</A></B>(2), <B><A HREF="../man2/lseek.2.html">lseek</A></B>(2), <B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2), etc.).
+
+The file descriptor returned by a successful call will be
+the lowest-numbered file descriptor not currently open for the process.
+<P>
+
+By default, the new file descriptor is set to remain open across an
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2)
+
+(i.e., the
+<B>FD_CLOEXEC</B>
+
+file descriptor flag described in
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+is initially disabled); the
+<B>O_CLOEXEC</B>
+
+flag, described below, can be used to change this default.
+The file offset is set to the beginning of the file (see
+<B><A HREF="../man2/lseek.2.html">lseek</A></B>(2)).
+
+<P>
+
+A call to
+<B>open</B>()
+
+creates a new
+<I>open file description</I>,
+
+an entry in the system-wide table of open files.
+The open file description records the file offset and the file status flags
+(see below).
+A file descriptor is a reference to an open file description;
+this reference is unaffected if
+<I>pathname</I>
+
+is subsequently removed or modified to refer to a different file.
+For further details on open file descriptions, see NOTES.
+<P>
+
+The argument
+<I>flags</I>
+
+must include one of the following
+<I>access modes</I>:
+
+<B>O_RDONLY</B>, <B>O_WRONLY</B>, or <B>O_RDWR</B>.
+
+These request opening the file read-only, write-only, or read/write,
+respectively.
+<P>
+In addition, zero or more file creation flags and file status flags
+can be
+bitwise-<I>or</I>'d
+
+in
+<I>flags</I>.
+
+The
+<I>file creation flags</I>
+
+are
+<B>O_CLOEXEC</B>,
+
+<B>O_CREAT</B>,
+
+<B>O_DIRECTORY</B>,
+
+<B>O_EXCL</B>,
+
+<B>O_NOCTTY</B>,
+
+<B>O_NOFOLLOW</B>,
+
+<B>O_TMPFILE</B>,
+
+<B>O_TRUNC</B>,
+
+and
+<B>O_TTY_INIT</B>.
+
+The
+<I>file status flags</I>
+
+are all of the remaining flags listed below.
+
+
+
+
+
+
+
+
+
+
+
+
+The distinction between these two groups of flags is that
+the file status flags can be retrieved and (in some cases)
+modified; see
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+for details.
+<P>
+The full list of file creation flags and file status flags is as follows:
+<DL COMPACT>
+<DT><B>O_APPEND</B>
+
+<DD>
+The file is opened in append mode.
+Before each
+<B><A HREF="../man2/write.2.html">write</A></B>(2),
+
+the file offset is positioned at the end of the file,
+as if with
+<B><A HREF="../man2/lseek.2.html">lseek</A></B>(2).
+
+<B>O_APPEND</B>
+
+may lead to corrupted files on NFS filesystems if more than one process
+appends data to a file at once.
+
+
+
+This is because NFS does not support
+appending to a file, so the client kernel has to simulate it, which
+can't be done without a race condition.
+<DT><B>O_ASYNC</B>
+
+<DD>
+Enable signal-driven I/O:
+generate a signal
+(<B>SIGIO</B>
+
+by default, but this can be changed via
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2))
+
+when input or output becomes possible on this file descriptor.
+This feature is available only for terminals, pseudoterminals,
+sockets, and (since Linux 2.6) pipes and FIFOs.
+See
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+for further details.
+See also BUGS, below.
+<DT><B>O_CLOEXEC</B> (since Linux 2.6.23)
+
+<DD>
+
+Enable the close-on-exec flag for the new file descriptor.
+Specifying this flag permits a program to avoid additional
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+<B>F_SETFD</B>
+
+operations to set the
+<B>FD_CLOEXEC</B>
+
+flag.
+<P>
+Note that the use of this flag is essential in some multithreaded programs,
+because using a separate
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+<B>F_SETFD</B>
+
+operation to set the
+<B>FD_CLOEXEC</B>
+
+flag does not suffice to avoid race conditions
+where one thread opens a file descriptor and
+attempts to set its close-on-exec flag using
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+at the same time as another thread does a
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+plus
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2).
+
+Depending on the order of execution,
+the race may lead to the file descriptor returned by
+<B>open</B>()
+
+being unintentionally leaked to the program executed by the child process
+created by
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2).
+
+(This kind of race is in principle possible for any system call
+that creates a file descriptor whose close-on-exec flag should be set,
+and various other Linux system calls provide an equivalent of the
+<B>O_CLOEXEC</B>
+
+flag to deal with this problem.)
+
+
+
+<DT><B>O_CREAT</B>
+
+<DD>
+If the file does not exist, it will be created.
+The owner (user ID) of the file is set to the effective user ID
+of the process.
+The group ownership (group ID) is set either to
+the effective group ID of the process or to the group ID of the
+parent directory (depending on filesystem type and mount options,
+and the mode of the parent directory; see the mount options
+<I>bsdgroups</I>
+
+and
+<I>sysvgroups</I>
+
+described in
+<B><A HREF="../man8/mount.8.html">mount</A></B>(8)).
+
+
+
+<DL COMPACT><DT><DD>
+<P>
+
+<I>mode</I>
+
+specifies the permissions to use in case a new file is created.
+This argument must be supplied when
+<B>O_CREAT</B>
+
+or
+<B>O_TMPFILE</B>
+
+is specified in
+<I>flags</I>;
+
+if neither
+<B>O_CREAT</B>
+
+nor
+<B>O_TMPFILE</B>
+
+is specified, then
+<I>mode</I>
+
+is ignored.
+The effective permissions are modified by
+the process's
+<I>umask</I>
+
+in the usual way: The permissions of the created file are
+<I>(mode&nbsp;&amp;&nbsp;~umask)</I>.
+
+Note that this mode applies only to future accesses of the
+newly created file; the
+<B>open</B>()
+
+call that creates a read-only file may well return a read/write
+file descriptor.
+<P>
+
+The following symbolic constants are provided for
+<I>mode</I>:
+
+<DL COMPACT>
+<DT><B>S_IRWXU</B>
+
+<DD>
+00700 user (file owner) has read, write and execute permission
+<DT><B>S_IRUSR</B>
+
+<DD>
+00400 user has read permission
+<DT><B>S_IWUSR</B>
+
+<DD>
+00200 user has write permission
+<DT><B>S_IXUSR</B>
+
+<DD>
+00100 user has execute permission
+<DT><B>S_IRWXG</B>
+
+<DD>
+00070 group has read, write and execute permission
+<DT><B>S_IRGRP</B>
+
+<DD>
+00040 group has read permission
+<DT><B>S_IWGRP</B>
+
+<DD>
+00020 group has write permission
+<DT><B>S_IXGRP</B>
+
+<DD>
+00010 group has execute permission
+<DT><B>S_IRWXO</B>
+
+<DD>
+00007 others have read, write and execute permission
+<DT><B>S_IROTH</B>
+
+<DD>
+00004 others have read permission
+<DT><B>S_IWOTH</B>
+
+<DD>
+00002 others have write permission
+<DT><B>S_IXOTH</B>
+
+<DD>
+00001 others have execute permission
+</DL>
+</DL>
+
+<DT><B>O_DIRECT</B> (since Linux 2.4.10)
+
+<DD>
+Try to minimize cache effects of the I/O to and from this file.
+In general this will degrade performance, but it is useful in
+special situations, such as when applications do their own caching.
+File I/O is done directly to/from user-space buffers.
+The
+<B>O_DIRECT</B>
+
+flag on its own makes an effort to transfer data synchronously,
+but does not give the guarantees of the
+<B>O_SYNC</B>
+
+flag that data and necessary metadata are transferred.
+To guarantee synchronous I/O,
+<B>O_SYNC</B>
+
+must be used in addition to
+<B>O_DIRECT</B>.
+
+See NOTES below for further discussion.
+<P>
+A semantically similar (but deprecated) interface for block devices
+is described in
+<B><A HREF="../man8/raw.8.html">raw</A></B>(8).
+
+<DT><B>O_DIRECTORY</B>
+
+<DD>
+If <I>pathname</I> is not a directory, cause the open to fail.
+
+
+
+
+This flag was added in kernel version 2.1.126, to
+avoid denial-of-service problems if
+<B><A HREF="../man3/opendir.3.html">opendir</A></B>(3)
+
+is called on a
+FIFO or tape device.
+<DT><B>O_DSYNC</B>
+
+<DD>
+Write operations on the file will complete according to the requirements of
+synchronized I/O
+<I>data</I>
+
+integrity completion.
+<P>
+By the time
+<B><A HREF="../man2/write.2.html">write</A></B>(2)
+
+(and similar)
+return, the output data
+has been transferred to the underlying hardware,
+along with any file metadata that would be required to retrieve that data
+(i.e., as though each
+<B><A HREF="../man2/write.2.html">write</A></B>(2)
+
+was followed by a call to
+<B><A HREF="../man2/fdatasync.2.html">fdatasync</A></B>(2)).
+
+<I>See NOTES below</I>.
+
+<DT><B>O_EXCL</B>
+
+<DD>
+Ensure that this call creates the file:
+if this flag is specified in conjunction with
+<B>O_CREAT</B>,
+
+and
+<I>pathname</I>
+
+already exists, then
+<B>open</B>()
+
+will fail.
+<P>
+When these two flags are specified, symbolic links are not followed:
+
+if
+<I>pathname</I>
+
+is a symbolic link, then
+<B>open</B>()
+
+fails regardless of where the symbolic link points to.
+<P>
+In general, the behavior of
+<B>O_EXCL</B>
+
+is undefined if it is used without
+<B>O_CREAT</B>.
+
+There is one exception: on Linux 2.6 and later,
+<B>O_EXCL</B>
+
+can be used without
+<B>O_CREAT</B>
+
+if
+<I>pathname</I>
+
+refers to a block device.
+If the block device is in use by the system (e.g., mounted),
+<B>open</B>()
+
+fails with the error
+<B>EBUSY</B>.
+
+<P>
+On NFS,
+<B>O_EXCL</B>
+
+is supported only when using NFSv3 or later on kernel 2.6 or later.
+In NFS environments where
+<B>O_EXCL</B>
+
+support is not provided, programs that rely on it
+for performing locking tasks will contain a race condition.
+Portable programs that want to perform atomic file locking using a lockfile,
+and need to avoid reliance on NFS support for
+<B>O_EXCL</B>,
+
+can create a unique file on
+the same filesystem (e.g., incorporating hostname and PID), and use
+<B><A HREF="../man2/link.2.html">link</A></B>(2)
+
+to make a link to the lockfile.
+If
+<B><A HREF="../man2/link.2.html">link</A></B>(2)
+
+returns 0, the lock is successful.
+Otherwise, use
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2)
+
+on the unique file to check if its link count has increased to 2,
+in which case the lock is also successful.
+<DT><B>O_LARGEFILE</B>
+
+<DD>
+(LFS)
+Allow files whose sizes cannot be represented in an
+<I>off_t</I>
+
+(but can be represented in an
+<I>off64_t</I>)
+
+to be opened.
+The
+<B>_LARGEFILE64_SOURCE</B>
+
+macro must be defined
+(before including
+<I>any</I>
+
+header files)
+in order to obtain this definition.
+Setting the
+<B>_FILE_OFFSET_BITS</B>
+
+feature test macro to 64 (rather than using
+<B>O_LARGEFILE</B>)
+
+is the preferred
+method of accessing large files on 32-bit systems (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)).
+
+<DT><B>O_NOATIME</B> (since Linux 2.6.8)
+
+<DD>
+Do not update the file last access time
+(<I>st_atime</I>
+
+in the inode)
+when the file is
+<B><A HREF="../man2/read.2.html">read</A></B>(2).
+
+This flag is intended for use by indexing or backup programs,
+where its use can significantly reduce the amount of disk activity.
+This flag may not be effective on all filesystems.
+One example is NFS, where the server maintains the access time.
+
+
+<DT><B>O_NOCTTY</B>
+
+<DD>
+If
+<I>pathname</I>
+
+refers to a terminal device---see
+<B><A HREF="../man4/tty.4.html">tty</A></B>(4)---it
+
+will not become the process's controlling terminal even if the
+process does not have one.
+<DT><B>O_NOFOLLOW</B>
+
+<DD>
+If <I>pathname</I> is a symbolic link, then the open fails.
+This is a FreeBSD extension, which was added to Linux in version 2.1.126.
+Symbolic links in earlier components of the pathname will still be
+followed.
+See also
+<B>O_PATH</B>
+
+below.
+
+
+
+<DT><B>O_NONBLOCK</B> or <B>O_NDELAY</B>
+
+<DD>
+When possible, the file is opened in nonblocking mode.
+Neither the
+<B>open</B>()
+
+nor any subsequent operations on the file descriptor which is
+returned will cause the calling process to wait.
+For the handling of FIFOs (named pipes), see also
+<B><A HREF="../man7/fifo.7.html">fifo</A></B>(7).
+
+For a discussion of the effect of
+<B>O_NONBLOCK</B>
+
+in conjunction with mandatory file locks and with file leases, see
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2).
+
+<DT><B>O_PATH</B> (since Linux 2.6.39)
+
+<DD>
+
+
+
+
+
+
+
+
+Obtain a file descriptor that can be used for two purposes:
+to indicate a location in the filesystem tree and
+to perform operations that act purely at the file descriptor level.
+The file itself is not opened, and other file operations (e.g.,
+<B><A HREF="../man2/read.2.html">read</A></B>(2),
+
+<B><A HREF="../man2/write.2.html">write</A></B>(2),
+
+<B><A HREF="../man2/fchmod.2.html">fchmod</A></B>(2),
+
+<B><A HREF="../man2/fchown.2.html">fchown</A></B>(2),
+
+<B><A HREF="../man2/fgetxattr.2.html">fgetxattr</A></B>(2),
+
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2))
+
+fail with the error
+<B>EBADF</B>.
+
+<P>
+The following operations
+<I>can</I>
+
+be performed on the resulting file descriptor:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>*<DD>
+<B><A HREF="../man2/close.2.html">close</A></B>(2);
+
+<B><A HREF="../man2/fchdir.2.html">fchdir</A></B>(2)
+
+(since Linux 3.5);
+
+<B><A HREF="../man2/fstat.2.html">fstat</A></B>(2)
+
+(since Linux 3.6).
+
+<DT>*<DD>
+Duplicating the file descriptor
+(<B><A HREF="../man2/dup.2.html">dup</A></B>(2),
+
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+<B>F_DUPFD</B>,
+
+etc.).
+<DT>*<DD>
+Getting and setting file descriptor flags
+(<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+<B>F_GETFD</B>
+
+and
+<B>F_SETFD</B>).
+
+<DT>*<DD>
+Retrieving open file status flags using the
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+<B>F_GETFL</B>
+
+operation: the returned flags will include the bit
+<B>O_PATH</B>.
+
+<DT>*<DD>
+Passing the file descriptor as the
+<I>dirfd</I>
+
+argument of
+<B><A HREF="../man2/openat.2.html">openat</A></B>(2)
+
+and the other &quot;*at()&quot; system calls.
+This includes
+<B><A HREF="../man2/linkat.2.html">linkat</A></B>(2)
+
+with
+<B>AT_EMPTY_PATH</B>
+
+(or via procfs using
+<B>AT_SYMLINK_FOLLOW</B>)
+
+even if the file is not a directory.
+<DT>*<DD>
+Passing the file descriptor to another process via a UNIX domain socket
+(see
+<B>SCM_RIGHTS</B>
+
+in
+<B><A HREF="../man7/unix.7.html">unix</A></B>(7)).
+
+</DL>
+</DL>
+
+<DT><DD>
+When
+<B>O_PATH</B>
+
+is specified in
+<I>flags</I>,
+
+flag bits other than
+<B>O_CLOEXEC</B>,
+
+<B>O_DIRECTORY</B>,
+
+and
+<B>O_NOFOLLOW</B>
+
+are ignored.
+<P>
+If
+<I>pathname</I>
+
+is a symbolic link and the
+<B>O_NOFOLLOW</B>
+
+flag is also specified,
+then the call returns a file descriptor referring to the symbolic link.
+This file descriptor can be used as the
+<I>dirfd</I>
+
+argument in calls to
+<B><A HREF="../man2/fchownat.2.html">fchownat</A></B>(2),
+
+<B><A HREF="../man2/fstatat.2.html">fstatat</A></B>(2),
+
+<B><A HREF="../man2/linkat.2.html">linkat</A></B>(2),
+
+and
+<B><A HREF="../man2/readlinkat.2.html">readlinkat</A></B>(2)
+
+with an empty pathname to have the calls operate on the symbolic link.
+<DT><B>O_SYNC</B>
+
+<DD>
+Write operations on the file will complete according to the requirements of
+synchronized I/O
+<I>file</I>
+
+integrity completion
+(by contrast with the
+synchronized I/O
+<I>data</I>
+
+integrity completion
+provided by
+<B>O_DSYNC</B>.)
+
+<P>
+By the time
+<B><A HREF="../man2/write.2.html">write</A></B>(2)
+
+(and similar)
+return, the output data and associated file metadata
+have been transferred to the underlying hardware
+(i.e., as though each
+<B><A HREF="../man2/write.2.html">write</A></B>(2)
+
+was followed by a call to
+<B><A HREF="../man2/fsync.2.html">fsync</A></B>(2)).
+
+<I>See NOTES below</I>.
+
+<DT><B>O_TMPFILE</B> (since Linux 3.11)
+
+<DD>
+
+
+
+Create an unnamed temporary file.
+The
+<I>pathname</I>
+
+argument specifies a directory;
+an unnamed inode will be created in that directory's filesystem.
+Anything written to the resulting file will be lost when
+the last file descriptor is closed, unless the file is given a name.
+<P>
+<B>O_TMPFILE</B>
+
+must be specified with one of
+<B>O_RDWR</B>
+
+or
+<B>O_WRONLY</B>
+
+and, optionally,
+<B>O_EXCL</B>.
+
+If
+<B>O_EXCL</B>
+
+is not specified, then
+<B><A HREF="../man2/linkat.2.html">linkat</A></B>(2)
+
+can be used to link the temporary file into the filesystem, making it
+permanent, using code like the following:
+<P>
+
+<PRE>
+char path[PATH_MAX];
+fd = open(&quot;/path/to/dir&quot;, O_TMPFILE | O_RDWR,
+                        S_IRUSR | S_IWUSR);
+
+/* File I/O on 'fd'... */
+
+snprintf(path, PATH_MAX,  &quot;/proc/self/fd/%d&quot;, fd);
+linkat(AT_FDCWD, path, AT_FDCWD, &quot;/path/for/file&quot;,
+                        AT_SYMLINK_FOLLOW);
+</PRE>
+
+
+<P>
+In this case,
+the
+<B>open</B>()
+
+<I>mode</I>
+
+argument determines the file permission mode, as with
+<B>O_CREAT</B>.
+
+<P>
+Specifying
+<B>O_EXCL</B>
+
+in conjunction with
+<B>O_TMPFILE</B>
+
+prevents a temporary file from being linked into the filesystem
+in the above manner.
+(Note that the meaning of
+<B>O_EXCL</B>
+
+in this case is different from the meaning of
+<B>O_EXCL</B>
+
+otherwise.)
+<P>
+<P>
+There are two main use cases for
+
+<B>O_TMPFILE</B>:
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>*<DD>
+Improved
+<B><A HREF="../man3/tmpfile.3.html">tmpfile</A></B>(3)
+
+functionality: race-free creation of temporary files that
+(1) are automatically deleted when closed;
+(2) can never be reached via any pathname;
+(3) are not subject to symlink attacks; and
+(4) do not require the caller to devise unique names.
+<DT>*<DD>
+Creating a file that is initially invisible, which is then populated
+with data and adjusted to have appropriate filesystem attributes
+(<B><A HREF="../man2/chown.2.html">chown</A></B>(2),
+
+<B><A HREF="../man2/chmod.2.html">chmod</A></B>(2),
+
+<B><A HREF="../man2/fsetxattr.2.html">fsetxattr</A></B>(2),
+
+etc.)
+before being atomically linked into the filesystem
+in a fully formed state (using
+<B><A HREF="../man2/linkat.2.html">linkat</A></B>(2)
+
+as described above).
+</DL>
+</DL>
+
+<DT><DD>
+<B>O_TMPFILE</B>
+
+requires support by the underlying filesystem;
+only a subset of Linux filesystems provide that support.
+In the initial implementation, support was provided in
+the ext2, ext3, ext4, UDF, Minix, and shmem filesystems.
+XFS support was added
+
+
+in Linux 3.15.
+<DT><B>O_TRUNC</B>
+
+<DD>
+If the file already exists and is a regular file and the access mode allows
+writing (i.e., is
+<B>O_RDWR</B>
+
+or
+<B>O_WRONLY</B>)
+
+it will be truncated to length 0.
+If the file is a FIFO or terminal device file, the
+<B>O_TRUNC</B>
+
+flag is ignored.
+Otherwise, the effect of
+<B>O_TRUNC</B>
+
+is unspecified.
+</DL>
+<A NAME="lbAE">&nbsp;</A>
+<H3>creat()</H3>
+
+<B>creat</B>()
+
+is equivalent to
+<B>open</B>()
+
+with
+<I>flags</I>
+
+equal to
+<B>O_CREAT|O_WRONLY|O_TRUNC</B>.
+
+<A NAME="lbAF">&nbsp;</A>
+<H3>openat()</H3>
+
+The
+<B>openat</B>()
+
+system call operates in exactly the same way as
+<B>open</B>(),
+
+except for the differences described here.
+<P>
+If the pathname given in
+<I>pathname</I>
+
+is relative, then it is interpreted relative to the directory
+referred to by the file descriptor
+<I>dirfd</I>
+
+(rather than relative to the current working directory of
+the calling process, as is done by
+<B>open</B>()
+
+for a relative pathname).
+<P>
+If
+<I>pathname</I>
+
+is relative and
+<I>dirfd</I>
+
+is the special value
+<B>AT_FDCWD</B>,
+
+then
+<I>pathname</I>
+
+is interpreted relative to the current working
+directory of the calling process (like
+<B>open</B>()).
+
+<P>
+If
+<I>pathname</I>
+
+is absolute, then
+<I>dirfd</I>
+
+is ignored.
+<A NAME="lbAG">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+<B>open</B>(),
+
+<B>openat</B>(),
+
+and
+<B>creat</B>()
+
+return the new file descriptor, or -1 if an error occurred
+(in which case,
+<I>errno</I>
+
+is set appropriately).
+<A NAME="lbAH">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<B>open</B>(),
+
+<B>openat</B>(),
+
+and
+<B>creat</B>()
+
+can fail with the following errors:
+<DL COMPACT>
+<DT><B>EACCES</B>
+
+<DD>
+The requested access to the file is not allowed, or search permission
+is denied for one of the directories in the path prefix of
+<I>pathname</I>,
+
+or the file did not exist yet and write access to the parent directory
+is not allowed.
+(See also
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7).)
+
+<DT><B>EDQUOT</B>
+
+<DD>
+Where
+<B>O_CREAT</B>
+
+is specified, the file does not exist, and the user's quota of disk
+blocks or inodes on the filesystem has been exhausted.
+<DT><B>EEXIST</B>
+
+<DD>
+<I>pathname</I>
+
+already exists and
+<B>O_CREAT</B> and <B>O_EXCL</B>
+
+were used.
+<DT><B>EFAULT</B>
+
+<DD>
+<I>pathname</I>
+
+points outside your accessible address space.
+<DT><B>EFBIG</B>
+
+<DD>
+See
+<B>EOVERFLOW</B>.
+
+<DT><B>EINTR</B>
+
+<DD>
+While blocked waiting to complete an open of a slow device
+(e.g., a FIFO; see
+<B><A HREF="../man7/fifo.7.html">fifo</A></B>(7)),
+
+the call was interrupted by a signal handler; see
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7).
+
+<DT><B>EINVAL</B>
+
+<DD>
+The filesystem does not support the
+<B>O_DIRECT</B>
+
+flag.
+See
+<B>NOTES</B>
+
+for more information.
+<DT><B>EINVAL</B>
+
+<DD>
+Invalid value in
+
+<I>flags</I>.
+
+<DT><B>EINVAL</B>
+
+<DD>
+<B>O_TMPFILE</B>
+
+was specified in
+<I>flags</I>,
+
+but neither
+<B>O_WRONLY</B>
+
+nor
+<B>O_RDWR</B>
+
+was specified.
+<DT><B>EISDIR</B>
+
+<DD>
+<I>pathname</I>
+
+refers to a directory and the access requested involved writing
+(that is,
+<B>O_WRONLY</B>
+
+or
+<B>O_RDWR</B>
+
+is set).
+<DT><B>EISDIR</B>
+
+<DD>
+<I>pathname</I>
+
+refers to an existing directory,
+<B>O_TMPFILE</B>
+
+and one of
+<B>O_WRONLY</B>
+
+or
+<B>O_RDWR</B>
+
+were specified in
+<I>flags</I>,
+
+but this kernel version does not provide the
+<B>O_TMPFILE</B>
+
+functionality.
+<DT><B>ELOOP</B>
+
+<DD>
+Too many symbolic links were encountered in resolving
+<I>pathname</I>.
+
+<DT><B>ELOOP</B>
+
+<DD>
+<I>pathname</I>
+
+was a symbolic link, and
+<I>flags</I>
+
+specified
+<B>O_NOFOLLOW</B>
+
+but not
+<B>O_PATH</B>.
+
+<DT><B>EMFILE</B>
+
+<DD>
+The process already has the maximum number of files open.
+<DT><B>ENAMETOOLONG</B>
+
+<DD>
+<I>pathname</I>
+
+was too long.
+<DT><B>ENFILE</B>
+
+<DD>
+The system limit on the total number of open files has been reached.
+<DT><B>ENODEV</B>
+
+<DD>
+<I>pathname</I>
+
+refers to a device special file and no corresponding device exists.
+(This is a Linux kernel bug; in this situation
+<B>ENXIO</B>
+
+must be returned.)
+<DT><B>ENOENT</B>
+
+<DD>
+<B>O_CREAT</B>
+
+is not set and the named file does not exist.
+Or, a directory component in
+<I>pathname</I>
+
+does not exist or is a dangling symbolic link.
+<DT><B>ENOENT</B>
+
+<DD>
+<I>pathname</I>
+
+refers to a nonexistent directory,
+<B>O_TMPFILE</B>
+
+and one of
+<B>O_WRONLY</B>
+
+or
+<B>O_RDWR</B>
+
+were specified in
+<I>flags</I>,
+
+but this kernel version does not provide the
+<B>O_TMPFILE</B>
+
+functionality.
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient kernel memory was available.
+<DT><B>ENOSPC</B>
+
+<DD>
+<I>pathname</I>
+
+was to be created but the device containing
+<I>pathname</I>
+
+has no room for the new file.
+<DT><B>ENOTDIR</B>
+
+<DD>
+A component used as a directory in
+<I>pathname</I>
+
+is not, in fact, a directory, or <B>O_DIRECTORY</B> was specified and
+<I>pathname</I>
+
+was not a directory.
+<DT><B>ENXIO</B>
+
+<DD>
+<B>O_NONBLOCK</B> | <B>O_WRONLY</B>
+
+is set, the named file is a FIFO, and
+no process has the FIFO open for reading.
+Or, the file is a device special file and no corresponding device exists.
+<DT><B>EOPNOTSUPP</B>
+
+<DD>
+The filesystem containing
+<I>pathname</I>
+
+does not support
+<B>O_TMPFILE</B>.
+
+<DT><B>EOVERFLOW</B>
+
+<DD>
+<I>pathname</I>
+
+refers to a regular file that is too large to be opened.
+The usual scenario here is that an application compiled
+on a 32-bit platform without
+<I>-D_FILE_OFFSET_BITS=64</I>
+
+tried to open a file whose size exceeds
+<I>(2&lt;&lt;31)-1</I>
+
+bits;
+see also
+<B>O_LARGEFILE</B>
+
+above.
+This is the error specified by POSIX.1-2001;
+in kernels before 2.6.24, Linux gave the error
+<B>EFBIG</B>
+
+for this case.
+
+
+
+<DT><B>EPERM</B>
+
+<DD>
+The
+<B>O_NOATIME</B>
+
+flag was specified, but the effective user ID of the caller
+
+did not match the owner of the file and the caller was not privileged
+(<B>CAP_FOWNER</B>).
+
+<DT><B>EROFS</B>
+
+<DD>
+<I>pathname</I>
+
+refers to a file on a read-only filesystem and write access was
+requested.
+<DT><B>ETXTBSY</B>
+
+<DD>
+<I>pathname</I>
+
+refers to an executable image which is currently being executed and
+write access was requested.
+<DT><B>EWOULDBLOCK</B>
+
+<DD>
+The
+<B>O_NONBLOCK</B>
+
+flag was specified, and an incompatible lease was held on the file
+(see
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)).
+
+</DL>
+<P>
+
+The following additional errors can occur for
+<B>openat</B>():
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>dirfd</I>
+
+is not a valid file descriptor.
+<DT><B>ENOTDIR</B>
+
+<DD>
+<I>pathname</I>
+
+is a relative pathname and
+<I>dirfd</I>
+
+is a file descriptor referring to a file other than a directory.
+</DL>
+<A NAME="lbAI">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>openat</B>()
+
+was added to Linux in kernel 2.6.16;
+library support was added to glibc in version 2.4.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>open</B>(),
+
+<B>creat</B>()
+
+SVr4, 4.3BSD, POSIX.1-2001, POSIX.1-2008.
+<P>
+<B>openat</B>():
+
+POSIX.1-2008.
+<P>
+The
+<B>O_DIRECT</B>,
+
+<B>O_NOATIME</B>,
+
+<B>O_PATH</B>,
+
+and
+<B>O_TMPFILE</B>
+
+flags are Linux-specific.
+One must define
+<B>_GNU_SOURCE</B>
+
+to obtain their definitions.
+<P>
+The
+<B>O_CLOEXEC</B>,
+
+<B>O_DIRECTORY</B>,
+
+and
+<B>O_NOFOLLOW</B>
+
+flags are not specified in POSIX.1-2001,
+but are specified in POSIX.1-2008.
+Since glibc 2.12, one can obtain their definitions by defining either
+<B>_POSIX_C_SOURCE</B>
+
+with a value greater than or equal to 200809L or
+<B>_XOPEN_SOURCE</B>
+
+with a value greater than or equal to 700.
+In glibc 2.11 and earlier, one obtains the definitions by defining
+<B>_GNU_SOURCE</B>.
+
+<P>
+As noted in
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7),
+
+feature test macros such as
+<B>_POSIX_C_SOURCE</B>,
+
+<B>_XOPEN_SOURCE</B>,
+
+and
+<B>_GNU_SOURCE</B>
+
+must be defined before including
+<I>any</I>
+
+header files.
+<A NAME="lbAK">&nbsp;</A>
+<H2>NOTES</H2>
+
+Under Linux, the
+<B>O_NONBLOCK</B>
+
+flag indicates that one wants to open
+but does not necessarily have the intention to read or write.
+This is typically used to open devices in order to get a file descriptor
+for use with
+<B><A HREF="../man2/ioctl.2.html">ioctl</A></B>(2).
+
+<P>
+<P>
+
+The (undefined) effect of
+<B>O_RDONLY | O_TRUNC</B>
+
+varies among implementations.
+On many systems the file is actually truncated.
+
+
+
+
+
+
+<P>
+Note that
+<B>open</B>()
+
+can open device special files, but
+<B>creat</B>()
+
+cannot create them; use
+<B><A HREF="../man2/mknod.2.html">mknod</A></B>(2)
+
+instead.
+<P>
+If the file is newly created, its
+<I>st_atime</I>,
+
+<I>st_ctime</I>,
+
+<I>st_mtime</I>
+
+fields
+(respectively, time of last access, time of last status change, and
+time of last modification; see
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2))
+
+are set
+to the current time, and so are the
+<I>st_ctime</I>
+
+and
+<I>st_mtime</I>
+
+fields of the
+parent directory.
+Otherwise, if the file is modified because of the
+<B>O_TRUNC</B>
+
+flag, its st_ctime and st_mtime fields are set to the current time.
+
+
+<A NAME="lbAL">&nbsp;</A>
+<H3>Open file descriptions</H3>
+
+The term open file description is the one used by POSIX to refer to the
+entries in the system-wide table of open files.
+In other contexts, this object is
+variously also called an &quot;open file object&quot;,
+a &quot;file handle&quot;, an &quot;open file table entry&quot;,
+or---in kernel-developer parlance---a
+<I>struct file</I>.
+
+<P>
+When a file descriptor is duplicated (using
+<B><A HREF="../man2/dup.2.html">dup</A></B>(2)
+
+or similar),
+the duplicate refers to the same open file description
+as the original file descriptor,
+and the two file descriptors consequently share
+the file offset and file status flags.
+Such sharing can also occur between processes:
+a child process created via
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+inherits duplicates of its parent's file descriptors,
+and those duplicates refer to the same open file descriptions.
+<P>
+Each
+<B><A HREF="../man2/open.2.html">open</A></B>(2)
+
+of a file creates a new open file description;
+thus, there may be multiple open file descriptions
+corresponding to a file inode.
+
+
+<A NAME="lbAM">&nbsp;</A>
+<H3>Synchronized I/O</H3>
+
+The POSIX.1-2008 &quot;synchronized I/O&quot; option
+specifies different variants of synchronized I/O,
+and specifies the
+<B>open</B>()
+
+flags
+<B>O_SYNC</B>,
+
+<B>O_DSYNC</B>,
+
+and
+<B>O_RSYNC</B>
+
+for controlling the behavior.
+Regardless of whether an implementation supports this option,
+it must at least support the use of
+<B>O_SYNC</B>
+
+for regular files.
+<P>
+Linux implements
+<B>O_SYNC</B>
+
+and
+<B>O_DSYNC</B>,
+
+but not
+<B>O_RSYNC</B>.
+
+(Somewhat incorrectly, glibc defines
+<B>O_RSYNC</B>
+
+to have the same value as
+<B>O_SYNC</B>.)
+
+<P>
+<B>O_SYNC</B>
+
+provides synchronized I/O
+<I>file</I>
+
+integrity completion,
+meaning write operations will flush data and all associated metadata
+to the underlying hardware.
+<B>O_DSYNC</B>
+
+provides synchronized I/O
+<I>data</I>
+
+integrity completion,
+meaning write operations will flush data
+to the underlying hardware,
+but will only flush metadata updates that are required
+to allow a subsequent read operation to complete successfully.
+Data integrity completion can reduce the number of disk operations
+that are required for applications that don't need the guarantees
+of file integrity completion.
+<P>
+To understand the difference between the two types of completion,
+consider two pieces of file metadata:
+the file last modification timestamp
+(<I>st_mtime</I>)
+
+and the file length.
+All write operations will update the last file modification timestamp,
+but only writes that add data to the end of the
+file will change the file length.
+The last modification timestamp is not needed to ensure that
+a read completes successfully, but the file length is.
+Thus,
+<B>O_DSYNC</B>
+
+would only guarantee to flush updates to the file length metadata
+(whereas
+<B>O_SYNC</B>
+
+would also always flush the last modification timestamp metadata).
+<P>
+Before Linux 2.6.33, Linux implemented only the
+<B>O_SYNC</B>
+
+flag for
+<B>open</B>().
+
+However, when that flag was specified,
+most filesystems actually provided the equivalent of synchronized I/O
+<I>data</I>
+
+integrity completion (i.e.,
+<B>O_SYNC</B>
+
+was actually implemented as the equivalent of
+<B>O_DSYNC</B>).
+
+<P>
+Since Linux 2.6.33, proper
+<B>O_SYNC</B>
+
+support is provided.
+However, to ensure backward binary compatibility,
+<B>O_DSYNC</B>
+
+was defined with the same value as the historical
+<B>O_SYNC</B>,
+
+and
+<B>O_SYNC</B>
+
+was defined as a new (two-bit) flag value that includes the
+<B>O_DSYNC</B>
+
+flag value.
+This ensures that applications compiled against
+new headers get at least
+<B>O_DSYNC</B>
+
+semantics on pre-2.6.33 kernels.
+
+
+<A NAME="lbAN">&nbsp;</A>
+<H3>NFS</H3>
+
+There are many infelicities in the protocol underlying NFS, affecting
+amongst others
+<B>O_SYNC</B> and <B>O_NDELAY</B>.
+
+<P>
+On NFS filesystems with UID mapping enabled,
+<B>open</B>()
+
+may
+return a file descriptor but, for example,
+<B><A HREF="../man2/read.2.html">read</A></B>(2)
+
+requests are denied
+with <B>EACCES</B>.
+This is because the client performs
+<B>open</B>()
+
+by checking the
+permissions, but UID mapping is performed by the server upon
+read and write requests.
+
+
+<A NAME="lbAO">&nbsp;</A>
+<H3>File access mode</H3>
+
+Unlike the other values that can be specified in
+<I>flags</I>,
+
+the
+<I>access mode</I>
+
+values
+<B>O_RDONLY</B>, <B>O_WRONLY</B>, and <B>O_RDWR</B>
+
+do not specify individual bits.
+Rather, they define the low order two bits of
+<I>flags</I>,
+
+and are defined respectively as 0, 1, and 2.
+In other words, the combination
+<B>O_RDONLY | O_WRONLY</B>
+
+is a logical error, and certainly does not have the same meaning as
+<B>O_RDWR</B>.
+
+<P>
+Linux reserves the special, nonstandard access mode 3 (binary 11) in
+<I>flags</I>
+
+to mean:
+check for read and write permission on the file and return a descriptor
+that can't be used for reading or writing.
+This nonstandard access mode is used by some Linux drivers to return a
+descriptor that is to be used only for device-specific
+<B><A HREF="../man2/ioctl.2.html">ioctl</A></B>(2)
+
+operations.
+
+
+
+
+
+
+
+<A NAME="lbAP">&nbsp;</A>
+<H3>Rationale for openat() and other directory file descriptor APIs</H3>
+
+<B>openat</B>()
+
+and the other system calls and library functions that take
+a directory file descriptor argument
+(i.e.,
+<B><A HREF="../man2/faccessat.2.html">faccessat</A></B>(2),
+
+<B><A HREF="../man2/fanotify_mark.2.html">fanotify_mark</A></B>(2),
+
+<B><A HREF="../man2/fchmodat.2.html">fchmodat</A></B>(2),
+
+<B><A HREF="../man2/fchownat.2.html">fchownat</A></B>(2),
+
+<B><A HREF="../man2/fstatat.2.html">fstatat</A></B>(2),
+
+<B><A HREF="../man2/futimesat.2.html">futimesat</A></B>(2),
+
+<B><A HREF="../man2/linkat.2.html">linkat</A></B>(2),
+
+<B><A HREF="../man2/mkdirat.2.html">mkdirat</A></B>(2),
+
+<B><A HREF="../man2/mknodat.2.html">mknodat</A></B>(2),
+
+<B><A HREF="../man2/name_to_handle_at.2.html">name_to_handle_at</A></B>(2),
+
+<B><A HREF="../man2/readlinkat.2.html">readlinkat</A></B>(2),
+
+<B><A HREF="../man2/renameat.2.html">renameat</A></B>(2),
+
+<B><A HREF="../man2/symlinkat.2.html">symlinkat</A></B>(2),
+
+<B><A HREF="../man2/unlinkat.2.html">unlinkat</A></B>(2),
+
+<B><A HREF="../man2/utimensat.2.html">utimensat</A></B>(2)
+
+<B><A HREF="../man3/mkfifoat.3.html">mkfifoat</A></B>(3),
+
+and
+<B><A HREF="../man3/scandirat.3.html">scandirat</A></B>(3))
+
+are supported
+for two reasons.
+Here, the explanation is in terms of the
+<B>openat</B>()
+
+call, but the rationale is analogous for the other interfaces.
+<P>
+First,
+<B>openat</B>()
+
+allows an application to avoid race conditions that could
+occur when using
+<B>open</B>()
+
+to open files in directories other than the current working directory.
+These race conditions result from the fact that some component
+of the directory prefix given to
+<B>open</B>()
+
+could be changed in parallel with the call to
+<B>open</B>().
+
+Such races can be avoided by
+opening a file descriptor for the target directory,
+and then specifying that file descriptor as the
+<I>dirfd</I>
+
+argument of
+<B>openat</B>().
+
+<P>
+Second,
+<B>openat</B>()
+
+allows the implementation of a per-thread &quot;current working
+directory&quot;, via file descriptor(s) maintained by the application.
+(This functionality can also be obtained by tricks based
+on the use of
+<I>/proc/self/fd/</I>dirfd,
+
+but less efficiently.)
+
+
+<A NAME="lbAQ">&nbsp;</A>
+<H3>O_DIRECT</H3>
+
+<P>
+
+The
+<B>O_DIRECT</B>
+
+flag may impose alignment restrictions on the length and address
+of user-space buffers and the file offset of I/Os.
+In Linux alignment
+restrictions vary by filesystem and kernel version and might be
+absent entirely.
+However there is currently no filesystem-independent
+interface for an application to discover these restrictions for a given
+file or filesystem.
+Some filesystems provide their own interfaces
+for doing so, for example the
+<B>XFS_IOC_DIOINFO</B>
+
+operation in
+<B><A HREF="../man3/xfsctl.3.html">xfsctl</A></B>(3).
+
+<P>
+
+Under Linux 2.4, transfer sizes, and the alignment of the user buffer
+and the file offset must all be multiples of the logical block size
+of the filesystem.
+Since Linux 2.6.0, alignment to the logical block size of the
+underlying storage (typically 512 bytes) suffices.
+The logical block size can be determined using the
+<B><A HREF="../man2/ioctl.2.html">ioctl</A></B>(2)
+
+<B>BLKSSZGET</B>
+
+operation or from the shell using the command:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;blockdev&nbsp;--getss
+<P>
+
+<B>O_DIRECT</B>
+
+I/Os should never be run concurrently with the
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+system call,
+if the memory buffer is a private mapping
+(i.e., any mapping created with the
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)
+
+<B>MAP_PRIVATE</B>
+
+flag;
+this includes memory allocated on the heap and statically allocated buffers).
+Any such I/Os, whether submitted via an asynchronous I/O interface or from
+another thread in the process,
+should be completed before
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+is called.
+Failure to do so can result in data corruption and undefined behavior in
+parent and child processes.
+This restriction does not apply when the memory buffer for the
+<B>O_DIRECT</B>
+
+I/Os was created using
+<B><A HREF="../man2/shmat.2.html">shmat</A></B>(2)
+
+or
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)
+
+with the
+<B>MAP_SHARED</B>
+
+flag.
+Nor does this restriction apply when the memory buffer has been advised as
+<B>MADV_DONTFORK</B>
+
+with
+<B><A HREF="../man2/madvise.2.html">madvise</A></B>(2),
+
+ensuring that it will not be available
+to the child after
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2).
+
+<P>
+
+The
+<B>O_DIRECT</B>
+
+flag was introduced in SGI IRIX, where it has alignment
+restrictions similar to those of Linux 2.4.
+IRIX has also a
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+call to query appropriate alignments, and sizes.
+FreeBSD 4.x introduced
+a flag of the same name, but without alignment restrictions.
+<P>
+
+<B>O_DIRECT</B>
+
+support was added under Linux in kernel version 2.4.10.
+Older Linux kernels simply ignore this flag.
+Some filesystems may not implement the flag and
+<B>open</B>()
+
+will fail with
+<B>EINVAL</B>
+
+if it is used.
+<P>
+
+Applications should avoid mixing
+<B>O_DIRECT</B>
+
+and normal I/O to the same file,
+and especially to overlapping byte regions in the same file.
+Even when the filesystem correctly handles the coherency issues in
+this situation, overall I/O throughput is likely to be slower than
+using either mode alone.
+Likewise, applications should avoid mixing
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)
+
+of files with direct I/O to the same files.
+<P>
+
+The behavior of
+<B>O_DIRECT</B>
+
+with NFS will differ from local filesystems.
+Older kernels, or
+kernels configured in certain ways, may not support this combination.
+The NFS protocol does not support passing the flag to the server, so
+<B>O_DIRECT</B>
+
+I/O will bypass the page cache only on the client; the server may
+still cache the I/O.
+The client asks the server to make the I/O
+synchronous to preserve the synchronous semantics of
+<B>O_DIRECT</B>.
+
+Some servers will perform poorly under these circumstances, especially
+if the I/O size is small.
+Some servers may also be configured to
+lie to clients about the I/O having reached stable storage; this
+will avoid the performance penalty at some risk to data integrity
+in the event of server power failure.
+The Linux NFS client places no alignment restrictions on
+<B>O_DIRECT</B>
+
+I/O.
+<P>
+
+In summary,
+<B>O_DIRECT</B>
+
+is a potentially powerful tool that should be used with caution.
+It is recommended that applications treat use of
+<B>O_DIRECT</B>
+
+as a performance option which is disabled by default.
+<P>
+
+<DL COMPACT><DT><DD>
+&quot;The thing that has always disturbed me about O_DIRECT is that the whole
+interface is just stupid, and was probably designed by a deranged monkey
+on some serious mind-controlling substances.&quot;---Linus
+</DL>
+
+<A NAME="lbAR">&nbsp;</A>
+<H2>BUGS</H2>
+
+Currently, it is not possible to enable signal-driven
+I/O by specifying
+<B>O_ASYNC</B>
+
+when calling
+<B>open</B>();
+
+use
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+to enable this flag.
+
+
+<P>
+One must check for two different error codes,
+<B>EISDIR</B>
+
+and
+<B>ENOENT</B>,
+
+when trying to determine whether the kernel supports
+<B>O_TMPFILE</B>
+
+functionality.
+<A NAME="lbAS">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/chmod.2.html">chmod</A></B>(2),
+
+<B><A HREF="../man2/chown.2.html">chown</A></B>(2),
+
+<B><A HREF="../man2/close.2.html">close</A></B>(2),
+
+<B><A HREF="../man2/dup.2.html">dup</A></B>(2),
+
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2),
+
+<B><A HREF="../man2/link.2.html">link</A></B>(2),
+
+<B><A HREF="../man2/lseek.2.html">lseek</A></B>(2),
+
+<B><A HREF="../man2/mknod.2.html">mknod</A></B>(2),
+
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2),
+
+<B><A HREF="../man2/mount.2.html">mount</A></B>(2),
+
+<B><A HREF="../man2/open_by_handle_at.2.html">open_by_handle_at</A></B>(2),
+
+<B><A HREF="../man2/read.2.html">read</A></B>(2),
+
+<B><A HREF="../man2/socket.2.html">socket</A></B>(2),
+
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2),
+
+<B><A HREF="../man2/umask.2.html">umask</A></B>(2),
+
+<B><A HREF="../man2/unlink.2.html">unlink</A></B>(2),
+
+<B><A HREF="../man2/write.2.html">write</A></B>(2),
+
+<B><A HREF="../man3/fopen.3.html">fopen</A></B>(3),
+
+<B><A HREF="../man7/fifo.7.html">fifo</A></B>(7),
+
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7),
+
+<B><A HREF="../man7/symlink.7.html">symlink</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">creat()</A><DD>
+<DT><A HREF="#lbAF">openat()</A><DD>
+</DL>
+<DT><A HREF="#lbAG">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAH">ERRORS</A><DD>
+<DT><A HREF="#lbAI">VERSIONS</A><DD>
+<DT><A HREF="#lbAJ">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAK">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAL">Open file descriptions</A><DD>
+<DT><A HREF="#lbAM">Synchronized I/O</A><DD>
+<DT><A HREF="#lbAN">NFS</A><DD>
+<DT><A HREF="#lbAO">File access mode</A><DD>
+<DT><A HREF="#lbAP">Rationale for openat() and other directory file descriptor APIs</A><DD>
+<DT><A HREF="#lbAQ">O_DIRECT</A><DD>
+</DL>
+<DT><A HREF="#lbAR">BUGS</A><DD>
+<DT><A HREF="#lbAS">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:49 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MALLOC_HOOK</TITLE>
+</HEAD><BODY>
+<H1>MALLOC_HOOK</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2010-10-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+__malloc_hook, __malloc_initialize_hook,
+__memalign_hook, __free_hook, __realloc_hook,
+__after_morecore_hook - malloc debugging variables
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/malloc.h">malloc.h</A>&gt;</B>
+
+<B>void *(*__malloc_hook)(size_t </B><I>size</I><B>, const void *</B><I>caller</I><B>);</B>
+
+<B>void *(*__realloc_hook)(void *</B><I>ptr</I><B>, size_t </B><I>size</I><B>, const void *</B><I>caller</I><B>);</B>
+
+<B>void *(*__memalign_hook)(size_t </B><I>alignment</I><B>, size_t </B><I>size</I><B>,</B>
+<B>                         const void *</B><I>caller</I><B>);</B>
+
+<B>void (*__free_hook)(void *</B><I>ptr</I><B>, const void *</B><I>caller</I><B>);</B>
+
+<B>void (*__malloc_initialize_hook)(void);</B>
+
+<B>void (*__after_morecore_hook)(void);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The GNU C library lets you modify the behavior of
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3),
+
+<B><A HREF="../man3/realloc.3.html">realloc</A></B>(3),
+
+and
+<B><A HREF="../man3/free.3.html">free</A></B>(3)
+
+by specifying appropriate hook functions.
+You can use these hooks
+to help you debug programs that use dynamic memory allocation,
+for example.
+<P>
+
+The variable
+<B>__malloc_initialize_hook</B>
+
+points at a function that is called once when the malloc implementation
+is initialized.
+This is a weak variable, so it can be overridden in
+the application with a definition like the following:
+<PRE>
+
+    void (*__malloc_initialize_hook)(void) = my_init_hook;
+
+</PRE>
+
+Now the function
+<I>my_init_hook</I>()
+
+can do the initialization of all hooks.
+<P>
+
+The four functions pointed to by
+<B>__malloc_hook</B>,
+
+<B>__realloc_hook</B>,
+
+<B>__memalign_hook</B>,
+
+<B>__free_hook</B>
+
+have a prototype like the functions
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3),
+
+<B><A HREF="../man3/realloc.3.html">realloc</A></B>(3),
+
+<B><A HREF="../man3/memalign.3.html">memalign</A></B>(3),
+
+<B><A HREF="../man3/free.3.html">free</A></B>(3),
+
+respectively, except that they have a final argument
+<I>caller</I>
+
+that gives the address of the caller of
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3),
+
+etc.
+<P>
+
+The variable
+<B>__after_morecore_hook</B>
+
+points at a function that is called each time after
+<B><A HREF="../man2/sbrk.2.html">sbrk</A></B>(2)
+
+was asked for more memory.
+<A NAME="lbAE">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+These functions are GNU extensions.
+<A NAME="lbAF">&nbsp;</A>
+<H2>NOTES</H2>
+
+The use of these hook functions is not safe in multithreaded programs,
+and they are now deprecated.
+
+
+Programmers should instead preempt calls to the relevant functions
+by defining and exporting functions such as &quot;malloc&quot; and &quot;free&quot;.
+<A NAME="lbAG">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+Here is a short example of how to use these variables.
+<P>
+<PRE>
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/malloc.h">malloc.h</A>&gt;
+
+/* Prototypes for our hooks.  */
+static void my_init_hook(void);
+static void *my_malloc_hook(size_t, const void *);
+
+/* Variables to save original hooks. */
+static void *(*old_malloc_hook)(size_t, const void *);
+
+/* Override initializing hook from the C library. */
+void (*__malloc_initialize_hook) (void) = my_init_hook;
+
+static void
+my_init_hook(void)
+{
+    old_malloc_hook = __malloc_hook;
+    __malloc_hook = my_malloc_hook;
+}
+
+static void *
+my_malloc_hook(size_t size, const void *caller)
+{
+    void *result;
+
+    /* Restore all old hooks */
+    __malloc_hook = old_malloc_hook;
+
+    /* Call recursively */
+    result = malloc(size);
+
+    /* Save underlying hooks */
+    old_malloc_hook = __malloc_hook;
+
+    /* printf() might call malloc(), so protect it too. */
+    printf(&quot;malloc(%u) called from %p returns %p\n&quot;,
+            (unsigned int) size, caller, result);
+
+    /* Restore our own hooks */
+    __malloc_hook = my_malloc_hook;
+
+    return result;
+}
+</PRE>
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/mallinfo.3.html">mallinfo</A></B>(3),
+
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3),
+
+<B><A HREF="../man3/mcheck.3.html">mcheck</A></B>(3),
+
+<B><A HREF="../man3/mtrace.3.html">mtrace</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAF">NOTES</A><DD>
+<DT><A HREF="#lbAG">EXAMPLE</A><DD>
+<DT><A HREF="#lbAH">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:03 GMT, September 18, 2014
+</BODY>
+</HTML>

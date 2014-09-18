@@ -1,0 +1,4966 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of PROC</TITLE>
+</HEAD><BODY>
+<H1>PROC</H1>
+Section: Linux Programmer's Manual (5)<BR>Updated: 2014-07-08<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+proc - process information pseudo-filesystem
+<A NAME="lbAC">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<I>proc</I>
+
+filesystem is a pseudo-filesystem which provides an interface to
+kernel data structures.
+It is commonly mounted at
+<I>/proc</I>.
+
+Most of it is read-only, but some files allow kernel variables to be
+changed.
+<P>
+
+The following list describes many of the files and directories under the
+<I>/proc</I>
+
+hierarchy.
+
+<DL COMPACT>
+<DT><I>/proc/[pid]</I>
+
+<DD>
+There is a numerical subdirectory for each running process; the
+subdirectory is named by the process ID.
+Each such subdirectory contains the following
+pseudo-files and directories.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<DT><I>/proc/[pid]/auxv</I> (since 2.6.0-test7)
+
+<DD>
+This contains the contents of the ELF interpreter information passed
+to the process at exec time.
+The format is one <I>unsigned long</I> ID
+plus one <I>unsigned long</I> value for each entry.
+The last entry contains two zeros.
+See also
+<B><A HREF="../man3/getauxval.3.html">getauxval</A></B>(3).
+
+<DT><I>/proc/[pid]/cgroup</I> (since Linux 2.6.24)
+
+<DD>
+
+This file describes control groups to which the process/task belongs.
+For each cgroup hierarchy there is one entry containing
+colon-separated fields of the form:
+<PRE>
+
+    5:cpuacct,cpu,cpuset:/daemons
+</PRE>
+
+<DT><DD>
+The colon-separated fields are, from left to right:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>1.<DD>
+hierarchy ID number
+<DT>2.<DD>
+set of subsystems bound to the hierarchy
+<DT>3.<DD>
+control group in the hierarchy to which the process belongs
+</DL>
+</DL>
+
+<DT><DD>
+This file is present only if the
+<B>CONFIG_CGROUPS</B>
+
+kernel configuration option is enabled.
+<DT><I>/proc/[pid]/clear_refs</I> (since Linux 2.6.22)
+
+<DD>
+
+
+
+
+
+
+<P>
+This is a write-only file, writable only by owner of the process.
+<P>
+The following values may be written to the file:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>1 (since Linux 2.6.22)<DD>
+
+Reset the PG_Referenced and ACCESSED/YOUNG
+bits for all the pages associated with the process.
+(Before kernel 2.6.32, writing any nonzero value to this file
+had this effect.)
+<DT>2 (since Linux 2.6.32)<DD>
+
+Reset the PG_Referenced and ACCESSED/YOUNG
+bits for all anonymous pages associated with the process.
+<DT>3 (since Linux 2.6.32)<DD>
+
+Reset the PG_Referenced and ACCESSED/YOUNG
+bits for all file-mapped pages associated with the process.
+</DL>
+</DL>
+
+<DT><DD>
+Clearing the PG_Referenced and ACCESSED/YOUNG bits provides a method
+to measure approximately how much memory a process is using.
+One first inspects the values in the &quot;Referenced&quot; fields
+for the VMAs shown in
+<I>/proc/[pid]/smaps</I>
+
+to get an idea of the memory footprint of the
+process.
+One then clears the PG_Referenced and ACCESSED/YOUNG bits
+and, after some measured time interval,
+once again inspects the values in the &quot;Referenced&quot; fields
+to get an idea of the change in memory footprint of the
+process during the measured interval.
+If one is interested only in inspecting the selected mapping types,
+then the value 2 or 3 can be used instead of 1.
+<P>
+A further value can be written to affect a different bit:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>4 (since Linux 3.11)<DD>
+Clear the soft-dirty bit for all the pages associated with the process.
+
+This is used (in conjunction with
+<I>/proc/[pid]/pagemap</I>)
+
+by the check-point restore system to discover which pages of a process
+have been dirtied since the file
+<I>/proc/[pid]/clear_refs</I>
+
+was written to.
+</DL>
+</DL>
+
+<DT><DD>
+Writing any value to
+<I>/proc/[pid]/clear_refs</I>
+
+other than those listed above has no effect.
+<P>
+The
+<I>/proc/[pid]/clear_refs</I>
+
+file is present only if the
+<B>CONFIG_PROC_PAGE_MONITOR</B>
+
+kernel configuration option is enabled.
+<DT><I>/proc/[pid]/cmdline</I>
+
+<DD>
+This read-only file holds the complete command line for the process,
+unless the process is a zombie.
+
+In the latter case, there is nothing in this file:
+that is, a read on this file will return 0 characters.
+The command-line arguments appear in this file as a set of
+strings separated by null bytes ('\0'),
+with a further null byte after the last string.
+<DT><I>/proc/[pid]/comm</I> (since Linux 2.6.33)
+
+<DD>
+
+This file exposes the process's
+<I>comm</I>
+
+value---that is, the command name associated with the process.
+Different threads in the same process may have different
+<I>comm</I>
+
+values, accessible via
+<I>/proc/[pid]/task/[tid]/comm</I>.
+
+A thread may modify its
+<I>comm</I>
+
+value, or that of any of other thread in the same thread group (see
+the discussion of
+<B>CLONE_THREAD</B>
+
+in
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)),
+
+by writing to the file
+<I>/proc/self/task/[tid]/comm</I>.
+
+Strings longer than
+<B>TASK_COMM_LEN</B>
+
+(16) characters are silently truncated.
+<P>
+This file provides a superset of the
+<B><A HREF="../man2/prctl.2.html">prctl</A></B>(2)
+
+<B>PR_SET_NAME</B>
+
+and
+<B>PR_GET_NAME</B>
+
+operations, and is employed by
+<B><A HREF="../man3/pthread_setname_np.3.html">pthread_setname_np</A></B>(3)
+
+when used to rename threads other than the caller.
+<DT><I>/proc/[pid]/coredump_filter</I> (since kernel 2.6.23)
+
+<DD>
+See
+<B><A HREF="../man5/core.5.html">core</A></B>(5).
+
+<DT><I>/proc/[pid]/cpuset</I> (since kernel 2.6.12)
+
+<DD>
+
+See
+<B><A HREF="../man7/cpuset.7.html">cpuset</A></B>(7).
+
+<DT><I>/proc/[pid]/cwd</I>
+
+<DD>
+This is a symbolic link to the current working directory of the process.
+To find out the current working directory of process 20,
+for instance, you can do this:
+<P>
+
+<PRE>
+$<B> cd /proc/20/cwd; /bin/pwd</B>
+</PRE>
+
+
+<P>
+Note that the
+<I>pwd</I>
+
+command is often a shell built-in, and might
+not work properly.
+In
+<B><A HREF="../man1/bash.1.html">bash</A></B>(1),
+
+you may use
+<I>pwd&nbsp;-P</I>.
+
+<P>
+
+In a multithreaded process, the contents of this symbolic link
+are not available if the main thread has already terminated
+(typically by calling
+<B><A HREF="../man3/pthread_exit.3.html">pthread_exit</A></B>(3)).
+
+<DT><I>/proc/[pid]/environ</I>
+
+<DD>
+This file contains the environment for the process.
+The entries are separated by null bytes ('\0'),
+and there may be a null byte at the end.
+Thus, to print out the environment of process 1, you would do:
+
+<PRE>
+
+$<B> strings /proc/1/environ</B>
+</PRE>
+
+
+
+<DT><I>/proc/[pid]/exe</I>
+
+<DD>
+Under Linux 2.2 and later, this file is a symbolic link
+containing the actual pathname of the executed command.
+This symbolic link can be dereferenced normally; attempting to open
+it will open the executable.
+You can even type
+<I>/proc/[pid]/exe</I>
+
+to run another copy of the same executable as is being run by
+process [pid].
+
+In a multithreaded process, the contents of this symbolic link
+are not available if the main thread has already terminated
+(typically by calling
+<B><A HREF="../man3/pthread_exit.3.html">pthread_exit</A></B>(3)).
+
+<P>
+Under Linux 2.0 and earlier,
+<I>/proc/[pid]/exe</I>
+
+is a pointer to the binary which was executed,
+and appears as a symbolic link.
+A
+<B><A HREF="../man2/readlink.2.html">readlink</A></B>(2)
+
+call on this file under Linux 2.0 returns a string in the format:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;[device]:inode
+<P>
+For example, [0301]:1502 would be inode 1502 on device major 03 (IDE,
+MFM, etc. drives) minor 01 (first partition on the first drive).
+<P>
+<B><A HREF="../man1/find.1.html">find</A></B>(1)
+
+with the
+<I>-inum</I>
+
+option can be used to locate the file.
+<DT><I>/proc/[pid]/fd/</I>
+
+<DD>
+This is a subdirectory containing one entry for each file which the
+process has open, named by its file descriptor, and which is a
+symbolic link to the actual file.
+Thus, 0 is standard input, 1 standard output, 2 standard error, and so on.
+<P>
+For file descriptors for pipes and sockets,
+the entries will be symbolic links whose content is the
+file type with the inode.
+A
+<B><A HREF="../man2/readlink.2.html">readlink</A></B>(2)
+
+call on this file returns a string in the format:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;type:[inode]
+<P>
+For example,
+<I>socket:[2248868]</I>
+
+will be a socket and its inode is 2248868.
+For sockets, that inode can be used to find more information
+in one of the files under
+<I>/proc/net/</I>.
+
+<P>
+For file descriptors that have no corresponding inode
+(e.g., file descriptors produced by
+<B><A HREF="../man2/epoll_create.2.html">epoll_create</A></B>(2),
+
+<B><A HREF="../man2/eventfd.2.html">eventfd</A></B>(2),
+
+<B><A HREF="../man2/inotify_init.2.html">inotify_init</A></B>(2),
+
+<B><A HREF="../man2/signalfd.2.html">signalfd</A></B>(2),
+
+and
+<B><A HREF="../man2/timerfd.2.html">timerfd</A></B>(2)),
+
+the entry will be a symbolic link with contents of the form
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;anon_inode:&lt;file-type&gt;
+<P>
+In some cases, the
+<I>file-type</I>
+
+is surrounded by square brackets.
+<P>
+For example, an epoll file descriptor will have a symbolic link
+whose content is the string
+<I>anon_inode:[eventpoll]</I>.
+
+<P>
+
+In a multithreaded process, the contents of this directory
+are not available if the main thread has already terminated
+(typically by calling
+<B><A HREF="../man3/pthread_exit.3.html">pthread_exit</A></B>(3)).
+
+<P>
+Programs that will take a filename as a command-line argument,
+but will not take input from standard input if no argument is supplied,
+or that write to a file named as a command-line argument,
+but will not send their output to standard output
+if no argument is supplied, can nevertheless be made to use
+standard input or standard out using
+<I>/proc/[pid]/fd</I>.
+
+For example, assuming that
+<I>-i</I>
+
+is the flag designating an input file and
+<I>-o</I>
+
+is the flag designating an output file:
+
+<PRE>
+
+$<B> foobar -i /proc/self/fd/0 -o /proc/self/fd/1 ...</B>
+</PRE>
+
+
+<P>
+and you have a working filter.
+
+
+
+
+<P>
+<I>/proc/self/fd/N</I>
+
+is approximately the same as
+<I>/dev/fd/N</I>
+
+in some UNIX and UNIX-like systems.
+Most Linux MAKEDEV scripts symbolically link
+<I>/dev/fd</I>
+
+to
+<I>/proc/self/fd</I>,
+
+in fact.
+<P>
+Most systems provide symbolic links
+<I>/dev/stdin</I>,
+
+<I>/dev/stdout</I>,
+
+and
+<I>/dev/stderr</I>,
+
+which respectively link to the files
+<I>0</I>,
+
+<I>1</I>,
+
+and
+<I>2</I>
+
+in
+<I>/proc/self/fd</I>.
+
+Thus the example command above could be written as:
+
+<PRE>
+
+$<B> foobar -i /dev/stdin -o /dev/stdout ...</B>
+</PRE>
+
+
+
+
+
+<DT><I>/proc/[pid]/fdinfo/</I> (since kernel 2.6.22)
+
+<DD>
+This is a subdirectory containing one entry for each file which the
+process has open, named by its file descriptor.
+The contents of each file can be read to obtain information
+about the corresponding file descriptor, for example:
+
+<PRE>
+
+$<B> cat /proc/12015/fdinfo/4</B>
+pos:    1000
+flags:  01002002
+</PRE>
+
+
+<P>
+The
+<I>pos</I>
+
+field is a decimal number showing the current file offset.
+The
+<I>flags</I>
+
+field is an octal number that displays the
+file access mode and file status flags (see
+<B><A HREF="../man2/open.2.html">open</A></B>(2)).
+
+<P>
+The files in this directory are readable only by the owner of the process.
+
+
+
+
+
+
+
+
+
+
+
+
+
+<DT><I>/proc/[pid]/io</I> (since kernel 2.6.20)
+
+<DD>
+
+This file contains I/O statistics for the process, for example:
+
+<PRE>
+
+#<B> cat /proc/3828/io</B>
+rchar: 323934931
+wchar: 323929600
+syscr: 632687
+syscw: 632675
+read_bytes: 0
+write_bytes: 323932160
+cancelled_write_bytes: 0
+</PRE>
+
+
+<P>
+The fields are as follows:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><I>rchar</I>: characters read
+
+<DD>
+The number of bytes which this task has caused to be read from storage.
+This is simply the sum of bytes which this process passed to
+<B><A HREF="../man2/read.2.html">read</A></B>(2)
+
+and similar system calls.
+It includes things such as terminal I/O and
+is unaffected by whether or not actual
+physical disk I/O was required (the read might have been satisfied from
+pagecache).
+<DT><I>wchar</I>: characters written
+
+<DD>
+The number of bytes which this task has caused, or shall cause to be written
+to disk.
+Similar caveats apply here as with
+<I>rchar</I>.
+
+<DT><I>syscr</I>: read syscalls
+
+<DD>
+Attempt to count the number of read I/O operations---that is,
+system calls such as
+<B><A HREF="../man2/read.2.html">read</A></B>(2)
+
+and
+<B><A HREF="../man2/pread.2.html">pread</A></B>(2).
+
+<DT><I>syscw</I>: write syscalls
+
+<DD>
+Attempt to count the number of write I/O operations---that is,
+system calls such as
+<B><A HREF="../man2/write.2.html">write</A></B>(2)
+
+and
+<B><A HREF="../man2/pwrite.2.html">pwrite</A></B>(2).
+
+<DT><I>read_bytes</I>: bytes read
+
+<DD>
+Attempt to count the number of bytes which this process really did cause to
+be fetched from the storage layer.
+This is accurate for block-backed filesystems.
+<DT><I>write_bytes</I>: bytes written
+
+<DD>
+Attempt to count the number of bytes which this process caused to be sent to
+the storage layer.
+<DT><I>cancelled_write_bytes</I>:
+
+<DD>
+The big inaccuracy here is truncate.
+If a process writes 1MB to a file and then deletes the file,
+it will in fact perform no writeout.
+But it will have been accounted as having caused 1MB of write.
+In other words: this field represents the number of bytes which this process
+caused to not happen, by truncating pagecache.
+A task can cause &quot;negative&quot; I/O too.
+If this task truncates some dirty pagecache,
+some I/O which another task has been accounted for
+(in its
+<I>write_bytes</I>)
+
+will not be happening.
+</DL>
+</DL>
+
+<DT><DD>
+<I>Note</I>:
+
+In the current implementation, things are a bit racy on 32-bit systems:
+if process A reads process B's
+<I>/proc/[pid]/io</I>
+
+while process B is updating one of these 64-bit counters,
+process A could see an intermediate result.
+<DT><I>/proc/[pid]/limits</I> (since kernel 2.6.24)
+
+<DD>
+This file displays the soft limit, hard limit, and units of measurement
+for each of the process's resource limits (see
+<B><A HREF="../man2/getrlimit.2.html">getrlimit</A></B>(2)).
+
+Up to and including Linux 2.6.35,
+this file is protected to allow reading only by the real UID of the process.
+Since Linux 2.6.36,
+
+this file is readable by all users on the system.
+<DT><I>/proc/[pid]/map_files/</I> (since kernel 3.3)
+
+<DD>
+
+This subdirectory contains entries corresponding to memory-mapped
+files (see
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)).
+
+Entries are named by memory region start and end
+address pair (expressed as hexadecimal numbers),
+and are symbolic links to the mapped files themselves.
+Here is an example, with the output wrapped and reformatted to fit on an 80-column display:
+
+<PRE>
+
+$<B> ls -l /proc/self/map_files/</B>
+lr--------. 1 root root 64 Apr 16 21:31
+            3252e00000-3252e20000 -&gt; /usr/lib64/ld-2.15.so
+...
+</PRE>
+
+
+<P>
+Although these entries are present for memory regions that were
+mapped with the
+<B>MAP_FILE</B>
+
+flag, the way anonymous shared memory (regions created with the
+<B>MAP_ANON | MAP_SHARED</B>
+
+flags)
+is implemented in Linux
+means that such regions also appear on this directory.
+Here is an example where the target file is the deleted
+<I>/dev/zero</I>
+
+one:
+
+<PRE>
+
+lrw-------. 1 root root 64 Apr 16 21:33
+            7fc075d2f000-7fc075e6f000 -&gt; /dev/zero (deleted)
+</PRE>
+
+
+<P>
+This directory appears only if the
+<B>CONFIG_CHECKPOINT_RESTORE</B>
+
+kernel configuration option is enabled.
+<DT><I>/proc/[pid]/maps</I>
+
+<DD>
+A file containing the currently mapped memory regions and their access
+permissions.
+See
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)
+
+for some further information about memory mappings.
+<P>
+The format of the file is:
+<P>
+
+<PRE>
+<I>address           perms offset  dev   inode       pathname</I>
+00400000-00452000 r-xp 00000000 08:02 173521      /usr/bin/dbus-daemon
+00651000-00652000 r--p 00051000 08:02 173521      /usr/bin/dbus-daemon
+00652000-00655000 rw-p 00052000 08:02 173521      /usr/bin/dbus-daemon
+00e03000-00e24000 rw-p 00000000 00:00 0           [heap]
+00e24000-011f7000 rw-p 00000000 00:00 0           [heap]
+...
+35b1800000-35b1820000 r-xp 00000000 08:02 135522  /usr/lib64/ld-2.15.so
+35b1a1f000-35b1a20000 r--p 0001f000 08:02 135522  /usr/lib64/ld-2.15.so
+35b1a20000-35b1a21000 rw-p 00020000 08:02 135522  /usr/lib64/ld-2.15.so
+35b1a21000-35b1a22000 rw-p 00000000 00:00 0
+35b1c00000-35b1dac000 r-xp 00000000 08:02 135870  /usr/lib64/libc-2.15.so
+35b1dac000-35b1fac000 ---p 001ac000 08:02 135870  /usr/lib64/libc-2.15.so
+35b1fac000-35b1fb0000 r--p 001ac000 08:02 135870  /usr/lib64/libc-2.15.so
+35b1fb0000-35b1fb2000 rw-p 001b0000 08:02 135870  /usr/lib64/libc-2.15.so
+...
+f2c6ff8c000-7f2c7078c000 rw-p 00000000 00:00 0    [stack:986]
+...
+7fffb2c0d000-7fffb2c2e000 rw-p 00000000 00:00 0   [stack]
+7fffb2d48000-7fffb2d49000 r-xp 00000000 00:00 0   [vdso]
+</PRE>
+
+
+<P>
+The
+<I>address</I>
+
+field is the address space in the process that the mapping occupies.
+The
+<I>perms</I>
+
+field is a set of permissions:
+<P>
+<PRE>
+r = read
+w = write
+x = execute
+s = shared
+p = private (copy on write)
+</PRE>
+
+
+<P>
+The
+<I>offset</I>
+
+field is the offset into the file/whatever;
+<I>dev</I>
+
+is the device
+(major:minor);
+<I>inode</I>
+
+is the inode on that device.
+0 indicates that no inode is associated with the memory region,
+as would be the case with BSS (uninitialized data).
+<P>
+The
+<I>pathname</I>
+
+field will usually be the file that is backing the mapping.
+For ELF files,
+you can easily coordinate with the
+<I>offset</I>
+
+field by looking at the
+Offset field in the ELF program headers
+(<I>readelf&nbsp;-l</I>).
+
+<P>
+There are additional helpful pseudo-paths:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><I>[stack]</I>
+
+<DD>
+The initial process's (also known as the main thread's) stack.
+<DT><I>[stack:&lt;tid&gt;]</I> (since Linux 3.4)
+
+<DD>
+
+A thread's stack (where the
+<I>&lt;tid&gt;</I>
+
+is a thread ID).
+It corresponds to the
+<I>/proc/[pid]/task/[tid]/</I>
+
+path.
+<DT><I>[vdso]</I>
+
+<DD>
+The virtual dynamically linked shared object.
+<DT><I>[heap]</I>
+
+<DD>
+The process's heap.
+
+</DL>
+</DL>
+
+<DT><DD>
+If the
+<I>pathname</I>
+
+field is blank,
+this is an anonymous mapping as obtained via the
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)
+
+function.
+There is no easy way to coordinate this back to a process's source,
+short of running it through
+<B><A HREF="../man1/gdb.1.html">gdb</A></B>(1),
+
+<B><A HREF="../man1/strace.1.html">strace</A></B>(1),
+
+or similar.
+<P>
+Under Linux 2.0, there is no field giving pathname.
+<DT><I>/proc/[pid]/mem</I>
+
+<DD>
+This file can be used to access the pages of a process's memory through
+<B><A HREF="../man2/open.2.html">open</A></B>(2),
+
+<B><A HREF="../man2/read.2.html">read</A></B>(2),
+
+and
+<B><A HREF="../man2/lseek.2.html">lseek</A></B>(2).
+
+<DT><I>/proc/[pid]/mountinfo</I> (since Linux 2.6.26)
+
+<DD>
+
+This file contains information about mount points.
+It contains lines of the form:
+<PRE>
+
+36 35 98:0 /mnt1 /mnt2 rw,noatime master:1 - ext3 /dev/root rw,errors=continue
+(1)(2)(3)   (4)   (5)      (6)      (7)   (8) (9)   (10)         (11)
+</PRE>
+
+<DT><DD>
+The numbers in parentheses are labels for the descriptions below:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>(1)<DD>
+mount ID: unique identifier of the mount (may be reused after
+<B><A HREF="../man2/umount.2.html">umount</A></B>(2)).
+
+<DT>(2)<DD>
+parent ID: ID of parent mount (or of self for the top of the mount tree).
+<DT>(3)<DD>
+major:minor: value of
+<I>st_dev</I>
+
+for files on filesystem (see
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2)).
+
+<DT>(4)<DD>
+root: root of the mount within the filesystem.
+<DT>(5)<DD>
+mount point: mount point relative to the process's root.
+<DT>(6)<DD>
+mount options: per-mount options.
+<DT>(7)<DD>
+optional fields: zero or more fields of the form &quot;tag[:value]&quot;.
+<DT>(8)<DD>
+separator: marks the end of the optional fields.
+<DT>(9)<DD>
+filesystem type: name of filesystem in the form &quot;type[.subtype]&quot;.
+<DT>(10)<DD>
+mount source: filesystem-specific information or &quot;none&quot;.
+<DT>(11)<DD>
+super options: per-superblock options.
+</DL>
+</DL>
+
+<DT><DD>
+Parsers should ignore all unrecognized optional fields.
+Currently the possible optional fields are:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>shared:X<DD>
+mount is shared in peer group X
+<DT>master:X<DD>
+mount is slave to peer group X
+<DT>propagate_from:X<DD>
+mount is slave and receives propagation from peer group X (*)
+<DT>unbindable<DD>
+mount is unbindable
+</DL>
+</DL>
+
+<DT><DD>
+(*) X is the closest dominant peer group under the process's root.
+If X is the immediate master of the mount,
+or if there is no dominant peer group under the same root,
+then only the &quot;master:X&quot; field is present
+and not the &quot;propagate_from:X&quot; field.
+<P>
+For more information on mount propagation see:
+<I>Documentation/filesystems/sharedsubtree.txt</I>
+
+in the Linux kernel source tree.
+<DT><I>/proc/[pid]/mounts</I> (since Linux 2.4.19)
+
+<DD>
+This is a list of all the filesystems currently mounted in the
+process's mount namespace.
+The format of this file is documented in
+<B><A HREF="../man5/fstab.5.html">fstab</A></B>(5).
+
+Since kernel version 2.6.15, this file is pollable:
+after opening the file for reading, a change in this file
+(i.e., a filesystem mount or unmount) causes
+<B><A HREF="../man2/select.2.html">select</A></B>(2)
+
+to mark the file descriptor as readable, and
+<B><A HREF="../man2/poll.2.html">poll</A></B>(2)
+
+and
+<B><A HREF="../man2/epoll_wait.2.html">epoll_wait</A></B>(2)
+
+mark the file as having an error condition.
+<DT><I>/proc/[pid]/mountstats</I> (since Linux 2.6.17)
+
+<DD>
+This file exports information (statistics, configuration information)
+about the mount points in the process's name space.
+Lines in this file have the form:
+<PRE>
+
+device /dev/sda7 mounted on /home with fstype ext3 [statistics]
+(       1      )            ( 2 )             (3 ) (4)
+</PRE>
+
+<DT><DD>
+The fields in each line are:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>(1)<DD>
+The name of the mounted device
+(or &quot;nodevice&quot; if there is no corresponding device).
+<DT>(2)<DD>
+The mount point within the filesystem tree.
+<DT>(3)<DD>
+The filesystem type.
+<DT>(4)<DD>
+Optional statistics and configuration information.
+Currently (as at Linux 2.6.26), only NFS filesystems export
+information via this field.
+</DL>
+</DL>
+
+<DT><DD>
+This file is readable only by the owner of the process.
+<DT><I>/proc/[pid]/ns/</I> (since Linux 3.0)
+
+<DD>
+
+This is a subdirectory containing one entry for each namespace that
+supports being manipulated by
+<B><A HREF="../man2/setns.2.html">setns</A></B>(2).
+
+For information about namespaces, see
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2).
+
+<DT><I>/proc/[pid]/ns/ipc</I> (since Linux 3.0)
+
+<DD>
+Bind mounting this file (see
+<B><A HREF="../man2/mount.2.html">mount</A></B>(2))
+
+to somewhere else in the filesystem keeps
+the IPC namespace of the process specified by
+<I>pid</I>
+
+alive even if all processes currently in the namespace terminate.
+<P>
+Opening this file returns a file handle for the IPC namespace
+of the process specified by
+<I>pid</I>.
+
+As long as this file descriptor remains open,
+the IPC namespace will remain alive,
+even if all processes in the namespace terminate.
+The file descriptor can be passed to
+<B><A HREF="../man2/setns.2.html">setns</A></B>(2).
+
+<DT><I>/proc/[pid]/ns/net</I> (since Linux 3.0)
+
+<DD>
+Bind mounting this file (see
+<B><A HREF="../man2/mount.2.html">mount</A></B>(2))
+
+to somewhere else in the filesystem keeps
+the network namespace of the process specified by
+<I>pid</I>
+
+alive even if all processes in the namespace terminate.
+<P>
+Opening this file returns a file handle for the network namespace
+of the process specified by
+<I>pid</I>.
+
+As long as this file descriptor remains open,
+the network namespace will remain alive,
+even if all processes in the namespace terminate.
+The file descriptor can be passed to
+<B><A HREF="../man2/setns.2.html">setns</A></B>(2).
+
+<DT><I>/proc/[pid]/ns/uts</I> (since Linux 3.0)
+
+<DD>
+Bind mounting this file (see
+<B><A HREF="../man2/mount.2.html">mount</A></B>(2))
+
+to somewhere else in the filesystem keeps
+the UTS namespace of the process specified by
+<I>pid</I>
+
+alive even if all processes currently in the namespace terminate.
+<P>
+Opening this file returns a file handle for the UTS namespace
+of the process specified by
+<I>pid</I>.
+
+As long as this file descriptor remains open,
+the UTS namespace will remain alive,
+even if all processes in the namespace terminate.
+The file descriptor can be passed to
+<B><A HREF="../man2/setns.2.html">setns</A></B>(2).
+
+<DT><I>/proc/[pid]/numa_maps</I> (since Linux 2.6.14)
+
+<DD>
+See
+<B><A HREF="../man7/numa.7.html">numa</A></B>(7).
+
+<DT><I>/proc/[pid]/oom_adj</I> (since Linux 2.6.11)
+
+<DD>
+This file can be used to adjust the score used to select which process
+should be killed in an out-of-memory (OOM) situation.
+The kernel uses this value for a bit-shift operation of the process's
+<I>oom_score</I>
+
+value:
+valid values are in the range -16 to +15,
+plus the special value -17,
+which disables OOM-killing altogether for this process.
+A positive score increases the likelihood of this
+process being killed by the OOM-killer;
+a negative score decreases the likelihood.
+<DT><DD>
+The default value for this file is 0;
+a new process inherits its parent's
+<I>oom_adj</I>
+
+setting.
+A process must be privileged
+(<B>CAP_SYS_RESOURCE</B>)
+
+to update this file.
+<DT><DD>
+Since Linux 2.6.36, use of this file is deprecated in favor of
+<I>/proc/[pid]/oom_score_adj</I>.
+
+<DT><I>/proc/[pid]/oom_score</I> (since Linux 2.6.11)
+
+<DD>
+
+This file displays the current score that the kernel gives to
+this process for the purpose of selecting a process
+for the OOM-killer.
+A higher score means that the process is more likely to be
+selected by the OOM-killer.
+The basis for this score is the amount of memory used by the process,
+with increases (+) or decreases (-) for factors including:
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>*<DD>
+whether the process creates a lot of children using
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+(+);
+<DT>*<DD>
+whether the process has been running a long time,
+or has used a lot of CPU time (-);
+<DT>*<DD>
+whether the process has a low nice value (i.e., &gt; 0) (+);
+<DT>*<DD>
+whether the process is privileged (-); and
+
+<DT>*<DD>
+whether the process is making direct hardware access (-).
+
+</DL>
+</DL>
+
+<DT><DD>
+The
+<I>oom_score</I>
+
+also reflects the adjustment specified by the
+<I>oom_score_adj</I>
+
+or
+<I>oom_adj</I>
+
+setting for the process.
+<DT><I>/proc/[pid]/oom_score_adj</I> (since Linux 2.6.36)
+
+<DD>
+
+This file can be used to adjust the badness heuristic used to select which
+process gets killed in out-of-memory conditions.
+<P>
+The badness heuristic assigns a value to each candidate task ranging from 0
+(never kill) to 1000 (always kill) to determine which process is targeted.
+The units are roughly a proportion along that range of
+allowed memory the process may allocate from,
+based on an estimation of its current memory and swap use.
+For example, if a task is using all allowed memory,
+its badness score will be 1000.
+If it is using half of its allowed memory, its score will be 500.
+<P>
+There is an additional factor included in the badness score: root
+processes are given 3% extra memory over other tasks.
+<P>
+The amount of &quot;allowed&quot; memory depends on the context
+in which the OOM-killer was called.
+If it is due to the memory assigned to the allocating task's cpuset
+being exhausted,
+the allowed memory represents the set of mems assigned to that
+cpuset (see
+<B><A HREF="../man7/cpuset.7.html">cpuset</A></B>(7)).
+
+If it is due to a mempolicy's node(s) being exhausted,
+the allowed memory represents the set of mempolicy nodes.
+If it is due to a memory limit (or swap limit) being reached,
+the allowed memory is that configured limit.
+Finally, if it is due to the entire system being out of memory, the
+allowed memory represents all allocatable resources.
+<P>
+The value of
+<I>oom_score_adj</I>
+
+is added to the badness score before it
+is used to determine which task to kill.
+Acceptable values range from -1000
+(OOM_SCORE_ADJ_MIN) to +1000 (OOM_SCORE_ADJ_MAX).
+This allows user space to control the preference for OOM-killing,
+ranging from always preferring a certain
+task or completely disabling it from OOM-killing.
+The lowest possible value, -1000, is
+equivalent to disabling OOM-killing entirely for that task,
+since it will always report a badness score of 0.
+<P>
+Consequently, it is very simple for user space to define
+the amount of memory to consider for each task.
+Setting a
+<I>oom_score_adj</I>
+
+value of +500, for example,
+is roughly equivalent to allowing the remainder of tasks sharing the
+same system, cpuset, mempolicy, or memory controller resources
+to use at least 50% more memory.
+A value of -500, on the other hand, would be roughly
+equivalent to discounting 50% of the task's
+allowed memory from being considered as scoring against the task.
+<P>
+For backward compatibility with previous kernels,
+<I>/proc/[pid]/oom_adj</I>
+
+can still be used to tune the badness score.
+Its value is
+scaled linearly with
+<I>oom_score_adj</I>.
+
+<P>
+Writing to
+<I>/proc/[pid]/oom_score_adj</I>
+
+or
+<I>/proc/[pid]/oom_adj</I>
+
+will change the other with its scaled value.
+<DT><I>/proc/[pid]/pagemap</I> (since Linux 2.6.25)
+
+<DD>
+This file shows the mapping of each of the process's virtual pages
+into physical page frames or swap area.
+It contains one 64-bit value for each virtual page,
+with the bits set as follows:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>63<DD>
+If set, the page is present in RAM.
+<DT>62<DD>
+If set, the page is in swap space
+<DT>61 (since Linux 3.5)<DD>
+The page is a file-mapped page or a shared anonymous page.
+<DT>60-56 (since Linux 3.11)<DD>
+Zero
+
+<DT>55 (Since Linux 3.11)<DD>
+PTE is soft-dirty
+(see the kernel source file
+<I>Documentation/vm/soft-dirty.txt</I>).
+
+<DT>54-0<DD>
+If the page is present in RAM (bit 63), then these bits
+provide the page frame number, which can be used to index
+<I>/proc/kpageflags</I>
+
+and
+<I>/proc/kpagecount</I>.
+
+If the page is present in swap (bit 62),
+then bits 4-0 give the swap type, and bits 54-5 encode the swap offset.
+</DL>
+</DL>
+
+<DT><DD>
+Before Linux 3.11, bits 60-55 were
+used to encode the base-2 log of the page size.
+<DT><DD>
+To employ
+<I>/proc/[pid]/pagemap</I>
+
+efficiently, use
+<I>/proc/[pid]/maps</I>
+
+to determine which areas of memory are actually mapped and seek
+to skip over unmapped regions.
+<DT><DD>
+The
+<I>/proc/[pid]/pagemap</I>
+
+file is present only if the
+<B>CONFIG_PROC_PAGE_MONITOR</B>
+
+kernel configuration option is enabled.
+<DT><I>/proc/[pid]/personality</I> (since Linux 2.6.28)
+
+<DD>
+
+This read-only file exposes the process's execution domain, as set by
+<B><A HREF="../man2/personality.2.html">personality</A></B>(2).
+
+The value is displayed in hexadecimal notation.
+<DT><I>/proc/[pid]/root</I>
+
+<DD>
+UNIX and Linux support the idea of a per-process root of the
+filesystem, set by the
+<B><A HREF="../man2/chroot.2.html">chroot</A></B>(2)
+
+system call.
+This file is a symbolic link that points to the process's
+root directory, and behaves in the same way as
+<I>exe</I>,
+
+and
+<I>fd/*</I>.
+
+<P>
+
+In a multithreaded process, the contents of this symbolic link
+are not available if the main thread has already terminated
+(typically by calling
+<B><A HREF="../man3/pthread_exit.3.html">pthread_exit</A></B>(3)).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<DT><I>/proc/[pid]/smaps</I> (since Linux 2.6.14)
+
+<DD>
+This file shows memory consumption for each of the process's mappings.
+For each mapping there is a series of lines such as the following:
+
+<PRE>
+
+00400000-0048a000 r-xp 00000000 fd:03 960637       /bin/bash
+Size:                552 kB
+Rss:                 460 kB
+Pss:                 100 kB
+Shared_Clean:        452 kB
+Shared_Dirty:          0 kB
+Private_Clean:         8 kB
+Private_Dirty:         0 kB
+Referenced:          460 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  0 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+
+</PRE>
+
+
+The first of these lines shows the same information as is displayed
+for the mapping in
+<I>/proc/[pid]/maps</I>.
+
+The remaining lines show the size of the mapping,
+the amount of the mapping that is currently resident in RAM (&quot;Rss&quot;),
+the process' proportional share of this mapping (&quot;Pss&quot;),
+the number of clean and dirty shared pages in the mapping,
+and the number of clean and dirty private pages in the mapping.
+&quot;Referenced&quot; indicates the amount of memory currently marked as
+referenced or accessed.
+&quot;Anonymous&quot; shows the amount of memory
+that does not belong to any file.
+&quot;Swap&quot; shows how much
+would-be-anonymous memory is also used, but out on swap.
+<P>
+The &quot;KernelPageSize&quot; entry is the page size used by the kernel to back a VMA.
+This matches the size used by the MMU in the majority of cases.
+However, one counter-example occurs on PPC64 kernels
+whereby a kernel using 64K as a base page size may still use 4K
+pages for the MMU on older processors.
+To distinguish, this
+patch reports &quot;MMUPageSize&quot; as the page size used by the MMU.
+<P>
+The &quot;Locked&quot; indicates whether the mapping is locked in memory
+or not.
+<P>
+&quot;VmFlags&quot; field represents the kernel flags associated with
+the particular virtual memory area in two letter encoded manner.
+The codes are the following:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;rd&nbsp;&nbsp;-&nbsp;readable
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;wr&nbsp;&nbsp;-&nbsp;writable
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;ex&nbsp;&nbsp;-&nbsp;executable
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;sh&nbsp;&nbsp;-&nbsp;shared
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;mr&nbsp;&nbsp;-&nbsp;may&nbsp;read
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;mw&nbsp;&nbsp;-&nbsp;may&nbsp;write
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;me&nbsp;&nbsp;-&nbsp;may&nbsp;execute
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;ms&nbsp;&nbsp;-&nbsp;may&nbsp;share
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;gd&nbsp;&nbsp;-&nbsp;stack&nbsp;segment&nbsp;grows&nbsp;down
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;pf&nbsp;&nbsp;-&nbsp;pure&nbsp;PFN&nbsp;range
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;dw&nbsp;&nbsp;-&nbsp;disabled&nbsp;write&nbsp;to&nbsp;the&nbsp;mapped&nbsp;file
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;lo&nbsp;&nbsp;-&nbsp;pages&nbsp;are&nbsp;locked&nbsp;in&nbsp;memory
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;io&nbsp;&nbsp;-&nbsp;memory&nbsp;mapped&nbsp;I/O&nbsp;area
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;sr&nbsp;&nbsp;-&nbsp;sequential&nbsp;read&nbsp;advise&nbsp;provided
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;rr&nbsp;&nbsp;-&nbsp;random&nbsp;read&nbsp;advise&nbsp;provided
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;dc&nbsp;&nbsp;-&nbsp;do&nbsp;not&nbsp;copy&nbsp;area&nbsp;on&nbsp;fork
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;de&nbsp;&nbsp;-&nbsp;do&nbsp;not&nbsp;expand&nbsp;area&nbsp;on&nbsp;remapping
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;ac&nbsp;&nbsp;-&nbsp;area&nbsp;is&nbsp;accountable
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;nr&nbsp;&nbsp;-&nbsp;swap&nbsp;space&nbsp;is&nbsp;not&nbsp;reserved&nbsp;for&nbsp;the&nbsp;area
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;ht&nbsp;&nbsp;-&nbsp;area&nbsp;uses&nbsp;huge&nbsp;tlb&nbsp;pages
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;nl&nbsp;&nbsp;-&nbsp;non-linear&nbsp;mapping
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;ar&nbsp;&nbsp;-&nbsp;architecture&nbsp;specific&nbsp;flag
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;dd&nbsp;&nbsp;-&nbsp;do&nbsp;not&nbsp;include&nbsp;area&nbsp;into&nbsp;core&nbsp;dump
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;sd&nbsp;&nbsp;-&nbsp;soft-dirty&nbsp;flag
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;mm&nbsp;&nbsp;-&nbsp;mixed&nbsp;map&nbsp;area
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;hg&nbsp;&nbsp;-&nbsp;huge&nbsp;page&nbsp;advise&nbsp;flag
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;nh&nbsp;&nbsp;-&nbsp;no-huge&nbsp;page&nbsp;advise&nbsp;flag
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;mg&nbsp;&nbsp;-&nbsp;mergeable&nbsp;advise&nbsp;flag
+<P>
+The
+<I>/proc/[pid]/smaps</I>
+
+file is present only if the
+<B>CONFIG_PROC_PAGE_MONITOR</B>
+
+kernel configuration option is enabled.
+<DT><I>/proc/[pid]/stack</I> (since Linux 2.6.29)
+
+<DD>
+
+This file provides a symbolic trace of the function calls in this
+process's kernel stack.
+This file is provided only if the kernel was built with the
+<B>CONFIG_STACKTRACE</B>
+
+configuration option.
+<DT><I>/proc/[pid]/stat</I>
+
+<DD>
+Status information about the process.
+This is used by
+<B><A HREF="../man1/ps.1.html">ps</A></B>(1).
+
+It is defined in the kernel source file
+<I>fs/proc/array.c</I>.
+
+<P>
+The fields, in order, with their proper
+<B><A HREF="../man3/scanf.3.html">scanf</A></B>(3)
+
+format specifiers, are:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>(1) <I>pid</I> &nbsp;%d<DD>
+<BR>
+
+The process ID.
+<DT>(2) <I>comm</I> &nbsp;%s<DD>
+The filename of the executable, in parentheses.
+This is visible whether or not the executable is swapped out.
+<DT>(3) <I>state</I> &nbsp;%c<DD>
+One of the following characters, indicating process state:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>R<DD>
+Running
+<DT>S<DD>
+Sleeping in an interruptible wait
+<DT>D<DD>
+Waiting in uninterruptible
+disk sleep
+<DT>Z<DD>
+Zombie
+<DT>T<DD>
+Stopped (on a signal) or (before Linux 2.6.33) trace stopped
+<DT>t<DD>
+
+Tracing stop (Linux 2.6.33 onward)
+<DT>W<DD>
+Paging (only before Linux 2.6.0)
+<DT>X<DD>
+Dead (from Linux 2.6.0 onward)
+<DT>x<DD>
+
+Dead (Linux 2.6.33 to
+
+3.13 only)
+<DT>K<DD>
+
+Wakekill (Linux 2.6.33 to
+
+3.13 only)
+<DT>W<DD>
+
+Waking (Linux 2.6.33 to
+
+3.13 only)
+<DT>P<DD>
+
+Parked (Linux 3.9 to
+
+3.13 only)
+</DL>
+</DL>
+
+<DT>(4) <I>ppid</I> &nbsp;%d<DD>
+The PID of the parent of this process.
+<DT>(5) <I>pgrp</I> &nbsp;%d<DD>
+The process group ID of the process.
+<DT>(6) <I>session</I> &nbsp;%d<DD>
+The session ID of the process.
+<DT>(7) <I>tty_nr</I> &nbsp;%d<DD>
+The controlling terminal of the process.
+(The minor device number is contained in the combination of bits
+31 to 20 and 7 to 0;
+the major device number is in bits 15 to 8.)
+<DT>(8) <I>tpgid</I> &nbsp;%d<DD>
+
+The ID of the foreground process group of the controlling
+terminal of the process.
+<DT>(9) <I>flags</I> &nbsp;%u<DD>
+The kernel flags word of the process.
+For bit meanings,
+see the PF_* defines in the Linux kernel source file
+<I>include/linux/sched.h</I>.
+
+Details depend on the kernel version.
+<P>
+The format for this field was %lu before Linux 2.6.
+<DT>(1) <I>minflt</I> &nbsp;%lu<DD>
+The number of minor faults the process has made which have not
+required loading a memory page from disk.
+<DT>(11) <I>cminflt</I> &nbsp;%lu<DD>
+The number of minor faults that the process's
+waited-for children have made.
+<DT>(12) <I>majflt</I> &nbsp;%lu<DD>
+The number of major faults the process has made which have
+required loading a memory page from disk.
+<DT>(13) <I>cmajflt</I> &nbsp;%lu<DD>
+The number of major faults that the process's
+waited-for children have made.
+<DT>(14) <I>utime</I> &nbsp;%lu<DD>
+Amount of time that this process has been scheduled in user mode,
+measured in clock ticks (divide by
+<I>sysconf(_SC_CLK_TCK)</I>).
+
+This includes guest time, <I>guest_time</I>
+(time spent running a virtual CPU, see below),
+so that applications that are not aware of the guest time field
+do not lose that time from their calculations.
+<DT>(15) <I>stime</I> &nbsp;%lu<DD>
+Amount of time that this process has been scheduled in kernel mode,
+measured in clock ticks (divide by
+<I>sysconf(_SC_CLK_TCK)</I>).
+
+<DT>(16) <I>cutime</I> &nbsp;%ld<DD>
+Amount of time that this process's
+waited-for children have been scheduled in user mode,
+measured in clock ticks (divide by
+<I>sysconf(_SC_CLK_TCK)</I>).
+
+(See also
+<B><A HREF="../man2/times.2.html">times</A></B>(2).)
+
+This includes guest time, <I>cguest_time</I>
+(time spent running a virtual CPU, see below).
+<DT>(17) <I>cstime</I> &nbsp;%ld<DD>
+Amount of time that this process's
+waited-for children have been scheduled in kernel mode,
+measured in clock ticks (divide by
+<I>sysconf(_SC_CLK_TCK)</I>).
+
+<DT>(18) <I>priority</I> &nbsp;%ld<DD>
+(Explanation for Linux 2.6)
+For processes running a real-time scheduling policy
+(<I>policy</I>
+
+below; see
+<B><A HREF="../man2/sched_setscheduler.2.html">sched_setscheduler</A></B>(2)),
+
+this is the negated scheduling priority, minus one;
+that is, a number in the range -2 to -100,
+corresponding to real-time priorities 1 to 99.
+For processes running under a non-real-time scheduling policy,
+this is the raw nice value
+(<B><A HREF="../man2/setpriority.2.html">setpriority</A></B>(2))
+
+as represented in the kernel.
+The kernel stores nice values as numbers
+in the range 0 (high) to 39 (low),
+corresponding to the user-visible nice range of -20 to 19.
+<P>
+Before Linux 2.6, this was a scaled value based on
+the scheduler weighting given to this process.
+
+<DT>(19) <I>nice</I> &nbsp;%ld<DD>
+The nice value (see
+<B><A HREF="../man2/setpriority.2.html">setpriority</A></B>(2)),
+
+a value in the range 19 (low priority) to -20 (high priority).
+
+
+
+
+
+
+
+
+
+
+<DT>(20) <I>num_threads</I> &nbsp;%ld<DD>
+Number of threads in this process (since Linux 2.6).
+Before kernel 2.6, this field was hard coded to 0 as a placeholder
+for an earlier removed field.
+<DT>(21) <I>itrealvalue</I> &nbsp;%ld<DD>
+The time in jiffies before the next
+<B>SIGALRM</B>
+
+is sent to the process due to an interval timer.
+Since kernel 2.6.17, this field is no longer maintained,
+and is hard coded as 0.
+<DT>(22) <I>starttime</I> &nbsp;%llu<DD>
+The time the process started after system boot.
+In kernels before Linux 2.6, this value was expressed in jiffies.
+Since Linux 2.6, the value is expressed in clock ticks (divide by
+<I>sysconf(_SC_CLK_TCK)</I>).
+
+<P>
+The format for this field was %lu before Linux 2.6.
+<DT>(23) <I>vsize</I> &nbsp;%lu<DD>
+Virtual memory size in bytes.
+<DT>(24) <I>rss</I> &nbsp;%ld<DD>
+Resident Set Size: number of pages the process has in real memory.
+This is just the pages which
+count toward text, data, or stack space.
+This does not include pages
+which have not been demand-loaded in, or which are swapped out.
+<DT>(25) <I>rsslim</I> &nbsp;%lu<DD>
+Current soft limit in bytes on the rss of the process;
+see the description of
+<B>RLIMIT_RSS</B>
+
+in
+<B><A HREF="../man2/getrlimit.2.html">getrlimit</A></B>(2).
+
+<DT>(26) <I>startcode</I> &nbsp;%lu<DD>
+The address above which program text can run.
+<DT>(27) <I>endcode</I> &nbsp;%lu<DD>
+The address below which program text can run.
+<DT>(28) <I>startstack</I> &nbsp;%lu<DD>
+The address of the start (i.e., bottom) of the stack.
+<DT>(29) <I>kstkesp</I> &nbsp;%lu<DD>
+The current value of ESP (stack pointer), as found in the
+kernel stack page for the process.
+<DT>(30) <I>kstkeip</I> &nbsp;%lu<DD>
+The current EIP (instruction pointer).
+<DT>(31) <I>signal</I> &nbsp;%lu<DD>
+The bitmap of pending signals, displayed as a decimal number.
+Obsolete, because it does not provide information on real-time signals; use
+<I>/proc/[pid]/status</I>
+
+instead.
+<DT>(32) <I>blocked</I> &nbsp;%lu<DD>
+The bitmap of blocked signals, displayed as a decimal number.
+Obsolete, because it does not provide information on real-time signals; use
+<I>/proc/[pid]/status</I>
+
+instead.
+<DT>(33) <I>sigignore</I> &nbsp;%lu<DD>
+The bitmap of ignored signals, displayed as a decimal number.
+Obsolete, because it does not provide information on real-time signals; use
+<I>/proc/[pid]/status</I>
+
+instead.
+<DT>(34) <I>sigcatch</I> &nbsp;%lu<DD>
+The bitmap of caught signals, displayed as a decimal number.
+Obsolete, because it does not provide information on real-time signals; use
+<I>/proc/[pid]/status</I>
+
+instead.
+<DT>(35) <I>wchan</I> &nbsp;%lu<DD>
+This is the &quot;channel&quot; in which the process is waiting.
+It is the address of a location in the kernel where the process is sleeping.
+The corresponding symbolic name can be found in
+<I>/proc/[pid]/wchan</I>.
+
+<DT>(36) <I>nswap</I> &nbsp;%lu<DD>
+
+Number of pages swapped (not maintained).
+<DT>(37) <I>cnswap</I> &nbsp;%lu<DD>
+
+Cumulative <I>nswap</I> for child processes (not maintained).
+<DT>(38) <I>exit_signal</I> &nbsp;%d &nbsp;(since Linux 2.1.22)<DD>
+Signal to be sent to parent when we die.
+<DT>(39) <I>processor</I> &nbsp;%d &nbsp;(since Linux 2.2.8)<DD>
+CPU number last executed on.
+<DT>(40) <I>rt_priority</I> &nbsp;%u &nbsp;(since Linux 2.5.19)<DD>
+Real-time scheduling priority, a number in the range 1 to 99 for
+processes scheduled under a real-time policy,
+or 0, for non-real-time processes (see
+<B><A HREF="../man2/sched_setscheduler.2.html">sched_setscheduler</A></B>(2)).
+
+<DT>(41) <I>policy</I> &nbsp;%u &nbsp;(since Linux 2.5.19)<DD>
+Scheduling policy (see
+<B><A HREF="../man2/sched_setscheduler.2.html">sched_setscheduler</A></B>(2)).
+
+Decode using the SCHED_* constants in
+<I>linux/sched.h</I>.
+
+<P>
+The format for this field was %lu before Linux 2.6.22.
+<DT>(42) <I>delayacct_blkio_ticks</I> &nbsp;%llu &nbsp;(since Linux 2.6.18)<DD>
+Aggregated block I/O delays, measured in clock ticks (centiseconds).
+<DT>(43) <I>guest_time</I> &nbsp;%lu &nbsp;(since Linux 2.6.24)<DD>
+Guest time of the process (time spent running a virtual CPU
+for a guest operating system), measured in clock ticks (divide by
+<I>sysconf(_SC_CLK_TCK)</I>).
+
+<DT>(44) <I>cguest_time</I> &nbsp;%ld &nbsp;(since Linux 2.6.24)<DD>
+Guest time of the process's children, measured in clock ticks (divide by
+<I>sysconf(_SC_CLK_TCK)</I>).
+
+<DT>(45) <I>start_data</I> &nbsp;%lu &nbsp;(since Linux 3.3)<DD>
+
+Address above which program initialized and
+uninitialized (BSS) data are placed.
+<DT>(46) <I>end_data</I> &nbsp;%lu &nbsp;(since Linux 3.3)<DD>
+
+Address below which program initialized and
+uninitialized (BSS) data are placed.
+<DT>(47) <I>start_brk</I> &nbsp;%lu &nbsp;(since Linux 3.3)<DD>
+
+Address above which program heap can be expanded with
+<B><A HREF="../man2/brk.2.html">brk</A></B>(2).
+
+<DT>(48) <I>arg_start</I> &nbsp;%lu &nbsp;(since Linux 3.5)<DD>
+
+Address above which program command-line arguments
+(<I>argv</I>)
+
+are placed.
+<DT>(49) <I>arg_end</I> &nbsp;%lu &nbsp;(since Linux 3.5)<DD>
+
+Address below program command-line arguments
+(<I>argv</I>)
+
+are placed.
+<DT>(50) <I>env_start</I> &nbsp;%lu &nbsp;(since Linux 3.5)<DD>
+
+Address above which program environment is placed.
+<DT>(51) <I>env_end</I> &nbsp;%lu &nbsp;(since Linux 3.5)<DD>
+
+Address below which program environment is placed.
+<DT>(52) <I>exit_code</I> &nbsp;%d &nbsp;(since Linux 3.5)<DD>
+
+The thread's exit status in the form reported by
+<B><A HREF="../man2/waitpid.2.html">waitpid</A></B>(2).
+
+</DL>
+</DL>
+
+<DT><I>/proc/[pid]/statm</I>
+
+<DD>
+Provides information about memory usage, measured in pages.
+The columns are:
+
+<PRE>
+
+size       (1) total program size
+           (same as VmSize in <I>/proc/[pid]/status</I>)
+resident   (2) resident set size
+           (same as VmRSS in <I>/proc/[pid]/status</I>)
+share      (3) shared pages (i.e., backed by a file)
+text       (4) text (code)
+lib        (5) library (unused in Linux 2.6)
+data       (6) data + stack
+dt         (7) dirty pages (unused in Linux 2.6)
+</PRE>
+
+
+<DT><I>/proc/[pid]/status</I>
+
+<DD>
+Provides much of the information in
+<I>/proc/[pid]/stat</I>
+
+and
+<I>/proc/[pid]/statm</I>
+
+in a format that's easier for humans to parse.
+Here's an example:
+
+<PRE>
+
+$<B> cat /proc/$$/status</B>
+Name:   bash
+State:  S (sleeping)
+Tgid:   3515
+Pid:    3515
+PPid:   3452
+TracerPid:      0
+Uid:    1000    1000    1000    1000
+Gid:    100     100     100     100
+FDSize: 256
+Groups: 16 33 100
+VmPeak:     9136 kB
+VmSize:     7896 kB
+VmLck:         0 kB
+VmHWM:      7572 kB
+VmRSS:      6316 kB
+VmData:     5224 kB
+VmStk:        88 kB
+VmExe:       572 kB
+VmLib:      1708 kB
+VmPTE:        20 kB
+Threads:        1
+SigQ:   0/3067
+SigPnd: 0000000000000000
+ShdPnd: 0000000000000000
+SigBlk: 0000000000010000
+SigIgn: 0000000000384004
+SigCgt: 000000004b813efb
+CapInh: 0000000000000000
+CapPrm: 0000000000000000
+CapEff: 0000000000000000
+CapBnd: ffffffffffffffff
+Cpus_allowed:   00000001
+Cpus_allowed_list:      0
+Mems_allowed:   1
+Mems_allowed_list:      0
+voluntary_ctxt_switches:        150
+nonvoluntary_ctxt_switches:     545
+</PRE>
+
+
+<DT><DD>
+The fields are as follows:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>*<DD>
+<I>Name</I>:
+
+Command run by this process.
+<DT>*<DD>
+<I>State</I>:
+
+Current state of the process.
+One of
+&quot;R (running)&quot;,
+&quot;S (sleeping)&quot;,
+&quot;D (disk sleep)&quot;,
+&quot;T (stopped)&quot;,
+&quot;T (tracing stop)&quot;,
+&quot;Z (zombie)&quot;,
+or
+&quot;X (dead)&quot;.
+<DT>*<DD>
+<I>Tgid</I>:
+
+Thread group ID (i.e., Process ID).
+<DT>*<DD>
+<I>Pid</I>:
+
+Thread ID (see
+<B><A HREF="../man2/gettid.2.html">gettid</A></B>(2)).
+
+<DT>*<DD>
+<I>PPid</I>:
+
+PID of parent process.
+<DT>*<DD>
+<I>TracerPid</I>:
+
+PID of process tracing this process (0 if not being traced).
+<DT>*<DD>
+<I>Uid</I>, <I>Gid</I>:
+
+Real, effective, saved set, and filesystem UIDs (GIDs).
+<DT>*<DD>
+<I>FDSize</I>:
+
+Number of file descriptor slots currently allocated.
+<DT>*<DD>
+<I>Groups</I>:
+
+Supplementary group list.
+<DT>*<DD>
+<I>VmPeak</I>:
+
+Peak virtual memory size.
+<DT>*<DD>
+<I>VmSize</I>:
+
+Virtual memory size.
+<DT>*<DD>
+<I>VmLck</I>:
+
+Locked memory size (see
+<B><A HREF="../man3/mlock.3.html">mlock</A></B>(3)).
+
+<DT>*<DD>
+<I>VmHWM</I>:
+
+Peak resident set size (&quot;high water mark&quot;).
+<DT>*<DD>
+<I>VmRSS</I>:
+
+Resident set size.
+<DT>*<DD>
+<I>VmData</I>, <I>VmStk</I>, <I>VmExe</I>:
+
+Size of data, stack, and text segments.
+<DT>*<DD>
+<I>VmLib</I>:
+
+Shared library code size.
+<DT>*<DD>
+<I>VmPTE</I>:
+
+Page table entries size (since Linux 2.6.10).
+<DT>*<DD>
+<I>Threads</I>:
+
+Number of threads in process containing this thread.
+<DT>*<DD>
+<I>SigQ</I>:
+
+This field contains two slash-separated numbers that relate to
+queued signals for the real user ID of this process.
+The first of these is the number of currently queued
+signals for this real user ID, and the second is the
+resource limit on the number of queued signals for this process
+(see the description of
+<B>RLIMIT_SIGPENDING</B>
+
+in
+<B><A HREF="../man2/getrlimit.2.html">getrlimit</A></B>(2)).
+
+<DT>*<DD>
+<I>SigPnd</I>, <I>ShdPnd</I>:
+
+Number of signals pending for thread and for process as a whole (see
+<B><A HREF="../man7/pthreads.7.html">pthreads</A></B>(7)
+
+and
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)).
+
+<DT>*<DD>
+<I>SigBlk</I>, <I>SigIgn</I>, <I>SigCgt</I>:
+
+Masks indicating signals being blocked, ignored, and caught (see
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)).
+
+<DT>*<DD>
+<I>CapInh</I>, <I>CapPrm</I>, <I>CapEff</I>:
+
+Masks of capabilities enabled in inheritable, permitted, and effective sets
+(see
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7)).
+
+<DT>*<DD>
+<I>CapBnd</I>:
+
+Capability Bounding set
+(since kernel 2.6.26, see
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7)).
+
+<DT>*<DD>
+<I>Cpus_allowed</I>:
+
+Mask of CPUs on which this process may run
+(since Linux 2.6.24, see
+<B><A HREF="../man7/cpuset.7.html">cpuset</A></B>(7)).
+
+<DT>*<DD>
+<I>Cpus_allowed_list</I>:
+
+Same as previous, but in &quot;list format&quot;
+(since Linux 2.6.26, see
+<B><A HREF="../man7/cpuset.7.html">cpuset</A></B>(7)).
+
+<DT>*<DD>
+<I>Mems_allowed</I>:
+
+Mask of memory nodes allowed to this process
+(since Linux 2.6.24, see
+<B><A HREF="../man7/cpuset.7.html">cpuset</A></B>(7)).
+
+<DT>*<DD>
+<I>Mems_allowed_list</I>:
+
+Same as previous, but in &quot;list format&quot;
+(since Linux 2.6.26, see
+<B><A HREF="../man7/cpuset.7.html">cpuset</A></B>(7)).
+
+<DT>*<DD>
+<I>voluntary_ctxt_switches</I>, <I>nonvoluntary_ctxt_switches</I>:
+
+Number of voluntary and involuntary context switches (since Linux 2.6.23).
+</DL>
+</DL>
+
+<DT><I>/proc/[pid]/syscall</I> (since Linux 2.6.27)
+
+<DD>
+
+This file exposes the system call number and argument registers for the
+system call currently being executed by the process,
+followed by the values of the stack pointer and program counter registers.
+The values of all six argument registers are exposed,
+although most system calls use fewer registers.
+<P>
+If the process is blocked, but not in a system call,
+then the file displays -1 in place of the system call number,
+followed by just the values of the stack pointer and program counter.
+If process is not blocked, then file contains just the string &quot;running&quot;.
+<P>
+This file is present only if the kernel was configured with
+<B>CONFIG_HAVE_ARCH_TRACEHOOK</B>.
+
+<DT><I>/proc/[pid]/task</I> (since Linux 2.6.0-test6)
+
+<DD>
+This is a directory that contains one subdirectory
+for each thread in the process.
+The name of each subdirectory is the numerical thread ID
+(<I>[tid]</I>)
+
+of the thread (see
+<B><A HREF="../man2/gettid.2.html">gettid</A></B>(2)).
+
+Within each of these subdirectories, there is a set of
+files with the same names and contents as under the
+<I>/proc/[pid]</I>
+
+directories.
+For attributes that are shared by all threads, the contents for
+each of the files under the
+<I>task/[tid]</I>
+
+subdirectories will be the same as in the corresponding
+file in the parent
+<I>/proc/[pid]</I>
+
+directory
+(e.g., in a multithreaded process, all of the
+<I>task/[tid]/cwd</I>
+
+files will have the same value as the
+<I>/proc/[pid]/cwd</I>
+
+file in the parent directory, since all of the threads in a process
+share a working directory).
+For attributes that are distinct for each thread,
+the corresponding files under
+<I>task/[tid]</I>
+
+may have different values (e.g., various fields in each of the
+<I>task/[tid]/status</I>
+
+files may be different for each thread).
+<P>
+
+In a multithreaded process, the contents of the
+<I>/proc/[pid]/task</I>
+
+directory are not available if the main thread has already terminated
+(typically by calling
+<B><A HREF="../man3/pthread_exit.3.html">pthread_exit</A></B>(3)).
+
+<DT><I>/proc/[pid]/wchan</I> (since Linux 2.6.0)
+
+<DD>
+The symbolic name corresponding to the location
+in the kernel where the process is sleeping.
+<DT><I>/proc/apm</I>
+
+<DD>
+Advanced power management version and battery information when
+<B>CONFIG_APM</B>
+
+is defined at kernel compilation time.
+<DT><I>/proc/bus</I>
+
+<DD>
+Contains subdirectories for installed busses.
+<DT><I>/proc/bus/pccard</I>
+
+<DD>
+Subdirectory for PCMCIA devices when
+<B>CONFIG_PCMCIA</B>
+
+is set at kernel compilation time.
+<DT><I>/proc/[pid]/timers</I> (since Linux 3.10)
+
+<DD>
+
+
+A list of the POSIX timers for this process.
+Each timer is listed with a line that started with the string &quot;ID:&quot;.
+For example:
+<P>
+
+<PRE>
+ID: 1
+signal: 60/00007fff86e452a8
+notify: signal/pid.2634
+ClockID: 0
+ID: 0
+signal: 60/00007fff86e452a8
+notify: signal/pid.2634
+ClockID: 1
+</PRE>
+
+
+<P>
+The lines shown for each timer have the following meanings:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><I>ID</I>
+
+<DD>
+The ID for this timer.
+This is not the same as the timer ID returned by
+<B><A HREF="../man2/timer_create.2.html">timer_create</A></B>(2);
+
+rather, it is the same kernel-internal ID that is available via the
+<I>si_timerid</I>
+
+field of the
+<I>siginfo_t</I>
+
+structure (see
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2)).
+
+<DT><I>signal</I>
+
+<DD>
+This is the signal number that this timer uses to deliver notifications
+followed by a slash, and then the
+<I>sigev_value.sival_ptr</I>
+
+value supplied to the signal handler.
+Valid only for timers that notify via a signal.
+<DT><I>notify</I>
+
+<DD>
+The part before the slash specifies the mechanism
+that this timer uses to deliver notifications,
+and is one of &quot;thread&quot;, &quot;signal&quot;, or &quot;none&quot;.
+Immediately following the slash is either the string &quot;tid&quot; for timers
+with
+<B>SIGEV_THREAD_ID</B>
+
+notification, or &quot;pid&quot; for timers that notify by other mechanisms.
+Following the &quot;.&quot; is the PID of the process that will be delivered
+a signal if the timer delivers notifications via a signal.
+<DT><I>ClockID</I>
+
+<DD>
+This field identifies the clock that the timer uses for measuring time.
+For most clocks, this is a number that matches one of the user-space
+<B>CLOCK_*</B>
+
+constants exposed via
+<I>&lt;<A HREF="file:///usr/include/time.h">time.h</A>&gt;</I>.
+
+<B>CLOCK_PROCESS_CPUTIME_ID</B>
+
+timers display with a value of -6
+in this field.
+<B>CLOCK_THREAD_CPUTIME_ID</B>
+
+timers display with a value of -2
+in this field.
+</DL>
+</DL>
+
+<DT><I>/proc/bus/pccard/drivers</I>
+
+<DD>
+<DT><I>/proc/bus/pci</I>
+
+<DD>
+Contains various bus subdirectories and pseudo-files containing
+information about PCI busses, installed devices, and device
+drivers.
+Some of these files are not ASCII.
+<DT><I>/proc/bus/pci/devices</I>
+
+<DD>
+Information about PCI devices.
+They may be accessed through
+<B><A HREF="../man8/lspci.8.html">lspci</A></B>(8)
+
+and
+<B><A HREF="../man8/setpci.8.html">setpci</A></B>(8).
+
+<DT><I>/proc/cmdline</I>
+
+<DD>
+Arguments passed to the Linux kernel at boot time.
+Often done via a boot manager such as
+<B><A HREF="../man8/lilo.8.html">lilo</A></B>(8)
+
+or
+<B><A HREF="../man8/grub.8.html">grub</A></B>(8).
+
+<DT><I>/proc/config.gz</I> (since Linux 2.6)
+
+<DD>
+This file exposes the configuration options that were used
+to build the currently running kernel,
+in the same format as they would be shown in the
+<I>.config</I>
+
+file that resulted when configuring the kernel (using
+<I>make xconfig</I>,
+
+<I>make config</I>,
+
+or similar).
+The file contents are compressed; view or search them using
+<B><A HREF="../man1/zcat.1.html">zcat</A></B>(1)
+
+and
+<B><A HREF="../man1/zgrep.1.html">zgrep</A></B>(1).
+
+As long as no changes have been made to the following file,
+the contents of
+<I>/proc/config.gz</I>
+
+are the same as those provided by :
+
+<PRE>
+
+cat /lib/modules/$(uname -r)/build/.config
+</PRE>
+
+
+<DT><DD>
+<I>/proc/config.gz</I>
+
+is provided only if the kernel is configured with
+<B>CONFIG_IKCONFIG_PROC</B>.
+
+<DT><I>/proc/cpuinfo</I>
+
+<DD>
+This is a collection of CPU and system architecture dependent items,
+for each supported architecture a different list.
+Two common entries are <I>processor</I> which gives CPU number and
+<I>bogomips</I>; a system constant that is calculated
+during kernel initialization.
+SMP machines have information for
+each CPU.
+The
+<B><A HREF="../man1/lscpu.1.html">lscpu</A></B>(1)
+
+command gathers its information from this file.
+<DT><I>/proc/devices</I>
+
+<DD>
+Text listing of major numbers and device groups.
+This can be used by MAKEDEV scripts for consistency with the kernel.
+<DT><I>/proc/diskstats</I> (since Linux 2.5.69)
+
+<DD>
+This file contains disk I/O statistics for each disk device.
+See the Linux kernel source file
+<I>Documentation/iostats.txt</I>
+
+for further information.
+<DT><I>/proc/dma</I>
+
+<DD>
+This is a list of the registered <I>ISA</I> DMA (direct memory access)
+channels in use.
+<DT><I>/proc/driver</I>
+
+<DD>
+Empty subdirectory.
+<DT><I>/proc/execdomains</I>
+
+<DD>
+List of the execution domains (ABI personalities).
+<DT><I>/proc/fb</I>
+
+<DD>
+Frame buffer information when
+<B>CONFIG_FB</B>
+
+is defined during kernel compilation.
+<DT><I>/proc/filesystems</I>
+
+<DD>
+A text listing of the filesystems which are supported by the kernel,
+namely filesystems which were compiled into the kernel or whose kernel
+modules are currently loaded.
+(See also
+<B><A HREF="../man5/filesystems.5.html">filesystems</A></B>(5).)
+
+If a filesystem is marked with &quot;nodev&quot;,
+this means that it does not require a block device to be mounted
+(e.g., virtual filesystem, network filesystem).
+<P>
+Incidentally, this file may be used by
+<B><A HREF="../man8/mount.8.html">mount</A></B>(8)
+
+when no filesystem is specified and it didn't manage to determine the
+filesystem type.
+Then filesystems contained in this file are tried
+(excepted those that are marked with &quot;nodev&quot;).
+<DT><I>/proc/fs</I>
+
+<DD>
+
+
+Contains subdirectories that in turn contain files
+with information about (certain) mounted filesystems.
+<DT><I>/proc/ide</I>
+
+<DD>
+This directory
+exists on systems with the IDE bus.
+There are directories for each IDE channel and attached device.
+Files include:
+<P>
+
+<PRE>
+cache              buffer size in KB
+capacity           number of sectors
+driver             driver version
+geometry           physical and logical geometry
+identify           in hexadecimal
+media              media type
+model              manufacturer's model number
+settings           drive settings
+smart_thresholds   in hexadecimal
+smart_values       in hexadecimal
+</PRE>
+
+
+<P>
+The
+<B><A HREF="../man8/hdparm.8.html">hdparm</A></B>(8)
+
+utility provides access to this information in a friendly format.
+<DT><I>/proc/interrupts</I>
+
+<DD>
+This is used to record the number of interrupts per CPU per IO device.
+Since Linux 2.6.24,
+for the i386 and x86_64 architectures, at least, this also includes
+interrupts internal to the system (that is, not associated with a device
+as such), such as NMI (nonmaskable interrupt), LOC (local timer interrupt),
+and for SMP systems, TLB (TLB flush interrupt), RES (rescheduling
+interrupt), CAL (remote function call interrupt), and possibly others.
+Very easy to read formatting, done in ASCII.
+<DT><I>/proc/iomem</I>
+
+<DD>
+I/O memory map in Linux 2.4.
+<DT><I>/proc/ioports</I>
+
+<DD>
+This is a list of currently registered Input-Output port regions that
+are in use.
+<DT><I>/proc/kallsyms</I> (since Linux 2.5.71)
+
+<DD>
+This holds the kernel exported symbol definitions used by the
+<B>modules</B>(X)
+
+tools to dynamically link and bind loadable modules.
+In Linux 2.5.47 and earlier, a similar file with slightly different syntax
+was named
+<I>ksyms</I>.
+
+<DT><I>/proc/kcore</I>
+
+<DD>
+This file represents the physical memory of the system and is stored
+in the ELF core file format.
+With this pseudo-file, and an unstripped
+kernel
+(<I>/usr/src/linux/vmlinux</I>)
+
+binary, GDB can be used to
+examine the current state of any kernel data structures.
+<P>
+The total length of the file is the size of physical memory (RAM) plus
+4KB.
+<DT><I>/proc/kmsg</I>
+
+<DD>
+This file can be used instead of the
+<B><A HREF="../man2/syslog.2.html">syslog</A></B>(2)
+
+system call to read kernel messages.
+A process must have superuser
+privileges to read this file, and only one process should read this
+file.
+This file should not be read if a syslog process is running
+which uses the
+<B><A HREF="../man2/syslog.2.html">syslog</A></B>(2)
+
+system call facility to log kernel messages.
+<P>
+Information in this file is retrieved with the
+<B><A HREF="../man1/dmesg.1.html">dmesg</A></B>(1)
+
+program.
+<DT><I>/proc/kpagecount</I> (since Linux 2.6.25)
+
+<DD>
+This file contains a 64-bit count of the number of
+times each physical page frame is mapped,
+indexed by page frame number (see the discussion of
+<I>/proc/[pid]/pagemap</I>).
+
+<DT><DD>
+The
+<I>/proc/kpagecount</I>
+
+file is present only if the
+<B>CONFIG_PROC_PAGE_MONITOR</B>
+
+kernel configuration option is enabled.
+<DT><I>/proc/kpageflags</I> (since Linux 2.6.25)
+
+<DD>
+This file contains 64-bit masks corresponding to each physical page frame;
+it is indexed by page frame number (see the discussion of
+<I>/proc/[pid]/pagemap</I>).
+
+The bits are as follows:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;-&nbsp;KPF_LOCKED
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;-&nbsp;KPF_ERROR
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;-&nbsp;KPF_REFERENCED
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;-&nbsp;KPF_UPTODATE
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;-&nbsp;KPF_DIRTY
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;-&nbsp;KPF_LRU
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;-&nbsp;KPF_ACTIVE
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;-&nbsp;KPF_SLAB
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;-&nbsp;KPF_WRITEBACK
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;-&nbsp;KPF_RECLAIM
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;10&nbsp;-&nbsp;KPF_BUDDY
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;11&nbsp;-&nbsp;KPF_MMAP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(since&nbsp;Linux&nbsp;2.6.31)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;12&nbsp;-&nbsp;KPF_ANON&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(since&nbsp;Linux&nbsp;2.6.31)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;13&nbsp;-&nbsp;KPF_SWAPCACHE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(since&nbsp;Linux&nbsp;2.6.31)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;14&nbsp;-&nbsp;KPF_SWAPBACKED&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(since&nbsp;Linux&nbsp;2.6.31)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;15&nbsp;-&nbsp;KPF_COMPOUND_HEAD&nbsp;&nbsp;(since&nbsp;Linux&nbsp;2.6.31)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;16&nbsp;-&nbsp;KPF_COMPOUND_TAIL&nbsp;&nbsp;(since&nbsp;Linux&nbsp;2.6.31)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;16&nbsp;-&nbsp;KPF_HUGE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(since&nbsp;Linux&nbsp;2.6.31)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;18&nbsp;-&nbsp;KPF_UNEVICTABLE&nbsp;&nbsp;&nbsp;&nbsp;(since&nbsp;Linux&nbsp;2.6.31)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;19&nbsp;-&nbsp;KPF_HWPOISON&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(since&nbsp;Linux&nbsp;2.6.31)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;20&nbsp;-&nbsp;KPF_NOPAGE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(since&nbsp;Linux&nbsp;2.6.31)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;21&nbsp;-&nbsp;KPF_KSM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(since&nbsp;Linux&nbsp;2.6.32)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;22&nbsp;-&nbsp;KPF_THP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(since&nbsp;Linux&nbsp;3.4)
+<P>
+For further details on the meanings of these bits,
+see the kernel source file
+<I>Documentation/vm/pagemap.txt</I>.
+
+Before kernel 2.6.29,
+
+
+<B>KPF_WRITEBACK</B>,
+
+<B>KPF_RECLAIM</B>,
+
+<B>KPF_BUDDY</B>,
+
+and
+<B>KPF_LOCKED</B>
+
+did not report correctly.
+<DT><DD>
+The
+<I>/proc/kpageflags</I>
+
+file is present only if the
+<B>CONFIG_PROC_PAGE_MONITOR</B>
+
+kernel configuration option is enabled.
+<DT><I>/proc/ksyms</I> (Linux 1.1.23-2.5.47)
+
+<DD>
+See
+<I>/proc/kallsyms</I>.
+
+<DT><I>/proc/loadavg</I>
+
+<DD>
+The first three fields in this file are load average figures
+giving the number of jobs in the run queue (state R)
+or waiting for disk I/O (state D) averaged over 1, 5, and 15 minutes.
+They are the same as the load average numbers given by
+<B><A HREF="../man1/uptime.1.html">uptime</A></B>(1)
+
+and other programs.
+The fourth field consists of two numbers separated by a slash (/).
+The first of these is the number of currently runnable kernel
+scheduling entities (processes, threads).
+The value after the slash is the number of kernel scheduling entities
+that currently exist on the system.
+The fifth field is the PID of the process that was most
+recently created on the system.
+<DT><I>/proc/locks</I>
+
+<DD>
+This file shows current file locks
+(<B><A HREF="../man2/flock.2.html">flock</A></B>(2) and <B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2))
+
+and leases
+(<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)).
+
+<DT><I>/proc/malloc</I> (only up to and including Linux 2.2)
+
+<DD>
+
+This file is present only if
+<B>CONFIG_DEBUG_MALLOC</B>
+
+was defined during compilation.
+<DT><I>/proc/meminfo</I>
+
+<DD>
+This file reports statistics about memory usage on the system.
+It is used by
+<B><A HREF="../man1/free.1.html">free</A></B>(1)
+
+to report the amount of free and used memory (both physical and swap)
+on the system as well as the shared memory and buffers used by the
+kernel.
+Each line of the file consists of a parameter name, followed by a colon,
+the value of the parameter, and an option unit of measurement (e.g., &quot;kB&quot;).
+The list below describes the parameter names and
+the format specifier required to read the field value.
+Except as noted below,
+all of the fields have been present since at least Linux 2.6.0.
+Some fields are displayed only if the kernel was configured
+with various options; those dependencies are noted in the list.
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><I>MemTotal</I> %lu
+
+<DD>
+Total usable RAM (i.e., physical RAM minus a few reserved
+bits and the kernel binary code).
+<DT><I>MemFree</I> %lu
+
+<DD>
+The sum of
+<I>LowFree</I>+<I>HighFree</I>.
+
+<DT><I>Buffers</I> %lu
+
+<DD>
+Relatively temporary storage for raw disk blocks that
+shouldn't get tremendously large (20MB or so).
+<DT><I>Cached</I> %lu
+
+<DD>
+In-memory cache for files read from the disk (the page cache).
+Doesn't include
+<I>SwapCached</I>.
+
+<DT><I>SwapCached</I> %lu
+
+<DD>
+Memory that once was swapped out, is swapped back in but
+still also is in the swap file.
+(If memory pressure is high, these pages
+don't need to be swapped out again because they are already
+in the swap file.
+This saves I/O.)
+<DT><I>Active</I> %lu
+
+<DD>
+Memory that has been used more recently and usually not
+reclaimed unless absolutely necessary.
+<DT><I>Inactive</I> %lu
+
+<DD>
+Memory which has been less recently used.
+It is more eligible to be reclaimed for other purposes.
+<DT><I>Active(anon)</I> %lu (since Linux 2.6.28)
+
+<DD>
+[To be documented.]
+<DT><I>Inactive(anon)</I> %lu (since Linux 2.6.28)
+
+<DD>
+[To be documented.]
+<DT><I>Active(file)</I> %lu (since Linux 2.6.28)
+
+<DD>
+[To be documented.]
+<DT><I>Inactive(file)</I> %lu (since Linux 2.6.28)
+
+<DD>
+[To be documented.]
+<DT><I>Unevictable</I> %lu (since Linux 2.6.28)
+
+<DD>
+(From Linux 2.6.28 to 2.6.30,
+<B>CONFIG_UNEVICTABLE_LRU</B> was required.)
+[To be documented.]
+<DT><I>Mlocked</I> %lu (since Linux 2.6.28)
+
+<DD>
+(From Linux 2.6.28 to 2.6.30,
+<B>CONFIG_UNEVICTABLE_LRU</B> was required.)
+[To be documented.]
+<DT><I>HighTotal</I> %lu
+
+<DD>
+(Starting with Linux 2.6.19, <B>CONFIG_HIGHMEM</B> is required.)
+Total amount of highmem.
+Highmem is all memory above ~860MB of physical memory.
+Highmem areas are for use by user-space programs,
+or for the page cache.
+The kernel must use tricks to access
+this memory, making it slower to access than lowmem.
+<DT><I>HighFree</I> %lu
+
+<DD>
+(Starting with Linux 2.6.19, <B>CONFIG_HIGHMEM</B> is required.)
+Amount of free highmem.
+<DT><I>LowTotal</I> %lu
+
+<DD>
+(Starting with Linux 2.6.19, <B>CONFIG_HIGHMEM</B> is required.)
+Total amount of lowmem.
+Lowmem is memory which can be used for everything that
+highmem can be used for, but it is also available for the
+kernel's use for its own data structures.
+Among many other things,
+it is where everything from
+<I>Slab</I>
+
+is allocated.
+Bad things happen when you're out of lowmem.
+<DT><I>LowFree</I> %lu
+
+<DD>
+(Starting with Linux 2.6.19, <B>CONFIG_HIGHMEM</B> is required.)
+Amount of free lowmem.
+<DT><I>MmapCopy</I> %lu (since Linux 2.6.29)
+
+<DD>
+(<B>CONFIG_MMU</B>
+
+is required.)
+[To be documented.]
+<DT><I>SwapTotal</I> %lu
+
+<DD>
+Total amount of swap space available.
+<DT><I>SwapFree</I> %lu
+
+<DD>
+Amount of swap space that is currently unused.
+<DT><I>Dirty</I> %lu
+
+<DD>
+Memory which is waiting to get written back to the disk.
+<DT><I>Writeback</I> %lu
+
+<DD>
+Memory which is actively being written back to the disk.
+<DT><I>AnonPages</I> %lu (since Linux 2.6.18)
+
+<DD>
+Non-file backed pages mapped into user-space page tables.
+<DT><I>Mapped</I> %lu
+
+<DD>
+Files which have been mapped into memory (with
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)),
+
+such as libraries.
+<DT><I>Shmem</I> %lu (since Linux 2.6.32)
+
+<DD>
+[To be documented.]
+<DT><I>Slab</I> %lu
+
+<DD>
+In-kernel data structures cache.
+<DT><I>SReclaimable</I> %lu (since Linux 2.6.19)
+
+<DD>
+Part of
+<I>Slab</I>,
+
+that might be reclaimed, such as caches.
+<DT><I>SUnreclaim</I> %lu (since Linux 2.6.19)
+
+<DD>
+Part of
+<I>Slab</I>,
+
+that cannot be reclaimed on memory pressure.
+<DT><I>KernelStack</I> %lu (since Linux 2.6.32)
+
+<DD>
+Amount of memory allocated to kernel stacks.
+<DT><I>PageTables</I> %lu (since Linux 2.6.18)
+
+<DD>
+Amount of memory dedicated to the lowest level of page tables.
+<DT><I>Quicklists</I> %lu (since Linux 2.6.27)
+
+<DD>
+(<B>CONFIG_QUICKLIST</B> is required.)
+[To be documented.]
+<DT><I>NFS_Unstable</I> %lu (since Linux 2.6.18)
+
+<DD>
+NFS pages sent to the server, but not yet committed to stable storage.
+<DT><I>Bounce</I> %lu (since Linux 2.6.18)
+
+<DD>
+Memory used for block device &quot;bounce buffers&quot;.
+<DT><I>WritebackTmp</I> %lu (since Linux 2.6.26)
+
+<DD>
+Memory used by FUSE for temporary writeback buffers.
+<DT><I>CommitLimit</I> %lu (since Linux 2.6.10)
+
+<DD>
+This is the total amount of memory currently available to
+be allocated on the system, expressed in kilobytes.
+This limit is adhered to
+only if strict overcommit accounting is enabled (mode 2 in
+<I>/proc/sys/vm/overcommit_memory</I>).
+
+The limit is calculated according to the formula described under
+<I>/proc/sys/vm/overcommit_memory</I>.
+
+For further details, see the kernel source file
+<I>Documentation/vm/overcommit-accounting</I>.
+
+<DT><I>Committed_AS</I> %lu
+
+<DD>
+The amount of memory presently allocated on the system.
+The committed memory is a sum of all of the memory which
+has been allocated by processes, even if it has not been
+&quot;used&quot; by them as of yet.
+A process which allocates 1GB of memory (using
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3)
+
+or similar), but touches only 300MB of that memory will show up
+as using only 300MB of memory even if it has the address space
+allocated for the entire 1GB.
+<P>
+This 1GB is memory which has been &quot;committed&quot; to by the VM
+and can be used at any time by the allocating application.
+With strict overcommit enabled on the system (mode 2 in
+IR /proc/sys/vm/overcommit_memory ),
+allocations which would exceed the
+<I>CommitLimit</I>
+
+will not be permitted.
+This is useful if one needs to guarantee that processes will not
+fail due to lack of memory once that memory has been successfully allocated.
+<DT><I>VmallocTotal</I> %lu
+
+<DD>
+Total size of vmalloc memory area.
+<DT><I>VmallocUsed</I> %lu
+
+<DD>
+Amount of vmalloc area which is used.
+<DT><I>VmallocChunk</I> %lu
+
+<DD>
+Largest contiguous block of vmalloc area which is free.
+<DT><I>HardwareCorrupted</I> %lu (since Linux 2.6.32)
+
+<DD>
+(<B>CONFIG_MEMORY_FAILURE</B> is required.)
+[To be documented.]
+<DT><I>AnonHugePages</I> %lu (since Linux 2.6.38)
+
+<DD>
+(<B>CONFIG_TRANSPARENT_HUGEPAGE</B> is required.)
+Non-file backed huge pages mapped into user-space page tables.
+<DT><I>HugePages_Total</I> %lu
+
+<DD>
+(<B>CONFIG_HUGETLB_PAGE</B> is required.)
+The size of the pool of huge pages.
+<DT><I>HugePages_Free</I> %lu
+
+<DD>
+(<B>CONFIG_HUGETLB_PAGE</B> is required.)
+The number of huge pages in the pool that are not yet allocated.
+<DT><I>HugePages_Rsvd</I> %lu (since Linux 2.6.17)
+
+<DD>
+(<B>CONFIG_HUGETLB_PAGE</B> is required.)
+This is the number of huge pages for
+which a commitment to allocate from the pool has been made,
+but no allocation has yet been made.
+These reserved huge pages
+guarantee that an application will be able to allocate a
+huge page from the pool of huge pages at fault time.
+<DT><I>HugePages_Surp</I> %lu (since Linux 2.6.24)
+
+<DD>
+(<B>CONFIG_HUGETLB_PAGE</B> is required.)
+This is the number of huge pages in
+the pool above the value in
+<I>/proc/sys/vm/nr_hugepages</I>.
+
+The maximum number of surplus huge pages is controlled by
+<I>/proc/sys/vm/nr_overcommit_hugepages</I>.
+
+<DT><I>Hugepagesize</I> %lu
+
+<DD>
+(<B>CONFIG_HUGETLB_PAGE</B> is required.)
+The size of huge pages.
+</DL>
+</DL>
+
+<DT><I>/proc/modules</I>
+
+<DD>
+A text list of the modules that have been loaded by the system.
+See also
+<B><A HREF="../man8/lsmod.8.html">lsmod</A></B>(8).
+
+<DT><I>/proc/mounts</I>
+
+<DD>
+Before kernel 2.4.19, this file was a list
+of all the filesystems currently mounted on the system.
+With the introduction of per-process mount namespaces in
+Linux 2.4.19, this file became a link to
+<I>/proc/self/mounts</I>,
+
+which lists the mount points of the process's own mount namespace.
+The format of this file is documented in
+<B><A HREF="../man5/fstab.5.html">fstab</A></B>(5).
+
+<DT><I>/proc/mtrr</I>
+
+<DD>
+Memory Type Range Registers.
+See the Linux kernel source file
+<I>Documentation/mtrr.txt</I>
+
+for details.
+<DT><I>/proc/net</I>
+
+<DD>
+various net pseudo-files, all of which give the status of some part of
+the networking layer.
+These files contain ASCII structures and are,
+therefore, readable with
+<B><A HREF="../man1/cat.1.html">cat</A></B>(1).
+
+However, the standard
+<B><A HREF="../man8/netstat.8.html">netstat</A></B>(8)
+
+suite provides much cleaner access to these files.
+<DT><I>/proc/net/arp</I>
+
+<DD>
+This holds an ASCII readable dump of the kernel ARP table used for
+address resolutions.
+It will show both dynamically learned and preprogrammed ARP entries.
+The format is:
+<P>
+<PRE>
+IP address     HW type   Flags     HW address          Mask   Device
+192.168.0.50   0x1       0x2       00:50:BF:25:68:F3   *      eth0
+192.168.0.250  0x1       0xc       00:00:00:00:00:00   *      eth0
+</PRE>
+
+
+<P>
+Here &quot;IP address&quot; is the IPv4 address of the machine and the &quot;HW type&quot;
+is the hardware type of the address from RFC&nbsp;826.
+The flags are the internal
+flags of the ARP structure (as defined in
+<I>/usr/include/linux/if_arp.h</I>)
+
+and
+the &quot;HW address&quot; is the data link layer mapping for that IP address if
+it is known.
+<DT><I>/proc/net/dev</I>
+
+<DD>
+The dev pseudo-file contains network device status information.
+This gives
+the number of received and sent packets, the number of errors and
+collisions
+and other basic statistics.
+These are used by the
+<B><A HREF="../man8/ifconfig.8.html">ifconfig</A></B>(8)
+
+program to report device status.
+The format is:
+<P>
+<PRE>
+Inter-|   Receive                                                |  Transmit
+ face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
+    lo: 2776770   11307    0    0    0     0          0         0  2776770   11307    0    0    0     0       0          0
+  eth0: 1215645    2751    0    0    0     0          0         0  1782404    4324    0    0    0   427       0          0
+  ppp0: 1622270    5552    1    0    0     0          0         0   354130    5669    0    0    0     0       0          0
+  tap0:    7714      81    0    0    0     0          0         0     7714      81    0    0    0     0       0          0
+</PRE>
+
+
+
+
+
+
+
+<DT><I>/proc/net/dev_mcast</I>
+
+<DD>
+Defined in
+<I>/usr/src/linux/net/core/dev_mcast.c</I>:
+
+<PRE>
+indx interface_name  dmi_u dmi_g dmi_address
+2    eth0            1     0     01005e000001
+3    eth1            1     0     01005e000001
+4    eth2            1     0     01005e000001
+</PRE>
+
+<DT><I>/proc/net/igmp</I>
+
+<DD>
+Internet Group Management Protocol.
+Defined in
+<I>/usr/src/linux/net/core/igmp.c</I>.
+
+<DT><I>/proc/net/rarp</I>
+
+<DD>
+This file uses the same format as the
+<I>arp</I>
+
+file and contains the current reverse mapping database used to provide
+<B><A HREF="../man8/rarp.8.html">rarp</A></B>(8)
+
+reverse address lookup services.
+If RARP is not configured into the
+kernel,
+this file will not be present.
+<DT><I>/proc/net/raw</I>
+
+<DD>
+Holds a dump of the RAW socket table.
+Much of the information is not of
+use
+apart from debugging.
+The &quot;sl&quot; value is the kernel hash slot for the
+socket,
+the &quot;local_address&quot; is the local address and protocol number pair.
+&quot;St&quot; is
+the internal status of the socket.
+The &quot;tx_queue&quot; and &quot;rx_queue&quot; are the
+outgoing and incoming data queue in terms of kernel memory usage.
+The &quot;tr&quot;, &quot;tm-&gt;when&quot;, and &quot;rexmits&quot; fields are not used by RAW.
+The &quot;uid&quot;
+field holds the effective UID of the creator of the socket.
+
+
+
+
+<DT><I>/proc/net/snmp</I>
+
+<DD>
+This file holds the ASCII data needed for the IP, ICMP, TCP, and UDP
+management
+information bases for an SNMP agent.
+<DT><I>/proc/net/tcp</I>
+
+<DD>
+Holds a dump of the TCP socket table.
+Much of the information is not
+of use apart from debugging.
+The &quot;sl&quot; value is the kernel hash slot
+for the socket, the &quot;local_address&quot; is the local address and port number pair.
+The &quot;rem_address&quot; is the remote address and port number pair
+(if connected).
+&quot;St&quot; is the internal status of the socket.
+The &quot;tx_queue&quot; and &quot;rx_queue&quot; are the
+outgoing and incoming data queue in terms of kernel memory usage.
+The &quot;tr&quot;, &quot;tm-&gt;when&quot;, and &quot;rexmits&quot; fields hold internal information of
+the kernel socket state and are only useful for debugging.
+The &quot;uid&quot;
+field holds the effective UID of the creator of the socket.
+<DT><I>/proc/net/udp</I>
+
+<DD>
+Holds a dump of the UDP socket table.
+Much of the information is not of
+use apart from debugging.
+The &quot;sl&quot; value is the kernel hash slot for the
+socket, the &quot;local_address&quot; is the local address and port number pair.
+The &quot;rem_address&quot; is the remote address and port number pair
+(if connected). &quot;St&quot; is the internal status of the socket.
+The &quot;tx_queue&quot; and &quot;rx_queue&quot; are the outgoing and incoming data queue
+in terms of kernel memory usage.
+The &quot;tr&quot;, &quot;tm-&gt;when&quot;, and &quot;rexmits&quot; fields
+are not used by UDP.
+The &quot;uid&quot;
+field holds the effective UID of the creator of the socket.
+The format is:
+<P>
+<PRE>
+sl  local_address rem_address   st tx_queue rx_queue tr rexmits  tm-&gt;when uid
+ 1: 01642C89:0201 0C642C89:03FF 01 00000000:00000001 01:000071BA 00000000 0
+ 1: 00000000:0801 00000000:0000 0A 00000000:00000000 00:00000000 6F000100 0
+ 1: 00000000:0201 00000000:0000 0A 00000000:00000000 00:00000000 00000000 0
+</PRE>
+
+<DT><I>/proc/net/unix</I>
+
+<DD>
+Lists the UNIX domain sockets present within the system and their
+status.
+The format is:
+<PRE>
+
+Num RefCount Protocol Flags    Type St Path
+ 0: 00000002 00000000 00000000 0001 03
+ 1: 00000001 00000000 00010000 0001 01 /dev/printer
+
+</PRE>
+
+<P>
+Here &quot;Num&quot; is the kernel table slot number, &quot;RefCount&quot; is the number
+of users of the socket, &quot;Protocol&quot; is currently always 0, &quot;Flags&quot;
+represent the internal kernel flags holding the status of the
+socket.
+Currently, type is always &quot;1&quot; (UNIX domain datagram sockets are
+not yet supported in the kernel).
+&quot;St&quot; is the internal state of the
+socket and Path is the bound path (if any) of the socket.
+<DT><I>/proc/partitions</I>
+
+<DD>
+Contains the major and minor numbers of each partition as well as the number
+of 1024-byte blocks and the partition name.
+<DT><I>/proc/pci</I>
+
+<DD>
+This is a listing of all PCI devices found during kernel initialization
+and their configuration.
+<P>
+This file has been deprecated in favor of a new
+<I>/proc</I>
+
+interface for PCI
+(<I>/proc/bus/pci</I>).
+
+It became optional in Linux 2.2 (available with
+<B>CONFIG_PCI_OLD_PROC</B>
+
+set at kernel compilation).
+It became once more nonoptionally enabled in Linux 2.4.
+Next, it was deprecated in Linux 2.6 (still available with
+<B>CONFIG_PCI_LEGACY_PROC</B>
+
+set), and finally removed altogether since Linux 2.6.17.
+
+
+
+
+
+<DT><I>/proc/profile</I> (since Linux 2.4)
+
+<DD>
+This file is present only if the kernel was booted with the
+<I>profile=1</I>
+
+command-line option.
+It exposes kernel profiling information in a binary format for use by
+<B><A HREF="../man1/readprofile.1.html">readprofile</A></B>(1).
+
+Writing (e.g., an empty string) to this file resets the profiling counters;
+on some architectures,
+writing a binary integer &quot;profiling multiplier&quot; of size
+<I>sizeof(int)</I>
+
+sets the profiling interrupt frequency.
+<DT><I>/proc/scsi</I>
+
+<DD>
+A directory with the
+<I>scsi</I>
+
+mid-level pseudo-file and various SCSI low-level
+driver directories,
+which contain a file for each SCSI host in this system, all of
+which give the status of some part of the SCSI IO subsystem.
+These files contain ASCII structures and are, therefore, readable with
+<B><A HREF="../man1/cat.1.html">cat</A></B>(1).
+
+<P>
+You can also write to some of the files to reconfigure the subsystem or
+switch certain features on or off.
+<DT><I>/proc/scsi/scsi</I>
+
+<DD>
+This is a listing of all SCSI devices known to the kernel.
+The listing is similar to the one seen during bootup.
+scsi currently supports only the <I>add-single-device</I> command which
+allows root to add a hotplugged device to the list of known devices.
+<P>
+The command
+
+<PRE>
+
+echo 'scsi add-single-device 1 0 5 0' &gt; /proc/scsi/scsi
+
+</PRE>
+
+
+will cause
+host scsi1 to scan on SCSI channel 0 for a device on ID 5 LUN 0.
+If there
+is already a device known on this address or the address is invalid, an
+error will be returned.
+<DT><I>/proc/scsi/[drivername]</I>
+
+<DD>
+<I>[drivername]</I> can currently be NCR53c7xx, aha152x, aha1542, aha1740,
+aic7xxx, buslogic, eata_dma, eata_pio, fdomain, in2000, pas16, qlogic,
+scsi_debug, seagate, t128, u15-24f, ultrastore, or wd7000.
+These directories show up for all drivers that registered at least one
+SCSI HBA.
+Every directory contains one file per registered host.
+Every host-file is named after the number the host was assigned during
+initialization.
+<P>
+Reading these files will usually show driver and host configuration,
+statistics, and so on.
+<P>
+Writing to these files allows different things on different hosts.
+For example, with the <I>latency</I> and <I>nolatency</I> commands,
+root can switch on and off command latency measurement code in the
+eata_dma driver.
+With the <I>lockup</I> and <I>unlock</I> commands,
+root can control bus lockups simulated by the scsi_debug driver.
+<DT><I>/proc/self</I>
+
+<DD>
+This directory refers to the process accessing the
+<I>/proc</I>
+
+filesystem,
+and is identical to the
+<I>/proc</I>
+
+directory named by the process ID of the same process.
+<DT><I>/proc/slabinfo</I>
+
+<DD>
+Information about kernel caches.
+Since Linux 2.6.16 this file is present only if the
+<B>CONFIG_SLAB</B>
+
+kernel configuration option is enabled.
+The columns in
+<I>/proc/slabinfo</I>
+
+are:
+
+<PRE>
+
+cache-name
+num-active-objs
+total-objs
+object-size
+num-active-slabs
+total-slabs
+num-pages-per-slab
+</PRE>
+
+
+<P>
+See
+<B><A HREF="../man5/slabinfo.5.html">slabinfo</A></B>(5)
+
+for details.
+<DT><I>/proc/stat</I>
+
+<DD>
+kernel/system statistics.
+Varies with architecture.
+Common
+entries include:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><I>cpu  3357 0 4313 1362393</I><DD>
+The amount of time, measured in units of
+USER_HZ (1/100ths of a second on most architectures, use
+<I>sysconf(_SC_CLK_TCK)</I>
+
+to obtain the right value),
+
+that the system spent in various states:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><I>user</I>
+
+<DD>
+(1) Time spent in user mode.
+<DT><I>nice</I>
+
+<DD>
+(2) Time spent in user mode with low priority (nice).
+<DT><I>system</I>
+
+<DD>
+(3) Time spent in system mode.
+<DT><I>idle</I>
+
+<DD>
+(4) Time spent in the idle task.
+
+
+
+This value should be USER_HZ times the
+second entry in the
+<I>/proc/uptime</I>
+
+pseudo-file.
+<DT><I>iowait</I> (since Linux 2.5.41)
+
+<DD>
+(5) Time waiting for I/O to complete.
+<DT><I>irq</I> (since Linux 2.6.0-test4)
+
+<DD>
+(6) Time servicing interrupts.
+<DT><I>softirq</I> (since Linux 2.6.0-test4)
+
+<DD>
+(7) Time servicing softirqs.
+<DT><I>steal</I> (since Linux 2.6.11)
+
+<DD>
+(8) Stolen time, which is the time spent in other operating systems when
+running in a virtualized environment
+<DT><I>guest</I> (since Linux 2.6.24)
+
+<DD>
+(9) Time spent running a virtual CPU for guest
+operating systems under the control of the Linux kernel.
+
+<DT><I>guest_nice</I> (since Linux 2.6.33)
+
+<DD>
+
+(10) Time spent running a niced guest (virtual CPU for guest
+operating systems under the control of the Linux kernel).
+</DL>
+</DL>
+
+<DT><I>page 5741 1808</I><DD>
+The number of pages the system paged in and the number that were paged
+out (from disk).
+<DT><I>swap 1 0</I><DD>
+The number of swap pages that have been brought in and out.
+<DT>
+<DD>
+
+<I>intr 1462898</I>
+This line shows counts of interrupts serviced since boot time,
+for each of the possible system interrupts.
+The first column is the total of all interrupts serviced
+including unnumbered architecture specific interrupts;
+each subsequent column is the total for that particular numbered interrupt.
+Unnumbered interrupts are not shown, only summed into the total.
+<DT><I>disk_io: (2,0):(31,30,5764,1,2) (3,0):</I>...<DD>
+(major,disk_idx):(noinfo, read_io_ops, blks_read, write_io_ops, blks_written)
+<BR>
+
+(Linux 2.4 only)
+<DT><I>ctxt 115315</I><DD>
+The number of context switches that the system underwent.
+<DT><I>btime 769041601</I><DD>
+boot time, in seconds since the Epoch, 1970-01-01 00:00:00 +0000 (UTC).
+<DT><I>processes 86031</I><DD>
+Number of forks since boot.
+<DT><I>procs_running 6</I><DD>
+Number of processes in runnable state.
+(Linux 2.5.45 onward.)
+<DT><I>procs_blocked 2</I><DD>
+Number of processes blocked waiting for I/O to complete.
+(Linux 2.5.45 onward.)
+</DL>
+</DL>
+
+<DT><I>/proc/swaps</I>
+
+<DD>
+Swap areas in use.
+See also
+<B><A HREF="../man8/swapon.8.html">swapon</A></B>(8).
+
+<DT><I>/proc/sys</I>
+
+<DD>
+This directory (present since 1.3.57) contains a number of files
+and subdirectories corresponding to kernel variables.
+These variables can be read and sometimes modified using
+the <I>/proc</I> filesystem, and the (deprecated)
+<B><A HREF="../man2/sysctl.2.html">sysctl</A></B>(2)
+
+system call.
+<DT><I>/proc/sys/abi</I> (since Linux 2.4.10)
+
+<DD>
+This directory may contain files with application binary information.
+
+See the Linux kernel source file
+<I>Documentation/sysctl/abi.txt</I>
+
+for more information.
+<DT><I>/proc/sys/debug</I>
+
+<DD>
+This directory may be empty.
+<DT><I>/proc/sys/dev</I>
+
+<DD>
+This directory contains device-specific information (e.g.,
+<I>dev/cdrom/info</I>).
+
+On
+some systems, it may be empty.
+<DT><I>/proc/sys/fs</I>
+
+<DD>
+This directory contains the files and subdirectories for kernel variables
+related to filesystems.
+<DT><I>/proc/sys/fs/binfmt_misc</I>
+
+<DD>
+Documentation for files in this directory can be found
+in the Linux kernel sources in
+<I>Documentation/binfmt_misc.txt</I>.
+
+<DT><I>/proc/sys/fs/dentry-state</I> (since Linux 2.2)
+
+<DD>
+This file contains information about the status of the
+directory cache (dcache).
+The file contains six numbers,
+<I>nr_dentry</I>, <I>nr_unused</I>, <I>age_limit</I> (age in seconds), 
+
+<I>want_pages</I>
+
+(pages requested by system) and two dummy values.
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>*<DD>
+<I>nr_dentry</I>
+
+is the number of allocated dentries (dcache entries).
+This field is unused in Linux 2.2.
+<DT>*<DD>
+<I>nr_unused</I>
+
+is the number of unused dentries.
+<DT>*<DD>
+<I>age_limit</I>
+
+
+is the age in seconds after which dcache entries
+can be reclaimed when memory is short.
+<DT>*<DD>
+<I>want_pages</I>
+
+
+is nonzero when the kernel has called shrink_dcache_pages() and the
+dcache isn't pruned yet.
+</DL>
+</DL>
+
+<DT><I>/proc/sys/fs/dir-notify-enable</I>
+
+<DD>
+This file can be used to disable or enable the
+<I>dnotify</I>
+
+interface described in
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+on a system-wide basis.
+A value of 0 in this file disables the interface,
+and a value of 1 enables it.
+<DT><I>/proc/sys/fs/dquot-max</I>
+
+<DD>
+This file shows the maximum number of cached disk quota entries.
+On some (2.4) systems, it is not present.
+If the number of free cached disk quota entries is very low and
+you have some awesome number of simultaneous system users,
+you might want to raise the limit.
+<DT><I>/proc/sys/fs/dquot-nr</I>
+
+<DD>
+This file shows the number of allocated disk quota
+entries and the number of free disk quota entries.
+<DT><I>/proc/sys/fs/epoll</I> (since Linux 2.6.28)
+
+<DD>
+This directory contains the file
+<I>max_user_watches</I>,
+
+which can be used to limit the amount of kernel memory consumed by the
+<I>epoll</I>
+
+interface.
+For further details, see
+<B><A HREF="../man7/epoll.7.html">epoll</A></B>(7).
+
+<DT><I>/proc/sys/fs/file-max</I>
+
+<DD>
+This file defines
+a system-wide limit on the number of open files for all processes.
+(See also
+<B><A HREF="../man2/setrlimit.2.html">setrlimit</A></B>(2),
+
+which can be used by a process to set the per-process limit,
+<B>RLIMIT_NOFILE</B>,
+
+on the number of files it may open.)
+If you get lots
+of error messages in the kernel log about running out of file handles
+(look for &quot;VFS: file-max limit &lt;number&gt; reached&quot;),
+try increasing this value:
+<BR>
+
+<P>
+<BR>
+
+<PRE>
+    echo 100000 &gt; /proc/sys/fs/file-max
+</PRE>
+
+
+<P>
+The kernel constant
+<B>NR_OPEN</B>
+
+imposes an upper limit on the value that may be placed in
+<I>file-max</I>.
+
+<P>
+Privileged processes
+(<B>CAP_SYS_ADMIN</B>)
+
+can override the
+<I>file-max</I>
+
+limit.
+<DT><I>/proc/sys/fs/file-nr</I>
+
+<DD>
+This (read-only) file contains three numbers:
+the number of allocated file handles
+(i.e., the number of files presently opened);
+the number of free file handles;
+and the maximum number of file handles (i.e., the same value as
+<I>/proc/sys/fs/file-max</I>).
+
+If the number of allocated file handles is close to the
+maximum, you should consider increasing the maximum.
+Before Linux 2.6,
+the kernel allocated file handles dynamically,
+but it didn't free them again.
+Instead the free file handles were kept in a list for reallocation;
+the &quot;free file handles&quot; value indicates the size of that list.
+A large number of free file handles indicates that there was
+a past peak in the usage of open file handles.
+Since Linux 2.6, the kernel does deallocate freed file handles,
+and the &quot;free file handles&quot; value is always zero.
+<DT><I>/proc/sys/fs/inode-max</I> (only present until Linux 2.2)
+
+<DD>
+This file contains the maximum number of in-memory inodes.
+This value should be 3-4 times larger
+than the value in
+<I>file-max</I>,
+
+since <I>stdin</I>, <I>stdout</I>
+and network sockets also need an inode to handle them.
+When you regularly run out of inodes, you need to increase this value.
+<P>
+Starting with Linux 2.4,
+there is no longer a static limit on the number of inodes,
+and this file is removed.
+<DT><I>/proc/sys/fs/inode-nr</I>
+
+<DD>
+This file contains the first two values from
+<I>inode-state</I>.
+
+<DT><I>/proc/sys/fs/inode-state</I>
+
+<DD>
+This file
+contains seven numbers:
+<I>nr_inodes</I>,
+
+<I>nr_free_inodes</I>,
+
+<I>preshrink</I>,
+
+and four dummy values (always zero).
+<P>
+<I>nr_inodes</I>
+
+is the number of inodes the system has allocated.
+
+
+
+<I>nr_free_inodes</I>
+
+represents the number of free inodes.
+<P>
+<I>preshrink</I>
+
+is nonzero when the
+<I>nr_inodes</I>
+
+&gt;
+<I>inode-max</I>
+
+and the system needs to prune the inode list instead of allocating more;
+since Linux 2.4, this field is a dummy value (always zero).
+<DT><I>/proc/sys/fs/inotify</I> (since Linux 2.6.13)
+
+<DD>
+This directory contains files
+<I>max_queued_events</I>, <I>max_user_instances</I>, and <I>max_user_watches</I>,
+
+that can be used to limit the amount of kernel memory consumed by the
+<I>inotify</I>
+
+interface.
+For further details, see
+<B><A HREF="../man7/inotify.7.html">inotify</A></B>(7).
+
+<DT><I>/proc/sys/fs/lease-break-time</I>
+
+<DD>
+This file specifies the grace period that the kernel grants to a process
+holding a file lease
+(<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2))
+
+after it has sent a signal to that process notifying it
+that another process is waiting to open the file.
+If the lease holder does not remove or downgrade the lease within
+this grace period, the kernel forcibly breaks the lease.
+<DT><I>/proc/sys/fs/leases-enable</I>
+
+<DD>
+This file can be used to enable or disable file leases
+(<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2))
+
+on a system-wide basis.
+If this file contains the value 0, leases are disabled.
+A nonzero value enables leases.
+<DT><I>/proc/sys/fs/mqueue</I> (since Linux 2.6.6)
+
+<DD>
+This directory contains files
+<I>msg_max</I>, <I>msgsize_max</I>, and <I>queues_max</I>,
+
+controlling the resources used by POSIX message queues.
+See
+<B><A HREF="../man7/mq_overview.7.html">mq_overview</A></B>(7)
+
+for details.
+<DT><I>/proc/sys/fs/overflowgid</I> and <I>/proc/sys/fs/overflowuid</I>
+
+<DD>
+These files
+allow you to change the value of the fixed UID and GID.
+The default is 65534.
+Some filesystems support only 16-bit UIDs and GIDs, although in Linux
+UIDs and GIDs are 32 bits.
+When one of these filesystems is mounted
+with writes enabled, any UID or GID that would exceed 65535 is translated
+to the overflow value before being written to disk.
+<DT><I>/proc/sys/fs/pipe-max-size</I> (since Linux 2.6.35)
+
+<DD>
+The value in this file defines an upper limit for raising the capacity
+of a pipe using the
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+<B>F_SETPIPE_SZ</B>
+
+operation.
+This limit applies only to unprivileged processes.
+The default value for this file is 1,048,576.
+The value assigned to this file may be rounded upward,
+to reflect the value actually employed for a convenient implementation.
+To determine the rounded-up value,
+display the contents of this file after assigning a value to it.
+The minimum value that can be assigned to this file is the system page size.
+<DT><I>/proc/sys/fs/protected_hardlinks</I> (since Linux 3.6)
+
+<DD>
+
+When the value in this file is 0,
+no restrictions are placed on the creation of hard links
+(i.e., this is the historical behavior before Linux 3.6).
+When the value in this file is 1,
+a hard link can be created to a target file
+only if one of the following conditions is true:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>*<DD>
+The caller has the
+<B>CAP_FOWNER</B>
+
+capability.
+<DT>*<DD>
+The filesystem UID of the process creating the link matches
+the owner (UID) of the target file
+(as described in
+<B><A HREF="../man7/credentials.7.html">credentials</A></B>(7),
+
+a process's filesystem UID is normally the same as its effective UID).
+<DT>*<DD>
+All of the following conditions are true:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>&bull;<DD>
+the target is a regular file;
+<DT>&bull;<DD>
+the target file does not have its set-user-ID permission bit enabled;
+<DT>&bull;<DD>
+the target file does not have both its set-group-ID and
+group-executable permission bits enabled; and
+<DT>&bull;<DD>
+the caller has permission to read and write the target file
+(either via the file's permissions mask or because it has
+suitable capabilities).
+</DL>
+</DL>
+
+</DL>
+</DL>
+
+<DT><DD>
+The default value in this file is 0.
+Setting the value to 1
+prevents a longstanding class of security issues caused by
+hard-link-based time-of-check, time-of-use races,
+most commonly seen in world-writable directories such as
+<I>/tmp</I>.
+
+The common method of exploiting this flaw
+is to cross privilege boundaries when following a given hard link
+(i.e., a root process follows a hard link created by another user).
+Additionally, on systems without separated partitions,
+this stops unauthorized users from &quot;pinning&quot; vulnerable set-user-ID and
+set-group-ID files against being upgraded by
+the administrator, or linking to special files.
+<DT><I>/proc/sys/fs/protected_symlinks</I> (since Linux 3.6)
+
+<DD>
+
+When the value in this file is 0,
+no restrictions are placed on following symbolic links
+(i.e., this is the historical behavior before Linux 3.6).
+When the value in this file is 1, symbolic links are followed only
+in the following circumstances:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>*<DD>
+the filesystem UID of the process following the link matches
+the owner (UID) of the symbolic link
+(as described in
+<B><A HREF="../man7/credentials.7.html">credentials</A></B>(7),
+
+a process's filesystem UID is normally the same as its effective UID);
+<DT>*<DD>
+the link is not in a sticky world-writable directory; or
+<DT>*<DD>
+the symbolic link and its parent directory have the same owner (UID)
+</DL>
+</DL>
+
+<DT><DD>
+A system call that fails to follow a symbolic link
+because of the above restrictions returns the error
+<B>EACCES</B>
+
+in
+<I>errno</I>.
+
+<DT><DD>
+The default value in this file is 0.
+Setting the value to 1 avoids a longstanding class of security issues
+based on time-of-check, time-of-use races when accessing symbolic links.
+<DT><I>/proc/sys/fs/suid_dumpable</I> (since Linux 2.6.13)
+
+<DD>
+
+The value in this file determines whether core dump files are
+produced for set-user-ID or otherwise protected/tainted binaries.
+Three different integer values can be specified:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><I>0&nbsp;(default)</I><DD>
+This provides the traditional (pre-Linux 2.6.13) behavior.
+A core dump will not be produced for a process which has
+changed credentials (by calling
+<B><A HREF="../man2/seteuid.2.html">seteuid</A></B>(2),
+
+<B><A HREF="../man2/setgid.2.html">setgid</A></B>(2),
+
+or similar, or by executing a set-user-ID or set-group-ID program)
+or whose binary does not have read permission enabled.
+<DT><I>1&nbsp;(&quot;debug&quot;)</I><DD>
+All processes dump core when possible.
+The core dump is owned by the filesystem user ID of the dumping process
+and no security is applied.
+This is intended for system debugging situations only.
+Ptrace is unchecked.
+<DT><I>2&nbsp;(&quot;suidsafe&quot;)</I><DD>
+Any binary which normally would not be dumped (see &quot;0&quot; above)
+is dumped readable by root only.
+This allows the user to remove the core dump file but not to read it.
+For security reasons core dumps in this mode will not overwrite one
+another or other files.
+This mode is appropriate when administrators are
+attempting to debug problems in a normal environment.
+<DT><DD>
+Additionally, since Linux 3.6,
+
+<I>/proc/sys/kernel/core_pattern</I>
+
+must either be an absolute pathname
+or a pipe command, as detailed in
+<B><A HREF="../man5/core.5.html">core</A></B>(5).
+
+Warnings will be written to the kernel log if
+<I>core_pattern</I>
+
+does not follow these rules, and no core dump will be produced.
+
+</DL>
+</DL>
+
+<DT><I>/proc/sys/fs/super-max</I>
+
+<DD>
+This file
+controls the maximum number of superblocks, and
+thus the maximum number of mounted filesystems the kernel
+can have.
+You need increase only
+<I>super-max</I>
+
+if you need to mount more filesystems than the current value in
+<I>super-max</I>
+
+allows you to.
+<DT><I>/proc/sys/fs/super-nr</I>
+
+<DD>
+This file
+contains the number of filesystems currently mounted.
+<DT><I>/proc/sys/kernel</I>
+
+<DD>
+This directory contains files controlling a range of kernel parameters,
+as described below.
+<DT><I>/proc/sys/kernel/acct</I>
+
+<DD>
+This file
+contains three numbers:
+<I>highwater</I>,
+
+<I>lowwater</I>,
+
+and
+<I>frequency</I>.
+
+If BSD-style process accounting is enabled, these values control
+its behavior.
+If free space on filesystem where the log lives goes below
+<I>lowwater</I>
+
+percent, accounting suspends.
+If free space gets above
+<I>highwater</I>
+
+percent, accounting resumes.
+<I>frequency</I>
+
+determines
+how often the kernel checks the amount of free space (value is in
+seconds).
+Default values are 4, 2 and 30.
+That is, suspend accounting if 2% or less space is free; resume it
+if 4% or more space is free; consider information about amount of free space
+valid for 30 seconds.
+<DT><I>/proc/sys/kernel/cap_last_cap</I> (since Linux 3.2)
+
+<DD>
+See
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7).
+
+<DT><I>/proc/sys/kernel/cap-bound</I> (from Linux 2.2 to 2.6.24)
+
+<DD>
+This file holds the value of the kernel
+<I>capability bounding set</I>
+
+(expressed as a signed decimal number).
+This set is ANDed against the capabilities permitted to a process
+during
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2).
+
+Starting with Linux 2.6.25,
+the system-wide capability bounding set disappeared,
+and was replaced by a per-thread bounding set; see
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7).
+
+<DT><I>/proc/sys/kernel/core_pattern</I>
+
+<DD>
+See
+<B><A HREF="../man5/core.5.html">core</A></B>(5).
+
+<DT><I>/proc/sys/kernel/core_uses_pid</I>
+
+<DD>
+See
+<B><A HREF="../man5/core.5.html">core</A></B>(5).
+
+<DT><I>/proc/sys/kernel/ctrl-alt-del</I>
+
+<DD>
+This file
+controls the handling of Ctrl-Alt-Del from the keyboard.
+When the value in this file is 0, Ctrl-Alt-Del is trapped and
+sent to the
+<B><A HREF="../man8/init.8.html">init</A></B>(8)
+
+program to handle a graceful restart.
+When the value is greater than zero, Linux's reaction to a Vulcan
+Nerve Pinch (tm) will be an immediate reboot, without even
+syncing its dirty buffers.
+Note: when a program (like dosemu) has the keyboard in &quot;raw&quot;
+mode, the ctrl-alt-del is intercepted by the program before it
+ever reaches the kernel tty layer, and it's up to the program
+to decide what to do with it.
+<DT><I>/proc/sys/kernel/dmesg_restrict</I> (since Linux 2.6.37)
+
+<DD>
+The value in this file determines who can see kernel syslog contents.
+A value of 0 in this file imposes no restrictions.
+If the value is 1, only privileged users can read the kernel syslog.
+(See
+<B><A HREF="../man2/syslog.2.html">syslog</A></B>(2)
+
+for more details.)
+Since Linux 3.4,
+
+only users with the
+<B>CAP_SYS_ADMIN</B>
+
+capability may change the value in this file.
+<DT><I>/proc/sys/kernel/domainname</I> and <I>/proc/sys/kernel/hostname</I>
+
+<DD>
+can be used to set the NIS/YP domainname and the
+hostname of your box in exactly the same way as the commands
+<B><A HREF="../man1/domainname.1.html">domainname</A></B>(1)
+
+and
+<B><A HREF="../man1/hostname.1.html">hostname</A></B>(1),
+
+that is:
+<P>
+
+<PRE>
+#<B> echo 'darkstar' &gt; /proc/sys/kernel/hostname</B>
+#<B> echo 'mydomain' &gt; /proc/sys/kernel/domainname</B>
+</PRE>
+
+
+<P>
+has the same effect as
+<P>
+
+<PRE>
+#<B> hostname 'darkstar'</B>
+#<B> domainname 'mydomain'</B>
+</PRE>
+
+
+<P>
+Note, however, that the classic darkstar.frop.org has the
+hostname &quot;darkstar&quot; and DNS (Internet Domain Name Server)
+domainname &quot;frop.org&quot;, not to be confused with the NIS (Network
+Information Service) or YP (Yellow Pages) domainname.
+These two
+domain names are in general different.
+For a detailed discussion
+see the
+<B><A HREF="../man1/hostname.1.html">hostname</A></B>(1)
+
+man page.
+<DT><I>/proc/sys/kernel/hotplug</I>
+
+<DD>
+This file
+contains the path for the hotplug policy agent.
+The default value in this file is
+<I>/sbin/hotplug</I>.
+
+<DT><I>/proc/sys/kernel/htab-reclaim</I>
+
+<DD>
+(PowerPC only) If this file is set to a nonzero value,
+the PowerPC htab
+(see kernel file
+<I>Documentation/powerpc/ppc_htab.txt</I>)
+
+is pruned
+each time the system hits the idle loop.
+<DT><I>/proc/sys/kernel/kptr_restrict</I> (since Linux 2.6.38)
+
+<DD>
+
+The value in this file determines whether kernel addresses are exposed via
+<I>/proc</I>
+
+files and other interfaces.
+A value of 0 in this file imposes no restrictions.
+If the value is 1, kernel pointers printed using the
+<I>%pK</I>
+
+format specifier will be replaced with zeros unless the user has the
+<B>CAP_SYSLOG</B>
+
+capability.
+If the value is 2, kernel pointers printed using the
+<I>%pK</I>
+
+format specifier will be replaced with zeros regardless
+of the user's capabilities.
+The initial default value for this file was 1,
+but the default was changed
+
+to 0 in Linux 2.6.39.
+Since Linux 3.4,
+
+only users with the
+<B>CAP_SYS_ADMIN</B>
+
+capability can change the value in this file.
+<DT><I>/proc/sys/kernel/l2cr</I>
+
+<DD>
+(PowerPC only) This file
+contains a flag that controls the L2 cache of G3 processor
+boards.
+If 0, the cache is disabled.
+Enabled if nonzero.
+<DT><I>/proc/sys/kernel/modprobe</I>
+
+<DD>
+This file contains the path for the kernel module loader.
+The default value is
+<I>/sbin/modprobe</I>.
+
+The file is present only if the kernel is built with the
+<B>CONFIG_MODULES</B>
+
+(<B>CONFIG_KMOD</B>
+
+in Linux 2.6.26 and earlier)
+option enabled.
+It is described by the Linux kernel source file
+<I>Documentation/kmod.txt</I>
+
+(present only in kernel 2.4 and earlier).
+<DT><I>/proc/sys/kernel/modules_disabled</I> (since Linux 2.6.31)
+
+<DD>
+
+
+A toggle value indicating if modules are allowed to be loaded
+in an otherwise modular kernel.
+This toggle defaults to off (0), but can be set true (1).
+Once true, modules can be neither loaded nor unloaded,
+and the toggle cannot be set back to false.
+The file is present only if the kernel is built with the
+<B>CONFIG_MODULES</B>
+
+option enabled.
+<DT><I>/proc/sys/kernel/msgmax</I> (since Linux 2.2)
+
+<DD>
+This file defines
+a system-wide limit specifying the maximum number of bytes in
+a single message written on a System V message queue.
+<DT><I>/proc/sys/kernel/msgmni</I> (since Linux 2.4)
+
+<DD>
+This file defines the system-wide limit on the number of
+message queue identifiers.
+<DT><I>/proc/sys/kernel/msgmnb</I> (since Linux 2.2)
+
+<DD>
+This file defines a system-wide parameter used to initialize the
+<I>msg_qbytes</I>
+
+setting for subsequently created message queues.
+The
+<I>msg_qbytes</I>
+
+setting specifies the maximum number of bytes that may be written to the
+message queue.
+<DT><I>/proc/sys/kernel/ngroups_max</I> (since Linux 2.6.4)
+
+<DD>
+This is a read-only file that displays the upper limit on the
+number of a process's group memberships.
+<DT><I>/proc/sys/kernel/ostype</I> and <I>/proc/sys/kernel/osrelease</I>
+
+<DD>
+These files
+give substrings of
+<I>/proc/version</I>.
+
+<DT><I>/proc/sys/kernel/overflowgid</I> and <I>/proc/sys/kernel/overflowuid</I>
+
+<DD>
+These files duplicate the files
+<I>/proc/sys/fs/overflowgid</I>
+
+and
+<I>/proc/sys/fs/overflowuid</I>.
+
+<DT><I>/proc/sys/kernel/panic</I>
+
+<DD>
+This file gives read/write access to the kernel variable
+<I>panic_timeout</I>.
+
+If this is zero, the kernel will loop on a panic; if nonzero,
+it indicates that the kernel should autoreboot after this number
+of seconds.
+When you use the
+software watchdog device driver, the recommended setting is 60.
+<DT><I>/proc/sys/kernel/panic_on_oops</I> (since Linux 2.5.68)
+
+<DD>
+This file controls the kernel's behavior when an oops
+or BUG is encountered.
+If this file contains 0, then the system
+tries to continue operation.
+If it contains 1, then the system
+delays a few seconds (to give klogd time to record the oops output)
+and then panics.
+If the
+<I>/proc/sys/kernel/panic</I>
+
+file is also nonzero, then the machine will be rebooted.
+<DT><I>/proc/sys/kernel/pid_max</I> (since Linux 2.5.34)
+
+<DD>
+This file specifies the value at which PIDs wrap around
+(i.e., the value in this file is one greater than the maximum PID).
+PIDs greater than this value are not allocated;
+thus, the value in this file also acts as a system-wide limit
+on the total number of processes and threads.
+The default value for this file, 32768,
+results in the same range of PIDs as on earlier kernels.
+On 32-bit platforms, 32768 is the maximum value for
+<I>pid_max</I>.
+
+On 64-bit systems,
+<I>pid_max</I>
+
+can be set to any value up to 2^22
+(<B>PID_MAX_LIMIT</B>,
+
+approximately 4 million).
+
+
+
+<DT><I>/proc/sys/kernel/powersave-nap</I> (PowerPC only)
+
+<DD>
+This file contains a flag.
+If set, Linux-PPC will use the &quot;nap&quot; mode of
+powersaving,
+otherwise the &quot;doze&quot; mode will be used.
+<DT><I>/proc/sys/kernel/printk</I>
+
+<DD>
+See
+<B><A HREF="../man2/syslog.2.html">syslog</A></B>(2).
+
+<DT><I>/proc/sys/kernel/pty</I> (since Linux 2.6.4)
+
+<DD>
+This directory contains two files relating to the number of UNIX 98
+pseudoterminals (see
+<B><A HREF="../man4/pts.4.html">pts</A></B>(4))
+
+on the system.
+<DT><I>/proc/sys/kernel/pty/max</I>
+
+<DD>
+This file defines the maximum number of pseudoterminals.
+<DT><I>/proc/sys/kernel/pty/nr</I>
+
+<DD>
+This read-only file
+indicates how many pseudoterminals are currently in use.
+<DT><I>/proc/sys/kernel/random</I>
+
+<DD>
+This directory
+contains various parameters controlling the operation of the file
+<I>/dev/random</I>.
+
+See
+<B><A HREF="../man4/random.4.html">random</A></B>(4)
+
+for further information.
+<DT><I>/proc/sys/kernel/random/uuid</I> (since Linux 2.4)
+
+<DD>
+Each read from this read-only file returns a randomly generated 128-bit UUID,
+as a string in the standard UUID format.
+<DT><I>/proc/sys/kernel/real-root-dev</I>
+
+<DD>
+This file is documented in the Linux kernel source file
+<I>Documentation/initrd.txt</I>.
+
+<DT><I>/proc/sys/kernel/reboot-cmd</I> (Sparc only) 
+
+<DD>
+This file seems to be a way to give an argument to the SPARC
+ROM/Flash boot loader.
+Maybe to tell it what to do after
+rebooting?
+<DT><I>/proc/sys/kernel/rtsig-max</I>
+
+<DD>
+(Only in kernels up to and including 2.6.7; see
+<B><A HREF="../man2/setrlimit.2.html">setrlimit</A></B>(2))
+
+This file can be used to tune the maximum number
+of POSIX real-time (queued) signals that can be outstanding
+in the system.
+<DT><I>/proc/sys/kernel/rtsig-nr</I>
+
+<DD>
+(Only in kernels up to and including 2.6.7.)
+This file shows the number POSIX real-time signals currently queued.
+<DT><I>/proc/sys/kernel/sched_rr_timeslice_ms</I> (since Linux 3.9)
+
+<DD>
+See
+<B><A HREF="../man2/sched_rr_get_interval.2.html">sched_rr_get_interval</A></B>(2).
+
+<DT><I>/proc/sys/kernel/sched_rt_period_us</I> (Since Linux 2.6.25)
+
+<DD>
+See
+<B><A HREF="../man7/sched.7.html">sched</A></B>(7).
+
+<DT><I>/proc/sys/kernel/sched_rt_runtime_us</I> (Since Linux 2.6.25)
+
+<DD>
+See
+<B><A HREF="../man7/sched.7.html">sched</A></B>(7).
+
+<DT><I>/proc/sys/kernel/sem</I> (since Linux 2.4)
+
+<DD>
+This file contains 4 numbers defining limits for System V IPC semaphores.
+These fields are, in order:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>SEMMSL<DD>
+The maximum semaphores per semaphore set.
+<DT>SEMMNS<DD>
+A system-wide limit on the number of semaphores in all semaphore sets.
+<DT>SEMOPM<DD>
+The maximum number of operations that may be specified in a
+<B><A HREF="../man2/semop.2.html">semop</A></B>(2)
+
+call.
+<DT>SEMMNI<DD>
+A system-wide limit on the maximum number of semaphore identifiers.
+</DL>
+</DL>
+
+<DT><I>/proc/sys/kernel/sg-big-buff</I>
+
+<DD>
+This file
+shows the size of the generic SCSI device (sg) buffer.
+You can't tune it just yet, but you could change it at
+compile time by editing
+<I>include/scsi/sg.h</I>
+
+and changing
+the value of
+<B>SG_BIG_BUFF</B>.
+
+However, there shouldn't be any reason to change this value.
+<DT><I>/proc/sys/kernel/shm_rmid_forced</I> (since Linux 3.1)
+
+<DD>
+
+
+If this file is set to 1, all System V shared memory segments will
+be marked for destruction as soon as the number of attached processes
+falls to zero;
+in other words, it is no longer possible to create shared memory segments
+that exist independently of any attached process.
+<DT><DD>
+The effect is as though a
+<B><A HREF="../man2/shmctl.2.html">shmctl</A></B>(2)
+
+<B>IPC_RMID</B>
+
+is performed on all existing segments as well as all segments
+created in the future (until this file is reset to 0).
+Note that existing segments that are attached to no process will be
+immediately destroyed when this file is set to 1.
+Setting this option will also destroy segments that were created,
+but never attached,
+upon termination of the process that created the segment with
+<B><A HREF="../man2/shmget.2.html">shmget</A></B>(2).
+
+<DT><DD>
+Setting this file to 1 provides a way of ensuring that
+all System V shared memory segments are counted against the
+resource usage and resource limits (see the description of
+<B>RLIMIT_AS</B>
+
+in
+<B><A HREF="../man2/getrlimit.2.html">getrlimit</A></B>(2))
+
+of at least one process.
+<DT><DD>
+Because setting this file to 1 produces behavior that is nonstandard
+and could also break existing applications,
+the default value in this file is 0.
+Only set this file to 1 if you have a good understanding
+of the semantics of the applications using
+System V shared memory on your system.
+<DT><I>/proc/sys/kernel/shmall</I> (since Linux 2.2)
+
+<DD>
+This file
+contains the system-wide limit on the total number of pages of
+System V shared memory.
+<DT><I>/proc/sys/kernel/shmmax</I> (since Linux 2.2)
+
+<DD>
+This file
+can be used to query and set the run-time limit
+on the maximum (System V IPC) shared memory segment size that can be
+created.
+Shared memory segments up to 1GB are now supported in the
+kernel.
+This value defaults to
+<B>SHMMAX</B>.
+
+<DT><I>/proc/sys/kernel/shmmni</I> (since Linux 2.4)
+
+<DD>
+This file
+specifies the system-wide maximum number of System V shared memory
+segments that can be created.
+<DT><I>/proc/sys/kernel/sysrq</I>
+
+<DD>
+This file controls the functions allowed to be invoked by the SysRq key.
+By default,
+the file contains 1 meaning that every possible SysRq request is allowed
+(in older kernel versions, SysRq was disabled by default,
+and you were required to specifically enable it at run-time,
+but this is not the case any more).
+Possible values in this file are:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;0&nbsp;-&nbsp;disable&nbsp;sysrq&nbsp;completely
+<BR>&nbsp;&nbsp;&nbsp;1&nbsp;-&nbsp;enable&nbsp;all&nbsp;functions&nbsp;of&nbsp;sysrq
+<BR>&nbsp;&nbsp;&gt;1&nbsp;-&nbsp;bit&nbsp;mask&nbsp;of&nbsp;allowed&nbsp;sysrq&nbsp;functions,&nbsp;as&nbsp;follows:
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;-&nbsp;enable&nbsp;control&nbsp;of&nbsp;console&nbsp;logging&nbsp;level
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;-&nbsp;enable&nbsp;control&nbsp;of&nbsp;keyboard&nbsp;(SAK,&nbsp;unraw)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;-&nbsp;enable&nbsp;debugging&nbsp;dumps&nbsp;of&nbsp;processes&nbsp;etc.
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16&nbsp;-&nbsp;enable&nbsp;sync&nbsp;command
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;32&nbsp;-&nbsp;enable&nbsp;remount&nbsp;read-only
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;64&nbsp;-&nbsp;enable&nbsp;signaling&nbsp;of&nbsp;processes&nbsp;(term,&nbsp;kill,&nbsp;oom-kill)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;128&nbsp;-&nbsp;allow&nbsp;reboot/poweroff
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;256&nbsp;-&nbsp;allow&nbsp;nicing&nbsp;of&nbsp;all&nbsp;real-time&nbsp;tasks
+<P>
+This file is present only if the
+<B>CONFIG_MAGIC_SYSRQ</B>
+
+kernel configuration option is enabled.
+For further details see the Linux kernel source file
+<I>Documentation/sysrq.txt</I>.
+
+<DT><I>/proc/sys/kernel/version</I>
+
+<DD>
+This file contains a string like:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;#5&nbsp;Wed&nbsp;Feb&nbsp;25&nbsp;21:49:24&nbsp;MET&nbsp;1998
+<P>
+The &quot;#5&quot; means that
+this is the fifth kernel built from this source base and the
+date behind it indicates the time the kernel was built.
+<DT><I>/proc/sys/kernel/threads-max</I> (since Linux 2.3.11)
+
+<DD>
+This file specifies the system-wide limit on the number of
+threads (tasks) that can be created on the system.
+<DT><I>/proc/sys/kernel/zero-paged</I> (PowerPC only) 
+
+<DD>
+This file
+contains a flag.
+When enabled (nonzero), Linux-PPC will pre-zero pages in
+the idle loop, possibly speeding up get_free_pages.
+<DT><I>/proc/sys/net</I>
+
+<DD>
+This directory contains networking stuff.
+Explanations for some of the files under this directory can be found in
+<B><A HREF="../man7/tcp.7.html">tcp</A></B>(7)
+
+and
+<B><A HREF="../man7/ip.7.html">ip</A></B>(7).
+
+<DT><I>/proc/sys/net/core/somaxconn</I>
+
+<DD>
+This file defines a ceiling value for the
+<I>backlog</I>
+
+argument of
+<B><A HREF="../man2/listen.2.html">listen</A></B>(2);
+
+see the
+<B><A HREF="../man2/listen.2.html">listen</A></B>(2)
+
+manual page for details.
+<DT><I>/proc/sys/proc</I>
+
+<DD>
+This directory may be empty.
+<DT><I>/proc/sys/sunrpc</I>
+
+<DD>
+This directory supports Sun remote procedure call for network filesystem
+(NFS).
+On some systems, it is not present.
+<DT><I>/proc/sys/vm</I>
+
+<DD>
+This directory contains files for memory management tuning, buffer and
+cache management.
+<DT><I>/proc/sys/vm/drop_caches</I> (since Linux 2.6.16)
+
+<DD>
+Writing to this file causes the kernel to drop clean caches, dentries, and
+inodes from memory, causing that memory to become free.
+This can be useful for memory management testing and
+performing reproducible filesystem benchmarks.
+Because writing to this file causes the benefits of caching to be lost,
+it can degrade overall system performance.
+<P>
+To free pagecache, use:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;1&nbsp;&gt;&nbsp;/proc/sys/vm/drop_caches
+<P>
+To free dentries and inodes, use:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;2&nbsp;&gt;&nbsp;/proc/sys/vm/drop_caches
+<P>
+To free pagecache, dentries and inodes, use:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;3&nbsp;&gt;&nbsp;/proc/sys/vm/drop_caches
+<P>
+Because writing to this file is a nondestructive operation and dirty objects
+are not freeable, the
+user should run
+<B><A HREF="../man1/sync.1.html">sync</A></B>(1)
+
+first.
+<DT><I>/proc/sys/vm/legacy_va_layout</I> (since Linux 2.6.9)
+
+<DD>
+
+If nonzero, this disables the new 32-bit memory-mapping layout;
+the kernel will use the legacy (2.4) layout for all processes.
+<DT><I>/proc/sys/vm/memory_failure_early_kill</I> (since Linux 2.6.32)
+
+<DD>
+
+Control how to kill processes when an uncorrected memory error
+(typically a 2-bit error in a memory module)
+that cannot be handled by the kernel
+is detected in the background by hardware.
+In some cases (like the page still having a valid copy on disk),
+the kernel will handle the failure
+transparently without affecting any applications.
+But if there is no other up-to-date copy of the data,
+it will kill processes to prevent any data corruptions from propagating.
+<P>
+The file has one of the following values:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>1:<DD>
+Kill all processes that have the corrupted-and-not-reloadable page mapped
+as soon as the corruption is detected.
+Note this is not supported for a few types of pages, like kernel internally
+allocated data or the swap cache, but works for the majority of user pages.
+<DT>0:<DD>
+Only unmap the corrupted page from all processes and kill only a process
+that tries to access it.
+</DL>
+</DL>
+
+<DT><DD>
+The kill is performed using a
+<B>SIGBUS</B>
+
+signal with
+<I>si_code</I>
+
+set to
+<B>BUS_MCEERR_AO</B>.
+
+Processes can handle this if they want to; see
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2)
+
+for more details.
+<P>
+This feature is active only on architectures/platforms with advanced machine
+check handling and depends on the hardware capabilities.
+<P>
+Applications can override the
+<I>memory_failure_early_kill</I>
+
+setting individually with the
+<B><A HREF="../man2/prctl.2.html">prctl</A></B>(2)
+
+<B>PR_MCE_KILL</B>
+
+operation.
+<DT><DD>
+Only present if the kernel was configured with
+<B>CONFIG_MEMORY_FAILURE</B>.
+
+<DT><I>/proc/sys/vm/memory_failure_recovery</I> (since Linux 2.6.32)
+
+<DD>
+
+Enable memory failure recovery (when supported by the platform)
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>1:<DD>
+Attempt recovery.
+<DT>0:<DD>
+Always panic on a memory failure.
+</DL>
+</DL>
+
+<DT><DD>
+Only present if the kernel was configured with
+<B>CONFIG_MEMORY_FAILURE</B>.
+
+<DT><I>/proc/sys/vm/oom_dump_tasks</I> (since Linux 2.6.25)
+
+<DD>
+
+Enables a system-wide task dump (excluding kernel threads) to be
+produced when the kernel performs an OOM-killing.
+The dump includes the following information
+for each task (thread, process):
+thread ID, real user ID, thread group ID (process ID),
+virtual memory size, resident set size,
+the CPU that the task is scheduled on,
+oom_adj score (see the description of
+<I>/proc/[pid]/oom_adj</I>),
+
+and command name.
+This is helpful to determine why the OOM-killer was invoked
+and to identify the rogue task that caused it.
+<P>
+If this contains the value zero, this information is suppressed.
+On very large systems with thousands of tasks,
+it may not be feasible to dump the memory state information for each one.
+Such systems should not be forced to incur a performance penalty in
+OOM situations when the information may not be desired.
+<P>
+If this is set to nonzero, this information is shown whenever the
+OOM-killer actually kills a memory-hogging task.
+<P>
+The default value is 0.
+<DT><I>/proc/sys/vm/oom_kill_allocating_task</I> (since Linux 2.6.24)
+
+<DD>
+
+This enables or disables killing the OOM-triggering task in
+out-of-memory situations.
+<P>
+If this is set to zero, the OOM-killer will scan through the entire
+tasklist and select a task based on heuristics to kill.
+This normally selects a rogue memory-hogging task that
+frees up a large amount of memory when killed.
+<P>
+If this is set to nonzero, the OOM-killer simply kills the task that
+triggered the out-of-memory condition.
+This avoids a possibly expensive tasklist scan.
+<P>
+If
+<I>/proc/sys/vm/panic_on_oom</I>
+
+is nonzero, it takes precedence over whatever value is used in
+<I>/proc/sys/vm/oom_kill_allocating_task</I>.
+
+<P>
+The default value is 0.
+<DT><I>/proc/sys/vm/overcommit_kbytes</I> (since Linux 3.14)
+
+<DD>
+
+This writable file provides an alternative to
+<I>/proc/sys/vm/overcommit_ratio</I>
+
+for controlling the
+<I>CommitLimit</I>
+
+when
+<I>/proc/sys/vm/overcommit_memory</I>
+
+has the value 2.
+It allows the amount of memory overcommitting to be specified as
+an absolute value (in kB),
+rather than as a percentage, as is done with
+<I>overcommit_ratio</I>.
+
+This allows for finer-grained control of
+<I>CommitLimit</I>
+
+on systems with extremely large memory sizes.
+<P>
+Only one of
+<I>overcommit_kbytes</I>
+
+or
+<I>overcommit_ratio</I>
+
+can have an effect:
+if
+<I>overcommit_kbytes</I>
+
+has a nonzero value, then it is used to calculate
+<I>CommitLimit</I>,
+
+otherwise
+<I>overcommit_ratio</I>
+
+is used.
+Writing a value to either of these files causes the
+value in the other file to be set to zero.
+<DT><I>/proc/sys/vm/overcommit_memory</I>
+
+<DD>
+This file contains the kernel virtual memory accounting mode.
+Values are:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><DD>
+0: heuristic overcommit (this is the default)
+<BR>
+
+1: always overcommit, never check
+<BR>
+
+2: always check, never overcommit
+</DL>
+</DL>
+
+<DT><DD>
+In mode 0, calls of
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)
+
+with
+<B>MAP_NORESERVE</B>
+
+are not checked, and the default check is very weak,
+leading to the risk of getting a process &quot;OOM-killed&quot;.
+Under Linux 2.4, any nonzero value implies mode 1.
+<P>
+In mode 2 (available since Linux 2.6), the total virtual address space
+that can be allocated
+(<I>CommitLimit</I>
+
+in
+<I>/proc/meminfo</I>)
+
+is calculated as
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;CommitLimit&nbsp;=&nbsp;(total_RAM&nbsp;-&nbsp;total_huge_TLB)&nbsp;*
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;overcommit_ratio&nbsp;/&nbsp;100&nbsp;+&nbsp;total_swap
+<P>
+where:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>*<DD>
+<I>total_RAM</I>
+
+is the total amount of RAM on the system;
+<DT>*<DD>
+<I>total_huge_TLB</I>
+
+is the amount of memory set aside for huge pages;
+<DT>*<DD>
+<I>overcommit_ratio</I>
+
+is the value in
+<I>/proc/sys/vm/overcommit_ratio</I>;
+
+and
+<DT>*<DD>
+<I>total_swap</I>
+
+is the amount of swap space.
+</DL>
+</DL>
+
+<DT><DD>
+For example, on a system with 16GB of physical RAM, 16GB
+of swap, no space dedicated to huge pages, and an
+<I>overcommit_ratio</I>
+
+of 50, this formula yields a
+<I>CommitLimit</I>
+
+of 24GB.
+<P>
+Since Linux 3.14, if the value in
+<I>/proc/sys/vm/overcommit_kbytes</I>
+
+is nonzero, then
+<I>CommitLimit</I>
+
+is instead calculated as:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;CommitLimit&nbsp;=&nbsp;overcommit_kbytes&nbsp;+&nbsp;total_swap
+<DT><I>/proc/sys/vm/overcommit_ratio</I> (since Linux 2.6.0)
+
+<DD>
+This writable file defines a percentage by which memory
+can be overcommitted.
+The default value in the file is 50.
+See the description of
+<I>/proc/sys/vm/overcommit_memory</I>.
+
+<DT><I>/proc/sys/vm/panic_on_oom</I> (since Linux 2.6.18)
+
+<DD>
+
+This enables or disables a kernel panic in
+an out-of-memory situation.
+<P>
+If this file is set to the value 0,
+the kernel's OOM-killer will kill some rogue process.
+Usually, the OOM-killer is able to kill a rogue process and the
+system will survive.
+<P>
+If this file is set to the value 1,
+then the kernel normally panics when out-of-memory happens.
+However, if a process limits allocations to certain nodes
+using memory policies
+(<B><A HREF="../man2/mbind.2.html">mbind</A></B>(2)
+
+<B>MPOL_BIND</B>)
+
+or cpusets
+(<B><A HREF="../man7/cpuset.7.html">cpuset</A></B>(7))
+
+and those nodes reach memory exhaustion status,
+one process may be killed by the OOM-killer.
+No panic occurs in this case:
+because other nodes' memory may be free,
+this means the system as a whole may not have reached
+an out-of-memory situation yet.
+<P>
+If this file is set to the value 2,
+the kernel always panics when an out-of-memory condition occurs.
+<P>
+The default value is 0.
+1 and 2 are for failover of clustering.
+Select either according to your policy of failover.
+<DT><I>/proc/sys/vm/swappiness</I>
+
+<DD>
+
+The value in this file controls how aggressively the kernel will swap
+memory pages.
+Higher values increase aggressiveness, lower values
+decrease aggressiveness.
+The default value is 60.
+<DT><I>/proc/sysrq-trigger</I> (since Linux 2.4.21)
+
+<DD>
+Writing a character to this file triggers the same SysRq function as
+typing ALT-SysRq-&lt;character&gt; (see the description of
+<I>/proc/sys/kernel/sysrq</I>).
+
+This file is normally writable only by
+<I>root</I>.
+
+For further details see the Linux kernel source file
+<I>Documentation/sysrq.txt</I>.
+
+<DT><I>/proc/sysvipc</I>
+
+<DD>
+Subdirectory containing the pseudo-files
+<I>msg</I>, <I>sem</I> and <I>shm</I>.
+
+These files list the System V Interprocess Communication (IPC) objects
+(respectively: message queues, semaphores, and shared memory)
+that currently exist on the system,
+providing similar information to that available via
+<B><A HREF="../man1/ipcs.1.html">ipcs</A></B>(1).
+
+These files have headers and are formatted (one IPC object per line)
+for easy understanding.
+<B><A HREF="../man7/svipc.7.html">svipc</A></B>(7)
+
+provides further background on the information shown by these files.
+<DT><I>/proc/timer_list</I> (since Linux 2.6.21)
+
+<DD>
+
+This read-only file exposes a list of all currently pending
+(high-resolution) timers,
+all clock-event sources, and their parameters in a human-readable form.
+<DT><I>/proc/timer_stats</I> (since Linux 2.6.21)
+
+<DD>
+
+
+
+This is a debugging facility to make timer (ab)use in a Linux
+system visible to kernel and user-space developers.
+It can be used by kernel and user-space developers to verify that
+their code does not make undue use of timers.
+The goal is to avoid unnecessary wakeups,
+thereby optimizing power consumption.
+<P>
+If enabled in the kernel
+(<B>CONFIG_TIMER_STATS</B>),
+
+but not used,
+it has almost zero runtime overhead and a relatively small
+data-structure overhead.
+Even if collection is enabled at runtime, overhead is low:
+all the locking is per-CPU and lookup is hashed.
+<P>
+The
+<I>/proc/timer_stats</I>
+
+file is used both to control sampling facility and to read out the
+sampled information.
+<P>
+The timer_stats functionality is inactive on bootup.
+A sampling period can be started using the following command:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;echo&nbsp;1&nbsp;&gt;&nbsp;/proc/timer_stats
+<P>
+The following command stops a sampling period:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;echo&nbsp;0&nbsp;&gt;&nbsp;/proc/timer_stats
+<P>
+The statistics can be retrieved by:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;$&nbsp;cat&nbsp;/proc/timer_stats
+<P>
+While sampling is enabled, each readout from
+<I>/proc/timer_stats</I>
+
+will see
+newly updated statistics.
+Once sampling is disabled, the sampled information
+is kept until a new sample period is started.
+This allows multiple readouts.
+<P>
+Sample output from
+<I>/proc/timer_stats</I>:
+
+<P>
+<PRE>
+$<B> cat /proc/timer_stats</B>
+Timer Stats Version: v0.3
+Sample period: 1.764 s
+Collection: active
+  255,     0 swapper/3        hrtimer_start_range_ns (tick_sched_timer)
+   71,     0 swapper/1        hrtimer_start_range_ns (tick_sched_timer)
+   58,     0 swapper/0        hrtimer_start_range_ns (tick_sched_timer)
+    4,  1694 gnome-shell      mod_delayed_work_on (delayed_work_timer_fn)
+   17,     7 rcu_sched        rcu_gp_kthread (process_timeout)
+...
+    1,  4911 kworker/u16:0    mod_delayed_work_on (delayed_work_timer_fn)
+   1D,  2522 kworker/0:0      queue_delayed_work_on (delayed_work_timer_fn)
+1029 total events, 583.333 events/sec
+
+</PRE>
+
+
+<DT><DD>
+The output columns are:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>*<DD>
+a count of the number of events,
+optionally (since Linux 2.6.23) followed by the letter 'D'
+
+if this is a deferrable timer;
+<DT>*<DD>
+the PID of the process that initialized the timer;
+<DT>*<DD>
+the name of the process that initialized the timer;
+<DT>*<DD>
+the function where the timer was initialized; and
+<DT>*<DD>
+(in parentheses)
+the callback function that is associated with the timer.
+</DL>
+</DL>
+
+<DT><I>/proc/tty</I>
+
+<DD>
+Subdirectory containing the pseudo-files and subdirectories for
+tty drivers and line disciplines.
+<DT><I>/proc/uptime</I>
+
+<DD>
+This file contains two numbers: the uptime of the system (seconds),
+and the amount of time spent in idle process (seconds).
+<DT><I>/proc/version</I>
+
+<DD>
+This string identifies the kernel version that is currently running.
+It includes the contents of
+<I>/proc/sys/kernel/ostype</I>,
+
+<I>/proc/sys/kernel/osrelease</I>
+
+and
+<I>/proc/sys/kernel/version</I>.
+
+For example:
+<PRE>
+Linux version 1.0.9 (<A HREF="mailto:quinlan@phaze">quinlan@phaze</A>) #1 Sat May 14 01:51:54 EDT 1994
+</PRE>
+
+
+
+
+
+
+<DT><I>/proc/vmstat</I> (since Linux 2.6)
+
+<DD>
+This file displays various virtual memory statistics.
+<DT><I>/proc/zoneinfo</I> (since Linux 2.6.13)
+
+<DD>
+This file display information about memory zones.
+This is useful for analyzing virtual memory behavior.
+
+</DL>
+<A NAME="lbAD">&nbsp;</A>
+<H2>NOTES</H2>
+
+Many strings (i.e., the environment and command line) are in
+the internal format, with subfields terminated by null bytes ('\0'),
+so you
+may find that things are more readable if you use <I>od -c</I> or <I>tr
+&quot;\000&quot; &quot;\n&quot;</I> to read them.
+Alternatively, <I>echo `cat &lt;file&gt;`</I> works well.
+<P>
+This manual page is incomplete, possibly inaccurate, and is the kind
+of thing that needs to be updated very often.
+
+
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/cat.1.html">cat</A></B>(1),
+
+<B><A HREF="../man1/dmesg.1.html">dmesg</A></B>(1),
+
+<B><A HREF="../man1/find.1.html">find</A></B>(1),
+
+<B><A HREF="../man1/free.1.html">free</A></B>(1),
+
+<B><A HREF="../man1/ps.1.html">ps</A></B>(1),
+
+<B><A HREF="../man1/tr.1.html">tr</A></B>(1),
+
+<B><A HREF="../man1/uptime.1.html">uptime</A></B>(1),
+
+<B><A HREF="../man2/chroot.2.html">chroot</A></B>(2),
+
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2),
+
+<B><A HREF="../man2/readlink.2.html">readlink</A></B>(2),
+
+<B><A HREF="../man2/syslog.2.html">syslog</A></B>(2),
+
+<B><A HREF="../man5/slabinfo.5.html">slabinfo</A></B>(5),
+
+<B><A HREF="../man7/hier.7.html">hier</A></B>(7),
+
+<B><A HREF="../man7/time.7.html">time</A></B>(7),
+
+<B><A HREF="../man8/arp.8.html">arp</A></B>(8),
+
+<B><A HREF="../man8/hdparm.8.html">hdparm</A></B>(8),
+
+<B><A HREF="../man8/ifconfig.8.html">ifconfig</A></B>(8),
+
+<B><A HREF="../man8/init.8.html">init</A></B>(8),
+
+<B><A HREF="../man8/lsmod.8.html">lsmod</A></B>(8),
+
+<B><A HREF="../man8/lspci.8.html">lspci</A></B>(8),
+
+<B><A HREF="../man8/mount.8.html">mount</A></B>(8),
+
+<B><A HREF="../man8/netstat.8.html">netstat</A></B>(8),
+
+<B><A HREF="../man8/procinfo.8.html">procinfo</A></B>(8),
+
+<B><A HREF="../man8/route.8.html">route</A></B>(8),
+
+<B><A HREF="../man8/sysctl.8.html">sysctl</A></B>(8)
+
+<P>
+The Linux kernel source files:
+<I>Documentation/filesystems/proc.txt</I>
+
+<I>Documentation/sysctl/fs.txt</I>,
+
+<I>Documentation/sysctl/kernel.txt</I>,
+
+<I>Documentation/sysctl/net.txt</I>,
+
+and
+<I>Documentation/sysctl/vm.txt</I>.
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAD">NOTES</A><DD>
+<DT><A HREF="#lbAE">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:20 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETHOSTID</TITLE>
+</HEAD><BODY>
+<H1>GETHOSTID</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2010-09-20<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+gethostid, sethostid - get or set the unique identifier of the current host
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<P>
+<B>long gethostid(void);</B>
+
+<BR>
+
+<B>int sethostid(long </B><I>hostid</I><B>);</B>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<BR>
+
+<B>gethostid</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED
+</DL>
+
+<B>sethostid</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || (_XOPEN_SOURCE &amp;&amp; _XOPEN_SOURCE&nbsp;&lt;&nbsp;500)
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>gethostid</B>()
+
+and
+<B>sethostid</B>()
+
+respectively get or set a unique 32-bit identifier for the current machine.
+The 32-bit identifier is intended to be unique among all UNIX systems in
+existence.
+This normally resembles the Internet address for the local
+machine, as returned by
+<B><A HREF="../man3/gethostbyname.3.html">gethostbyname</A></B>(3),
+
+and thus usually never needs to be set.
+<P>
+The
+<B>sethostid</B>()
+
+call is restricted to the superuser.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+<B>gethostid</B>()
+
+returns the 32-bit identifier for the current host as set by
+<B>sethostid</B>().
+
+<P>
+On success,
+<B>sethostid</B>()
+
+returns 0; on error, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<B>sethostid</B>()
+
+can fail with the following errors:
+<DL COMPACT>
+<DT><B>EACCES</B>
+
+<DD>
+The caller did not have permission to write to the file used
+to store the host ID.
+<DT><B>EPERM</B>
+
+<DD>
+The calling process's effective user or group ID is not the same
+as its corresponding real ID.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+4.2BSD; these functions were dropped in 4.4BSD.
+SVr4 includes
+<B>gethostid</B>()
+
+but not
+<B>sethostid</B>().
+
+POSIX.1-2001 specifies
+<B>gethostid</B>()
+
+but not
+<B>sethostid</B>().
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+In the glibc implementation, the
+<I>hostid</I>
+
+is stored in the file
+<I>/etc/hostid</I>.
+
+(In glibc versions before 2.2, the file
+<I>/var/adm/hostid</I>
+
+was used.)
+
+<P>
+In the glibc implementation, if
+<B>gethostid</B>()
+
+cannot open the file containing the host ID,
+then it obtains the hostname using
+<B><A HREF="../man2/gethostname.2.html">gethostname</A></B>(2),
+
+passes that hostname to
+<B><A HREF="../man3/gethostbyname_r.3.html">gethostbyname_r</A></B>(3)
+
+in order to obtain the host's IPv4 address,
+and returns a value obtained by bit-twiddling the IPv4 address.
+(This value may not be unique.)
+<A NAME="lbAI">&nbsp;</A>
+<H2>BUGS</H2>
+
+It is impossible to ensure that the identifier is globally unique.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/hostid.1.html">hostid</A></B>(1),
+
+<B><A HREF="../man3/gethostbyname.3.html">gethostbyname</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">BUGS</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:10 GMT, September 18, 2014
+</BODY>
+</HTML>

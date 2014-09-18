@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of TIMER_GETOVERRUN</TITLE>
+</HEAD><BODY>
+<H1>TIMER_GETOVERRUN</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2009-02-20<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+timer_getoverrun - get overrun count for a POSIX per-process timer
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/time.h">time.h</A>&gt;</B>
+
+<B>int timer_getoverrun(timer_t </B><I>timerid</I><B>);</B>
+</PRE>
+
+<P>
+Link with <I>-lrt</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>timer_getoverrun</B>():
+
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;199309L
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>timer_getoverrun</B>()
+
+returns the &quot;overrun count&quot; for the timer referred to by
+<I>timerid</I>.
+
+An application can use the overrun count to accurately calculate the number
+of timer expirations that would have occurred over a given time interval.
+Timer overruns can occur both when receiving expiration notifications
+via signals
+(<B>SIGEV_SIGNAL</B>),
+
+and via threads
+(<B>SIGEV_THREAD</B>).
+
+<P>
+When expiration notifications are delivered via a signal,
+overruns can occur as follows.
+Regardless of whether or not a real-time signal is used for
+timer notifications,
+the system queues at most one signal per timer.
+(This is the behavior specified by POSIX.1-2001.
+The alternative, queuing one signal for each timer expiration,
+could easily result in overflowing the allowed limits for
+queued signals on the system.)
+Because of system scheduling delays,
+or because the signal may be temporarily blocked,
+there can be a delay between the time when the notification
+signal is generated and the time when it
+is delivered (e.g., caught by a signal handler) or accepted (e.g., using
+<B><A HREF="../man2/sigwaitinfo.2.html">sigwaitinfo</A></B>(2)).
+
+In this interval, further timer expirations may occur.
+The timer overrun count is the number of additional
+timer expirations that occurred between the time when the signal
+was generated and when it was delivered or accepted.
+<P>
+Timer overruns can also occur when expiration notifications
+are delivered via invocation of a thread,
+since there may be an arbitrary delay between an expiration of the timer
+and the invocation of the notification thread,
+and in that delay interval, additional timer expirations may occur.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>timer_getoverrun</B>()
+
+returns the overrun count of the specified timer;
+this count may be 0 if no overruns have occurred.
+On failure, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+<I>timerid</I>
+
+is not a valid timer ID.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+This system call is available since Linux 2.6.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+When timer notifications are delivered via signals
+(<B>SIGEV_SIGNAL</B>),
+
+on Linux it is also possible to obtain the overrun count via the
+<I>si_overrun</I>
+
+field of the
+<I>siginfo_t</I>
+
+structure (see
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2)).
+
+This allows an application to avoid the overhead of making
+a system call to obtain the overrun count,
+but is a nonportable extension to POSIX.1-2001.
+<P>
+POSIX.1-2001 discusses timer overruns only in the context of
+timer notifications using signals.
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>BUGS</H2>
+
+POSIX.1-2001 specifies that if the timer overrun count
+is equal to or greater than an implementation-defined maximum,
+<B>DELAYTIMER_MAX</B>,
+
+then
+<B>timer_getoverrun</B>()
+
+should return
+<B>DELAYTIMER_MAX</B>.
+
+However, Linux does not implement this feature: instead,
+if the timer overrun value exceeds the maximum representable integer,
+the counter cycles, starting once more from low values.
+
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+See
+<B><A HREF="../man2/timer_create.2.html">timer_create</A></B>(2).
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/clock_gettime.2.html">clock_gettime</A></B>(2),
+
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man2/signalfd.2.html">signalfd</A></B>(2),
+
+<B><A HREF="../man2/sigwaitinfo.2.html">sigwaitinfo</A></B>(2),
+
+<B><A HREF="../man2/timer_create.2.html">timer_create</A></B>(2),
+
+<B><A HREF="../man2/timer_delete.2.html">timer_delete</A></B>(2),
+
+<B><A HREF="../man2/timer_settime.2.html">timer_settime</A></B>(2),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7),
+
+<B><A HREF="../man7/time.7.html">time</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">BUGS</A><DD>
+<DT><A HREF="#lbAK">EXAMPLE</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:45 GMT, September 18, 2014
+</BODY>
+</HTML>

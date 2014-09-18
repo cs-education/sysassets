@@ -1,0 +1,439 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MKNOD</TITLE>
+</HEAD><BODY>
+<H1>MKNOD</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-02-21<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+mknod, mknodat - create a special or ordinary file
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<B>int mknod(const char *</B><I>pathname</I><B>, mode_t </B><I>mode</I><B>, dev_t </B><I>dev</I><B>);</B>
+
+<B>#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;           </B>/* Definition of AT_* constants */
+<B>#include &lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</B>
+
+<B>int mknodat(int </B><I>dirfd</I><B>, const char *</B><I>pathname</I><B>, mode_t </B><I>mode</I><B>, dev_t </B><I>dev</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>mknod</B>():
+
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The system call
+<B>mknod</B>()
+
+creates a filesystem node (file, device special file, or
+named pipe) named
+<I>pathname</I>,
+
+with attributes specified by
+<I>mode</I>
+
+and
+<I>dev</I>.
+
+<P>
+The
+<I>mode</I>
+
+argument specifies both the permissions to use and the type of node
+to be created.
+It should be a combination (using bitwise OR) of one of the file types
+listed below and the permissions for the new node.
+<P>
+The permissions are modified by the process's
+<I>umask</I>
+
+in the usual way: the permissions of the created node are
+<I>(mode &amp; ~umask)</I>.
+
+<P>
+The file type must be one of
+<B>S_IFREG</B>,
+
+<B>S_IFCHR</B>,
+
+<B>S_IFBLK</B>,
+
+<B>S_IFIFO</B>,
+
+or
+<B>S_IFSOCK</B>
+
+
+to specify a regular file (which will be created empty), character
+special file, block special file, FIFO (named pipe), or UNIX domain socket,
+respectively.
+(Zero file type is equivalent to type
+<B>S_IFREG</B>.)
+
+<P>
+If the file type is
+<B>S_IFCHR</B>
+
+or
+<B>S_IFBLK</B>,
+
+then
+<I>dev</I>
+
+specifies the major and minor numbers of the newly created device
+special file
+(<B><A HREF="../man3/makedev.3.html">makedev</A></B>(3)
+
+may be useful to build the value for
+<I>dev</I>);
+
+otherwise it is ignored.
+<P>
+If
+<I>pathname</I>
+
+already exists, or is a symbolic link, this call fails with an
+<B>EEXIST</B>
+
+error.
+<P>
+The newly created node will be owned by the effective user ID of the
+process.
+If the directory containing the node has the set-group-ID
+bit set, or if the filesystem is mounted with BSD group semantics, the
+new node will inherit the group ownership from its parent directory;
+otherwise it will be owned by the effective group ID of the process.
+
+
+<A NAME="lbAE">&nbsp;</A>
+<H3>mknodat()</H3>
+
+The
+<B>mknodat</B>()
+
+system call operates in exactly the same way as
+<B><A HREF="../man2/mknod.2.html">mknod</A></B>(2),
+
+except for the differences described here.
+<P>
+If the pathname given in
+<I>pathname</I>
+
+is relative, then it is interpreted relative to the directory
+referred to by the file descriptor
+<I>dirfd</I>
+
+(rather than relative to the current working directory of
+the calling process, as is done by
+<B><A HREF="../man2/mknod.2.html">mknod</A></B>(2)
+
+for a relative pathname).
+<P>
+If
+<I>pathname</I>
+
+is relative and
+<I>dirfd</I>
+
+is the special value
+<B>AT_FDCWD</B>,
+
+then
+<I>pathname</I>
+
+is interpreted relative to the current working
+directory of the calling process (like
+<B><A HREF="../man2/mknod.2.html">mknod</A></B>(2)).
+
+<P>
+If
+<I>pathname</I>
+
+is absolute, then
+<I>dirfd</I>
+
+is ignored.
+<P>
+
+See
+<B><A HREF="../man2/openat.2.html">openat</A></B>(2)
+
+for an explanation of the need for
+<B>mknodat</B>().
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+<B>mknod</B>()
+
+and
+<B>mknodat</B>()
+
+return zero on success, or -1 if an error occurred (in which case,
+<I>errno</I>
+
+is set appropriately).
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EACCES</B>
+
+<DD>
+The parent directory does not allow write permission to the process,
+or one of the directories in the path prefix of
+<I>pathname</I>
+
+did not allow search permission.
+(See also
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7).)
+
+<DT><B>EDQUOT</B>
+
+<DD>
+The user's quota of disk blocks or inodes on the filesystem has been
+exhausted.
+<DT><B>EEXIST</B>
+
+<DD>
+<I>pathname</I>
+
+already exists.
+This includes the case where
+<I>pathname</I>
+
+is a symbolic link, dangling or not.
+<DT><B>EFAULT</B>
+
+<DD>
+<I>pathname</I> points outside your accessible address space.
+
+<DT><B>EINVAL</B>
+
+<DD>
+<I>mode</I>
+
+requested creation of something other than a regular file, device
+special file, FIFO or socket.
+<DT><B>ELOOP</B>
+
+<DD>
+Too many symbolic links were encountered in resolving
+<I>pathname</I>.
+
+<DT><B>ENAMETOOLONG</B>
+
+<DD>
+<I>pathname</I> was too long.
+
+<DT><B>ENOENT</B>
+
+<DD>
+A directory component in
+<I>pathname</I>
+
+does not exist or is a dangling symbolic link.
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient kernel memory was available.
+<DT><B>ENOSPC</B>
+
+<DD>
+The device containing
+<I>pathname</I>
+
+has no room for the new node.
+<DT><B>ENOTDIR</B>
+
+<DD>
+A component used as a directory in
+<I>pathname</I>
+
+is not, in fact, a directory.
+<DT><B>EPERM</B>
+
+<DD>
+<I>mode</I>
+
+requested creation of something other than a regular file,
+FIFO (named pipe), or UNIX domain socket, and the caller
+is not privileged (Linux: does not have the
+<B>CAP_MKNOD</B>
+
+capability);
+
+
+
+also returned if the filesystem containing
+<I>pathname</I>
+
+does not support the type of node requested.
+<DT><B>EROFS</B>
+
+<DD>
+<I>pathname</I>
+
+refers to a file on a read-only filesystem.
+</DL>
+<P>
+
+The following additional errors can occur for
+<B>mknodat</B>():
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>dirfd</I>
+
+is not a valid file descriptor.
+<DT><B>ENOTDIR</B>
+
+<DD>
+<I>pathname</I>
+
+is relative and
+<I>dirfd</I>
+
+is a file descriptor referring to a file other than a directory.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>mknodat</B>()
+
+was added to Linux in kernel 2.6.16;
+library support was added to glibc in version 2.4.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>mknod</B>():
+
+SVr4, 4.4BSD, POSIX.1-2001 (but see below), POSIX.1-2008.
+
+
+
+<P>
+<B>mknodat</B>():
+
+POSIX.1-2008.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+POSIX.1-2001 says: &quot;The only portable use of
+<B>mknod</B>()
+
+is to create a FIFO-special file.
+If
+<I>mode</I>
+
+is not
+<B>S_IFIFO</B>
+
+or
+<I>dev</I>
+
+is not 0, the behavior of
+<B>mknod</B>()
+
+is unspecified.&quot;
+However, nowadays one should never use
+<B>mknod</B>()
+
+for this purpose; one should use
+<B><A HREF="../man3/mkfifo.3.html">mkfifo</A></B>(3),
+
+a function especially defined for this purpose.
+<P>
+Under Linux,
+<B>mknod</B>()
+
+cannot be used to create directories.
+One should make directories with
+<B><A HREF="../man2/mkdir.2.html">mkdir</A></B>(2).
+
+
+<P>
+There are many infelicities in the protocol underlying NFS.
+Some of these affect
+<B>mknod</B>()
+
+and
+<B><A HREF="../man2/mknodat.2.html">mknodat</A></B>(2).
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/chmod.2.html">chmod</A></B>(2),
+
+<B><A HREF="../man2/chown.2.html">chown</A></B>(2),
+
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2),
+
+<B><A HREF="../man2/mkdir.2.html">mkdir</A></B>(2),
+
+<B><A HREF="../man2/mount.2.html">mount</A></B>(2),
+
+<B><A HREF="../man2/socket.2.html">socket</A></B>(2),
+
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2),
+
+<B><A HREF="../man2/umask.2.html">umask</A></B>(2),
+
+<B><A HREF="../man2/unlink.2.html">unlink</A></B>(2),
+
+<B><A HREF="../man3/makedev.3.html">makedev</A></B>(3),
+
+<B><A HREF="../man3/mkfifo.3.html">mkfifo</A></B>(3),
+
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">mknodat()</A><DD>
+</DL>
+<DT><A HREF="#lbAF">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">VERSIONS</A><DD>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:49 GMT, September 18, 2014
+</BODY>
+</HTML>

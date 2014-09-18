@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETRESUID</TITLE>
+</HEAD><BODY>
+<H1>GETRESUID</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2010-11-22<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getresuid, getresgid - get real, effective and saved user/group IDs
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#define _GNU_SOURCE</B>         /* See <A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A>(7) */
+
+<BR>
+
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<P>
+<B>int getresuid(uid_t *</B><I>ruid</I><B>, uid_t *</B><I>euid</I><B>, uid_t *</B><I>suid</I><B>);</B>
+
+<BR>
+
+<B>int getresgid(gid_t *</B><I>rgid</I><B>, gid_t *</B><I>egid</I><B>, gid_t *</B><I>sgid</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>getresuid</B>()
+
+returns the real UID, the effective UID, and the saved set-user-ID
+of the calling process, in the arguments
+<I>ruid</I>,
+
+<I>euid</I>,
+
+and
+<I>suid</I>,
+
+respectively.
+<B>getresgid</B>()
+
+performs the analogous task for the process's group IDs.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, zero is returned.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EFAULT</B>
+
+<DD>
+One of the arguments specified an address outside the calling program's
+address space.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+These system calls appeared on Linux starting with kernel 2.1.44.
+<P>
+The prototypes are given by glibc since version 2.3.2,
+provided
+<B>_GNU_SOURCE</B>
+
+is defined.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+These calls are nonstandard;
+they also appear on HP-UX and some of the BSDs.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+The original Linux
+<B>getresuid</B>()
+
+and
+<B>getresgid</B>()
+
+system calls supported only 16-bit user and group IDs.
+Subsequently, Linux 2.4 added
+<B>getresuid32</B>()
+
+and
+<B>getresgid32</B>(),
+
+supporting 32-bit IDs.
+The glibc
+<B>getresuid</B>()
+
+and
+<B>getresgid</B>()
+
+wrapper functions transparently deal with the variations across kernel versions.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/getuid.2.html">getuid</A></B>(2),
+
+<B><A HREF="../man2/setresuid.2.html">setresuid</A></B>(2),
+
+<B><A HREF="../man2/setreuid.2.html">setreuid</A></B>(2),
+
+<B><A HREF="../man2/setuid.2.html">setuid</A></B>(2),
+
+<B><A HREF="../man7/credentials.7.html">credentials</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:51 GMT, September 18, 2014
+</BODY>
+</HTML>

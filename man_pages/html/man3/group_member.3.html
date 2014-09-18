@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GROUP_MEMBER</TITLE>
+</HEAD><BODY>
+<H1>GROUP_MEMBER</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-03-30<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+group_member - test whether a process is in a group
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<P>
+<B>int group_member(gid_t </B><I>gid</I><B>);</B>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>group_member</B>():
+
+_GNU_SOURCE
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>group_member</B>()
+
+function tests whether any of the caller's supplementary group IDs
+(as returned by
+<B><A HREF="../man2/getgroups.2.html">getgroups</A></B>(2))
+
+matches
+<I>gid</I>.
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>group_member</B>()
+
+function returns nonzero if any of the caller's
+supplementary group IDs matches
+<I>gid</I>,
+
+and zero otherwise.
+<A NAME="lbAF">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function is a nonstandard GNU extension.
+<A NAME="lbAG">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/getgid.2.html">getgid</A></B>(2),
+
+<B><A HREF="../man2/getgroups.2.html">getgroups</A></B>(2),
+
+<B><A HREF="../man3/getgrouplist.3.html">getgrouplist</A></B>(3),
+
+<B><A HREF="../man5/group.5.html">group</A></B>(5)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAG">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:08 GMT, September 18, 2014
+</BODY>
+</HTML>

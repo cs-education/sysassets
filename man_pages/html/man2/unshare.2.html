@@ -1,0 +1,374 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of UNSHARE</TITLE>
+</HEAD><BODY>
+<H1>UNSHARE</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2013-04-17<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+unshare - disassociate parts of the process execution context
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sched.h">sched.h</A>&gt;</B>
+
+<B>int unshare(int </B><I>flags</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>unshare</B>():
+
+
+<DL COMPACT><DT><DD>
+
+<DL COMPACT>
+<DT>Since glibc 2.14:<DD>
+_GNU_SOURCE
+<DT>
+<DD>
+Before glibc 2.14:
+_BSD_SOURCE || _SVID_SOURCE
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;_GNU_SOURCE&nbsp;also&nbsp;suffices&nbsp;*/
+
+</DL>
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>unshare</B>()
+
+allows a process to disassociate parts of its execution
+context that are currently being shared with other processes.
+Part of the execution context, such as the mount namespace, is shared
+implicitly when a new process is created using
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+or
+<B><A HREF="../man2/vfork.2.html">vfork</A></B>(2),
+
+while other parts, such as virtual memory, may be
+shared by explicit request when creating a process using
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2).
+
+<P>
+The main use of
+<B>unshare</B>()
+
+is to allow a process to control its
+shared execution context without creating a new process.
+<P>
+The
+<I>flags</I>
+
+argument is a bit mask that specifies which parts of
+the execution context should be unshared.
+This argument is specified by ORing together zero or more
+of the following constants:
+<DL COMPACT>
+<DT><B>CLONE_FILES</B>
+
+<DD>
+Reverse the effect of the
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)
+
+<B>CLONE_FILES</B>
+
+flag.
+Unshare the file descriptor table, so that the calling process
+no longer shares its file descriptors with any other process.
+<DT><B>CLONE_FS</B>
+
+<DD>
+Reverse the effect of the
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)
+
+<B>CLONE_FS</B>
+
+flag.
+Unshare filesystem attributes, so that the calling process
+no longer shares its root directory
+(<B><A HREF="../man2/chroot.2.html">chroot</A></B>(2)),
+
+current directory
+(<B><A HREF="../man2/chdir.2.html">chdir</A></B>(2)),
+
+or umask
+(<B><A HREF="../man2/umask.2.html">umask</A></B>(2))
+
+attributes with any other process.
+<DT><B>CLONE_NEWIPC</B> (since Linux 2.6.19)
+
+<DD>
+This flag has the same effect as the
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)
+
+<B>CLONE_NEWIPC</B>
+
+flag.
+Unshare the System&nbsp;V IPC namespace,
+so that the calling process has a private copy of the
+System&nbsp;V IPC namespace which is not shared with any other process.
+Specifying this flag automatically implies
+<B>CLONE_SYSVSEM</B>
+
+as well.
+Use of
+<B>CLONE_NEWIPC</B>
+
+requires the
+<B>CAP_SYS_ADMIN</B>
+
+capability.
+<DT><B>CLONE_NEWNET</B> (since Linux 2.6.24)
+
+<DD>
+This flag has the same effect as the
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)
+
+<B>CLONE_NEWNET</B>
+
+flag.
+Unshare the network namespace,
+so that the calling process is moved into a
+new network namespace which is not shared
+with any previously existing process.
+Use of
+<B>CLONE_NEWNET</B>
+
+requires the
+<B>CAP_SYS_ADMIN</B>
+
+capability.
+<DT><B>CLONE_NEWNS</B>
+
+<DD>
+
+
+
+
+This flag has the same effect as the
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)
+
+<B>CLONE_NEWNS</B>
+
+flag.
+Unshare the mount namespace,
+so that the calling process has a private copy of
+its namespace which is not shared with any other process.
+Specifying this flag automatically implies
+<B>CLONE_FS</B>
+
+as well.
+Use of
+<B>CLONE_NEWNS</B>
+
+requires the
+<B>CAP_SYS_ADMIN</B>
+
+capability.
+<DT><B>CLONE_NEWUTS</B> (since Linux 2.6.19)
+
+<DD>
+This flag has the same effect as the
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)
+
+<B>CLONE_NEWUTS</B>
+
+flag.
+Unshare the UTS IPC namespace,
+so that the calling process has a private copy of the
+UTS namespace which is not shared with any other process.
+Use of
+<B>CLONE_NEWUTS</B>
+
+requires the
+<B>CAP_SYS_ADMIN</B>
+
+capability.
+<DT><B>CLONE_SYSVSEM</B> (since Linux 2.6.26)
+
+<DD>
+
+This flag reverses the effect of the
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)
+
+<B>CLONE_SYSVSEM</B>
+
+flag.
+Unshare System&nbsp;V semaphore undo values,
+so that the calling process has a private copy
+which is not shared with any other process.
+Use of
+<B>CLONE_SYSVSEM</B>
+
+requires the
+<B>CAP_SYS_ADMIN</B>
+
+capability.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</DL>
+<P>
+
+If
+<I>flags</I>
+
+is specified as zero, then
+<B>unshare</B>()
+
+is a no-op;
+no changes are made to the calling process's execution context.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, zero returned.
+On failure, -1 is returned and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+An invalid bit was specified in
+<I>flags</I>.
+
+<DT><B>ENOMEM</B>
+
+<DD>
+Cannot allocate sufficient memory to copy parts of caller's
+context that need to be unshared.
+<DT><B>EPERM</B>
+
+<DD>
+The calling process did not have the required privileges for this operation.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>unshare</B>()
+
+system call was added to Linux in kernel 2.6.16.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+The
+<B>unshare</B>()
+
+system call is Linux-specific.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+Not all of the process attributes that can be shared when
+a new process is created using
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)
+
+can be unshared using
+<B>unshare</B>().
+
+In particular, as at kernel 3.8,
+
+<B>unshare</B>()
+
+does not implement flags that reverse the effects of
+<B>CLONE_SIGHAND</B>,
+
+
+
+
+
+<B>CLONE_THREAD</B>,
+
+or
+<B>CLONE_VM</B>.
+
+
+
+
+
+Such functionality may be added in the future, if required.
+
+
+
+
+
+
+
+
+
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2),
+
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2),
+
+<B><A HREF="../man2/kcmp.2.html">kcmp</A></B>(2),
+
+<B><A HREF="../man2/setns.2.html">setns</A></B>(2),
+
+<B><A HREF="../man2/vfork.2.html">vfork</A></B>(2)
+
+<P>
+<I>Documentation/unshare.txt</I>
+
+in the Linux kernel source tree
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:46 GMT, September 18, 2014
+</BODY>
+</HTML>

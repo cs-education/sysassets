@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GLOB</TITLE>
+</HEAD><BODY>
+<H1>GLOB</H1>
+Section: Linux Programmer's Manual (7)<BR>Updated: 2012-07-28<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+glob - globbing pathnames
+<A NAME="lbAC">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+Long ago, in UNIX&nbsp;V6, there was a program
+<I>/etc/glob</I>
+
+that would expand wildcard patterns.
+Soon afterward this became a shell built-in.
+<P>
+These days there is also a library routine
+<B><A HREF="../man3/glob.3.html">glob</A></B>(3)
+
+that will perform this function for a user program.
+<P>
+The rules are as follows (POSIX.2, 3.13).
+<A NAME="lbAD">&nbsp;</A>
+<H3>Wildcard matching</H3>
+
+A string is a wildcard pattern if it contains one of the
+characters '?', '*' or '['.
+Globbing is the operation
+that expands a wildcard pattern into the list of pathnames
+matching the pattern.
+Matching is defined by:
+<P>
+A '?' (not between brackets) matches any single character.
+<P>
+A '*' (not between brackets) matches any string,
+including the empty string.
+<P>
+
+<B>Character classes</B>
+
+<P>
+An expression &quot;<I>[...]</I>&quot; where the first character after the
+leading '[' is not an '!' matches a single character,
+namely any of the characters enclosed by the brackets.
+The string enclosed by the brackets cannot be empty;
+therefore ']' can be allowed between the brackets, provided
+that it is the first character.
+(Thus, &quot;<I>[][!]</I>&quot; matches the
+three characters '[', ']' and '!'.)
+<P>
+
+<B>Ranges</B>
+
+<P>
+There is one special convention:
+two characters separated by '-' denote a range.
+(Thus, &quot;<I>[A-Fa-f0-9]</I>&quot;
+is equivalent to &quot;<I>[ABCDEFabcdef0123456789]</I>&quot;.)
+One may include '-' in its literal meaning by making it the
+first or last character between the brackets.
+(Thus, &quot;<I>[]-]</I>&quot; matches just the two characters ']' and '-',
+and &quot;<I>[--0]</I>&quot; matches the
+three characters '-', '.', '0', since '/'
+cannot be matched.)
+<P>
+
+<B>Complementation</B>
+
+<P>
+An expression &quot;<I>[!...]</I>&quot; matches a single character, namely
+any character that is not matched by the expression obtained
+by removing the first '!' from it.
+(Thus, &quot;<I>[!]a-]</I>&quot; matches any
+single character except ']', 'a' and '-'.)
+<P>
+One can remove the special meaning of '?', '*' and '[' by
+preceding them by a backslash, or, in case this is part of
+a shell command line, enclosing them in quotes.
+Between brackets these characters stand for themselves.
+Thus, &quot;<I>[[?*\]</I>&quot; matches the
+four characters '[', '?', '*' and '\'.
+<A NAME="lbAE">&nbsp;</A>
+<H3>Pathnames</H3>
+
+Globbing is applied on each of the components of a pathname
+separately.
+A '/' in a pathname cannot be matched by a '?' or '*'
+wildcard, or by a range like &quot;<I>[.-0]</I>&quot;.
+A range cannot contain an
+explicit '/' character; this would lead to a syntax error.
+<P>
+If a filename starts with a '.',
+this character must be matched explicitly.
+(Thus, <I>rm&nbsp;*</I> will not remove .profile, and <I>tar&nbsp;c&nbsp;*</I> will not
+archive all your files; <I>tar&nbsp;c&nbsp;.</I> is better.)
+<A NAME="lbAF">&nbsp;</A>
+<H3>Empty lists</H3>
+
+The nice and simple rule given above: &quot;expand a wildcard pattern
+into the list of matching pathnames&quot; was the original UNIX
+definition.
+It allowed one to have patterns that expand into
+an empty list, as in
+<P>
+<PRE>
+    xv -wait 0 *.gif *.jpg
+</PRE>
+
+<P>
+where perhaps no *.gif files are present (and this is not
+an error).
+However, POSIX requires that a wildcard pattern is left
+unchanged when it is syntactically incorrect, or the list of
+matching pathnames is empty.
+With
+<I>bash</I>
+
+one can force the classical behavior using this command:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;shopt&nbsp;-s&nbsp;nullglob
+
+<P>
+(Similar problems occur elsewhere.
+For example, where old scripts have
+<P>
+<PRE>
+    rm `find . -name &quot;*~&quot;`
+</PRE>
+
+<P>
+new scripts require
+<P>
+<PRE>
+    rm -f nosuchfile `find . -name &quot;*~&quot;`
+</PRE>
+
+<P>
+to avoid error messages from
+<I>rm</I>
+
+called with an empty argument list.)
+<A NAME="lbAG">&nbsp;</A>
+<H2>NOTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Regular expressions</H3>
+
+Note that wildcard patterns are not regular expressions,
+although they are a bit similar.
+First of all, they match
+filenames, rather than text, and secondly, the conventions
+are not the same: for example, in a regular expression '*' means zero or
+more copies of the preceding thing.
+<P>
+Now that regular expressions have bracket expressions where
+the negation is indicated by a '^', POSIX has declared the
+effect of a wildcard pattern &quot;<I>[^...]</I>&quot; to be undefined.
+<A NAME="lbAI">&nbsp;</A>
+<H3>Character classes and internationalization</H3>
+
+Of course ranges were originally meant to be ASCII ranges,
+so that &quot;<I>[&nbsp;-%]</I>&quot; stands for &quot;<I>[&nbsp;!&quot;#$%]</I>&quot; and &quot;<I>[a-z]</I>&quot; stands
+for &quot;any lowercase letter&quot;.
+Some UNIX implementations generalized this so that a range X-Y
+stands for the set of characters with code between the codes for
+X and for Y.
+However, this requires the user to know the
+character coding in use on the local system, and moreover, is
+not convenient if the collating sequence for the local alphabet
+differs from the ordering of the character codes.
+Therefore, POSIX extended the bracket notation greatly,
+both for wildcard patterns and for regular expressions.
+In the above we saw three types of items that can occur in a bracket
+expression: namely (i) the negation, (ii) explicit single characters,
+and (iii) ranges.
+POSIX specifies ranges in an internationally
+more useful way and adds three more types:
+<P>
+(iii) Ranges X-Y comprise all characters that fall between X
+and Y (inclusive) in the current collating sequence as defined
+by the
+<B>LC_COLLATE</B>
+
+category in the current locale.
+<P>
+(iv) Named character classes, like
+<PRE>
+
+[:alnum:]  [:alpha:]  [:blank:]  [:cntrl:]
+[:digit:]  [:graph:]  [:lower:]  [:print:]
+[:punct:]  [:space:]  [:upper:]  [:xdigit:]
+
+</PRE>
+
+so that one can say &quot;<I>[[:lower:]]</I>&quot; instead of &quot;<I>[a-z]</I>&quot;, and have
+things work in Denmark, too, where there are three letters past 'z'
+in the alphabet.
+These character classes are defined by the
+<B>LC_CTYPE</B>
+
+category
+in the current locale.
+<P>
+(v) Collating symbols, like &quot;<I>[.ch.]</I>&quot; or &quot;<I>[.a-acute.]</I>&quot;,
+where the string between &quot;<I>[.</I>&quot; and &quot;<I>.]</I>&quot; is a collating
+element defined for the current locale.
+Note that this may
+be a multicharacter element.
+<P>
+(vi) Equivalence class expressions, like &quot;<I>[=a=]</I>&quot;,
+where the string between &quot;<I>[=</I>&quot; and &quot;<I>=]</I>&quot; is any collating
+element from its equivalence class, as defined for the
+current locale.
+For example, &quot;<I>[[=a=]]</I>&quot; might be equivalent
+to &quot;<I>[a&aacute;&agrave;&auml;&acirc;]</I>&quot;, that is,
+to &quot;<I>[a[.a-acute.][.a-grave.][.a-umlaut.][.a-circumflex.]]</I>&quot;.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/sh.1.html">sh</A></B>(1),
+
+<B><A HREF="../man3/fnmatch.3.html">fnmatch</A></B>(3),
+
+<B><A HREF="../man3/glob.3.html">glob</A></B>(3),
+
+<B><A HREF="../man7/locale.7.html">locale</A></B>(7),
+
+<B><A HREF="../man7/regex.7.html">regex</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAD">Wildcard matching</A><DD>
+<DT><A HREF="#lbAE">Pathnames</A><DD>
+<DT><A HREF="#lbAF">Empty lists</A><DD>
+</DL>
+<DT><A HREF="#lbAG">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Regular expressions</A><DD>
+<DT><A HREF="#lbAI">Character classes and internationalization</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:21 GMT, September 18, 2014
+</BODY>
+</HTML>

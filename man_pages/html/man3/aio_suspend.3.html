@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of AIO_SUSPEND</TITLE>
+</HEAD><BODY>
+<H1>AIO_SUSPEND</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2012-05-08<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+aio_suspend - wait for asynchronous I/O operation or timeout
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+
+<B>#include &lt;<A HREF="file:///usr/include/aio.h">aio.h</A>&gt;</B>
+
+<B>int aio_suspend(const struct aiocb * const </B><I>aiocb_list</I><B>[],</B>
+<BR>
+<B>                int </B><I>nitems</I><B>, const struct timespec *</B><I>timeout</I><B>);</B>
+
+Link with <I>-lrt</I>.
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>aio_suspend</B>()
+
+function suspends the calling thread until one of the following occurs:
+<DL COMPACT>
+<DT>*<DD>
+One or more of the asynchronous I/O requests in the list
+<I>aiocb_list</I>
+
+has completed.
+<DT>*<DD>
+A signal is delivered.
+<DT>*<DD>
+<I>timeout</I>
+
+is not NULL and the specified time interval has passed.
+(For details of the
+<I>timespec</I>
+
+structure, see
+<B><A HREF="../man2/nanosleep.2.html">nanosleep</A></B>(2).)
+
+</DL>
+<P>
+
+The
+<I>nitems</I>
+
+argument specifies the number of items in
+<I>aiocb_list</I>.
+
+Each item in the list pointed to by
+<I>aiocb_list</I>
+
+must be either NULL (and then is ignored),
+or a pointer to a control block on which I/O was initiated using
+<B><A HREF="../man3/aio_read.3.html">aio_read</A></B>(3),
+
+<B><A HREF="../man3/aio_write.3.html">aio_write</A></B>(3),
+
+or
+<B><A HREF="../man3/lio_listio.3.html">lio_listio</A></B>(3).
+
+(See
+<B><A HREF="../man7/aio.7.html">aio</A></B>(7)
+
+for a description of the
+<I>aiocb</I>
+
+structure.)
+<P>
+
+If
+<B>CLOCK_MONOTONIC</B>
+
+is supported, this clock is used to measure
+the timeout interval (see
+<B><A HREF="../man3/clock_gettime.3.html">clock_gettime</A></B>(3)).
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+If this function returns after completion of one of the I/O
+requests specified in
+<I>aiocb_list</I>,
+
+0 is returned.
+Otherwise, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EAGAIN</B>
+
+<DD>
+The call timed out before any of the indicated operations
+had completed.
+<DT><B>EINTR</B>
+
+<DD>
+The call was ended by signal
+(possibly the completion signal of one of the operations we were
+waiting for); see
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7).
+
+<DT><B>ENOSYS</B>
+
+<DD>
+<B>aio_suspend</B>()
+
+is not implemented.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>aio_suspend</B>()
+
+function is available since glibc 2.1.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001, POSIX.1-2008.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+One can achieve polling by using a non-NULL
+<I>timeout</I>
+
+that specifies a zero time interval.
+<P>
+If one or more of the asynchronous I/O operations specified in
+<I>aiocb_list</I>
+
+has already completed at the time of the call to
+<B>aio_suspend</B>(),
+
+then the call returns immediately.
+<P>
+To determine which I/O operations have completed
+after a successful return from
+<B>aio_suspend</B>(),
+
+use
+<B><A HREF="../man3/aio_error.3.html">aio_error</A></B>(3)
+
+to scan the list of
+<I>aiocb</I>
+
+structures pointed to by
+<I>aiocb_list</I>.
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/aio_cancel.3.html">aio_cancel</A></B>(3),
+
+<B><A HREF="../man3/aio_error.3.html">aio_error</A></B>(3),
+
+<B><A HREF="../man3/aio_fsync.3.html">aio_fsync</A></B>(3),
+
+<B><A HREF="../man3/aio_read.3.html">aio_read</A></B>(3),
+
+<B><A HREF="../man3/aio_return.3.html">aio_return</A></B>(3),
+
+<B><A HREF="../man3/aio_write.3.html">aio_write</A></B>(3),
+
+<B><A HREF="../man3/lio_listio.3.html">lio_listio</A></B>(3),
+
+<B><A HREF="../man7/aio.7.html">aio</A></B>(7),
+
+<B><A HREF="../man7/time.7.html">time</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:18 GMT, September 18, 2014
+</BODY>
+</HTML>

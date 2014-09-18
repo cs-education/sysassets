@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of RANDOM_R</TITLE>
+</HEAD><BODY>
+<H1>RANDOM_R</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-03-25<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+random_r, srandom_r, initstate_r, setstate_r - reentrant
+random number generator
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;</B>
+
+<B>int random_r(struct random_data *</B><I>buf</I><B>, int32_t *</B><I>result</I><B>);</B>
+
+<B>int srandom_r(unsigned int </B><I>seed</I><B>, struct random_data *</B><I>buf</I><B>);</B>
+
+<B>int initstate_r(unsigned int </B><I>seed</I><B>, char *</B><I>statebuf</I><B>,</B>
+<B>                size_t </B><I>statelen</I><B>, struct random_data *</B><I>buf</I><B>);</B>
+<BR>
+<B>int setstate_r(char *</B><I>statebuf</I><B>, struct random_data *</B><I>buf</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>random_r</B>(),
+
+<B>srandom_r</B>(),
+
+<B>initstate_r</B>(),
+
+<B>setstate_r</B>():
+
+<DL COMPACT><DT><DD>
+_SVID_SOURCE || _BSD_SOURCE
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+These functions are the reentrant equivalents
+of the functions described in
+<B><A HREF="../man3/random.3.html">random</A></B>(3).
+
+They are suitable for use in multithreaded programs where each thread
+needs to obtain an independent, reproducible sequence of random numbers.
+<P>
+The
+<B>random_r</B>()
+
+function is like
+<B><A HREF="../man3/random.3.html">random</A></B>(3),
+
+except that instead of using state information maintained
+in a global variable,
+it uses the state information in the argument pointed to by
+<I>buf</I>.
+
+The generated random number is returned in the argument
+<I>result</I>.
+
+<P>
+The
+<B>srandom_r</B>()
+
+function is like
+<B><A HREF="../man3/srandom.3.html">srandom</A></B>(3),
+
+except that it initializes the seed for the random number generator
+whose state is maintained in the object pointed to by
+<I>buf</I>,
+
+instead of the seed associated with the global state variable.
+<P>
+The
+<B>initstate_r</B>()
+
+function is like
+<B><A HREF="../man3/initstate.3.html">initstate</A></B>(3)
+
+except that it initializes the state in the object pointed to by
+<I>buf</I>,
+
+rather than initializing the global state variable.
+<P>
+The
+<B>setstate_r</B>()
+
+function is like
+<B><A HREF="../man3/setstate.3.html">setstate</A></B>(3)
+
+except that it modifies the state in the object pointer to by
+<I>buf</I>,
+
+rather than modifying the global state variable.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+All of these functions return 0 on success.
+On error, -1 is returned, with
+<I>errno</I>
+
+set to indicate the cause of the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+A state array of less than 8 bytes was specified to
+<B>initstate_r</B>().
+
+<DT><B>EINVAL</B>
+
+<DD>
+The
+<I>statebuf</I>
+
+or
+<I>buf</I>
+
+argument to
+<B>setstate_r</B>()
+
+was NULL.
+<DT><B>EINVAL</B>
+
+<DD>
+The
+<I>buf</I>
+
+or
+<I>result</I>
+
+argument to
+<B>random_r</B>()
+
+was NULL.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>random_r</B>(),
+
+<B>srandom_r</B>(),
+
+<B>initstate_r</B>(),
+
+and
+<B>setstate_r</B>()
+
+functions are thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+These functions are nonstandard glibc extensions.
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/drand48.3.html">drand48</A></B>(3),
+
+<B><A HREF="../man3/rand.3.html">rand</A></B>(3),
+
+<B><A HREF="../man3/random.3.html">random</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:02 GMT, September 18, 2014
+</BODY>
+</HTML>

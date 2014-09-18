@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SIGINTERRUPT</TITLE>
+</HEAD><BODY>
+<H1>SIGINTERRUPT</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-06-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+siginterrupt - allow signals to interrupt system calls
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/signal.h">signal.h</A>&gt;</B>
+
+<B>int siginterrupt(int </B><I>sig</I><B>, int </B><I>flag</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>siginterrupt</B>():
+
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED
+<BR>
+
+|| /* Since glibc 2.12: */ _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>siginterrupt</B>()
+
+function changes the restart behavior when
+a system call is interrupted by the signal <I>sig</I>.
+If the <I>flag</I>
+argument is false (0), then system calls will be restarted if interrupted
+by the specified signal <I>sig</I>.
+This is the default behavior in Linux.
+<P>
+
+If the <I>flag</I> argument is true (1) and no data has been transferred,
+then a system call interrupted by the signal <I>sig</I> will return -1
+and <I>errno</I> will be set to
+<B>EINTR</B>.
+
+<P>
+
+If the <I>flag</I> argument is true (1) and data transfer has started,
+then the system call will be interrupted and will return the actual
+amount of data transferred.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>siginterrupt</B>()
+
+function returns 0 on success.
+It returns -1 if the
+signal number
+<I>sig</I>
+
+is invalid, with
+<I>errno</I>
+
+set to indicate the cause of the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+The specified signal number is invalid.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>siginterrupt</B>()
+
+function uses a global variable that is not protected,
+so it is not thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+4.3BSD, POSIX.1-2001.
+POSIX.1-2008 marks
+<B>siginterrupt</B>()
+
+as obsolete, recommending the use of
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2)
+
+with the
+<B>SA_RESTART</B>
+
+flag instead.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:00 GMT, September 18, 2014
+</BODY>
+</HTML>

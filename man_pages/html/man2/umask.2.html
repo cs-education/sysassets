@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of UMASK</TITLE>
+</HEAD><BODY>
+<H1>UMASK</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2008-01-09<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+umask - set file mode creation mask
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+
+<BR>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</B>
+
+<P>
+<B>mode_t umask(mode_t </B><I>mask</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>umask</B>()
+
+sets the calling process's file mode creation mask (umask) to
+<I>mask</I>
+
+&amp; 0777 (i.e., only the file permission bits of
+<I>mask</I>
+
+are used), and returns the previous value of the mask.
+<P>
+The umask is used by
+<B><A HREF="../man2/open.2.html">open</A></B>(2),
+
+<B><A HREF="../man2/mkdir.2.html">mkdir</A></B>(2),
+
+and other system calls that create files
+
+
+to modify the permissions placed on newly created files or directories.
+Specifically, permissions in the umask are turned off from
+the
+<I>mode</I>
+
+argument to
+<B><A HREF="../man2/open.2.html">open</A></B>(2)
+
+and
+<B><A HREF="../man2/mkdir.2.html">mkdir</A></B>(2).
+
+<P>
+The constants that should be used to specify
+<I>mask</I>
+
+are described under
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2).
+
+<P>
+The typical default value for the process umask is
+<I>S_IWGRP&nbsp;|&nbsp;S_IWOTH</I>
+
+(octal 022).
+In the usual case where the
+<I>mode</I>
+
+argument to
+<B><A HREF="../man2/open.2.html">open</A></B>(2)
+
+is specified as:
+<PRE>
+
+    S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH
+
+</PRE>
+
+(octal 0666) when creating a new file, the permissions on the
+resulting file will be:
+<PRE>
+
+    S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
+
+</PRE>
+
+(because 0666 &amp; ~022 = 0644; i.e., rw-r--r--).
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+This system call always succeeds and the previous value of the mask
+is returned.
+<A NAME="lbAF">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, 4.3BSD, POSIX.1-2001.
+<A NAME="lbAG">&nbsp;</A>
+<H2>NOTES</H2>
+
+A child process created via
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+inherits its parent's umask.
+The umask is left unchanged by
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2).
+
+<P>
+The umask setting also affects the permissions assigned to POSIX IPC objects
+(<B><A HREF="../man3/mq_open.3.html">mq_open</A></B>(3),
+
+<B><A HREF="../man3/sem_open.3.html">sem_open</A></B>(3),
+
+<B><A HREF="../man3/shm_open.3.html">shm_open</A></B>(3)),
+
+FIFOs
+(<B><A HREF="../man3/mkfifo.3.html">mkfifo</A></B>(3)),
+
+and UNIX domain sockets
+(<B><A HREF="../man7/unix.7.html">unix</A></B>(7))
+
+created by the process.
+The umask does not affect the permissions assigned
+to System&nbsp;V IPC objects created by the process (using
+<B><A HREF="../man2/msgget.2.html">msgget</A></B>(2),
+
+<B><A HREF="../man2/semget.2.html">semget</A></B>(2),
+
+<B><A HREF="../man2/shmget.2.html">shmget</A></B>(2)).
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/chmod.2.html">chmod</A></B>(2),
+
+<B><A HREF="../man2/mkdir.2.html">mkdir</A></B>(2),
+
+<B><A HREF="../man2/open.2.html">open</A></B>(2),
+
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2),
+
+<B><A HREF="../man5/acl.5.html">acl</A></B>(5)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAG">NOTES</A><DD>
+<DT><A HREF="#lbAH">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:45 GMT, September 18, 2014
+</BODY>
+</HTML>

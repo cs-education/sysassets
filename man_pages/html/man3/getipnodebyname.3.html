@@ -1,0 +1,383 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETIPNODEBYNAME</TITLE>
+</HEAD><BODY>
+<H1>GETIPNODEBYNAME</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2010-09-04<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getipnodebyname, getipnodebyaddr, freehostent - get network
+hostnames and addresses
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/sys/socket.h">sys/socket.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/netdb.h">netdb.h</A>&gt;</B>
+
+<B>struct hostent *getipnodebyname(const char *</B><I>name</I><B>, int </B><I>af</I><B>,</B>
+<B>                                int </B><I>flags</I><B>, int *</B><I>error_num</I><B>);</B>
+
+<B>struct hostent *getipnodebyaddr(const void *</B><I>addr</I><B>, size_t </B><I>len</I><B>,</B>
+<B>                                int </B><I>af</I><B>, int *</B><I>error_num</I><B>);</B>
+
+<B>void freehostent(struct hostent *</B><I>ip</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+These functions are deprecated (and unavailable in glibc).
+Use
+<B><A HREF="../man3/getaddrinfo.3.html">getaddrinfo</A></B>(3)
+
+and
+<B><A HREF="../man3/getnameinfo.3.html">getnameinfo</A></B>(3)
+
+instead.
+<P>
+
+The
+<B>getipnodebyname</B>()
+
+and
+<B>getipnodebyaddr</B>()
+
+functions return the names and addresses of a network host.
+These functions return a pointer to the
+following structure:
+<P>
+
+<PRE>
+struct hostent {
+    char  *h_name;
+    char **h_aliases;
+    int    h_addrtype;
+    int    h_length;
+    char **h_addr_list;
+};
+</PRE>
+
+<P>
+
+These functions replace the
+<B><A HREF="../man3/gethostbyname.3.html">gethostbyname</A></B>(3)
+
+and
+<B><A HREF="../man3/gethostbyaddr.3.html">gethostbyaddr</A></B>(3)
+
+functions, which could access only the IPv4 network address family.
+The
+<B>getipnodebyname</B>()
+
+and
+<B>getipnodebyaddr</B>()
+
+functions can access multiple network address families.
+<P>
+
+Unlike the
+<B>gethostby</B>
+
+functions,
+these functions return pointers to dynamically allocated memory.
+The
+<B>freehostent</B>()
+
+function is used to release the dynamically allocated memory
+after the caller no longer needs the
+<I>hostent</I>
+
+structure.
+<A NAME="lbAE">&nbsp;</A>
+<H3>getipnodebyname() arguments</H3>
+
+The
+<B>getipnodebyname</B>()
+
+function
+looks up network addresses for the host
+specified by the
+<I>name</I>
+
+argument.
+The
+<I>af</I>
+
+argument specifies one of the following values:
+<DL COMPACT>
+<DT><B>AF_INET</B>
+
+<DD>
+The
+<I>name</I>
+
+argument points to a dotted-quad IPv4 address or a name
+of an IPv4 network host.
+<DT><B>AF_INET6</B>
+
+<DD>
+The
+<I>name</I>
+
+argument points to a hexadecimal IPv6 address or a name
+of an IPv6 network host.
+</DL>
+<P>
+
+The
+<I>flags</I>
+
+argument specifies additional options.
+More than one option can be specified by bitwise OR-ing
+them together.
+<I>flags</I>
+
+should be set to 0
+if no options are desired.
+<DL COMPACT>
+<DT><B>AI_V4MAPPED</B>
+
+<DD>
+This flag is used with
+<B>AF_INET6</B>
+
+to request a query for IPv4 addresses instead of
+IPv6 addresses; the IPv4 addresses will
+be mapped to IPv6 addresses.
+<DT><B>AI_ALL</B>
+
+<DD>
+This flag is used with
+<B>AI_V4MAPPED</B>
+
+to request a query for both IPv4 and IPv6 addresses.
+Any IPv4 address found will be mapped to an IPv6 address.
+<DT><B>AI_ADDRCONFIG</B>
+
+<DD>
+This flag is used with
+<B>AF_INET6</B>
+
+to
+further request that queries for IPv6 addresses should not be made unless
+the system has at least one IPv6 address assigned to a network interface,
+and that queries for IPv4 addresses should not be made unless the
+system has at least one IPv4 address assigned to a network interface.
+This flag may be used by itself or with the
+<B>AI_V4MAPPED</B>
+
+flag.
+<DT><B>AI_DEFAULT</B>
+
+<DD>
+This flag is equivalent to
+<B>(AI_ADDRCONFIG | AI_V4MAPPED)</B>.
+
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H3>getipnodebyaddr() arguments</H3>
+
+The
+<B>getipnodebyaddr</B>()
+
+function
+looks up the name of the host whose
+network address is
+specified by the
+<I>addr</I>
+
+argument.
+The
+<I>af</I>
+
+argument specifies one of the following values:
+<DL COMPACT>
+<DT><B>AF_INET</B>
+
+<DD>
+The
+<I>addr</I>
+
+argument points to a
+<I>struct in_addr</I>
+
+and
+<I>len</I>
+
+must be set to
+<I>sizeof(struct in_addr)</I>.
+
+<DT><B>AF_INET6</B>
+
+<DD>
+The
+<I>addr</I>
+
+argument points to a
+<I>struct in6_addr</I>
+
+and
+<I>len</I>
+
+must be set to
+<I>sizeof(struct in6_addr)</I>.
+
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+NULL is returned if an error occurred, and
+<I>error_num</I>
+
+will contain an error code from the following list:
+<DL COMPACT>
+<DT><B>HOST_NOT_FOUND</B>
+
+<DD>
+The hostname or network address was not found.
+<DT><B>NO_ADDRESS</B>
+
+<DD>
+The domain name server recognized the network address or name,
+but no answer was returned.
+This can happen if the network host has only IPv4 addresses and
+a request has been made for IPv6 information only, or vice versa.
+<DT><B>NO_RECOVERY</B>
+
+<DD>
+The domain name server returned a permanent failure response.
+<DT><B>TRY_AGAIN</B>
+
+<DD>
+The domain name server returned a temporary failure response.
+You might have better luck next time.
+</DL>
+<P>
+
+A successful query returns a pointer to a
+<I>hostent</I>
+
+structure that contains the following fields:
+<DL COMPACT>
+<DT><I>h_name</I>
+
+<DD>
+This is the official name of this network host.
+<DT><I>h_aliases</I>
+
+<DD>
+This is an array of pointers to unofficial aliases for the same host.
+The array is terminated by a null pointer.
+<DT><I>h_addrtype</I>
+
+<DD>
+This is a copy of the
+<I>af</I>
+
+argument to
+<B>getipnodebyname</B>()
+
+or
+<B>getipnodebyaddr</B>().
+
+<I>h_addrtype</I>
+
+will always be
+<B>AF_INET</B>
+
+if the
+<I>af</I>
+
+argument was
+<B>AF_INET</B>.
+
+<I>h_addrtype</I>
+
+will always be
+<B>AF_INET6</B>
+
+if the
+<I>af</I>
+
+argument was
+<B>AF_INET6</B>.
+
+<DT><I>h_length</I>
+
+<DD>
+This field will be set to
+<I>sizeof(struct in_addr)</I>
+
+if
+<I>h_addrtype</I>
+
+is
+<B>AF_INET</B>,
+
+and to
+<I>sizeof(struct in6_addr)</I>
+
+if
+<I>h_addrtype</I>
+
+is
+<B>AF_INET6</B>.
+
+<DT><I>h_addr_list</I>
+
+<DD>
+This is an array of one or more pointers to network address structures for the
+network host.
+The array is terminated by a null pointer.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+RFC&nbsp;2553.
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+These functions were present in glibc 2.1.91-95, but were
+removed again.
+Several UNIX-like systems support them, but all
+call them deprecated.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/getaddrinfo.3.html">getaddrinfo</A></B>(3),
+
+<B><A HREF="../man3/getnameinfo.3.html">getnameinfo</A></B>(3),
+
+<B><A HREF="../man3/inet_ntop.3.html">inet_ntop</A></B>(3),
+
+<B><A HREF="../man3/inet_pton.3.html">inet_pton</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">getipnodebyname() arguments</A><DD>
+<DT><A HREF="#lbAF">getipnodebyaddr() arguments</A><DD>
+</DL>
+<DT><A HREF="#lbAG">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:10 GMT, September 18, 2014
+</BODY>
+</HTML>

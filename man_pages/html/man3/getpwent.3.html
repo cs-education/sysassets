@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETPWENT</TITLE>
+</HEAD><BODY>
+<H1>GETPWENT</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-06-21<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getpwent, setpwent, endpwent - get password file entry
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/pwd.h">pwd.h</A>&gt;</B>
+
+<B>struct passwd *getpwent(void);</B>
+
+<B>void setpwent(void);</B>
+
+<B>void endpwent(void);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>getpwent</B>(),
+
+<B>setpwent</B>(),
+
+<B>endpwent</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>getpwent</B>()
+
+function returns a pointer to a structure containing
+the broken-out fields of a record from the password database
+(e.g., the local password file
+<I>/etc/passwd</I>,
+
+NIS, and LDAP).
+The first time
+<B>getpwent</B>()
+
+is called, it returns the first entry; thereafter, it returns successive
+entries.
+<P>
+
+The
+<B>setpwent</B>()
+
+function rewinds to the beginning
+of the password database.
+<P>
+
+The
+<B>endpwent</B>()
+
+function is used to close the password database
+after all processing has been performed.
+<P>
+
+The <I>passwd</I> structure is defined in <I>&lt;<A HREF="file:///usr/include/pwd.h">pwd.h</A>&gt;</I> as follows:
+<P>
+
+<PRE>
+struct passwd {
+    char   *pw_name;       /* username */
+    char   *pw_passwd;     /* user password */
+    uid_t   pw_uid;        /* user ID */
+    gid_t   pw_gid;        /* group ID */
+    char   *pw_gecos;      /* user information */
+    char   *pw_dir;        /* home directory */
+    char   *pw_shell;      /* shell program */
+};
+</PRE>
+
+
+<P>
+
+For more information about the fields of this structure, see
+<B><A HREF="../man5/passwd.5.html">passwd</A></B>(5).
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>getpwent</B>()
+
+function returns a pointer to a
+<I>passwd</I>
+
+structure, or NULL if
+there are no more entries or an error occurred.
+If an error occurs,
+<I>errno</I>
+
+is set appropriately.
+If one wants to check
+<I>errno</I>
+
+after the call, it should be set to zero before the call.
+<P>
+The return value may point to a static area, and may be overwritten
+by subsequent calls to
+<B>getpwent</B>(),
+
+<B><A HREF="../man3/getpwnam.3.html">getpwnam</A></B>(3),
+
+or
+<B><A HREF="../man3/getpwuid.3.html">getpwuid</A></B>(3).
+
+(Do not pass the returned pointer to
+<B><A HREF="../man3/free.3.html">free</A></B>(3).)
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINTR</B>
+
+<DD>
+A signal was caught.
+<DT><B>EIO</B>
+
+<DD>
+I/O error.
+<DT><B>EMFILE</B>
+
+<DD>
+The maximum number
+(<B>OPEN_MAX</B>)
+
+of files was open already in the calling process.
+<DT><B>ENFILE</B>
+
+<DD>
+The maximum number of files was open already in the system.
+<DT><B>ENOMEM</B>
+
+<DD>
+
+Insufficient memory to allocate
+<I>passwd</I>
+
+structure.
+
+<DT><B>ERANGE</B>
+
+<DD>
+Insufficient buffer space supplied.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>FILES</H2>
+
+<DL COMPACT>
+<DT><I>/etc/passwd</I>
+
+<DD>
+local password database file
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>getpwent</B>()
+
+function is not thread-safe.
+<P>
+
+The
+<B>setpwent</B>()
+
+and
+<B>endpwent</B>()
+
+functions are thread-safe.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, 4.3BSD, POSIX.1-2001.
+The
+<I>pw_gecos</I>
+
+field is not specified in POSIX, but is present on most implementations.
+<A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/fgetpwent.3.html">fgetpwent</A></B>(3),
+
+<B><A HREF="../man3/getpw.3.html">getpw</A></B>(3),
+
+<B><A HREF="../man3/getpwent_r.3.html">getpwent_r</A></B>(3),
+
+<B><A HREF="../man3/getpwnam.3.html">getpwnam</A></B>(3),
+
+<B><A HREF="../man3/getpwuid.3.html">getpwuid</A></B>(3),
+
+<B><A HREF="../man3/putpwent.3.html">putpwent</A></B>(3),
+
+<B><A HREF="../man5/passwd.5.html">passwd</A></B>(5)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">FILES</A><DD>
+<DT><A HREF="#lbAH">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:11 GMT, September 18, 2014
+</BODY>
+</HTML>

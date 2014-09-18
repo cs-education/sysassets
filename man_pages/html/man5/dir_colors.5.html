@@ -1,0 +1,559 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of DIR_COLORS</TITLE>
+</HEAD><BODY>
+<H1>DIR_COLORS</H1>
+Section: Linux User Manual (5)<BR>Updated: 2013-08-09<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+dir_colors - configuration file for <A HREF="../man1/dircolors.1.html">dircolors</A>(1)
+<A NAME="lbAC">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The program
+<B><A HREF="../man1/ls.1.html">ls</A></B>(1)
+
+uses the environment variable
+<B>LS_COLORS</B>
+
+to determine the colors in which the filenames are to be displayed.
+This environment variable is usually set by a command like
+<P>
+<DL COMPACT><DT><DD>
+eval `dircolors some_path/dir_colors`
+</DL>
+
+<P>
+found in a system default shell initialization file, like
+<I>/etc/profile</I>
+
+or
+<I>/etc/csh.cshrc</I>.
+
+(See also
+<B><A HREF="../man1/dircolors.1.html">dircolors</A></B>(1).)
+
+Usually, the file used here is
+<I>/etc/DIR_COLORS</I>
+
+and can be overridden by a
+<I>.dir_colors</I>
+
+file in one's home directory.
+<P>
+
+This configuration file consists of several statements, one per line.
+Anything right of a hash mark (#) is treated as a comment, if the
+hash mark is at the beginning of a line or is preceded by at least one
+whitespace.
+Blank lines are ignored.
+<P>
+
+The
+<I>global</I>
+
+section of the file consists of any statement before the first
+<B>TERM</B>
+
+statement.
+Any statement in the global section of the file is
+considered valid for all terminal types.
+Following the global section
+is one or more
+<I>terminal-specific</I>
+
+sections, preceded by one or more
+<B>TERM</B>
+
+statements which specify the terminal types (as given by the
+<B>TERM</B>
+
+environment variable) the following declarations apply to.
+It is always possible to override a global declaration by a subsequent
+terminal-specific one.
+<P>
+
+The following statements are recognized; case is insignificant:
+<DL COMPACT>
+<DT><B>TERM </B><I>terminal-type</I>
+
+<DD>
+Starts a terminal-specific section and specifies which terminal it
+applies to.
+Multiple
+<B>TERM</B>
+
+statements can be used to create a section which applies for several
+terminal types.
+<DT><B>COLOR yes|all|no|none|tty</B>
+
+<DD>
+(Slackware only; ignored by GNU
+<B><A HREF="../man1/dircolors.1.html">dircolors</A></B>(1).)
+
+Specifies that colorization should always be enabled (<I>yes</I> or
+<I>all</I>), never enabled (<I>no</I> or <I>none</I>), or enabled only if
+the output is a terminal (<I>tty</I>).
+The default is <I>no</I>.
+<DT><B>EIGHTBIT yes|no</B>
+
+<DD>
+(Slackware only; ignored by GNU
+<B><A HREF="../man1/dircolors.1.html">dircolors</A></B>(1).)
+
+Specifies that eight-bit ISO 8859 characters should be enabled by
+default.
+For compatibility reasons, this can also be specified as 1 for
+<I>yes</I> or 0 for <I>no</I>.
+The default is <I>no</I>.
+<DT><B>OPTIONS </B><I>options</I>
+
+<DD>
+(Slackware only; ignored by GNU
+<B><A HREF="../man1/dircolors.1.html">dircolors</A></B>(1).)
+
+Adds command-line options to the default
+<B>ls</B>
+
+command line.
+The options can be any valid
+<B>ls</B>
+
+command-line options, and should include the leading minus sign.
+Note that
+<B>dircolors</B>
+
+does not verify the validity of these options.
+<DT><B>NORMAL </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for normal (nonfilename) text.
+<P>
+Synonym:
+<B>NORM</B>.
+
+<DT><B>FILE </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a regular file.
+<DT><B>DIR </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for directories.
+<DT><B>LINK </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a symbolic link.
+<P>
+Synonyms:
+<B>LNK</B>,
+
+<B>SYMLINK</B>.
+
+<DT><B>ORPHAN </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for an orphaned symbolic link (one which
+points to a nonexistent file).
+If this is unspecified,
+<B>ls</B>
+
+will use the
+<B>LINK</B>
+
+color instead.
+<DT><B>MISSING </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a missing file (a nonexistent file which
+nevertheless has a symbolic link pointing to it).
+If this is unspecified,
+<B>ls</B>
+
+will use the
+<B>FILE</B>
+
+color instead.
+<DT><B>FIFO </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a FIFO (named pipe).
+<P>
+Synonym:
+<B>PIPE</B>.
+
+<DT><B>SOCK </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a socket.
+<DT><B>DOOR </B><I>color-sequence</I>
+
+<DD>
+(Supported since fileutils 4.1)
+Specifies the color used for a door (Solaris 2.5 and later).
+<DT><B>BLK </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a block device special file.
+<P>
+Synonym:
+<B>BLOCK</B>.
+
+<DT><B>CHR </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a character device special file.
+<P>
+Synonym:
+<B>CHAR</B>.
+
+<DT><B>EXEC </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a file with the executable attribute set.
+<DT><B>SUID </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a file with the set-user-ID attribute set.
+<P>
+Synonym:
+<B>SETUID</B>.
+
+<DT><B>SGID </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a file with the set-group-ID attribute set.
+<P>
+Synonym:
+<B>SETGID</B>.
+
+<DT><B>STICKY </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a directory with the sticky attribute set.
+<DT><B>STICKY_OTHER_WRITABLE </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a other-writable directory with the executable attribute set.
+<P>
+Synonym:
+<B>OWT</B>.
+
+<DT><B>OTHER_WRITABLE </B><I>color-sequence</I>
+
+<DD>
+Specifies the color used for a other-writable directory without the executable attribute set.
+<P>
+Synonym:
+<B>OWR</B>.
+
+<DT><B>LEFTCODE </B><I>color-sequence</I>
+
+<DD>
+Specifies the
+<I>left code</I>
+
+for non-ISO&nbsp;6429 terminals (see below).
+<P>
+Synonym:
+<B>LEFT</B>.
+
+<DT><B>RIGHTCODE </B><I>color-sequence</I>
+
+<DD>
+Specifies the
+<I>right code</I>
+
+for non-ISO&nbsp;6429 terminals (see below).
+<P>
+Synonym:
+<B>RIGHT</B>.
+
+<DT><B>ENDCODE </B><I>color-sequence</I>
+
+<DD>
+Specifies the
+<I>end code</I>
+
+for non-ISO&nbsp;6429 terminals (see below).
+<P>
+Synonym:
+<B>END</B>.
+
+<DT><B>*</B><I>extension</I> <I>color-sequence</I><DD>
+Specifies the color used for any file that ends in <I>extension</I>.
+<DT><B> .</B><I>extension</I> <I>color-sequence</I><DD>
+Same as <B>*</B>.<I>extension</I>.
+Specifies the color used for any file that
+ends in .<I>extension</I>.
+Note that the period is included in the
+extension, which makes it impossible to specify an extension not
+starting with a period, such as
+<B>~</B>
+
+for
+<B>emacs</B>
+
+backup files.
+This form should be considered obsolete.
+</DL>
+<A NAME="lbAD">&nbsp;</A>
+<H3>ISO 6429 (ANSI) color sequences</H3>
+
+Most color-capable ASCII terminals today use ISO 6429 (ANSI) color sequences,
+and many common terminals without color capability, including
+<B>xterm</B>
+
+and the widely used and cloned DEC VT100, will recognize ISO 6429 color
+codes and harmlessly eliminate them from the output or emulate them.
+<B>ls</B>
+
+uses ISO 6429 codes by default, assuming colorization is enabled.
+<P>
+ISO 6429 color sequences are composed of sequences of numbers
+separated by semicolons.
+The most common codes are:
+<P>
+<DL COMPACT><DT><DD>
+<TABLE>
+<TR VALIGN=top><TD><BR>&nbsp;0</TD><TD>to restore default color<BR></TD></TR>
+<TR VALIGN=top><TD><BR>&nbsp;1</TD><TD>for brighter colors<BR></TD></TR>
+<TR VALIGN=top><TD><BR>&nbsp;4</TD><TD>for underlined text<BR></TD></TR>
+<TR VALIGN=top><TD><BR>&nbsp;5</TD><TD>for flashing text<BR></TD></TR>
+<TR VALIGN=top><TD>30</TD><TD>for black foreground<BR></TD></TR>
+<TR VALIGN=top><TD>31</TD><TD>for red foreground<BR></TD></TR>
+<TR VALIGN=top><TD>32</TD><TD>for green foreground<BR></TD></TR>
+<TR VALIGN=top><TD>33</TD><TD>for yellow (or brown) foreground<BR></TD></TR>
+<TR VALIGN=top><TD>34</TD><TD>for blue foreground<BR></TD></TR>
+<TR VALIGN=top><TD>35</TD><TD>for purple foreground<BR></TD></TR>
+<TR VALIGN=top><TD>36</TD><TD>for cyan foreground<BR></TD></TR>
+<TR VALIGN=top><TD>37</TD><TD>for white (or gray) foreground<BR></TD></TR>
+<TR VALIGN=top><TD>40</TD><TD>for black background<BR></TD></TR>
+<TR VALIGN=top><TD>41</TD><TD>for red background<BR></TD></TR>
+<TR VALIGN=top><TD>42</TD><TD>for green background<BR></TD></TR>
+<TR VALIGN=top><TD>43</TD><TD>for yellow (or brown) background<BR></TD></TR>
+<TR VALIGN=top><TD>44</TD><TD>for blue background<BR></TD></TR>
+<TR VALIGN=top><TD>45</TD><TD>for purple background<BR></TD></TR>
+<TR VALIGN=top><TD>46</TD><TD>for cyan background<BR></TD></TR>
+<TR VALIGN=top><TD>47</TD><TD>for white (or gray) background<BR></TD></TR>
+</TABLE>
+
+</DL>
+
+<P>
+Not all commands will work on all systems or display devices.
+<P>
+
+<B>ls</B>
+
+uses the following defaults:
+<P>
+<TABLE>
+<TR VALIGN=top><TD><B>NORMAL</B></TD><TD>0       </TD><TD>Normal (nonfilename) text<BR></TD></TR>
+<TR VALIGN=top><TD><B>FILE</B></TD><TD>0       </TD><TD>Regular file<BR></TD></TR>
+<TR VALIGN=top><TD><B>DIR</B></TD><TD>32      </TD><TD>Directory<BR></TD></TR>
+<TR VALIGN=top><TD><B>LINK</B></TD><TD>36      </TD><TD>Symbolic link<BR></TD></TR>
+<TR VALIGN=top><TD><B>ORPHAN</B></TD><TD>undefined</TD><TD>Orphaned symbolic link<BR></TD></TR>
+<TR VALIGN=top><TD><B>MISSING</B></TD><TD>undefined</TD><TD>Missing file<BR></TD></TR>
+<TR VALIGN=top><TD><B>FIFO</B></TD><TD>31      </TD><TD>Named pipe (FIFO)<BR></TD></TR>
+<TR VALIGN=top><TD><B>SOCK</B></TD><TD>33      </TD><TD>Socket<BR></TD></TR>
+<TR VALIGN=top><TD><B>BLK</B></TD><TD>44;37   </TD><TD>Block device<BR></TD></TR>
+<TR VALIGN=top><TD><B>CHR</B></TD><TD>44;37   </TD><TD>Character device<BR></TD></TR>
+<TR VALIGN=top><TD><B>EXEC</B></TD><TD>35      </TD><TD>Executable file<BR></TD></TR>
+</TABLE>
+
+<P>
+A few terminal programs do not recognize the default
+properly.
+If all text gets colorized after you do a directory
+listing, change the
+<B>NORMAL</B>
+
+and
+<B>FILE</B>
+
+codes to the numerical codes for your normal foreground and background
+colors.
+<A NAME="lbAE">&nbsp;</A>
+<H3>Other terminal types (advanced configuration)</H3>
+
+If you have a color-capable (or otherwise highlighting) terminal (or
+printer!) which uses a different set of codes, you can still generate
+a suitable setup.
+To do so, you will have to use the
+<B>LEFTCODE</B>,
+
+<B>RIGHTCODE</B>,
+
+and
+<B>ENDCODE</B>
+
+definitions.
+<P>
+
+When writing out a filename,
+<B>ls</B>
+
+generates the following output sequence:
+<B>LEFTCODE</B>
+
+<I>typecode</I>
+
+<B>RIGHTCODE</B>
+
+<I>filename</I>
+
+<B>ENDCODE</B>,
+
+where the
+<I>typecode</I>
+
+is the color sequence that depends on the type or name of file.
+If the
+<B>ENDCODE</B>
+
+is undefined, the sequence
+<B>LEFTCODE NORMAL RIGHTCODE</B>
+
+will be used instead.
+The purpose of the left- and rightcodes is
+merely to reduce the amount of typing necessary (and to hide ugly
+escape codes away from the user).
+If they are not appropriate for
+your terminal, you can eliminate them by specifying the respective
+keyword on a line by itself.
+<P>
+
+<B>NOTE:</B>
+
+If the
+<B>ENDCODE</B>
+
+is defined in the global section of the setup file, it
+<I>cannot</I>
+
+be undefined in a terminal-specific section of the file.
+This means any
+<B>NORMAL</B>
+
+definition will have no effect.
+A different
+<B>ENDCODE</B>
+
+can, however, be specified, which would have the same effect.
+<A NAME="lbAF">&nbsp;</A>
+<H3>Escape sequences</H3>
+
+To specify control- or blank characters in the color sequences or
+filename extensions, either C-style \-escaped notation or
+<B>stty</B>-style
+
+^-notation can be used.
+The C-style notation
+includes the following characters:
+<P>
+<DL COMPACT><DT><DD>
+<TABLE>
+<TR VALIGN=top><TD><B>\a</B></TD><TD>Bell (ASCII 7)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\b</B></TD><TD>Backspace (ASCII 8)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\e</B></TD><TD>Escape (ASCII 27)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\f</B></TD><TD>Form feed (ASCII 12)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\n</B></TD><TD>Newline (ASCII 10)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\r</B></TD><TD>Carriage Return (ASCII 13)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\t</B></TD><TD>Tab (ASCII 9)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\v</B></TD><TD>Vertical Tab (ASCII 11)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\?</B></TD><TD>Delete (ASCII 127)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\<I>nnn</I></B></TD><TD>Any character (octal notation)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\x<I>nnn</I></B></TD><TD>Any character (hexadecimal notation)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\_</B></TD><TD>Space<BR></TD></TR>
+<TR VALIGN=top><TD><B>\\</B></TD><TD>Backslash (\)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\^</B></TD><TD>Caret (^)<BR></TD></TR>
+<TR VALIGN=top><TD><B>\#</B></TD><TD>Hash mark (#)<BR></TD></TR>
+</TABLE>
+
+</DL>
+
+<P>
+Note that escapes are necessary to enter a space, backslash,
+caret, or any control character anywhere in the string, as well as a
+hash mark as the first character.
+<A NAME="lbAG">&nbsp;</A>
+<H2>FILES</H2>
+
+<DL COMPACT>
+<DT><I>/etc/DIR_COLORS</I>
+
+<DD>
+System-wide configuration file.
+<DT><I>~/.dir_colors</I>
+
+<DD>
+Per-user configuration file.
+</DL>
+<P>
+
+This page describes the
+<B>dir_colors</B>
+
+file format as used in the fileutils-4.1 package;
+other versions may differ slightly.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+The default
+<B>LEFTCODE</B>
+
+and
+<B>RIGHTCODE</B>
+
+definitions, which are used by ISO 6429 terminals are:
+<P>
+<DL COMPACT><DT><DD>
+<TABLE>
+<TR VALIGN=top><TD><B>LEFTCODE</B></TD><TD>\e[<BR></TD></TR>
+<TR VALIGN=top><TD><B>RIGHTCODE</B></TD><TD>m<BR></TD></TR>
+</TABLE>
+
+</DL>
+
+<P>
+The default
+<B>ENDCODE</B>
+
+is undefined.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/dircolors.1.html">dircolors</A></B>(1),
+
+<B><A HREF="../man1/ls.1.html">ls</A></B>(1),
+
+<B><A HREF="../man1/stty.1.html">stty</A></B>(1),
+
+<B><A HREF="../man1/xterm.1.html">xterm</A></B>(1)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAD">ISO 6429 (ANSI) color sequences</A><DD>
+<DT><A HREF="#lbAE">Other terminal types (advanced configuration)</A><DD>
+<DT><A HREF="#lbAF">Escape sequences</A><DD>
+</DL>
+<DT><A HREF="#lbAG">FILES</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:20 GMT, September 18, 2014
+</BODY>
+</HTML>

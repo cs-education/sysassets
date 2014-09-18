@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GROUP</TITLE>
+</HEAD><BODY>
+<H1>GROUP</H1>
+Section: Linux Programmer's Manual (5)<BR>Updated: 2010-10-21<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+group - user group file
+<A NAME="lbAC">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<I>/etc/group</I>
+
+file is a text file that defines the groups on the system.
+There is one entry per line, with the following format:
+<P>
+<DL COMPACT><DT><DD>
+group_name:password:GID:user_list
+</DL>
+
+<P>
+The fields are as follows:
+<DL COMPACT>
+<DT><I>group_name</I>
+
+<DD>
+the name of the group.
+<DT><I>password</I>
+
+<DD>
+the (encrypted) group password.
+If this field is empty, no password is needed.
+<DT><I>GID</I>
+
+<DD>
+the numeric group ID.
+<DT><I>user_list</I>
+
+<DD>
+a list of the usernames that are members of this group, separated by commas.
+</DL>
+<A NAME="lbAD">&nbsp;</A>
+<H2>FILES</H2>
+
+/etc/group
+<A NAME="lbAE">&nbsp;</A>
+<H2>BUGS</H2>
+
+As the 4.2BSD
+<B><A HREF="../man3/initgroups.3.html">initgroups</A></B>(3)
+
+man page says: No-one seems to keep
+<I>/etc/group</I>
+
+up-to-date.
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/login.1.html">login</A></B>(1),
+
+<B><A HREF="../man1/newgrp.1.html">newgrp</A></B>(1),
+
+<B><A HREF="../man3/getgrent.3.html">getgrent</A></B>(3),
+
+<B><A HREF="../man3/getgrnam.3.html">getgrnam</A></B>(3),
+
+<B><A HREF="../man5/passwd.5.html">passwd</A></B>(5)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAD">FILES</A><DD>
+<DT><A HREF="#lbAE">BUGS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:20 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETS</TITLE>
+</HEAD><BODY>
+<H1>GETS</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-01-24<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+gets - get a string from standard input (DEPRECATED)
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;</B>
+
+<B>char *gets(char *</B><I>s</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<I>Never use this function</I>.
+
+<P>
+<B>gets</B>()
+
+reads a line from
+<I>stdin</I>
+
+into the buffer pointed to by
+<I>s</I>
+
+until either a terminating newline or
+<B>EOF</B>,
+
+which it replaces with a null byte ('\0').
+No check for buffer overrun is performed (see BUGS below).
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+<B>gets</B>()
+
+returns
+<I>s</I>
+
+on success, and NULL
+on error or when end of file occurs while no characters have been read.
+However, given the lack of buffer overrun checking, there can be no
+guarantees that the function will even return.
+<A NAME="lbAF">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+C89, C99, POSIX.1-2001.
+<P>
+LSB deprecates
+<B>gets</B>().
+
+POSIX.1-2008 marks
+<B>gets</B>()
+
+obsolescent.
+ISO C11 removes the specification of
+<B>gets</B>()
+
+from the C language, and since version 2.16,
+glibc header files don't expose the function declaration if the
+<B>_ISOC11_SOURCE</B>
+
+feature test macro is defined.
+<A NAME="lbAG">&nbsp;</A>
+<H2>BUGS</H2>
+
+Never use
+<B>gets</B>().
+
+Because it is impossible to tell without knowing the data in advance how many
+characters
+<B>gets</B>()
+
+will read, and because
+<B>gets</B>()
+
+will continue to store characters past the end of the buffer,
+it is extremely dangerous to use.
+It has been used to break computer security.
+Use
+<B>fgets</B>()
+
+instead.
+<P>
+For more information, see CWE-242 (aka &quot;Use of Inherently Dangerous
+Function&quot;) at
+<A HREF="http://cwe.mitre.org/data/definitions/242.html">http://cwe.mitre.org/data/definitions/242.html</A>
+<A NAME="lbAH">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/read.2.html">read</A></B>(2),
+
+<B><A HREF="../man2/write.2.html">write</A></B>(2),
+
+<B><A HREF="../man3/ferror.3.html">ferror</A></B>(3),
+
+<B><A HREF="../man3/fgetc.3.html">fgetc</A></B>(3),
+
+<B><A HREF="../man3/fgets.3.html">fgets</A></B>(3),
+
+<B><A HREF="../man3/fgetwc.3.html">fgetwc</A></B>(3),
+
+<B><A HREF="../man3/fgetws.3.html">fgetws</A></B>(3),
+
+<B><A HREF="../man3/fopen.3.html">fopen</A></B>(3),
+
+<B><A HREF="../man3/fread.3.html">fread</A></B>(3),
+
+<B><A HREF="../man3/fseek.3.html">fseek</A></B>(3),
+
+<B><A HREF="../man3/getline.3.html">getline</A></B>(3),
+
+<B><A HREF="../man3/getwchar.3.html">getwchar</A></B>(3),
+
+<B><A HREF="../man3/puts.3.html">puts</A></B>(3),
+
+<B><A HREF="../man3/scanf.3.html">scanf</A></B>(3),
+
+<B><A HREF="../man3/ungetwc.3.html">ungetwc</A></B>(3),
+
+<B><A HREF="../man3/unlocked_stdio.3.html">unlocked_stdio</A></B>(3),
+
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAG">BUGS</A><DD>
+<DT><A HREF="#lbAH">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:11 GMT, September 18, 2014
+</BODY>
+</HTML>

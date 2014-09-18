@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of ICONVCONFIG</TITLE>
+</HEAD><BODY>
+<H1>ICONVCONFIG</H1>
+Section: Linux System Administration (8)<BR>Updated: 2014-07-08<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+iconvconfig - create iconv module configuration cache
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>iconvconfig</B>
+
+[<I>options</I>]
+
+[<I>directory</I>]...
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B><A HREF="../man3/iconv.3.html">iconv</A></B>(3)
+
+function internally uses
+<I>gconv</I>
+
+modules to convert to and from a character set.
+A configuration file is used to determine the needed modules
+for a conversion.
+Loading and parsing such a configuration file would slow down
+programs that use
+<B><A HREF="../man3/iconv.3.html">iconv</A></B>(3),
+
+so a caching mechanism is employed.
+<P>
+The
+<B>iconvconfig</B>
+
+program reads iconv module configuration files and writes
+a fast-loading gconv module configuration cache file.
+In addition to the system provided gconv modules, the user can specify
+custom gconv module directories with the environment variable
+<B>GCONV_PATH</B>.
+
+However, iconv module configuration caching is only used when
+the environment variable
+<B>GCONV_PATH</B>
+
+is not set.
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>--nostdlib</B>
+
+<DD>
+Do not search the system default gconv directory,
+only the directories provided on the command line.
+<DT><B>-o</B><I> outputfile</I><B>, --output=</B><I>outputfile</I>
+
+<DD>
+Use
+<I>outputfile</I>
+
+for output instead of the system default cache location.
+<DT><B>--prefix=</B><I>pathname</I>
+
+<DD>
+Set the prefix to be prepended to the system pathnames.
+See FILES, below.
+By default, the prefix is empty.
+Setting the prefix to
+<I>foo</I>,
+
+the gconv module configuration would be read from
+<I>foo/usr/lib/gconv/gconv-modules</I>
+
+and the cache would be written to
+<I>foo/usr/lib/gconv/gconv-modules.cache</I>.
+
+<DT><B>-?</B>, <B>--help</B>
+
+<DD>
+Print a usage summary and exit.
+<DT><B>--usage</B>
+
+<DD>
+Print a short usage summary and exit.
+<DT><B>-V</B>, <B>--version</B>
+
+<DD>
+Print the version number, license, and disclaimer of warranty for
+<B>iconv</B>.
+
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>EXIT STATUS</H2>
+
+Zero on success, non-zero on errors.
+<A NAME="lbAG">&nbsp;</A>
+<H2>FILES</H2>
+
+<DL COMPACT>
+<DT><I>/usr/lib/gconv</I>
+
+<DD>
+Usual default gconv module path.
+<DT><I>/usr/lib/gconv/gconv-modules</I>
+
+<DD>
+Usual system default gconv module configuration file.
+<DT><I>/usr/lib/gconv/gconv-modules.cache</I>
+
+<DD>
+Usual system gconv module configuration cache.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/iconv.1.html">iconv</A></B>(1),
+
+<B><A HREF="../man3/iconv.3.html">iconv</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">EXIT STATUS</A><DD>
+<DT><A HREF="#lbAG">FILES</A><DD>
+<DT><A HREF="#lbAH">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:22 GMT, September 18, 2014
+</BODY>
+</HTML>

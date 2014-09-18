@@ -1,0 +1,339 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SCHED_SETSCHEDULER</TITLE>
+</HEAD><BODY>
+<H1>SCHED_SETSCHEDULER</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-05-21<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+sched_setscheduler, sched_getscheduler -
+set and get scheduling policy/parameters
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sched.h">sched.h</A>&gt;</B>
+
+<B>int sched_setscheduler(pid_t </B><I>pid</I><B>, int </B><I>policy</I><B>,</B>
+<BR>
+<B>                       const struct sched_param *</B><I>param</I><B>);</B>
+
+<B>int sched_getscheduler(pid_t </B><I>pid</I><B>);</B>
+
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>sched_setscheduler</B>()
+
+system call
+sets both the scheduling policy and parameters for the
+thread whose ID is specified in <I>pid</I>.
+If <I>pid</I> equals zero, the
+scheduling policy and parameters of the calling thread will be set.
+<P>
+The scheduling parameters are specified in the
+<I>param</I>
+
+argument, which is a pointer to a structure of the following form:
+<P>
+<PRE>
+struct sched_param {
+    ...
+    int sched_priority;
+    ...
+};
+</PRE>
+
+<P>
+In the current implementation, the structure contains only one field,
+<I>sched_priority</I>.
+
+The interpretation of
+<I>param</I>
+
+depends on the selected policy.
+<P>
+Currently, Linux supports the following &quot;normal&quot;
+(i.e., non-real-time) scheduling policies as values that may be specified in
+<I>policy</I>:
+
+<DL COMPACT>
+<DT><B>SCHED_OTHER</B>
+
+<DD>
+the standard round-robin time-sharing policy;
+
+
+<DT><B>SCHED_BATCH</B>
+
+<DD>
+for &quot;batch&quot; style execution of processes; and
+<DT><B>SCHED_IDLE</B>
+
+<DD>
+for running
+<I>very</I>
+
+low priority background jobs.
+</DL>
+<P>
+
+For each of the above policies,
+<I>param-&gt;sched_priority</I>
+
+must be 0.
+<P>
+Various &quot;real-time&quot; policies are also supported,
+for special time-critical applications that need precise control over
+the way in which runnable threads are selected for execution.
+For the rules governing when a process may use these policies, see
+<B><A HREF="../man7/sched.7.html">sched</A></B>(7).
+
+The real-time policies that may be specified in
+<I>policy</I>
+
+are:
+<DL COMPACT>
+<DT><B>SCHED_FIFO</B>
+
+<DD>
+a first-in, first-out policy; and
+<DT><B>SCHED_RR</B>
+
+<DD>
+a round-robin policy.
+</DL>
+<P>
+
+For each of the above policies,
+<I>param-&gt;sched_priority</I>
+
+specifies a scheduling priority for the thread.
+This is a number in the range returned by calling
+<B><A HREF="../man2/sched_get_priority_min.2.html">sched_get_priority_min</A></B>(2)
+
+and
+<B><A HREF="../man2/sched_get_priority_min.2.html">sched_get_priority_min</A></B>(2)
+
+with the specified
+<I>policy</I>.
+
+On Linux, these system calls return, respectively, 1 and 99.
+<P>
+Since Linux 2.6.32, the
+<B>SCHED_RESET_ON_FORK</B>
+
+flag can be ORed in
+<I>policy</I>
+
+when calling
+<B>sched_setscheduler</B>().
+
+As a result of including this flag, children created by
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+do not inherit privileged scheduling policies.
+See
+<B><A HREF="../man7/sched.7.html">sched</A></B>(7)
+
+for details.
+<P>
+<B>sched_getscheduler</B>()
+
+returns the current scheduling policy of the thread
+identified by <I>pid</I>.
+If <I>pid</I> equals zero, the policy of the
+calling thread will be retrieved.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>sched_setscheduler</B>()
+
+returns zero.
+On success,
+<B>sched_getscheduler</B>()
+
+returns the policy for the thread (a nonnegative integer).
+On error, both calls return -1, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+Invalid arguments:
+<I>pid</I>
+
+is negative or
+<I>param</I>
+
+is NULL.
+<DT><B>EINVAL</B>
+
+<DD>
+(<B>sched_setscheduler</B>())
+
+<I>policy</I>
+
+is not one of the recognized policies.
+<DT><B>EINVAL</B>
+
+<DD>
+(<B>sched_setscheduler</B>())
+
+<I>param</I>
+
+does not make sense for the specified
+<I>policy</I>.
+
+<DT><B>EPERM</B>
+
+<DD>
+The calling thread does not have appropriate privileges.
+<DT><B>ESRCH</B>
+
+<DD>
+The thread whose ID is <I>pid</I> could not be found.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001 (but see BUGS below).
+The <B>SCHED_BATCH</B> and <B>SCHED_IDLE</B> policies are Linux-specific.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+Further details of the semantics of all of the above &quot;normal&quot;
+and &quot;real-time&quot; scheduling policies can be found in
+<B><A HREF="../man7/sched.7.html">sched</A></B>(7).
+
+<P>
+POSIX systems on which
+<B>sched_setscheduler</B>()
+
+and
+<B>sched_getscheduler</B>()
+
+are available define
+<B>_POSIX_PRIORITY_SCHEDULING</B>
+
+in <I>&lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</I>.
+<P>
+POSIX.1 does not detail the permissions that an unprivileged
+thread requires in order to call
+<B>sched_setscheduler</B>(),
+
+and details vary across systems.
+For example, the Solaris 7 manual page says that
+the real or effective user ID of the caller must
+match the real user ID or the save set-user-ID of the target.
+<P>
+
+The scheduling policy and parameters are in fact per-thread
+attributes on Linux.
+The value returned from a call to
+<B><A HREF="../man2/gettid.2.html">gettid</A></B>(2)
+
+can be passed in the argument
+<I>pid</I>.
+
+Specifying
+<I>pid</I>
+
+as 0 will operate on the attributes of the calling thread,
+and passing the value returned from a call to
+<B><A HREF="../man2/getpid.2.html">getpid</A></B>(2)
+
+will operate on the attributes of the main thread of the thread group.
+(If you are using the POSIX threads API, then use
+<B><A HREF="../man3/pthread_setschedparam.3.html">pthread_setschedparam</A></B>(3),
+
+<B><A HREF="../man3/pthread_getschedparam.3.html">pthread_getschedparam</A></B>(3),
+
+and
+<B><A HREF="../man3/pthread_setschedprio.3.html">pthread_setschedprio</A></B>(3),
+
+instead of the
+<B>sched_*</B>(2)
+
+system calls.)
+<A NAME="lbAI">&nbsp;</A>
+<H2>BUGS</H2>
+
+POSIX says that on success,
+<B>sched_setscheduler</B>()
+
+should return the previous scheduling policy.
+Linux
+<B>sched_setscheduler</B>()
+
+does not conform to this requirement,
+since it always returns 0 on success.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+
+
+<B><A HREF="../man2/nice.2.html">nice</A></B>(2),
+
+<B><A HREF="../man2/sched_get_priority_max.2.html">sched_get_priority_max</A></B>(2),
+
+<B><A HREF="../man2/sched_get_priority_min.2.html">sched_get_priority_min</A></B>(2),
+
+<B><A HREF="../man2/sched_getaffinity.2.html">sched_getaffinity</A></B>(2),
+
+<B><A HREF="../man2/sched_getattr.2.html">sched_getattr</A></B>(2),
+
+<B><A HREF="../man2/sched_getparam.2.html">sched_getparam</A></B>(2),
+
+<B><A HREF="../man2/sched_rr_get_interval.2.html">sched_rr_get_interval</A></B>(2),
+
+<B><A HREF="../man2/sched_setaffinity.2.html">sched_setaffinity</A></B>(2),
+
+<B><A HREF="../man2/sched_setattr.2.html">sched_setattr</A></B>(2),
+
+<B><A HREF="../man2/sched_setparam.2.html">sched_setparam</A></B>(2),
+
+<B><A HREF="../man2/sched_yield.2.html">sched_yield</A></B>(2),
+
+<B><A HREF="../man2/setpriority.2.html">setpriority</A></B>(2),
+
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7),
+
+<B><A HREF="../man7/cpuset.7.html">cpuset</A></B>(7),
+
+<B><A HREF="../man7/sched.7.html">sched</A></B>(7)
+
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">BUGS</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

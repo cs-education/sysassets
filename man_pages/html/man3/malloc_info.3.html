@@ -1,0 +1,317 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MALLOC_INFO</TITLE>
+</HEAD><BODY>
+<H1>MALLOC_INFO</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-04-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+malloc_info - export malloc state to a stream
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/malloc.h">malloc.h</A>&gt;</B>
+
+<B>int malloc_info(int </B><I>options</I><B>, FILE *</B><I>fp</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>malloc_info</B>()
+
+function exports an XML string that describes the current state
+of the memory-allocation
+implementation in the caller.
+The string is printed on the file stream
+<I>fp</I>.
+
+The exported string includes information about all arenas (see
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3)).
+
+<P>
+As currently implemented,
+<I>options</I>
+
+must be zero.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>malloc_info</B>()
+
+returns 0;
+on error, it returns -1, with
+<I>errno</I>
+
+set to indicate the cause.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+<I>options</I>
+
+was nonzero.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>malloc_info</B>()
+
+was added to glibc in version 2.10.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function is a GNU extension.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+The memory-allocation information is provided as an XML string
+(rather than a C structure)
+because the information may change over time
+(according to changes in the underlying implementation).
+The output XML string includes a version field.
+<P>
+The
+<B><A HREF="../man3/open_memstream.3.html">open_memstream</A></B>(3)
+
+function can be used to send the output of
+<B>malloc_info</B>()
+
+directly into a buffer in memory, rather than to a file.
+<P>
+The
+<B>malloc_info</B>()
+
+function is designed to address deficiencies in
+<B><A HREF="../man3/malloc_stats.3.html">malloc_stats</A></B>(3)
+
+and
+<B><A HREF="../man3/mallinfo.3.html">mallinfo</A></B>(3).
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The program below takes up to four command-line arguments,
+of which the first three are mandatory.
+The first argument specifies the number of threads that
+the program should create.
+All of the threads, including the main thread,
+allocate the number of blocks of memory specified by the second argument.
+The third argument controls the size of the blocks to be allocated.
+The main thread creates blocks of this size,
+the second thread created by the program allocates blocks of twice this size,
+the third thread allocates blocks of three times this size, and so on.
+<P>
+The program calls
+<B>malloc_info</B>()
+
+twice to display the memory-allocation state.
+The first call takes place before any threads
+are created or memory allocated.
+The second call is performed after all threads have allocated memory.
+<P>
+In the following example,
+the command-line arguments specify the creation of one additional thread,
+and both the main thread and the additional thread
+allocate 10000 blocks of memory.
+After the blocks of memory have been allocated,
+<B>malloc_info</B>()
+
+shows the state of two allocation arenas.
+
+<PRE>
+
+$ <B>getconf GNU_LIBC_VERSION</B>
+glibc 2.13
+$ <B>./a.out 1 10000 100</B>
+============ Before allocating blocks ============
+&lt;malloc version=&quot;1&quot;&gt;
+&lt;heap nr=&quot;0&quot;&gt;
+&lt;sizes&gt;
+&lt;/sizes&gt;
+&lt;total type=&quot;fast&quot; count=&quot;0&quot; size=&quot;0&quot;/&gt;
+&lt;total type=&quot;rest&quot; count=&quot;0&quot; size=&quot;0&quot;/&gt;
+&lt;system type=&quot;current&quot; size=&quot;135168&quot;/&gt;
+&lt;system type=&quot;max&quot; size=&quot;135168&quot;/&gt;
+&lt;aspace type=&quot;total&quot; size=&quot;135168&quot;/&gt;
+&lt;aspace type=&quot;mprotect&quot; size=&quot;135168&quot;/&gt;
+&lt;/heap&gt;
+&lt;total type=&quot;fast&quot; count=&quot;0&quot; size=&quot;0&quot;/&gt;
+&lt;total type=&quot;rest&quot; count=&quot;0&quot; size=&quot;0&quot;/&gt;
+&lt;system type=&quot;current&quot; size=&quot;135168&quot;/&gt;
+&lt;system type=&quot;max&quot; size=&quot;135168&quot;/&gt;
+&lt;aspace type=&quot;total&quot; size=&quot;135168&quot;/&gt;
+&lt;aspace type=&quot;mprotect&quot; size=&quot;135168&quot;/&gt;
+&lt;/malloc&gt;
+
+============ After allocating blocks ============
+&lt;malloc version=&quot;1&quot;&gt;
+&lt;heap nr=&quot;0&quot;&gt;
+&lt;sizes&gt;
+&lt;/sizes&gt;
+&lt;total type=&quot;fast&quot; count=&quot;0&quot; size=&quot;0&quot;/&gt;
+&lt;total type=&quot;rest&quot; count=&quot;0&quot; size=&quot;0&quot;/&gt;
+&lt;system type=&quot;current&quot; size=&quot;1081344&quot;/&gt;
+&lt;system type=&quot;max&quot; size=&quot;1081344&quot;/&gt;
+&lt;aspace type=&quot;total&quot; size=&quot;1081344&quot;/&gt;
+&lt;aspace type=&quot;mprotect&quot; size=&quot;1081344&quot;/&gt;
+&lt;/heap&gt;
+&lt;heap nr=&quot;1&quot;&gt;
+&lt;sizes&gt;
+&lt;/sizes&gt;
+&lt;total type=&quot;fast&quot; count=&quot;0&quot; size=&quot;0&quot;/&gt;
+&lt;total type=&quot;rest&quot; count=&quot;0&quot; size=&quot;0&quot;/&gt;
+&lt;system type=&quot;current&quot; size=&quot;1032192&quot;/&gt;
+&lt;system type=&quot;max&quot; size=&quot;1032192&quot;/&gt;
+&lt;aspace type=&quot;total&quot; size=&quot;1032192&quot;/&gt;
+&lt;aspace type=&quot;mprotect&quot; size=&quot;1032192&quot;/&gt;
+&lt;/heap&gt;
+&lt;total type=&quot;fast&quot; count=&quot;0&quot; size=&quot;0&quot;/&gt;
+&lt;total type=&quot;rest&quot; count=&quot;0&quot; size=&quot;0&quot;/&gt;
+&lt;system type=&quot;current&quot; size=&quot;2113536&quot;/&gt;
+&lt;system type=&quot;max&quot; size=&quot;2113536&quot;/&gt;
+&lt;aspace type=&quot;total&quot; size=&quot;2113536&quot;/&gt;
+&lt;aspace type=&quot;mprotect&quot; size=&quot;2113536&quot;/&gt;
+&lt;/malloc&gt;
+</PRE>
+
+
+<A NAME="lbAK">&nbsp;</A>
+<H3>Program source</H3>
+
+<PRE>
+
+#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/pthread.h">pthread.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/malloc.h">malloc.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/errno.h">errno.h</A>&gt;
+
+static size_t blockSize;
+static int numThreads, numBlocks;
+
+#define errExit(msg)    do { perror(msg); exit(EXIT_FAILURE); \
+                        } while (0)
+
+static void *
+thread_func(void *arg)
+{
+    int j;
+    int tn = (int) arg;
+
+    /* The multiplier '(2 + tn)' ensures that each thread (including
+       the main thread) allocates a different amount of memory */
+
+    for (j = 0; j &lt; numBlocks; j++)
+        if (malloc(blockSize * (2 + tn)) == NULL)
+            errExit(&quot;malloc-thread&quot;);
+
+    sleep(100);         /* Sleep until main thread terminates */
+    return NULL;
+}
+
+int
+main(int argc, char *argv[])
+{
+    int j, tn, sleepTime;
+    pthread_t *thr;
+
+    if (argc &lt; 4) {
+        fprintf(stderr,
+                &quot;%s num-threads num-blocks block-size [sleep-time]\n&quot;,
+                argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    numThreads = atoi(argv[1]);
+    numBlocks = atoi(argv[2]);
+    blockSize = atoi(argv[3]);
+    sleepTime = (argc &gt; 4) ? atoi(argv[4]) : 0;
+
+    thr = calloc(numThreads, sizeof(pthread_t));
+    if (thr == NULL)
+        errExit(&quot;calloc&quot;);
+
+    printf(&quot;============ Before allocating blocks ============\n&quot;);
+    malloc_info(0, stdout);
+
+    /* Create threads that allocate different amounts of memory */
+
+    for (tn = 0; tn &lt; numThreads; tn++) {
+        errno = pthread_create(&amp;thr[tn], NULL, thread_func,
+                               (void *) tn);
+        if (errno != 0)
+            errExit(&quot;pthread_create&quot;);
+
+        /* If we add a sleep interval after the start-up of each
+           thread, the threads likely won't contend for malloc
+           mutexes, and therefore additional arenas won't be
+           allocated (see <A HREF="../man3/malloc.3.html">malloc</A>(3)). */
+
+        if (sleepTime &gt; 0)
+            sleep(sleepTime);
+    }
+
+    /* The main thread also allocates some memory */
+
+    for (j = 0; j &lt; numBlocks; j++)
+        if (malloc(blockSize) == NULL)
+            errExit(&quot;malloc&quot;);
+
+    <A HREF="../man2/sleep.2.html">sleep</A>(2);           /* Give all threads a chance to
+                           complete allocations */
+
+    printf(&quot;\n============ After allocating blocks ============\n&quot;);
+    malloc_info(0, stdout);
+
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/mallinfo.3.html">mallinfo</A></B>(3),
+
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3),
+
+<B><A HREF="../man3/malloc_stats.3.html">malloc_stats</A></B>(3),
+
+<B><A HREF="../man3/mallopt.3.html">mallopt</A></B>(3),
+
+<B><A HREF="../man3/open_memstream.3.html">open_memstream</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">EXAMPLE</A><DD>
+<DL>
+<DT><A HREF="#lbAK">Program source</A><DD>
+</DL>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:03 GMT, September 18, 2014
+</BODY>
+</HTML>

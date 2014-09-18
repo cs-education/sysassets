@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of ON_EXIT</TITLE>
+</HEAD><BODY>
+<H1>ON_EXIT</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+on_exit - register a function to be called at normal process termination
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;</B>
+
+<B>int on_exit(void (*</B><I>function</I><B>)(int , void *), void *</B><I>arg</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>on_exit</B>():
+
+_BSD_SOURCE || _SVID_SOURCE
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>on_exit</B>()
+
+function registers the given
+<I>function</I>
+
+to be
+called at normal process termination, whether via
+<B><A HREF="../man3/exit.3.html">exit</A></B>(3)
+
+or via return from the program's
+<I>main</I>().
+
+The
+<I>function</I>
+
+is passed the status argument given to the last call to
+<B><A HREF="../man3/exit.3.html">exit</A></B>(3)
+
+and the
+<I>arg</I>
+
+argument from
+<B>on_exit</B>().
+
+<P>
+The same function may be registered multiple times:
+it is called once for each registration.
+<P>
+When a child process is created via
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2),
+
+it inherits copies of its parent's registrations.
+Upon a successful call to one of the
+<B><A HREF="../man3/exec.3.html">exec</A></B>(3)
+
+functions, all registrations are removed.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>on_exit</B>()
+
+function returns the value 0 if successful; otherwise
+it returns a nonzero value.
+<A NAME="lbAF">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function comes from SunOS 4, but is also present in glibc.
+It no longer occurs in Solaris (SunOS 5).
+Portable application should avoid this function, and use the standard
+<B><A HREF="../man3/atexit.3.html">atexit</A></B>(3)
+
+instead.
+<A NAME="lbAG">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/_exit.2.html">_exit</A></B>(2),
+
+<B><A HREF="../man3/atexit.3.html">atexit</A></B>(3),
+
+<B><A HREF="../man3/exit.3.html">exit</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAG">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:04 GMT, September 18, 2014
+</BODY>
+</HTML>

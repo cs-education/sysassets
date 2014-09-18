@@ -1,0 +1,314 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of REALPATH</TITLE>
+</HEAD><BODY>
+<H1>REALPATH</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+realpath - return the canonicalized absolute pathname
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/limits.h">limits.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;</B>
+
+<B>char *realpath(const char *</B><I>path</I><B>, char *</B><I>resolved_path</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>realpath</B>():
+
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>realpath</B>()
+
+expands all symbolic links and resolves references
+to
+<I>/./</I>, <I>/../</I>
+
+and extra '/'
+characters in the null-terminated string named by
+<I>path</I>
+
+to produce a canonicalized absolute pathname.
+The resulting pathname is stored as a null-terminated string,
+up to a maximum of
+<B>PATH_MAX</B>
+
+bytes,
+in the buffer pointed to by
+<I>resolved_path</I>.
+
+The resulting path will have no symbolic link,
+<I>/./</I>
+
+or
+<I>/../</I>
+
+components.
+<P>
+If
+<I>resolved_path</I>
+
+is specified as NULL, then
+<B>realpath</B>()
+
+uses
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3)
+
+to allocate a buffer of up to
+<B>PATH_MAX</B>
+
+bytes to hold the resolved pathname,
+and returns a pointer to this buffer.
+The caller should deallocate this buffer using
+<B><A HREF="../man3/free.3.html">free</A></B>(3).
+
+
+
+
+
+
+
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+If there is no error,
+<B>realpath</B>()
+
+returns a pointer to the
+<I>resolved_path</I>.
+
+<P>
+Otherwise, it returns NULL, the contents
+of the array
+<I>resolved_path</I>
+
+are undefined, and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EACCES</B>
+
+<DD>
+Read or search permission was denied for a component of the path prefix.
+<DT><B>EINVAL</B>
+
+<DD>
+<I>path</I>
+
+is NULL.
+
+(In glibc versions before 2.3,
+this error is also returned if
+<I>resolved_path</I>
+
+is NULL.)
+<DT><B>EIO</B>
+
+<DD>
+An I/O error occurred while reading from the filesystem.
+<DT><B>ELOOP</B>
+
+<DD>
+Too many symbolic links were encountered in translating the pathname.
+<DT><B>ENAMETOOLONG</B>
+
+<DD>
+A component of a pathname exceeded
+<B>NAME_MAX</B>
+
+characters, or an entire pathname exceeded
+<B>PATH_MAX</B>
+
+characters.
+<DT><B>ENOENT</B>
+
+<DD>
+The named file does not exist.
+<DT><B>ENOTDIR</B>
+
+<DD>
+A component of the path prefix is not a directory.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+4.4BSD, POSIX.1-2001.
+<P>
+POSIX.1-2001 says that the behavior if
+<I>resolved_path</I>
+
+is NULL is implementation-defined.
+POSIX.1-2008 specifies the behavior described in this page.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+In 4.4BSD and Solaris, the limit on the pathname length is
+<B>MAXPATHLEN</B>
+
+(found in <I>&lt;<A HREF="file:///usr/include/sys/param.h">sys/param.h</A>&gt;</I>).
+SUSv2 prescribes
+<B>PATH_MAX</B>
+
+and
+<B>NAME_MAX</B>,
+
+as found in <I>&lt;<A HREF="file:///usr/include/limits.h">limits.h</A>&gt;</I> or provided by the
+<B><A HREF="../man3/pathconf.3.html">pathconf</A></B>(3)
+
+function.
+A typical source fragment would be
+<P>
+
+
+<PRE>
+#ifdef PATH_MAX
+  path_max = PATH_MAX;
+#else
+  path_max = pathconf(path, _PC_PATH_MAX);
+  if (path_max &lt;= 0)
+    path_max = 4096;
+#endif
+</PRE>
+
+
+<P>
+
+(But see the BUGS section.)
+<P>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>GNU extensions</H3>
+
+If the call fails with either
+<B>EACCES</B>
+
+or
+<B>ENOENT</B>
+
+and
+<I>resolved_path</I>
+
+is not NULL, then the prefix of
+<I>path</I>
+
+that is not readable or does not exist is returned in
+<I>resolved_path</I>.
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>BUGS</H2>
+
+The POSIX.1-2001 standard version of this function is broken by design,
+since it is impossible to determine a suitable size for the output buffer,
+<I>resolved_path</I>.
+
+According to POSIX.1-2001 a buffer of size
+<B>PATH_MAX</B>
+
+suffices, but
+<B>PATH_MAX</B>
+
+need not be a defined constant, and may have to be obtained using
+<B><A HREF="../man3/pathconf.3.html">pathconf</A></B>(3).
+
+And asking
+<B><A HREF="../man3/pathconf.3.html">pathconf</A></B>(3)
+
+does not really help, since, on the one hand POSIX warns that
+the result of
+<B><A HREF="../man3/pathconf.3.html">pathconf</A></B>(3)
+
+may be huge and unsuitable for mallocing memory,
+and on the other hand
+<B><A HREF="../man3/pathconf.3.html">pathconf</A></B>(3)
+
+may return -1 to signify that
+<B>PATH_MAX</B>
+
+is not bounded.
+The
+<I>resolved_path&nbsp;==&nbsp;NULL</I>
+
+feature, not standardized in POSIX.1-2001,
+but standardized in POSIX.1-2008, allows this design problem to be avoided.
+
+
+
+
+
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/readlink.2.html">readlink</A></B>(2),
+
+<B><A HREF="../man3/canonicalize_file_name.3.html">canonicalize_file_name</A></B>(3),
+
+<B><A HREF="../man3/getcwd.3.html">getcwd</A></B>(3),
+
+<B><A HREF="../man3/pathconf.3.html">pathconf</A></B>(3),
+
+<B><A HREF="../man3/sysconf.3.html">sysconf</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">GNU extensions</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">BUGS</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:02 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,358 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SPU_RUN</TITLE>
+</HEAD><BODY>
+<H1>SPU_RUN</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2012-08-05<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+spu_run - execute an SPU context
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/spu.h">sys/spu.h</A>&gt;</B>
+
+<B>int spu_run(int </B><I>fd</I><B>, unsigned int *</B><I>npc</I><B>, unsigned int *</B><I>event</I><B>);</B>
+</PRE>
+
+<P>
+<I>Note</I>:
+
+There is no glibc wrapper for this system call; see NOTES.
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>spu_run</B>()
+
+system call is used on PowerPC machines that implement the
+Cell Broadband Engine Architecture in order to access Synergistic
+Processor Units (SPUs).
+The
+<I>fd</I>
+
+argument is a file descriptor returned by
+<B><A HREF="../man2/spu_create.2.html">spu_create</A></B>(2)
+
+that refers to a specific SPU context.
+When the context gets scheduled to a physical SPU,
+it starts execution at the instruction pointer passed in
+<I>npc</I>.
+
+<P>
+Execution of SPU code happens synchronously, meaning that
+<B>spu_run</B>()
+
+blocks while the SPU is still running.
+If there is a need
+to execute SPU code in parallel with other code on either the
+main CPU or other SPUs, a new thread of execution must be created
+first (e.g., using
+<B><A HREF="../man3/pthread_create.3.html">pthread_create</A></B>(3)).
+
+<P>
+When
+<B>spu_run</B>()
+
+returns, the current value of the SPU program counter is written to
+<I>npc</I>,
+
+so successive calls to
+<B>spu_run</B>()
+
+can use the same
+<I>npc</I>
+
+pointer.
+<P>
+The
+<I>event</I>
+
+argument provides a buffer for an extended status code.
+If the SPU
+context was created with the
+<B>SPU_CREATE_EVENTS_ENABLED</B>
+
+flag, then this buffer is populated by the Linux kernel before
+<B>spu_run</B>()
+
+returns.
+<P>
+The status code may be one (or more) of the following constants:
+<DL COMPACT>
+<DT><B>SPE_EVENT_DMA_ALIGNMENT</B>
+
+<DD>
+A DMA alignment error occurred.
+<DT><B>SPE_EVENT_INVALID_DMA</B>
+
+<DD>
+An invalid MFC DMA command was attempted.
+<DT><B>SPE_EVENT_SPE_DATA_STORAGE</B>
+
+<DD>
+A DMA storage error occurred.
+<DT><B>SPE_EVENT_SPE_ERROR</B>
+
+<DD>
+An illegal instruction was executed.
+</DL>
+<P>
+
+NULL
+is a valid value for the
+<I>event</I>
+
+argument.
+In this case, the events will not be reported to the calling process.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>spu_run</B>()
+
+returns the value of the
+<I>spu_status</I>
+
+register.
+On error, it returns -1 and sets
+<I>errno</I>
+
+to one of the error codes listed below.
+<P>
+The
+<I>spu_status</I>
+
+register value is a bit mask of status codes and
+optionally a 14-bit code returned from the
+<B>stop-and-signal</B>
+
+instruction on the SPU.
+The bit masks for the status codes
+are:
+<DL COMPACT>
+<DT><B>0x02</B>
+
+<DD>
+SPU was stopped by a
+<B>stop-and-signal</B>
+
+instruction.
+<DT><B>0x04</B>
+
+<DD>
+SPU was stopped by a
+<B>halt</B>
+
+instruction.
+<DT><B>0x08</B>
+
+<DD>
+SPU is waiting for a channel.
+<DT><B>0x10</B>
+
+<DD>
+SPU is in single-step mode.
+<DT><B>0x20</B>
+
+<DD>
+SPU has tried to execute an invalid instruction.
+<DT><B>0x40</B>
+
+<DD>
+SPU has tried to access an invalid channel.
+<DT><B>0x3fff0000</B>
+
+<DD>
+The bits masked with this value contain the code returned from a
+<B>stop-and-signal</B>
+
+instruction.
+These bits are valid only if the 0x02 bit is set.
+</DL>
+<P>
+
+If
+<B>spu_run</B>()
+
+has not returned an error, one or more bits among the lower eight
+ones are always set.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>fd</I>
+
+is not a valid file descriptor.
+<DT><B>EFAULT</B>
+
+<DD>
+<I>npc</I>
+
+is not a valid pointer, or
+<I>event</I>
+
+is non-NULL and an invalid pointer.
+<DT><B>EINTR</B>
+
+<DD>
+A signal occurred while
+<B>spu_run</B>()
+
+was in progress; see
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7).
+
+The
+<I>npc</I>
+
+value has been updated to the new program counter value if
+necessary.
+<DT><B>EINVAL</B>
+
+<DD>
+<I>fd</I>
+
+is not a valid file descriptor returned from
+<B><A HREF="../man2/spu_create.2.html">spu_create</A></B>(2).
+
+<DT><B>ENOMEM</B>
+
+<DD>
+There was not enough memory available to handle a page fault
+resulting from a Memory Flow Controller (MFC) direct memory access.
+<DT><B>ENOSYS</B>
+
+<DD>
+The functionality is not provided by the current system, because
+either the hardware does not provide SPUs or the spufs module is not
+loaded.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>spu_run</B>()
+
+system call was added to Linux in kernel 2.6.16.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This call is Linux-specific and implemented only by the PowerPC
+architecture.
+Programs using this system call are not portable.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+Glibc does not provide a wrapper for this system call; call it using
+<B><A HREF="../man2/syscall.2.html">syscall</A></B>(2).
+
+Note however, that
+<B>spu_run</B>()
+
+is meant to be used from libraries that implement a more abstract
+interface to SPUs, not to be used from regular applications.
+See
+
+
+for the recommended libraries.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The following is an example of running a simple, one-instruction SPU
+program with the
+<B>spu_run</B>()
+
+system call.
+<P>
+<PRE>
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdint.h">stdint.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;
+
+#define handle_error(msg) \
+    do { perror(msg); exit(EXIT_FAILURE); } while (0)
+
+int main(void)
+{
+    int context, fd, spu_status;
+    uint32_t instruction, npc;
+
+    context = spu_create(&quot;/spu/example-context&quot;, 0, 0755);
+    if (context == -1)
+        handle_error(&quot;spu_create&quot;);
+
+    /* write a 'stop 0x1234' instruction to the SPU's
+     * local store memory
+     */
+    instruction = 0x00001234;
+
+    fd = open(&quot;/spu/example-context/mem&quot;, O_RDWR);
+    if (fd == -1)
+        handle_error(&quot;open&quot;);
+    write(fd, &amp;instruction, sizeof(instruction));
+
+    /* set npc to the starting instruction address of the
+     * SPU program. Since we wrote the instruction at the
+     * start of the mem file, the entry point will be 0x0
+     */
+    npc = 0;
+
+    spu_status = spu_run(context, &amp;npc, NULL);
+    if (spu_status == -1)
+        handle_error(&quot;open&quot;);
+
+    /* we should see a status code of 0x1234002:
+     *   0x00000002 (spu was stopped due to stop-and-signal)
+     * | 0x12340000 (the stop-and-signal code)
+     */
+    printf(&quot;SPU Status: 0x%08x\n&quot;, spu_status);
+
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/close.2.html">close</A></B>(2),
+
+<B><A HREF="../man2/spu_create.2.html">spu_create</A></B>(2),
+
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7),
+
+<B><A HREF="../man7/spufs.7.html">spufs</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">EXAMPLE</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:45 GMT, September 18, 2014
+</BODY>
+</HTML>

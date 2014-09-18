@@ -1,0 +1,375 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SPROF</TITLE>
+</HEAD><BODY>
+<H1>SPROF</H1>
+Section: Linux User Manual (1)<BR>Updated: 2014-06-24<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+sprof - read and display shared object profiling data
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>sprof</B> [<I>option</I>]... <I>shared-object-path</I> [<I>profile-data-path</I>]
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>sprof</B>
+
+command displays a profiling summary for the
+shared object specified as its first command-line argument.
+The profiling summary is created using previously generated
+profiling data in the (optional) second command-line argument.
+If the profiling data pathname is omitted, then
+<B>sprof</B>
+
+will attempt to deduce it using the soname of the shared object,
+looking for a file with the name
+<I>&lt;soname&gt;.profile</I>
+
+in the current directory.
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+The following command-line options specify the profile output
+to be produced:
+<DL COMPACT>
+<DT><B>-c</B>, <B>--call-pairs</B>
+
+<DD>
+Print a list of pairs of call paths for the interfaces exported
+by the shared object,
+along with the number of times each path is used.
+<DT><B>-p</B>, <B>--flat-profile</B>
+
+<DD>
+Generate a flat profile of all of the functions in the monitored object,
+with counts and ticks.
+<DT><B>-q</B>, <B>--graph</B>
+
+<DD>
+Generate a call graph.
+</DL>
+<P>
+
+If none of the above options is specified,
+then the default behavior is to display a flat profile and a call graph.
+<P>
+
+The following additional command-line options are available:
+<DL COMPACT>
+<DT><B>-?</B>, <B>--help</B>
+
+<DD>
+Display a summary of command-line options and arguments and exit.
+<DT><B>--usage</B>
+
+<DD>
+Display a short usage message and exit.
+<DT><B>-V</B>, <B>--version</B>
+
+<DD>
+Display the program version and exit.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+The
+<B>sprof</B>
+
+command is a GNU extension, not present in POSIX.1.
+<A NAME="lbAG">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The following example demonstrates the use of
+<B>sprof</B>.
+
+The example consists of a main program that calls two functions
+in a shared library.
+First, the code of the main program:
+<P>
+
+<PRE>
+$ <B>cat prog.c</B>
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+
+void x1(void);
+void x2(void);
+
+int
+main(int argc, char *argv[])
+{
+    x1();
+    x2();
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+
+<P>
+
+The functions
+<I>x1()</I>
+
+and
+<I>x2()</I>
+
+are defined in the following source file that is used to
+construct the shared library:
+<P>
+
+<PRE>
+$ <B>cat libdemo.c</B>
+#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;
+
+void
+consumeCpu1(int lim)
+{
+    int j;
+
+    for (j = 0; j &lt; lim; j++)
+        getppid();
+}
+
+void
+x1(void) {
+    int j;
+
+    for (j = 0; j &lt; 100; j++)
+        consumeCpu1(200000);
+}
+
+void
+consumeCpu2(int lim)
+{
+    int j;
+
+    for (j = 0; j &lt; lim; j++)
+        getppid();
+}
+
+void
+x2(void)
+{
+    int j;
+
+    for (j = 0; j &lt; 1000; j++)
+        consumeCpu2(10000);
+}
+</PRE>
+
+
+<P>
+
+Now we construct the shared library with the real name
+<I>libdemo.so.1.0.1</I>,
+
+and the soname
+<I>libdemo.so.1</I>:
+
+<P>
+
+<PRE>
+$ <B>cc -g -fPIC -shared -Wl,-soname,libdemo.so.1 \</B>
+        <B>-o libdemo.so.1.0.1 libdemo.c</B>
+</PRE>
+
+
+<P>
+
+Then we construct symbolic links for the library soname and
+the library linker name:
+<P>
+
+<PRE>
+$ <B>ln -sf libdemo.so.1.0.1 libdemo.so.1</B>
+$ <B>ln -sf libdemo.so.1 libdemo.so</B>
+</PRE>
+
+
+<P>
+
+Next, we compile the main program, linking it against the shared library,
+and then list the dynamic dependencies of the program:
+<P>
+
+<PRE>
+$ <B>cc -g -o prog prog.c -L. -ldemo</B>
+$ <B>ldd prog</B>
+        linux-vdso.so.1 =&gt;  (0x00007fff86d66000)
+        libdemo.so.1 =&gt; not found
+        libc.so.6 =&gt; /lib64/libc.so.6 (0x00007fd4dc138000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fd4dc51f000)
+</PRE>
+
+
+<P>
+
+In order to get profiling information for the shared library,
+we define the environment variable
+<B>LD_PROFILE</B>
+
+with the soname of the library:
+<P>
+
+<PRE>
+$ <B>export LD_PROFILE=libdemo.so.1</B>
+</PRE>
+
+
+<P>
+
+We then define the environment variable
+<B>LD_PROFILE_OUTPUT</B>
+
+with the pathname of the directory where profile output should be written,
+and create that directory if it does not exist already:
+<P>
+
+<PRE>
+$ <B>export LD_PROFILE_OUTPUT=$(pwd)/prof_data</B>
+$ <B>mkdir -p $LD_PROFILE_OUTPUT</B>
+</PRE>
+
+
+<P>
+
+<B>LD_PROFILE</B>
+
+causes profiling output to be
+<I>appended</I>
+
+to the output file if it already exists,
+so we ensure that there is no preexisting profiling data:
+<P>
+
+<PRE>
+$ <B>rm -f $LD_PROFILE_OUTPUT/$LD_PROFILE.profile</B>
+</PRE>
+
+
+<P>
+
+We then run the program to produce the profiling output,
+which is written to a file in the directory specified in
+<B>LD_PROFILE_OUTPUT</B>:
+
+<P>
+
+<PRE>
+$ <B>LD_LIBRARY_PATH=. ./prog</B>
+$ <B>ls prof_data</B>
+libdemo.so.1.profile
+</PRE>
+
+
+<P>
+
+We then use the
+<B>sprof -p</B>
+
+option to generate a flat profile with counts and ticks:
+<P>
+
+<PRE>
+$ <B>sprof -p libdemo.so.1 $LD_PROFILE_OUTPUT/libdemo.so.1.profile</B>
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total
+ time   seconds   seconds    calls  us/call  us/call  name
+ 60.00      0.06     0.06      100   600.00           consumeCpu1
+ 40.00      0.10     0.04     1000    40.00           consumeCpu2
+  0.00      0.10     0.00        1     0.00           x1
+  0.00      0.10     0.00        1     0.00           x2
+</PRE>
+
+
+<P>
+
+The
+<B>sprof -q</B>
+
+option generates a call graph:
+<P>
+
+<PRE>
+$ <B>sprof -q libdemo.so.1 $LD_PROFILE_OUTPUT/libdemo.so.1.profile</B>
+
+index % time    self  children    called     name
+
+                0.00    0.00      100/100         x1 [1]
+[0]    100.0    0.00    0.00      100         consumeCpu1 [0]
+-----------------------------------------------
+                0.00    0.00        1/1           &lt;UNKNOWN&gt;
+[1]      0.0    0.00    0.00        1         x1 [1]
+                0.00    0.00      100/100         consumeCpu1 [0]
+-----------------------------------------------
+                0.00    0.00     1000/1000        x2 [3]
+[2]      0.0    0.00    0.00     1000         consumeCpu2 [2]
+-----------------------------------------------
+                0.00    0.00        1/1           &lt;UNKNOWN&gt;
+[3]      0.0    0.00    0.00        1         x2 [3]
+                0.00    0.00     1000/1000        consumeCpu2 [2]
+-----------------------------------------------
+</PRE>
+
+
+<P>
+
+Above and below, the &quot;&lt;UNKNOWN&gt;&quot; strings represent identifiers that
+are outside of the profiled object (in this example, these are instances of
+<I>main()</I>).
+
+<P>
+
+The
+<B>sprof -c</B>
+
+option generates a list of call pairs and the number of their occurrences:
+<P>
+
+<PRE>
+$ <B>sprof -c libdemo.so.1 $LD_PROFILE_OUTPUT/libdemo.so.1.profile</B>
+&lt;UNKNOWN&gt;                  x1                                 1
+x1                         consumeCpu1                      100
+&lt;UNKNOWN&gt;                  x2                                 1
+x2                         consumeCpu2                     1000
+</PRE>
+
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/gprof.1.html">gprof</A></B>(1),
+
+<B><A HREF="../man1/ldd.1.html">ldd</A></B>(1),
+
+<B><A HREF="../man8/ld.so.8.html">ld.so</A></B>(8)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAG">EXAMPLE</A><DD>
+<DT><A HREF="#lbAH">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:44 GMT, September 18, 2014
+</BODY>
+</HTML>

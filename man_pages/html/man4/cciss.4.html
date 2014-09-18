@@ -1,0 +1,497 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of CCISS</TITLE>
+</HEAD><BODY>
+<H1>CCISS</H1>
+Section: Linux Programmer's Manual (4)<BR>Updated: 2012-08-05<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+cciss - HP Smart Array block driver
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+modprobe cciss [ cciss_allow_hpsa=1 ]
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>cciss</B>
+
+is a block driver for older HP Smart Array RAID controllers.
+<A NAME="lbAE">&nbsp;</A>
+<H3>Options</H3>
+
+<I>cciss_allow_hpsa=1</I>:
+
+This option prevents the
+<B>cciss</B>
+
+driver from attempting to drive any controllers that the
+<B><A HREF="../man4/hpsa.4.html">hpsa</A></B>(4)
+
+driver is capable of controlling, which is to say, the
+<B>cciss</B>
+
+driver is restricted by this option to the following controllers:
+<PRE>
+
+    Smart Array 5300
+    Smart Array 5i
+    Smart Array 532
+    Smart Array 5312
+    Smart Array 641
+    Smart Array 642
+    Smart Array 6400
+    Smart Array 6400 EM
+    Smart Array 6i
+    Smart Array P600
+    Smart Array P400i
+    Smart Array E200i
+    Smart Array E200
+    Smart Array E200i
+    Smart Array E200i
+    Smart Array E200i
+    Smart Array E500
+</PRE>
+
+<A NAME="lbAF">&nbsp;</A>
+<H3>Supported hardware</H3>
+
+The
+<B>cciss</B>
+
+driver supports the following Smart Array boards:
+<PRE>
+
+    Smart Array 5300
+    Smart Array 5i
+    Smart Array 532
+    Smart Array 5312
+    Smart Array 641
+    Smart Array 642
+    Smart Array 6400
+    Smart Array 6400 U320 Expansion Module
+    Smart Array 6i
+    Smart Array P600
+    Smart Array P800
+    Smart Array E400
+    Smart Array P400i
+    Smart Array E200
+    Smart Array E200i
+    Smart Array E500
+    Smart Array P700m
+    Smart Array P212
+    Smart Array P410
+    Smart Array P410i
+    Smart Array P411
+    Smart Array P812
+    Smart Array P712m
+    Smart Array P711m
+</PRE>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Configuration details</H3>
+
+To configure HP Smart Array controllers,
+use the HP Array Configuration Utility
+(either
+<B><A HREF="../man8/hpacuxe.8.html">hpacuxe</A></B>(8)
+
+or
+<B><A HREF="../man8/hpacucli.8.html">hpacucli</A></B>(8))
+
+or the Offline ROM-based Configuration Utility (ORCA)
+run from the Smart Array's option ROM at boot time.
+<A NAME="lbAH">&nbsp;</A>
+<H2>FILES</H2>
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Device nodes</H3>
+
+The device naming scheme is as follows:
+<PRE>
+
+Major numbers:
+
+    104     cciss0
+    105     cciss1
+    106     cciss2
+    105     cciss3
+    108     cciss4
+    109     cciss5
+    110     cciss6
+    111     cciss7
+
+Minor numbers:
+
+    b7 b6 b5 b4 b3 b2 b1 b0
+    |----+----| |----+----|
+         |           |
+         |           +-------- Partition ID (0=wholedev, 1-15 partition)
+         |
+         +-------------------- Logical Volume number
+
+The device naming scheme is:
+
+    /dev/cciss/c0d0         Controller 0, disk 0, whole device
+    /dev/cciss/c0d0p1       Controller 0, disk 0, partition 1
+    /dev/cciss/c0d0p2       Controller 0, disk 0, partition 2
+    /dev/cciss/c0d0p3       Controller 0, disk 0, partition 3
+
+    /dev/cciss/c1d1         Controller 1, disk 1, whole device
+    /dev/cciss/c1d1p1       Controller 1, disk 1, partition 1
+    /dev/cciss/c1d1p2       Controller 1, disk 1, partition 2
+    /dev/cciss/c1d1p3       Controller 1, disk 1, partition 3
+</PRE>
+
+<A NAME="lbAJ">&nbsp;</A>
+<H3>Files in /proc</H3>
+
+The files
+<I>/proc/driver/cciss/cciss[0-9]+</I>
+
+contain information about
+the configuration of each controller.
+For example:
+<PRE>
+
+    $ <B>cd /proc/driver/cciss</B>
+    $ <B>ls -l</B>
+    total 0
+    -rw-r--r-- 1 root root 0 2010-09-10 10:38 cciss0
+    -rw-r--r-- 1 root root 0 2010-09-10 10:38 cciss1
+    -rw-r--r-- 1 root root 0 2010-09-10 10:38 cciss2
+    $ <B>cat cciss2</B>
+    cciss2: HP Smart Array P800 Controller
+    Board ID: 0x3223103c
+    Firmware Version: 7.14
+    IRQ: 16
+    Logical drives: 1
+    Current Q depth: 0
+    Current # commands on controller: 0
+    Max Q depth since init: 1
+    Max # commands on controller since init: 2
+    Max SG entries since init: 32
+    Sequential access devices: 0
+
+    cciss/c2d0:   36.38GB       RAID 0
+</PRE>
+
+<A NAME="lbAK">&nbsp;</A>
+<H3>Files in /sys</H3>
+
+<DL COMPACT>
+<DT><I>/sys/bus/pci/devices/&lt;dev&gt;/ccissX/cXdY/model</I>
+
+<DD>
+Displays the SCSI INQUIRY page 0 model for logical drive
+<I>Y</I>
+
+of controller
+<I>X</I>.
+
+<DT><I>/sys/bus/pci/devices/&lt;dev&gt;/ccissX/cXdY/rev</I>
+
+<DD>
+Displays the SCSI INQUIRY page 0 revision for logical drive
+<I>Y</I>
+
+of controller
+<I>X</I>.
+
+<DT><I>/sys/bus/pci/devices/&lt;dev&gt;/ccissX/cXdY/unique_id</I>
+
+<DD>
+Displays the SCSI INQUIRY page 83 serial number for logical drive
+<I>Y</I>
+
+of controller
+<I>X</I>.
+
+<DT><I>/sys/bus/pci/devices/&lt;dev&gt;/ccissX/cXdY/vendor</I>
+
+<DD>
+Displays the SCSI INQUIRY page 0 vendor for logical drive
+<I>Y</I>
+
+of controller
+<I>X</I>.
+
+<DT><I>/sys/bus/pci/devices/&lt;dev&gt;/ccissX/cXdY/block:cciss!cXdY</I>
+
+<DD>
+A symbolic link to
+<I>/sys/block/cciss!cXdY</I>.
+
+<DT><I>/sys/bus/pci/devices/&lt;dev&gt;/ccissX/rescan</I>
+
+<DD>
+When this file is written to, the driver rescans the controller
+to discover any new, removed, or modified logical drives.
+<DT><I>/sys/bus/pci/devices/&lt;dev&gt;/ccissX/resettable</I>
+
+<DD>
+A value of 1 displayed in this file indicates that
+the &quot;reset_devices=1&quot; kernel parameter (used by
+<B>kdump</B>)
+
+is honored by this controller.
+A value of 0 indicates that the
+&quot;reset_devices=1&quot; kernel parameter will not be honored.
+Some models of Smart Array are not able to honor this parameter.
+<DT><I>/sys/bus/pci/devices/&lt;dev&gt;/ccissX/cXdY/lunid</I>
+
+<DD>
+Displays the 8-byte LUN ID used to address logical drive
+<I>Y</I>
+
+of controller
+<I>X</I>.
+
+<DT><I>/sys/bus/pci/devices/&lt;dev&gt;/ccissX/cXdY/raid_level</I>
+
+<DD>
+Displays the RAID level of logical drive
+<I>Y</I>
+
+of controller
+<I>X</I>.
+
+<DT><I>/sys/bus/pci/devices/&lt;dev&gt;/ccissX/cXdY/usage_count</I>
+
+<DD>
+Displays the usage count (number of opens) of logical drive
+<I>Y</I>
+
+of controller
+<I>X</I>.
+
+</DL>
+<A NAME="lbAL">&nbsp;</A>
+<H3>SCSI tape drive and medium changer support</H3>
+
+SCSI sequential access devices and medium changer devices are supported and
+appropriate device nodes are automatically created (e.g.,
+<I>/dev/st0</I>,
+
+<I>/dev/st1</I>,
+
+etc.; see
+<B><A HREF="../man4/st.4.html">st</A></B>(4)
+
+for more details.)
+You must enable &quot;SCSI tape drive support for Smart Array 5xxx&quot; and
+&quot;SCSI support&quot; in your kernel configuration to be able to use SCSI
+tape drives with your Smart Array 5xxx controller.
+<P>
+Additionally, note that the driver will not engage the SCSI core at
+init time.
+The driver must be directed to dynamically engage the SCSI core via the
+<I>/proc</I>
+
+filesystem entry,
+which the &quot;block&quot; side of the driver creates as
+<I>/proc/driver/cciss/cciss*</I>
+
+at run time.
+This is because at driver init time,
+the SCSI core may not yet be initialized (because the driver is a block
+driver) and attempting to register it with the SCSI core in such a case
+would cause a hang.
+This is best done via an initialization script
+(typically in
+<I>/etc/init.d</I>,
+
+but could vary depending on distribution).
+For example:
+<PRE>
+
+    for x in /proc/driver/cciss/cciss[0-9]*
+    do
+        echo &quot;engage scsi&quot; &gt; $x
+    done
+
+</PRE>
+
+Once the SCSI core is engaged by the driver, it cannot be disengaged
+(except by unloading the driver, if it happens to be linked as a module.)
+<P>
+Note also that if no sequential access devices or medium changers are
+detected, the SCSI core will not be engaged by the action of the above
+script.
+<A NAME="lbAM">&nbsp;</A>
+<H3>Hot plug support for SCSI tape drives</H3>
+
+Hot plugging of SCSI tape drives is supported, with some caveats.
+The
+<B>cciss</B>
+
+driver must be informed that changes to the SCSI bus
+have been made.
+This may be done via the
+<I>/proc</I>
+
+filesystem.
+For example:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;&quot;rescan&quot;&nbsp;&gt;&nbsp;/proc/scsi/cciss0/1
+<P>
+This causes the driver to:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>1.<DD>
+query the adapter about changes to the
+physical SCSI buses and/or fibre channel arbitrated loop, and
+<DT>2.<DD>
+make note of any new or removed sequential access devices
+or medium changers.
+</DL>
+</DL>
+
+<P>
+
+The driver will output messages indicating which
+devices have been added or removed and the controller, bus, target, and
+lun used to address each device.
+The driver then notifies the SCSI midlayer
+of these changes.
+<P>
+Note that the naming convention of the
+<I>/proc</I>
+
+filesystem entries
+contains a number in addition to the driver name
+(e.g., &quot;cciss0&quot;
+instead of just &quot;cciss&quot;, which you might expect).
+<P>
+Note:
+<I>Only</I>
+
+sequential access devices and medium changers are presented
+as SCSI devices to the SCSI midlayer by the
+<B>cciss</B>
+
+driver.
+Specifically, physical SCSI disk drives are
+<I>not</I>
+
+presented to the SCSI midlayer.
+The only disk devices that are presented to the kernel are logical
+drives that the array controller constructs from regions on
+the physical drives.
+The logical drives are presented to the block layer
+(not to the SCSI midlayer).
+It is important for the driver to prevent the kernel from accessing the
+physical drives directly, since these drives are used by the array
+controller to construct the logical drives.
+<A NAME="lbAN">&nbsp;</A>
+<H3>SCSI error handling for tape drives and medium changers</H3>
+
+The Linux SCSI midlayer provides an error-handling protocol that
+is initiated whenever a SCSI command fails to complete within a
+certain amount of time (which can vary depending on the command).
+The
+<B>cciss</B>
+
+driver participates in this protocol to some extent.
+The normal protocol is a four-step process:
+<DL COMPACT>
+<DT>*<DD>
+First, the device is told to abort the command.
+<DT>*<DD>
+If that doesn't work, the device is reset.
+<DT>*<DD>
+If that doesn't work, the SCSI bus is reset.
+<DT>*<DD>
+If that doesn't work, the host bus adapter is reset.
+</DL>
+<P>
+
+The
+<B>cciss</B>
+
+driver is a block
+driver as well as a SCSI driver and only the tape drives and medium
+changers are presented to the SCSI midlayer.
+Furthermore, unlike more
+straightforward SCSI drivers, disk I/O continues through the block
+side during the SCSI error-recovery process.
+Therefore, the
+<B>cciss</B>
+
+driver implements only the first two of these actions,
+aborting the command, and resetting the device.
+Note also that most tape drives will not oblige
+in aborting commands, and sometimes it appears they will not even
+obey a reset command, though in most circumstances they will.
+If the command cannot be aborted and the device cannot be
+reset, the device will be set offline.
+<P>
+In the event that the error-handling code is triggered and a tape drive is
+successfully reset or the tardy command is successfully aborted, the
+tape drive may still not allow I/O to continue until some command
+is issued that positions the tape to a known position.
+Typically you must rewind the tape (by issuing
+<I>mt -f /dev/st0 rewind</I>
+
+for example) before I/O can proceed again to a tape drive that was reset.
+<A NAME="lbAO">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man8/cciss_vol_status.8.html">cciss_vol_status</A></B>(8),
+
+<B><A HREF="../man4/hpsa.4.html">hpsa</A></B>(4),
+
+<B><A HREF="../man8/hpacucli.8.html">hpacucli</A></B>(8),
+
+<B><A HREF="../man8/hpacuxe.8.html">hpacuxe</A></B>(8),
+
+<P>
+
+
+and
+<I>Documentation/blockdev/cciss.txt</I>
+
+and
+<I>Documentation/ABI/testing/sysfs-bus-pci-devices-cciss</I>
+
+in the Linux kernel source tree
+
+
+
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">Options</A><DD>
+<DT><A HREF="#lbAF">Supported hardware</A><DD>
+<DT><A HREF="#lbAG">Configuration details</A><DD>
+</DL>
+<DT><A HREF="#lbAH">FILES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Device nodes</A><DD>
+<DT><A HREF="#lbAJ">Files in /proc</A><DD>
+<DT><A HREF="#lbAK">Files in /sys</A><DD>
+<DT><A HREF="#lbAL">SCSI tape drive and medium changer support</A><DD>
+<DT><A HREF="#lbAM">Hot plug support for SCSI tape drives</A><DD>
+<DT><A HREF="#lbAN">SCSI error handling for tape drives and medium changers</A><DD>
+</DL>
+<DT><A HREF="#lbAO">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:19 GMT, September 18, 2014
+</BODY>
+</HTML>

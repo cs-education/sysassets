@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of AIO_FSYNC</TITLE>
+</HEAD><BODY>
+<H1>AIO_FSYNC</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2012-05-08<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+aio_fsync - asynchronous file synchronization
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/aio.h">aio.h</A>&gt;</B>
+
+<P>
+<B>int aio_fsync(int </B><I>op</I><B>, struct aiocb *</B><I>aiocbp</I><B>);</B>
+
+<P>
+Link with <I>-lrt</I>.
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>aio_fsync</B>()
+
+function does a sync on all outstanding asynchronous I/O operations
+associated with
+<I>aiocbp-&gt;aio_fildes</I>.
+
+(See
+<B><A HREF="../man7/aio.7.html">aio</A></B>(7)
+
+for a description of the
+<I>aiocb</I>
+
+structure.)
+<P>
+
+More precisely, if
+<I>op</I>
+
+is
+<B>O_SYNC</B>,
+
+then all currently queued I/O operations shall be
+completed as if by a call of
+<B><A HREF="../man2/fsync.2.html">fsync</A></B>(2),
+
+and if
+<I>op</I>
+
+is
+<B>O_DSYNC</B>,
+
+this call is the asynchronous analog of
+<B><A HREF="../man2/fdatasync.2.html">fdatasync</A></B>(2).
+
+<P>
+Note that this is a request only; it does not wait for I/O completion.
+<P>
+
+Apart from
+<I>aio_fildes</I>,
+
+the only field in the structure pointed to by
+<I>aiocbp</I>
+
+that is used by this call is the
+<I>aio_sigevent</I>
+
+field (a
+<I>sigevent</I>
+
+structure, described in
+<B><A HREF="../man7/sigevent.7.html">sigevent</A></B>(7)),
+
+which indicates the desired type of asynchronous notification at completion.
+All other fields are ignored.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success (the sync request was successfully queued)
+this function returns 0.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EAGAIN</B>
+
+<DD>
+Out of resources.
+<DT><B>EBADF</B>
+
+<DD>
+<I>aio_fildes</I>
+
+is not a valid file descriptor open for writing.
+<DT><B>EINVAL</B>
+
+<DD>
+Synchronized I/O is not supported for this file, or
+<I>op</I>
+
+is not
+<B>O_SYNC</B>
+
+or
+<B>O_DSYNC</B>.
+
+<DT><B>ENOSYS</B>
+
+<DD>
+<B>aio_fsync</B>()
+
+is not implemented.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>aio_fsync</B>()
+
+function is available since glibc 2.1.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001, POSIX.1-2008.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/aio_cancel.3.html">aio_cancel</A></B>(3),
+
+<B><A HREF="../man3/aio_error.3.html">aio_error</A></B>(3),
+
+<B><A HREF="../man3/aio_read.3.html">aio_read</A></B>(3),
+
+<B><A HREF="../man3/aio_return.3.html">aio_return</A></B>(3),
+
+<B><A HREF="../man3/aio_suspend.3.html">aio_suspend</A></B>(3),
+
+<B><A HREF="../man3/aio_write.3.html">aio_write</A></B>(3),
+
+<B><A HREF="../man3/lio_listio.3.html">lio_listio</A></B>(3),
+
+<B><A HREF="../man7/aio.7.html">aio</A></B>(7),
+
+<B><A HREF="../man7/sigevent.7.html">sigevent</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:18 GMT, September 18, 2014
+</BODY>
+</HTML>

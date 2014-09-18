@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of BSD_SIGNAL</TITLE>
+</HEAD><BODY>
+<H1>BSD_SIGNAL</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-10-22<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+bsd_signal - signal handling with BSD semantics
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#define _XOPEN_SOURCE</B>       /* See <A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A>(7) */
+
+<BR>
+
+<B>#include &lt;<A HREF="file:///usr/include/signal.h">signal.h</A>&gt;</B>
+
+<P>
+<B>typedef void (*sighandler_t)(int);</B>
+
+<P>
+<B>sighandler_t bsd_signal(int </B><I>signum</I><B>, sighandler_t </B><I>handler</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>bsd_signal</B>()
+
+function takes the same arguments, and performs the same task, as
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2).
+
+<P>
+The difference between the two is that
+<B>bsd_signal</B>()
+
+is guaranteed to provide reliable signal semantics, that is:
+a) the disposition of the signal is not reset to the default
+when the handler is invoked;
+b) delivery of further instances of the signal is blocked while
+the signal handler is executing; and
+c) if the handler interrupts a blocking system call,
+then the system call is automatically restarted.
+A portable application cannot rely on
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2)
+
+to provide these guarantees.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>bsd_signal</B>()
+
+function returns the previous value of the signal handler, or
+<B>SIG_ERR</B>
+
+on error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+As for
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2).
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>bsd_signal</B>()
+
+function is thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+4.2BSD, POSIX.1-2001.
+POSIX.1-2008 removes the specification of
+<B>bsd_signal</B>(),
+
+recommending the use of
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2)
+
+instead.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+Use of
+<B>bsd_signal</B>()
+
+should be avoided; use
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2)
+
+instead.
+<P>
+On modern Linux systems,
+<B>bsd_signal</B>()
+
+and
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2)
+
+are equivalent.
+But on older systems,
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2)
+
+provided unreliable signal semantics; see
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2)
+
+for details.
+<P>
+The use of
+<I>sighandler_t</I>
+
+is a GNU extension;
+this type is defined only if the
+<B>_GNU_SOURCE</B>
+
+feature test macro is defined.
+<A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2),
+
+<B><A HREF="../man3/sysv_signal.3.html">sysv_signal</A></B>(3),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:19 GMT, September 18, 2014
+</BODY>
+</HTML>

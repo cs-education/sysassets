@@ -1,0 +1,1579 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of LOCALE</TITLE>
+</HEAD><BODY>
+<H1>LOCALE</H1>
+Section: Linux User Manual (5)<BR>Updated: 2014-06-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+locale - describes a locale definition file
+<A NAME="lbAC">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>locale</B>
+
+definition file contains all the information that the
+<B><A HREF="../man1/localedef.1.html">localedef</A></B>(1)
+
+command needs to convert it into the binary locale database.
+<P>
+The definition files consist of sections which each describe a
+locale category in detail.
+<A NAME="lbAD">&nbsp;</A>
+<H3>Syntax</H3>
+
+The locale definition file starts with a header that may consist
+of the following keywords:
+<DL COMPACT>
+<DT><I>&lt;escape_char&gt;</I>
+
+<DD>
+is followed by a character that should be used as the
+escape-character for the rest of the file to mark characters that
+should be interpreted in a special way.
+It defaults to the backslash (\).
+<DT><I>&lt;comment_char&gt;</I>
+
+<DD>
+is followed by a character that will be used as the
+comment-character for the rest of the file.
+It defaults to the number sign (#).
+</DL>
+<P>
+
+The locale definition has one part for each locale category.
+Each part can be copied from another existing locale or
+can be defined from scratch.
+If the category should be copied,
+the only valid keyword in the definition is
+<B>copy</B>
+
+followed by the name of the locale which should be copied.
+<A NAME="lbAE">&nbsp;</A>
+<H3>Locale category sections</H3>
+
+The following category sections are defined by POSIX:
+<DL COMPACT>
+<DT>*<DD>
+<B>LC_CTYPE</B>
+
+<DT>*<DD>
+<B>LC_COLLATE</B>
+
+<DT>*<DD>
+<B>LC_MESSAGES</B>
+
+<DT>*<DD>
+<B>LC_MONETARY</B>
+
+<DT>*<DD>
+<B>LC_NUMERIC</B>
+
+<DT>*<DD>
+<B>LC_TIME</B>
+
+</DL>
+<P>
+
+In addition, since version 2.2,
+the GNU C library supports the following nonstandard categories:
+<DL COMPACT>
+<DT>*<DD>
+<B>LC_ADDRESS</B>
+
+<DT>*<DD>
+<B>LC_IDENTIFICATION</B>
+
+<DT>*<DD>
+<B>LC_MEASUREMENT</B>
+
+<DT>*<DD>
+<B>LC_NAME</B>
+
+<DT>*<DD>
+<B>LC_PAPER</B>
+
+<DT>*<DD>
+<B>LC_TELEPHONE</B>
+
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H3>LC_ADDRESS</H3>
+
+The definition starts with the string
+<B>LC_ADDRESS</B>
+
+in the first column.
+<P>
+The following keywords are allowed:
+
+<DL COMPACT>
+<DT><I>postal_fmt</I>
+
+<DD>
+followed by a string containing field descriptors that define
+the format used for postal addresses in the locale.
+The following field descriptors are recognized:
+
+<DL COMPACT><DT><DD>
+
+
+
+
+
+
+
+
+<DL COMPACT>
+<DT>%a<DD>
+Care of person, or organization.
+<DT>%f<DD>
+Firm name.
+<DT>%d<DD>
+Department name.
+<DT>%b<DD>
+Building name.
+<DT>%s<DD>
+Street or block (e.g., Japanese) name.
+<DT>%h<DD>
+House number or designation.
+<DT>%N<DD>
+Insert an end-of-line if the previous descriptor's value was not an empty
+string; otherwise ignore.
+<DT>%t<DD>
+Insert a space if the previous descriptor's value was not an empty string;
+otherwise ignore.
+<DT>%r<DD>
+Room number, door designation.
+<DT>%e<DD>
+Floor number.
+<DT>%C<DD>
+Country designation, from the &lt;country_post&gt; keyword.
+
+
+
+
+
+<DT>%z<DD>
+Zip number, postal code.
+<DT>%T<DD>
+Town, city.
+<DT>%S<DD>
+State, province, or prefecture.
+<DT>%c<DD>
+Country, as taken from data record.
+</DL>
+<P>
+
+Each field descriptor may have an 'R' after
+the '%' to specify that the
+information is taken from a Romanized version string of the
+entity.
+</DL>
+
+<P>
+<DT><I>country_name</I>
+
+<DD>
+followed by the country name in the language of the current document
+(e.g., &quot;Deutschland&quot; for the
+<I>de_DE</I>
+
+locale).
+<DT><I>country_post</I>
+
+<DD>
+followed by the abbreviation of the country (see CERT_MAILCODES).
+<DT><I>country_ab2</I>
+
+<DD>
+followed by the two-letter abbreviation of the country (ISO 3166).
+<DT><I>country_ab3</I>
+
+<DD>
+followed by the three-letter abbreviation of the country (ISO 3166).
+<DT><I>country_num</I>
+
+<DD>
+followed by the numeric country code (ISO 3166).
+<DT><I>country_car</I>
+
+<DD>
+followed by the code for the country car number.
+<DT><I>country_isbn</I>
+
+<DD>
+followed by the ISBN code (for books).
+<DT><I>lang_name</I>
+
+<DD>
+followed by the language name in the language of the current document.
+<DT><I>lang_ab</I>
+
+<DD>
+followed by the two-letter abbreviation of the language (ISO 639).
+<DT><I>lang_term</I>
+
+<DD>
+followed by the three-letter abbreviation of the language (ISO 639-2/T).
+<DT><I>lang_lib</I>
+
+<DD>
+followed by the three-letter abbreviation of the language for library
+use (ISO 639-2/B).
+Applications should in general prefer
+<I>lang_term</I>
+
+over
+<I>lang_lib</I>.
+
+</DL>
+<P>
+
+The
+<B>LC_ADDRESS</B>
+
+definition ends with the string
+<I>END LC_ADDRESS</I>.
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>LC_CTYPE</H3>
+
+The definition starts with the string
+<B>LC_CTYPE</B>
+
+in the first column.
+<P>
+The following keywords are allowed:
+
+
+
+
+
+
+
+<DL COMPACT>
+<DT><I>upper</I>
+
+<DD>
+followed by a list of uppercase letters.
+The letters
+<B>A</B>
+
+through
+<B>Z</B>
+
+are included automatically.
+Characters also specified as
+<B>cntrl</B>,
+
+<B>digit</B>,
+
+<B>punct</B>,
+
+or
+<B>space</B>
+
+are not allowed.
+<DT><I>lower</I>
+
+<DD>
+followed by a list of lowercase letters.
+The letters
+<B>a</B>
+
+through
+<B>z</B>
+
+are included automatically.
+Characters also specified as
+<B>cntrl</B>,
+
+<B>digit</B>,
+
+<B>punct</B>,
+
+or
+<B>space</B>
+
+are not allowed.
+<DT><I>alpha</I>
+
+<DD>
+followed by a list of letters.
+All character specified as either
+<B>upper</B>
+
+or
+<B>lower</B>
+
+are automatically included.
+Characters also specified as
+<B>cntrl</B>,
+
+<B>digit</B>,
+
+<B>punct</B>,
+
+or
+<B>space</B>
+
+are not allowed.
+<DT><I>digit</I>
+
+<DD>
+followed by the characters classified as numeric digits.
+Only the
+digits
+<B>0</B>
+
+through
+<B>9</B>
+
+are allowed.
+They are included by default in this class.
+<DT><I>space</I>
+
+<DD>
+followed by a list of characters defined as white-space
+characters.
+Characters also specified as
+<B>upper</B>,
+
+<B>lower</B>,
+
+<B>alpha</B>,
+
+<B>digit</B>,
+
+<B>graph</B>,
+
+or
+<B>xdigit</B>
+
+are not allowed.
+The characters
+<B>&lt;space&gt;</B>,
+
+<B>&lt;form-feed&gt;</B>,
+
+<B>&lt;newline&gt;</B>,
+
+<B>&lt;carriage-return&gt;</B>,
+
+<B>&lt;tab&gt;</B>,
+
+and
+<B>&lt;vertical-tab&gt;</B>
+
+are automatically included.
+<DT><I>cntrl</I>
+
+<DD>
+followed by a list of control characters.
+Characters also specified as
+<B>upper</B>,
+
+<B>lower</B>,
+
+<B>alpha</B>,
+
+<B>digit</B>,
+
+<B>punct</B>,
+
+<B>graph</B>,
+
+<B>print</B>,
+
+or
+<B>xdigit</B>
+
+are not allowed.
+<DT><I>punct</I>
+
+<DD>
+followed by a list of punctuation characters.
+Characters also
+specified as
+<B>upper</B>,
+
+<B>lower</B>,
+
+<B>alpha</B>,
+
+<B>digit</B>,
+
+<B>cntrl</B>,
+
+<B>xdigit</B>,
+
+or the
+<B>&lt;space&gt;</B>
+
+character are not allowed.
+<DT><I>graph</I>
+
+<DD>
+followed by a list of printable characters, not including the
+<B>&lt;space&gt;</B>
+
+character.
+The characters defined as
+<B>upper</B>,
+
+<B>lower</B>,
+
+<B>alpha</B>,
+
+<B>digit</B>,
+
+<B>xdigit</B>,
+
+and
+<B>punct</B>
+
+are automatically included.
+Characters also specified as
+<B>cntrl</B>
+
+are not allowed.
+<DT><I>print</I>
+
+<DD>
+followed by a list of printable characters, including the
+<B>&lt;space&gt;</B>
+
+character.
+The characters defined as
+<B>upper</B>,
+
+<B>lower</B>,
+
+<B>alpha</B>,
+
+<B>digit</B>,
+
+<B>xdigit</B>,
+
+<B>punct</B>,
+
+and the
+<B>&lt;space&gt;</B>
+
+character are automatically included.
+Characters also specified as
+<B>cntrl</B>
+
+are not allowed.
+<DT><I>xdigit</I>
+
+<DD>
+followed by a list of characters classified as hexadecimal
+digits.
+The decimal digits must be included followed by one or
+more set of six characters in ascending order.
+The following
+characters are included by default:
+<B>0</B>
+
+through
+<B>9</B>,
+
+<B>a</B>
+
+through
+<B>f</B>,
+
+<B>A</B>
+
+through
+<B>F</B>.
+
+<DT><I>blank</I>
+
+<DD>
+followed by a list of characters classified as
+<B>blank</B>.
+
+The characters
+<B>&lt;space&gt;</B>
+
+and
+<B>&lt;tab&gt;</B>
+
+are automatically included.
+<DT><I>toupper</I>
+
+<DD>
+followed by a list of mappings from lowercase to uppercase
+letters.
+Each mapping is a pair of a lowercase and an uppercase letter
+separated with a
+<B>,</B>
+
+and enclosed in parentheses.
+The members of the list are separated
+with semicolons.
+<DT><I>tolower</I>
+
+<DD>
+followed by a list of mappings from uppercase to lowercase
+letters.
+If the keyword tolower is not present, the reverse of the
+toupper list is used.
+</DL>
+<P>
+
+The
+<B>LC_CTYPE</B>
+
+definition ends with the string
+<I>END LC_CTYPE</I>.
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>LC_COLLATE</H3>
+
+
+The
+<B>LC_COLLATE</B>
+
+category defines the rules for collating characters.
+Due to
+limitations of libc not all POSIX-options are implemented.
+<P>
+The definition starts with the string
+<B>LC_COLLATE</B>
+
+in the first column.
+<P>
+The following keywords are allowed:
+
+
+
+<DL COMPACT>
+<DT><I>collating-element</I>
+
+<DD>
+followed by the definition of a collating-element symbol
+representing a multicharacter collating element.
+<DT><I>collating-symbol</I>
+
+<DD>
+followed by the definition of a collating symbol
+that can be used in collation order statements.
+</DL>
+<P>
+
+The order-definition starts with a line:
+<DL COMPACT>
+<DT><I>order_start</I>
+
+<DD>
+followed by a list of keywords chosen from
+<B>forward</B>,
+
+<B>backward</B>,
+
+or
+<B>position</B>.
+
+The order definition consists of lines that describe the order
+and is terminated with the keyword
+<I>order_end</I>.
+
+
+
+
+
+
+</DL>
+<P>
+
+The
+<B>LC_COLLATE</B>
+
+definition ends with the string
+<I>END LC_COLLATE</I>.
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>LC_IDENTIFICATION</H3>
+
+This category contains meta-information about the locale definition.
+<P>
+The definition starts with the string
+<B>LC_IDENTIFICATION</B>
+
+in the first column.
+<P>
+The following keywords are allowed:
+<DL COMPACT>
+<DT><I>title</I>
+
+<DD>
+followed by the title of the locale document
+(e.g., &quot;Maori language locale for New Zealand&quot;).
+<DT><I>source</I>
+
+<DD>
+followed by the name of the organization that maintains this document.
+<DT><I>address</I>
+
+<DD>
+followed by the address of the organization that maintains this document.
+<DT><I>contact</I>
+
+<DD>
+followed by the name of the contact person at
+the organization that maintains this document.
+<DT><I>email</I>
+
+<DD>
+followed by the email address of the person or
+organization that maintains this document.
+<DT><I>tel</I>
+
+<DD>
+followed by the telephone number (in international format)
+of the organization that maintains this document.
+<DT><I>fax</I>
+
+<DD>
+followed by the fax number (in international format)
+of the organization that maintains this document.
+<DT><I>language</I>
+
+<DD>
+followed by the name of the language to which this document applies.
+<DT><I>territory</I>
+
+<DD>
+followed by the name of the country/geographic extent
+to which this document applies.
+<DT><I>audience</I>
+
+<DD>
+followed by a description of the audience for which this document is intended.
+<DT><I>application</I>
+
+<DD>
+followed by a description of any special application
+for which this document is intended.
+<DT><I>abbreviation</I>
+
+<DD>
+
+followed by the short name for this document.
+<DT><I>revision</I>
+
+<DD>
+followed by the revision number of this document.
+<DT><I>date</I>
+
+<DD>
+followed by the revision date of this document.
+</DL>
+<P>
+
+In addition, for each of the categories defined by the document,
+there should be a line starting with the keyword
+<I>category</I>,
+
+followed by:
+<DL COMPACT>
+<DT>*<DD>
+a string that identifies this locale category definition,
+<DT>*<DD>
+a semicolon, and
+<DT>*<DD>
+one of the
+<B>LC_</B><I>*</I>
+
+identifiers.
+</DL>
+<P>
+
+The
+<B>LC_IDENTIFICATION</B>
+
+definition ends with the string
+<I>END LC_IDENTIFICATION</I>.
+
+<A NAME="lbAJ">&nbsp;</A>
+<H3>LC_MESSAGES</H3>
+
+The definition starts with the string
+<B>LC_MESSAGES</B>
+
+in the first column.
+<P>
+The following keywords are allowed:
+<DL COMPACT>
+<DT><I>yesexpr</I>
+
+<DD>
+followed by a regular expression that describes possible
+yes-responses.
+<DT><I>noexpr</I>
+
+<DD>
+followed by a regular expression that describes possible
+no-responses.
+<DT><I>yesstr</I>
+
+<DD>
+followed by the output string corresponding to &quot;yes&quot;.
+<DT><I>nostr</I>
+
+<DD>
+followed by the output string corresponding to &quot;no&quot;.
+</DL>
+<P>
+
+The
+<B>LC_MESSAGES</B>
+
+definition ends with the string
+<I>END LC_MESSAGES</I>.
+
+<A NAME="lbAK">&nbsp;</A>
+<H3>LC_MEASUREMENT</H3>
+
+The definition starts with the string
+<B>LC_MEASUREMENT</B>
+
+in the first column.
+<P>
+The following keywords are allowed:
+<DL COMPACT>
+<DT><I>measurement</I>
+
+<DD>
+followed by number identifying the standard used for measurement.
+The following values are recognized:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>1</B>
+
+<DD>
+Metric.
+<DT><B>2</B>
+
+<DD>
+US customary measurements.
+</DL>
+</DL>
+
+</DL>
+<P>
+
+The
+<B>LC_MEASUREMENT</B>
+
+definition ends with the string
+<I>END LC_MEASUREMENT</I>.
+
+<A NAME="lbAL">&nbsp;</A>
+<H3>LC_MONETARY</H3>
+
+The definition starts with the string
+<B>LC_MONETARY</B>
+
+in the first column.
+<P>
+The following keywords are allowed:
+<DL COMPACT>
+<DT><I>int_curr_symbol</I>
+
+<DD>
+followed by the international currency symbol.
+This must be a
+4-character string containing the international currency symbol as
+defined by the ISO 4217 standard (three characters) followed by a
+separator.
+<DT><I>currency_symbol</I>
+
+<DD>
+followed by the local currency symbol.
+<DT><I>mon_decimal_point</I>
+
+<DD>
+followed by the string that will be used as the decimal delimiter
+when formatting monetary quantities.
+<DT><I>mon_thousands_sep</I>
+
+<DD>
+followed by the string that will be used as a group separator
+when formatting monetary quantities.
+<DT><I>mon_grouping</I>
+
+<DD>
+followed by a sequence of integers separated by semicolons that
+describe the formatting of monetary quantities.
+See
+<I>grouping</I>
+
+below for details.
+<DT><I>positive_sign</I>
+
+<DD>
+followed by a string that is used to indicate a positive sign for
+monetary quantities.
+<DT><I>negative_sign</I>
+
+<DD>
+followed by a string that is used to indicate a negative sign for
+monetary quantities.
+<DT><I>int_frac_digits</I>
+
+<DD>
+followed by the number of fractional digits that should be used when
+formatting with the
+<I>int_curr_symbol</I>.
+
+<DT><I>frac_digits</I>
+
+<DD>
+followed by the number of fractional digits that should be used when
+formatting with the
+<I>currency_symbol</I>.
+
+<DT><I>p_cs_precedes</I>
+
+<DD>
+followed by an integer that indicates the placement of
+<I>currency_symbol</I>
+
+for a nonnegative formatted monetary quantity:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>0</B>
+
+<DD>
+the symbol succeeds the value.
+<DT><B>1</B>
+
+<DD>
+the symbol precedes the value.
+</DL>
+</DL>
+
+<DT><I>n_cs_precedes</I>
+
+<DD>
+followed by an integer that indicates the placement of
+<I>currency_symbol</I>
+
+for a negative formatted monetary quantity.
+The same values are recognized as for
+<I>p_cs_precedes</I>.
+
+<DT><I>int_p_cs_precedes</I>
+
+<DD>
+followed by an integer that indicates the placement of
+<I>int_currency_symbol</I>
+
+for a nonnegative internationally formatted monetary quantity.
+The same values are recognized as for
+<I>p_cs_precedes</I>.
+
+<DT><I>int_n_cs_precedes</I>
+
+<DD>
+followed by an integer that indicates the placement of
+<I>int_currency_symbol</I>
+
+for a negative internationally formatted monetary quantity.
+The same values are recognized as for
+<I>p_cs_precedes</I>.
+
+<DT><I>p_sep_by_space</I>
+
+<DD>
+followed by an integer that indicates the separation of
+<I>currency_symbol</I>,
+
+the sign string, and the value for a nonnegative formatted monetary quantity.
+The following values are recognized:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>0</B>
+
+<DD>
+No space separates the currency symbol and the value.
+<DT><B>1</B>
+
+<DD>
+If the currency symbol and the sign string are adjacent,
+a space separates them from the value;
+otherwise a space separates the currency symbol and the value.
+<DT><B>2</B>
+
+<DD>
+If the currency symbol and the sign string are adjacent,
+a space separates them from the value;
+otherwise a space separates the sign string and the value.
+</DL>
+</DL>
+
+<DT><I>n_sep_by_space</I>
+
+<DD>
+followed by an integer that indicates the separation of
+<I>currency_symbol</I>,
+
+the sign string, and the value for a negative formatted monetary quantity.
+The same values are recognized as for
+<I>p_sep_by_space</I>.
+
+<DT><I>int_p_sep_by_space</I>
+
+<DD>
+followed by an integer that indicates the separation of
+<I>int_currency_symbol</I>,
+
+the sign string,
+and the value for a nonnegative internationally formatted monetary quantity.
+The same values are recognized as for
+<I>p_sep_by_space</I>.
+
+<DT><I>int_n_sep_by_space</I>
+
+<DD>
+followed by an integer that indicates the separation of
+<I>int_currency_symbol</I>,
+
+the sign string,
+and the value for a negative internationally formatted monetary quantity.
+The same values are recognized as for
+<I>p_sep_by_space</I>.
+
+<DT><I>p_sign_posn</I>
+
+<DD>
+followed by an integer that indicates where the
+<I>positive_sign</I>
+
+should be placed for a nonnegative monetary quantity:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>0</B>
+
+<DD>
+Parentheses enclose the quantity and the
+<I>currency_symbol</I>
+
+or
+<I>int_curr_symbol</I>.
+
+<DT><B>1</B>
+
+<DD>
+The sign string precedes the quantity and the
+<I>currency_symbol</I>
+
+or the
+<I>int_curr_symbol</I>.
+
+<DT><B>2</B>
+
+<DD>
+The sign string succeeds the quantity and the
+<I>currency_symbol</I>
+
+or the
+<I>int_curr_symbol</I>.
+
+<DT><B>3</B>
+
+<DD>
+The sign string precedes the
+<I>currency_symbol</I>
+
+or the
+<I>int_curr_symbol</I>.
+
+<DT><B>4</B>
+
+<DD>
+The sign string succeeds the
+<I>currency_symbol</I>
+
+or the
+<I>int_curr_symbol</I>.
+
+</DL>
+</DL>
+
+<DT><I>n_sign_posn</I>
+
+<DD>
+followed by an integer that indicates where the
+<I>negative_sign</I>
+
+should be placed for a negative monetary quantity.
+The same values are recognized as for
+<I>p_sign_posn</I>.
+
+<DT><I>int_p_sign_posn</I>
+
+<DD>
+followed by an integer that indicates where the
+<I>negative_sign</I>
+
+should be placed for a nonnegative
+internationally formatted monetary quantity.
+The same values are recognized as for
+<I>p_sign_posn</I>.
+
+<DT><I>int_n_sign_posn</I>
+
+<DD>
+followed by an integer that indicates where the
+<I>negative_sign</I>
+
+should be placed for a negative
+internationally formatted monetary quantity.
+The same values are recognized as for
+<I>p_sign_posn</I>.
+
+</DL>
+<P>
+
+The
+<B>LC_MONETARY</B>
+
+definition ends with the string
+<I>END LC_MONETARY</I>.
+
+<A NAME="lbAM">&nbsp;</A>
+<H3>LC_NAME</H3>
+
+The definition starts with the string
+<B>LC_NAME</B>
+
+in the first column.
+<P>
+Various keywords are allowed, but only
+<I>name_fmt</I>
+
+is mandatory.
+Other keywords are needed only if there is common convention to
+use the corresponding salutation in this locale.
+The allowed keywords are as follows:
+<DL COMPACT>
+<DT><I>name_fmt</I>
+
+<DD>
+followed by a string containing field descriptors that define
+the format used for names in the locale.
+The following field descriptors are recognized:
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>%f<DD>
+Family name(s).
+<DT>%F<DD>
+Family names in uppercase.
+<DT>%g<DD>
+First given name.
+<DT>%G<DD>
+First given initial.
+<DT>%l<DD>
+First given name with Latin letters.
+<DT>%o<DD>
+Other shorter name.
+<DT>%m<DD>
+Additional given name(s).
+<DT>%M<DD>
+Initials for additional given name(s).
+<DT>%p<DD>
+Profession.
+<DT>%s<DD>
+Salutation, such as &quot;Doctor&quot;.
+<DT>%S<DD>
+Abbreviated salutation, such as &quot;Mr.&quot; or &quot;Dr.&quot;.
+<DT>%d<DD>
+Salutation, using the FDCC-sets conventions.
+
+
+
+
+
+
+
+
+
+<DT>%t<DD>
+If the preceding field descriptor resulted in an empty string,
+then the empty string, otherwise a space character.
+</DL>
+</DL>
+
+<DT><I>name_gen</I>
+
+<DD>
+followed by the general salutation for any gender.
+<DT><I>name_mr</I>
+
+<DD>
+followed by the salutation for men.
+<DT><I>name_mrs</I>
+
+<DD>
+followed by the salutation for married women.
+<DT><I>name_miss</I>
+
+<DD>
+followed by the salutation for unmarried women.
+<DT><I>name_ms</I>
+
+<DD>
+followed by the salutation valid for all women.
+</DL>
+<P>
+
+The
+<B>LC_NAME</B>
+
+definition ends with the string
+<I>END LC_NAME</I>.
+
+<A NAME="lbAN">&nbsp;</A>
+<H3>LC_NUMERIC</H3>
+
+The definition starts with the string
+<B>LC_NUMERIC</B>
+
+in the first column.
+<P>
+The following keywords are allowed:
+<DL COMPACT>
+<DT><I>decimal_point</I>
+
+<DD>
+followed by the string that will be used as the decimal delimiter
+when formatting numeric quantities.
+<DT><I>thousands_sep</I>
+
+<DD>
+followed by the string that will be used as a group separator
+when formatting numeric quantities.
+<DT><I>grouping</I>
+
+<DD>
+followed by a sequence of integers separated by semicolons that
+describe the formatting of numeric quantities.
+<DT><DD>
+Each integer specifies the number of digits in a group.
+The first integer defines the size of the group immediately
+to the left of the decimal delimiter.
+Subsequent integers define succeeding groups to the
+left of the previous group.
+If the last integer is not -1, then the size of the previous group
+(if any) is repeatedly used for the remainder of the digits.
+If the last integer is -1, then no further grouping is performed.
+</DL>
+<P>
+
+The
+<B>LC_NUMERIC</B>
+
+definition ends with the string
+<I>END LC_NUMERIC</I>.
+
+<A NAME="lbAO">&nbsp;</A>
+<H3>LC_PAPER</H3>
+
+The definition starts with the string
+<B>LC_PAPER</B>
+
+in the first column.
+<P>
+The following keywords are allowed:
+<DL COMPACT>
+<DT><I>height</I>
+
+<DD>
+followed by the height, in millimeters, of the standard paper format.
+<DT><I>width</I>
+
+<DD>
+followed by the width, in millimeters, of the standard paper format.
+</DL>
+<P>
+
+The
+<B>LC_PAPER</B>
+
+definition ends with the string
+<I>END LC_PAPER</I>.
+
+<A NAME="lbAP">&nbsp;</A>
+<H3>LC_TELEPHONE</H3>
+
+The definition starts with the string
+<B>LC_TELEPHONE</B>
+
+in the first column.
+<P>
+The following keywords are allowed:
+<DL COMPACT>
+<DT><I>tel_int_fmt</I>
+
+<DD>
+followed by a string that contains field descriptors that identify
+the format used to dial international numbers.
+The following field descriptors are recognized:
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>%a<DD>
+Area code without nationwide prefix (the prefix is often &quot;00&quot;).
+<DT>%A<DD>
+Area code including nationwide prefix.
+<DT>%l<DD>
+Local number (within area code).
+<DT>%e<DD>
+Extension (to local number).
+<DT>%c<DD>
+Country code.
+<DT>%C<DD>
+Alternate carrier service code used for dialing abroad.
+<DT>%t<DD>
+If the preceding field descriptor resulted in an empty string,
+then the empty string, otherwise a space character.
+</DL>
+</DL>
+
+<DT><I>tel_dom_fmt</I>
+
+<DD>
+followed by a string that contains field descriptors that identify
+the format used to dial domestic numbers.
+The recognized field descriptors are the same as for
+<I>tel_int_fmt</I>.
+
+<DT><I>int_select</I>
+
+<DD>
+followed by the prefix used to call international phone numbers.
+<DT><I>int_prefix</I>
+
+<DD>
+followed by the prefix used from other countries to dial this country.
+</DL>
+<P>
+
+The
+<B>LC_TELEPHONE</B>
+
+definition ends with the string
+<I>END LC_TELEPHONE</I>.
+
+<A NAME="lbAQ">&nbsp;</A>
+<H3>LC_TIME</H3>
+
+The definition starts with the string
+<B>LC_TIME</B>
+
+in the first column.
+<P>
+The following keywords are allowed:
+
+
+
+
+
+
+<DL COMPACT>
+<DT><I>abday</I>
+
+<DD>
+followed by a list of abbreviated names of the days of the week.
+The list starts with the first day of the week
+as specified by
+<I>week</I>
+
+(Sunday by default).
+See NOTES.
+<DT><I>day</I>
+
+<DD>
+followed by a list of names of the days of the week.
+The list starts with the first day of the week
+as specified by
+<I>week</I>
+
+(Sunday by default).
+See NOTES.
+<DT><I>abmon</I>
+
+<DD>
+followed by a list of abbreviated month names.
+<DT><I>mon</I>
+
+<DD>
+followed by a list of month names.
+<DT><I>am_pm</I>
+
+<DD>
+followed by the appropriate representation of the
+<B>am</B>
+
+and
+<B>pm</B>
+
+strings.
+This should be left empty for locales not using AM/PM convention.
+<DT><I>d_t_fmt</I>
+
+<DD>
+followed by the appropriate date and time format.
+<DT><I>d_fmt</I>
+
+<DD>
+followed by the appropriate date format.
+<DT><I>t_fmt</I>
+
+<DD>
+followed by the appropriate time format.
+<DT><I>t_fmt_ampm</I>
+
+<DD>
+followed by the appropriate time format when using 12h clock format.
+This should be left empty for locales not using AM/PM convention.
+<DT><I>week</I>
+
+<DD>
+followed by a list of three values:
+The number of days in a week (by default 7),
+a date of beginning of the week (by default corresponds to Sunday),
+and the minimal length of the first week in year (by default 4).
+Regarding the start of the week,
+<B>19971130</B>
+
+shall be used for Sunday and
+<B>19971201</B>
+
+shall be used for Monday.
+See NOTES.
+<DT><I>first_weekday</I> (since glibc 2.2)
+
+<DD>
+followed by the number of the first day from the
+<I>day</I>
+
+list to be shown in calendar applications.
+The default value of
+<B>1</B>
+
+corresponds to either Sunday or Monday depending
+on the value of the second
+<I>week</I>
+
+list item.
+See NOTES.
+<DT><I>first_workday</I> (since glibc 2.2)
+
+<DD>
+followed by the number of the first working day from the
+<I>day</I>
+
+list.
+The default value is
+<B>2</B>.
+
+See NOTES.
+<DT><I>cal_direction</I>
+
+<DD>
+
+followed by a value that indicates the direction for the
+display of calendar dates, as follows:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>1</B>
+
+<DD>
+Left-right from top.
+<DT><B>2</B>
+
+<DD>
+Top-down from left.
+<DT><B>3</B>
+
+<DD>
+Right-left from top.
+</DL>
+</DL>
+
+<DT><I>date_fmt</I>
+
+<DD>
+followed by the appropriate date representation for
+<B><A HREF="../man1/date.1.html">date</A></B>(1).
+
+</DL>
+<P>
+
+The
+<B>LC_TIME</B>
+
+definition ends with the string
+<I>END LC_TIME</I>.
+
+<A NAME="lbAR">&nbsp;</A>
+<H2>FILES</H2>
+
+<DL COMPACT>
+<DT><I>/usr/lib/locale/locale-archive</I>
+
+<DD>
+Usual default locale archive location.
+<DT><I>/usr/share/i18n/locales</I>
+
+<DD>
+Usual default path for locale definition files.
+</DL>
+<A NAME="lbAS">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.2, ISO/IEC TR 14652.
+<A NAME="lbAT">&nbsp;</A>
+<H2>NOTES</H2>
+
+The collective GNU C library community wisdom regarding
+<I>abday</I>,
+
+<I>day</I>,
+
+<I>week</I>,
+
+<I>first_weekday</I>,
+
+and
+<I>first_workday</I>
+
+states at
+<A HREF="https://sourceware.org/glibc/wiki/Locales">https://sourceware.org/glibc/wiki/Locales</A>
+the following:
+<DL COMPACT>
+<DT>*<DD>
+The value of the second
+<I>week</I>
+
+list item specifies the base of the
+<I>abday</I>
+
+and
+<I>day</I>
+
+lists.
+<DT>*<DD>
+<I>first_weekday</I>
+
+specifies the offset of the first day-of-week in the
+<I>abday</I>
+
+and
+<I>day</I>
+
+lists.
+<DT>*<DD>
+For compatibility reasons, all glibc locales should set the value of the
+second
+<I>week</I>
+
+list item to
+<B>19971130</B>
+
+(Sunday) and base the
+<I>abday</I>
+
+and
+<I>day</I>
+
+lists appropriately, and set
+<I>first_weekday</I>
+
+to
+<B>1</B>
+
+or
+<B>2</B>,
+
+depending on whether the week actually starts on Sunday or Monday
+for the locale.
+</DL>
+<A NAME="lbAU">&nbsp;</A>
+<H2>BUGS</H2>
+
+This manual page isn't complete.
+
+
+<A NAME="lbAV">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/locale.1.html">locale</A></B>(1),
+
+<B><A HREF="../man1/localedef.1.html">localedef</A></B>(1),
+
+<B><A HREF="../man3/localeconv.3.html">localeconv</A></B>(3),
+
+<B><A HREF="../man3/newlocale.3.html">newlocale</A></B>(3),
+
+<B><A HREF="../man3/setlocale.3.html">setlocale</A></B>(3),
+
+<B><A HREF="../man3/uselocale.3.html">uselocale</A></B>(3),
+
+<B><A HREF="../man5/charmap.5.html">charmap</A></B>(5),
+
+<B><A HREF="../man7/charsets.7.html">charsets</A></B>(7),
+
+<B><A HREF="../man7/locale.7.html">locale</A></B>(7),
+
+<B><A HREF="../man7/unicode.7.html">unicode</A></B>(7),
+
+<B><A HREF="../man7/utf-8.7.html">utf-8</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAD">Syntax</A><DD>
+<DT><A HREF="#lbAE">Locale category sections</A><DD>
+<DT><A HREF="#lbAF">LC_ADDRESS</A><DD>
+<DT><A HREF="#lbAG">LC_CTYPE</A><DD>
+<DT><A HREF="#lbAH">LC_COLLATE</A><DD>
+<DT><A HREF="#lbAI">LC_IDENTIFICATION</A><DD>
+<DT><A HREF="#lbAJ">LC_MESSAGES</A><DD>
+<DT><A HREF="#lbAK">LC_MEASUREMENT</A><DD>
+<DT><A HREF="#lbAL">LC_MONETARY</A><DD>
+<DT><A HREF="#lbAM">LC_NAME</A><DD>
+<DT><A HREF="#lbAN">LC_NUMERIC</A><DD>
+<DT><A HREF="#lbAO">LC_PAPER</A><DD>
+<DT><A HREF="#lbAP">LC_TELEPHONE</A><DD>
+<DT><A HREF="#lbAQ">LC_TIME</A><DD>
+</DL>
+<DT><A HREF="#lbAR">FILES</A><DD>
+<DT><A HREF="#lbAS">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAT">NOTES</A><DD>
+<DT><A HREF="#lbAU">BUGS</A><DD>
+<DT><A HREF="#lbAV">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:20 GMT, September 18, 2014
+</BODY>
+</HTML>

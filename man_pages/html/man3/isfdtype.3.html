@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of ISFDTYPE</TITLE>
+</HEAD><BODY>
+<H1>ISFDTYPE</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-03-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+isfdtype - test file type of a file descriptor
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/sys/socket.h">sys/socket.h</A>&gt;</B>
+
+<B>int isfdtype(int </B><I>fd</I><B>, int</B><I>fdtype</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>isfdtype</B>():
+
+
+<DL COMPACT><DT><DD>
+
+<DL COMPACT>
+<DT>Since glibc 2.20:<DD>
+_DEFAULT_SOURCE
+<DT>Before glibc 2.20:<DD>
+_BSD_SOURCE || _SVID_SOURCE
+
+</DL>
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>isfdtype</B>()
+
+function tests whether the file descriptor
+<I>fd</I>
+
+refers to a file of type
+<I>fdtype</I>.
+
+The
+<I>fdtype</I>
+
+argument specifies one of the
+<B>S_IF*</B>
+
+constants defined in
+<I>&lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</I>
+
+and documented in
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2)
+
+(e.g.,
+<B>S_IFREG</B>).
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>isfdtype</B>()
+
+function returns 1 if the file descriptor
+<I>fd</I>
+
+is of type
+<I>fdtype</I>
+
+and 0 if it is not.
+On error, -1 is returned and
+<I>errno</I>
+
+is set to indicate the cause.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+The
+<B>isfdtype</B>()
+
+function can fail with any of the same errors as
+<B><A HREF="../man3/fstat.3.html">fstat</A></B>(3).
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+The
+<B>isfdtype</B>()
+
+function is not specified in any standard,
+but did appear in the draft POSIX.1g standard.
+It is present on OpenBSD and Tru64 UNIX
+(where the required header file in both cases is just
+<I>&lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</I>,
+
+as shown in the POSIX.1g draft),
+and possibly other systems.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+Portable applications should use
+<B><A HREF="../man3/fstat.3.html">fstat</A></B>(3)
+
+instead.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/fstat.3.html">fstat</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:09 GMT, September 18, 2014
+</BODY>
+</HTML>

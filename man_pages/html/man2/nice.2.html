@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of NICE</TITLE>
+</HEAD><BODY>
+<H1>NICE</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-04-28<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+nice - change process priority
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<P>
+<B>int nice(int </B><I>inc</I><B>);</B>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>nice</B>():
+
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>nice</B>()
+
+adds
+<I>inc</I>
+
+to the nice value for the calling process.
+(A higher nice value means a low priority.)
+Only the superuser may specify a negative increment,
+or priority increase.
+The range for nice values is described in
+<B><A HREF="../man2/getpriority.2.html">getpriority</A></B>(2).
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, the new nice value is returned (but see NOTES below).
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EPERM</B>
+
+<DD>
+The calling process attempted to increase its priority by
+supplying a negative
+<I>inc</I>
+
+but has insufficient privileges.
+Under Linux, the
+<B>CAP_SYS_NICE</B>
+
+capability is required.
+(But see the discussion of the
+<B>RLIMIT_NICE</B>
+
+resource limit in
+<B><A HREF="../man2/setrlimit.2.html">setrlimit</A></B>(2).)
+
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, 4.3BSD, POSIX.1-2001.
+However, the Linux and (g)libc
+(earlier than glibc 2.2.4) return value is nonstandard, see below.
+SVr4 documents an additional
+<B>EINVAL</B>
+
+error code.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+SUSv2 and POSIX.1-2001 specify that
+<B>nice</B>()
+
+should return the new nice value.
+However, the Linux syscall and the
+<B>nice</B>()
+
+library function provided in older versions of (g)libc
+(earlier than glibc 2.2.4) return 0 on success.
+The new nice value can be found using
+<B><A HREF="../man2/getpriority.2.html">getpriority</A></B>(2).
+
+<P>
+Since glibc 2.2.4,
+<B>nice</B>()
+
+is implemented as a library function that calls
+<B><A HREF="../man2/getpriority.2.html">getpriority</A></B>(2)
+
+to obtain the new nice value to be returned to the caller.
+With this implementation,
+a successful call can legitimately return -1.
+To reliably detect an error, set
+<I>errno</I>
+
+to 0 before the call, and check its value when
+<B>nice</B>()
+
+returns -1.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/nice.1.html">nice</A></B>(1),
+
+<B><A HREF="../man1/renice.1.html">renice</A></B>(1),
+
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2),
+
+<B><A HREF="../man2/getpriority.2.html">getpriority</A></B>(2),
+
+<B><A HREF="../man2/setpriority.2.html">setpriority</A></B>(2),
+
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7),
+
+<B><A HREF="../man7/sched.7.html">sched</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:49 GMT, September 18, 2014
+</BODY>
+</HTML>

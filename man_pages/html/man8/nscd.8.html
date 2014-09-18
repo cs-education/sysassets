@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of NSCD</TITLE>
+</HEAD><BODY>
+<H1>NSCD</H1>
+Section: Linux Programmer's Manual (8)<BR>Updated: 2012-05-10<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+nscd - name service cache daemon
+<A NAME="lbAC">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+Nscd is a daemon that provides a cache for the most common name service
+requests.
+The default configuration file,
+<I>/etc/nscd.conf</I>,
+
+determines the behavior of the cache daemon.
+See
+<B><A HREF="../man5/nscd.conf.5.html">nscd.conf</A></B>(5).
+
+<P>
+Nscd provides caching for accesses of the
+<B><A HREF="../man5/passwd.5.html">passwd</A></B>(5),
+
+<B><A HREF="../man5/group.5.html">group</A></B>(5),
+
+and
+<B><A HREF="../man5/hosts.5.html">hosts</A></B>(5)
+
+databases through standard libc interfaces, such as
+<B><A HREF="../man3/getpwnam.3.html">getpwnam</A></B>(3),
+
+<B><A HREF="../man3/getpwuid.3.html">getpwuid</A></B>(3),
+
+<B><A HREF="../man3/getgrnam.3.html">getgrnam</A></B>(3),
+
+<B><A HREF="../man3/getgrgid.3.html">getgrgid</A></B>(3),
+
+<B><A HREF="../man3/gethostbyname.3.html">gethostbyname</A></B>(3),
+
+and others.
+<P>
+There are two caches for each database:
+a positive one for items found, and a negative one
+for items not found.
+Each cache has a separate TTL (time-to-live)
+period for its data.
+Note that the shadow file is specifically not cached.
+<B><A HREF="../man3/getspnam.3.html">getspnam</A></B>(3)
+
+calls remain uncached as a result.
+<A NAME="lbAD">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>--help</B>
+
+<DD>
+will give you a list with all options and what they do.
+</DL>
+<A NAME="lbAE">&nbsp;</A>
+<H2>NOTES</H2>
+
+The daemon will try to watch for changes in configuration files
+appropriate for each database (e.g.,
+<I>/etc/passwd</I>
+
+for the
+<I>passwd</I>
+
+database or
+<I>/etc/hosts</I>
+
+and
+<I>/etc/resolv.conf</I>
+
+for the
+<I>hosts</I>
+
+database), and flush the cache when these are changed.
+However, this will happen only after a short delay (unless the
+<B><A HREF="../man7/inotify.7.html">inotify</A></B>(7)
+
+mechanism is available and glibc 2.9 or later is available),
+and this auto-detection does not cover configuration files
+required by nonstandard NSS modules, if any are specified in
+<I>/etc/nsswitch.conf</I>.
+
+In that case, you need to run the following command
+after changing the configuration file of the database so that
+<B>nscd</B>
+
+invalidates its cache:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;$&nbsp;<B>nscd&nbsp;-i</B>&nbsp;<I>&lt;database&gt;</I>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man5/nscd.conf.5.html">nscd.conf</A></B>(5),
+
+<B><A HREF="../man5/nsswitch.conf.5.html">nsswitch.conf</A></B>(5)
+
+
+
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAD">OPTIONS</A><DD>
+<DT><A HREF="#lbAE">NOTES</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:22 GMT, September 18, 2014
+</BODY>
+</HTML>

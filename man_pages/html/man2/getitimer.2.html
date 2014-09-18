@@ -1,0 +1,362 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETITIMER</TITLE>
+</HEAD><BODY>
+<H1>GETITIMER</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-07-08<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getitimer, setitimer - get or set value of an interval timer
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/time.h">sys/time.h</A>&gt;</B>
+
+<B>int getitimer(int </B><I>which</I><B>, struct itimerval *</B><I>curr_value</I><B>);</B>
+<BR>
+<B>int setitimer(int </B><I>which</I><B>, const struct itimerval *</B><I>new_value</I><B>,</B>
+<B>              struct itimerval *</B><I>old_value</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The system provides each process with three interval timers,
+each decrementing in a distinct time domain.
+When a timer expires, a signal is sent to the
+process, and the timer is reset to the specified interval (if nonzero).
+<DL COMPACT>
+<DT><B>ITIMER_REAL</B>
+
+<DD>
+decrements in real time, and delivers
+<B>SIGALRM</B>
+
+upon expiration.
+<DT><B>ITIMER_VIRTUAL</B>
+
+<DD>
+decrements only when the process is executing, and delivers
+<B>SIGVTALRM</B>
+
+upon expiration.
+<DT><B>ITIMER_PROF</B>
+
+<DD>
+decrements both when the process executes and when the system is executing
+on behalf of the process.
+Coupled with
+<B>ITIMER_VIRTUAL</B>,
+
+this timer is usually used to profile the time spent by the
+application in user and kernel space.
+<B>SIGPROF</B>
+
+is delivered upon expiration.
+</DL>
+<P>
+
+Timer values are defined by the following structures:
+
+
+<PRE>
+
+struct itimerval {
+    struct timeval it_interval; /* Interval for periodic timer */
+    struct timeval it_value;    /* Time until next expiration */
+};
+
+struct timeval {
+    time_t      tv_sec;         /* seconds */
+    suseconds_t tv_usec;        /* microseconds */
+};
+</PRE>
+
+
+
+<P>
+
+The function
+<B>getitimer</B>()
+
+fills the structure pointed to by
+<I>curr_value</I>
+
+with the current value
+(i.e., the amount of time remaining until the next expiration)
+of the timer specified by
+<I>which</I>
+
+(one of
+<B>ITIMER_REAL</B>,
+
+<B>ITIMER_VIRTUAL</B>,
+
+or
+<B>ITIMER_PROF</B>).
+
+The subfields of the field
+<I>it_value</I>
+
+are set to the amount of time remaining on the timer, or zero if the timer
+is disabled.
+The
+<I>it_interval</I>
+
+field is set to the timer interval (period);
+a value of zero returned in (both subfields of) this field indicates
+that this is a single-shot timer.
+<P>
+The function
+<B>setitimer</B>()
+
+sets the specified timer to the value in
+<I>new_value</I>.
+
+If
+<I>old_value</I>
+
+is non-NULL, the old value of the timer
+(i.e., the same information as returned by
+<B>getitimer</B>())
+
+is stored there.
+<P>
+
+Timers decrement from
+<I>it_value</I>
+
+to zero, generate a signal, and reset to
+<I>it_interval</I>.
+
+A timer which is set to zero
+(<I>it_value</I>
+
+is zero or the timer expires and
+<I>it_interval</I>
+
+is zero) stops.
+<P>
+
+Both
+<I>tv_sec</I>
+
+and
+<I>tv_usec</I>
+
+are significant in determining the duration of a timer.
+<P>
+
+Timers will never expire before the requested time,
+but may expire some (short) time afterward, which depends
+on the system timer resolution and on the system load; see
+<B><A HREF="../man7/time.7.html">time</A></B>(7).
+
+(But see BUGS below.)
+Upon expiration, a signal will be generated and the timer reset.
+If the timer expires while the process is active (always true for
+<B>ITIMER_VIRTUAL</B>),
+
+the signal will be delivered immediately when generated.
+Otherwise, the
+delivery will be offset by a small time dependent on the system loading.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, zero is returned.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EFAULT</B>
+
+<DD>
+<I>new_value</I>,
+
+<I>old_value</I>,
+
+or
+<I>curr_value</I>
+
+is not valid a pointer.
+<DT><B>EINVAL</B>
+
+<DD>
+<I>which</I>
+
+is not one of
+<B>ITIMER_REAL</B>,
+
+<B>ITIMER_VIRTUAL</B>,
+
+or
+<B>ITIMER_PROF</B>;
+
+or (since Linux 2.6.22) one of the
+<I>tv_usec</I>
+
+fields in the structure pointed to by
+<I>new_value</I>
+
+contains a value outside the range 0 to 999999.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001, SVr4, 4.4BSD (this call first appeared in 4.2BSD).
+POSIX.1-2008 marks
+<B>getitimer</B>()
+
+and
+<B>setitimer</B>()
+
+obsolete, recommending the use of the POSIX timers API
+(<B><A HREF="../man2/timer_gettime.2.html">timer_gettime</A></B>(2),
+
+<B><A HREF="../man2/timer_settime.2.html">timer_settime</A></B>(2),
+
+etc.) instead.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+A child created via
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+does not inherit its parent's interval timers.
+Interval timers are preserved across an
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2).
+
+<P>
+POSIX.1 leaves the
+interaction between
+<B>setitimer</B>()
+
+and the three interfaces
+<B><A HREF="../man2/alarm.2.html">alarm</A></B>(2),
+
+<B><A HREF="../man3/sleep.3.html">sleep</A></B>(3),
+
+and
+<B><A HREF="../man3/usleep.3.html">usleep</A></B>(3)
+
+unspecified.
+<P>
+The standards are silent on the meaning of the call:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;setitimer(which,&nbsp;NULL,&nbsp;&amp;old_value);
+<P>
+Many systems (Solaris, the BSDs, and perhaps others)
+treat this as equivalent to:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;getitimer(which,&nbsp;&amp;old_value);
+<P>
+In Linux, this is treated as being equivalent to a call in which the
+<I>new_value</I>
+
+fields are zero; that is, the timer is disabled.
+<I>Don't use this Linux misfeature</I>:
+
+it is nonportable and unnecessary.
+<A NAME="lbAI">&nbsp;</A>
+<H2>BUGS</H2>
+
+The generation and delivery of a signal are distinct, and
+only one instance of each of the signals listed above may be pending
+for a process.
+Under very heavy loading, an
+<B>ITIMER_REAL</B>
+
+timer may expire before the signal from a previous expiration
+has been delivered.
+The second signal in such an event will be lost.
+<P>
+On Linux kernels before 2.6.16, timer values are represented in jiffies.
+If a request is made set a timer with a value whose jiffies
+representation exceeds
+<B>MAX_SEC_IN_JIFFIES</B>
+
+(defined in
+<I>include/linux/jiffies.h</I>),
+
+then the timer is silently truncated to this ceiling value.
+On Linux/i386 (where, since Linux 2.6.13,
+the default jiffy is 0.004 seconds),
+this means that the ceiling value for a timer is
+approximately 99.42 days.
+Since Linux 2.6.16,
+the kernel uses a different internal representation for times,
+and this ceiling is removed.
+<P>
+On certain systems (including i386),
+Linux kernels before version 2.6.12 have a bug which will produce
+premature timer expirations of up to one jiffy under some circumstances.
+This bug is fixed in kernel 2.6.12.
+
+
+<P>
+POSIX.1-2001 says that
+<B>setitimer</B>()
+
+should fail if a
+<I>tv_usec</I>
+
+value is specified that is outside of the range 0 to 999999.
+However, in kernels up to and including 2.6.21,
+Linux does not give an error, but instead silently
+adjusts the corresponding seconds value for the timer.
+From kernel 2.6.22 onward,
+this nonconformance has been repaired:
+an improper
+<I>tv_usec</I>
+
+value results in an
+<B>EINVAL</B>
+
+error.
+
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/gettimeofday.2.html">gettimeofday</A></B>(2),
+
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2),
+
+<B><A HREF="../man2/timer_create.2.html">timer_create</A></B>(2),
+
+<B><A HREF="../man2/timerfd_create.2.html">timerfd_create</A></B>(2),
+
+<B><A HREF="../man7/time.7.html">time</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">BUGS</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:51 GMT, September 18, 2014
+</BODY>
+</HTML>

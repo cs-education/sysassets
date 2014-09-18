@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SENDMMSG</TITLE>
+</HEAD><BODY>
+<H1>SENDMMSG</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-07-08<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+sendmmsg - send multiple messages on a socket
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#define _GNU_SOURCE          /* See <A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A>(7) */</B>
+<B>#include &lt;<A HREF="file:///usr/include/sys/socket.h">sys/socket.h</A>&gt;</B>
+
+<B>int sendmmsg(int </B><I>sockfd</I><B>, struct mmsghdr *</B><I>msgvec</I><B>, unsigned int </B><I>vlen</I><B>,</B>
+<B>             unsigned int </B><I>flags</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>sendmmsg</B>()
+
+system call is an extension of
+<B><A HREF="../man2/sendmsg.2.html">sendmsg</A></B>(2)
+
+that allows the caller to transmit multiple messages on a socket
+using a single system call.
+(This has performance benefits for some applications.)
+
+<P>
+The
+<I>sockfd</I>
+
+argument is the file descriptor of the socket
+on which data is to be transmitted.
+<P>
+The
+<I>msgvec</I>
+
+argument is a pointer to an array of
+<I>mmsghdr</I>
+
+structures.
+The size of this array is specified in
+<I>vlen</I>.
+
+<P>
+The
+<I>mmsghdr</I>
+
+structure is defined in
+<I>&lt;<A HREF="file:///usr/include/sys/socket.h">sys/socket.h</A>&gt;</I>
+
+as:
+<P>
+
+<PRE>
+struct mmsghdr {
+    struct msghdr msg_hdr;  /* Message header */
+    unsigned int  msg_len;  /* Number of bytes transmitted */
+};
+</PRE>
+
+
+<P>
+
+The
+<I>msg_hdr</I>
+
+field is a
+<I>msghdr</I>
+
+structure, as described in
+<B><A HREF="../man2/sendmsg.2.html">sendmsg</A></B>(2).
+
+The
+<I>msg_len</I>
+
+field is used to return the number of bytes sent from the message in
+<I>msg_hdr</I>
+
+(i.e., the same as the return value from a single
+<B><A HREF="../man2/sendmsg.2.html">sendmsg</A></B>(2)
+
+call).
+<P>
+The
+<I>flags</I>
+
+argument contains flags ORed together.
+The flags are the same as for
+<B><A HREF="../man2/sendmsg.2.html">sendmsg</A></B>(2).
+
+<P>
+A blocking
+<B>sendmmsg</B>()
+
+call blocks until
+<I>vlen</I>
+
+messages have been sent.
+A nonblocking call sends as many messages as possible
+(up to the limit specified by
+<I>vlen</I>)
+
+and returns immediately.
+<P>
+On return from
+<B>sendmmsg</B>(),
+
+the
+<I>msg_len</I>
+
+fields of successive elements of
+<I>msgvec</I>
+
+are updated to contain the number of bytes transmitted from the corresponding
+<I>msg_hdr</I>.
+
+The return value of the call indicates the number of elements of
+<I>msgvec</I>
+
+that have been updated.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>sendmmsg</B>()
+
+returns the number of messages sent from
+<I>msgvec</I>;
+
+if this is less than
+<I>vlen</I>,
+
+the caller can retry with a further
+<B>sendmmsg</B>()
+
+call to send the remaining messages.
+<P>
+On error, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+Errors are as for
+<B><A HREF="../man2/sendmsg.2.html">sendmsg</A></B>(2).
+
+An error is returned only if no datagrams could be sent.
+
+
+
+
+
+
+
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>sendmmsg</B>()
+
+system call was added in Linux 3.0.
+Support in glibc was added in version 2.14.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>sendmmsg</B>()
+
+is Linux-specific.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+The value specified in
+<I>vlen</I>
+
+is capped to
+<B>UIO_MAXIOV</B>
+
+(1024).
+
+
+
+
+
+
+
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The example below uses
+<B>sendmmsg</B>()
+
+to send
+<I>onetwo</I>
+
+and
+<I>three</I>
+
+in two distinct UDP datagrams using one system call.
+The contents of the first datagram originates from a pair of buffers.
+<P>
+<PRE>
+#define _GNU_SOURCE
+#include &lt;<A HREF="file:///usr/include/netinet/ip.h">netinet/ip.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/string.h">string.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/sys/socket.h">sys/socket.h</A>&gt;
+
+int
+main(void)
+{
+    int sockfd;
+    struct sockaddr_in sa;
+    struct mmsghdr msg[2];
+    struct iovec msg1[2], msg2;
+    int retval;
+
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sockfd == -1) {
+        perror(&quot;socket()&quot;);
+        exit(EXIT_FAILURE);
+    }
+
+    sa.sin_family = AF_INET;
+    sa.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+    sa.sin_port = htons(1234);
+    if (connect(sockfd, (struct sockaddr *) &amp;sa, sizeof(sa)) == -1) {
+        perror(&quot;connect()&quot;);
+        exit(EXIT_FAILURE);
+    }
+
+    memset(msg1, 0, sizeof(msg1));
+    msg1[0].iov_base = &quot;one&quot;;
+    msg1[0].iov_len = 3;
+    msg1[1].iov_base = &quot;two&quot;;
+    msg1[1].iov_len = 3;
+
+    memset(&amp;msg2, 0, sizeof(msg2));
+    msg2.iov_base = &quot;three&quot;;
+    msg2.iov_len = 5;
+
+    memset(msg, 0, sizeof(msg));
+    msg[0].msg_hdr.msg_iov = msg1;
+    msg[0].msg_hdr.msg_iovlen = 2;
+
+    msg[1].msg_hdr.msg_iov = &amp;msg2;
+    msg[1].msg_hdr.msg_iovlen = 1;
+
+    retval = sendmmsg(sockfd, msg, 2, 0);
+    if (retval == -1)
+        perror(&quot;sendmmsg()&quot;);
+    else
+        printf(&quot;%d messages sent\n&quot;, retval);
+
+    exit(0);
+}
+</PRE>
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/recvmmsg.2.html">recvmmsg</A></B>(2),
+
+<B><A HREF="../man2/sendmsg.2.html">sendmsg</A></B>(2),
+
+<B><A HREF="../man2/socket.2.html">socket</A></B>(2),
+
+<B><A HREF="../man7/socket.7.html">socket</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">EXAMPLE</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

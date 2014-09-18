@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SETFSGID</TITLE>
+</HEAD><BODY>
+<H1>SETFSGID</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2013-08-08<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+setfsgid - set group identity used for filesystem checks
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/fsuid.h">sys/fsuid.h</A>&gt;</B>
+
+<P>
+<B>int setfsgid(uid_t </B><I>fsgid</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The system call
+<B>setfsgid</B>()
+
+changes the value of the caller's filesystem group ID---the
+group ID that the Linux kernel uses to check for all accesses
+to the filesystem.
+Normally, the value of
+the filesystem group ID
+will shadow the value of the effective group ID.
+In fact, whenever the
+effective group ID is changed,
+the filesystem group ID
+will also be changed to the new value of the effective group ID.
+<P>
+Explicit calls to
+<B><A HREF="../man2/setfsuid.2.html">setfsuid</A></B>(2)
+
+and
+<B>setfsgid</B>()
+
+are usually used only by programs such as the Linux NFS server that
+need to change what user and group ID is used for file access without a
+corresponding change in the real and effective user and group IDs.
+A change in the normal user IDs for a program such as the NFS server
+is a security hole that can expose it to unwanted signals.
+(But see below.)
+<P>
+<B>setfsgid</B>()
+
+will succeed only if the caller is the superuser or if
+<I>fsgid</I>
+
+matches either the caller's real group ID, effective group ID,
+saved set-group-ID, or current the filesystem user ID.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On both success and failure,
+this call returns the previous filesystem group ID of the caller.
+<A NAME="lbAF">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+This system call is present in Linux since version 1.2.
+
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>setfsgid</B>()
+
+is Linux-specific and should not be used in programs intended
+to be portable.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+When glibc determines that the argument is not a valid group ID,
+it will return -1 and set <I>errno</I> to
+<B>EINVAL</B>
+
+without attempting
+the system call.
+<P>
+
+Note that at the time this system call was introduced, a process
+could send a signal to a process with the same effective user ID.
+Today signal permission handling is slightly different.
+See
+<B><A HREF="../man2/setfsuid.2.html">setfsuid</A></B>(2)
+
+for a discussion of why the use of both
+<B><A HREF="../man2/setfsuid.2.html">setfsuid</A></B>(2)
+
+and
+<B>setfsgid</B>()
+
+is nowadays unneeded.
+<P>
+The original Linux
+<B>setfsgid</B>()
+
+system call supported only 16-bit group IDs.
+Subsequently, Linux 2.4 added
+<B>setfsgid32</B>()
+
+supporting 32-bit IDs.
+The glibc
+<B>setfsgid</B>()
+
+wrapper function transparently deals with the variation across kernel versions.
+<A NAME="lbAI">&nbsp;</A>
+<H2>BUGS</H2>
+
+No error indications of any kind are returned to the caller,
+and the fact that both successful and unsuccessful calls return
+the same value makes it impossible to directly determine
+whether the call succeeded or failed.
+Instead, the caller must resort to looking at the return value
+from a further call such as
+<I>setfsgid(-1)</I>
+
+(which will always fail), in order to determine if a preceding call to
+<B>setfsgid</B>()
+
+changed the filesystem group ID.
+At the very
+least,
+<B>EPERM</B>
+
+should be returned when the call fails (because the caller lacks the
+<B>CAP_SETGID</B>
+
+capability).
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/kill.2.html">kill</A></B>(2),
+
+<B><A HREF="../man2/setfsuid.2.html">setfsuid</A></B>(2),
+
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7),
+
+<B><A HREF="../man7/credentials.7.html">credentials</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">VERSIONS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">BUGS</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

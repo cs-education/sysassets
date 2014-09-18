@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SETUP</TITLE>
+</HEAD><BODY>
+<H1>SETUP</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2008-12-03<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+setup - setup devices and filesystems, mount root filesystem
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<P>
+<B>int setup(void);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>setup</B>()
+
+is called once from within
+<I>linux/init/main.c</I>.
+
+It calls initialization functions for devices and filesystems
+configured into the kernel and then mounts the root filesystem.
+<P>
+
+No user process may call
+<B>setup</B>().
+
+Any user process, even a process with superuser permission,
+will receive
+<B>EPERM</B>.
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+<B>setup</B>()
+
+always returns -1 for a user process.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EPERM</B>
+
+<DD>
+Always, for a user process.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+Since Linux 2.1.121, no such function exists anymore.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function is Linux-specific, and should not be used in programs
+intended to be portable, or indeed in any programs at all.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+The calling sequence varied: at some times
+<I>setup ()</I>
+
+has had a single argument
+<I>void&nbsp;*BIOS</I>
+
+and at other times a single argument
+<I>int magic</I>.
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:44 GMT, September 18, 2014
+</BODY>
+</HTML>

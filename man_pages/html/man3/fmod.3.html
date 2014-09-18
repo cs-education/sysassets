@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of FMOD</TITLE>
+</HEAD><BODY>
+<H1>FMOD</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2012-03-15<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+fmod, fmodf, fmodl - floating-point remainder function
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/math.h">math.h</A>&gt;</B>
+
+<B>double fmod(double </B><I>x</I><B>, double </B><I>y</I><B>);</B>
+<BR>
+<B>float fmodf(float </B><I>x</I><B>, float </B><I>y</I><B>);</B>
+<BR>
+<B>long double fmodl(long double </B><I>x</I><B>, long double </B><I>y</I><B>);</B>
+</PRE>
+
+<P>
+Link with <I>-lm</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>fmodf</B>(),
+
+<B>fmodl</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600 || _ISOC99_SOURCE ||
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>fmod</B>()
+
+function computes the floating-point remainder of dividing
+<I>x</I>
+
+by
+<I>y</I>.
+
+The return value is
+<I>x</I>
+
+-
+<I>n</I>
+
+*
+<I>y</I>,
+
+where
+<I>n</I>
+
+is the quotient of
+<I>x</I>
+
+/
+<I>y</I>,
+
+rounded toward zero to an integer.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these
+functions return the value <I>x</I>&nbsp;-&nbsp;<I>n</I>*<I>y</I>,
+for some integer
+<I>n</I>,
+
+such that the returned value has the same sign as
+<I>x</I>
+
+and a magnitude less than the magnitude of
+<I>y</I>.
+
+<P>
+If
+<I>x</I>
+
+or
+<I>y</I>
+
+is a NaN, a NaN is returned.
+<P>
+If
+<I>x</I>
+
+is an infinity,
+a domain error occurs, and
+a NaN is returned.
+<P>
+If
+<I>y</I>
+
+is zero,
+a domain error occurs, and
+a NaN is returned.
+<P>
+If
+<I>x</I>
+
+is +0 (-0), and
+<I>y</I>
+
+is not zero, +0 (-0) is returned.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+See
+<B><A HREF="../man7/math_error.7.html">math_error</A></B>(7)
+
+for information on how to determine whether an error has occurred
+when calling these functions.
+<P>
+
+The following errors can occur:
+<DL COMPACT>
+<DT>Domain error: <I>x</I> is an infinity<DD>
+<I>errno</I>
+
+is set to
+<B>EDOM</B>
+
+(but see BUGS).
+An invalid floating-point exception
+(<B>FE_INVALID</B>)
+
+is raised.
+<DT>Domain error: <I>y</I> is zero<DD>
+<I>errno</I>
+
+is set to
+<B>EDOM</B>.
+
+An invalid floating-point exception
+(<B>FE_INVALID</B>)
+
+is raised.
+
+
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+C99, POSIX.1-2001.
+The variant returning
+<I>double</I>
+
+also conforms to
+SVr4, 4.3BSD, C89.
+<A NAME="lbAH">&nbsp;</A>
+<H2>BUGS</H2>
+
+Before version 2.10, the glibc implementation did not set
+
+<I>errno</I>
+
+to
+<B>EDOM</B>
+
+when a domain error occurred for an infinite
+<I>x</I>.
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/remainder.3.html">remainder</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">BUGS</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:13 GMT, September 18, 2014
+</BODY>
+</HTML>

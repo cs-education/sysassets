@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of ATOI</TITLE>
+</HEAD><BODY>
+<H1>ATOI</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+atoi, atol, atoll - convert a string to an integer
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;</B>
+
+<B>int atoi(const char *</B><I>nptr</I><B>);</B>
+<BR>
+<B>long atol(const char *</B><I>nptr</I><B>);</B>
+<BR>
+<B>long long atoll(const char *</B><I>nptr</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>atoll</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600 || _ISOC99_SOURCE ||
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>atoi</B>()
+
+function converts the initial portion of the string
+pointed to by <I>nptr</I> to
+<I>int</I>.
+
+The behavior is the same as
+<P>
+
+strtol(nptr, NULL, 10);
+
+<P>
+except that
+<B>atoi</B>()
+
+does not detect errors.
+<P>
+
+The
+<B>atol</B>()
+
+and
+<B>atoll</B>()
+
+functions behave the same as
+<B>atoi</B>(),
+
+except that they convert the initial portion of the
+string to their return type of <I>long</I> or <I>long long</I>.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The converted value.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>atoi</B>(),
+
+<B>atol</B>(),
+
+and
+<B>atoll</B>()
+
+functions are thread-safe with exceptions.
+These functions can be safely used in multithreaded applications,
+as long as
+<B><A HREF="../man3/setlocale.3.html">setlocale</A></B>(3)
+
+is not called to change the locale during their execution.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, POSIX.1-2001, 4.3BSD, C99.
+C89 and
+POSIX.1-1996 include the functions
+<B>atoi</B>()
+
+and
+<B>atol</B>()
+
+only.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+Linux libc provided
+<B>atoq</B>()
+
+as an obsolete name for
+<B>atoll</B>();
+
+<B>atoq</B>()
+
+is not provided by glibc.
+
+
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/atof.3.html">atof</A></B>(3),
+
+<B><A HREF="../man3/strtod.3.html">strtod</A></B>(3),
+
+<B><A HREF="../man3/strtol.3.html">strtol</A></B>(3),
+
+<B><A HREF="../man3/strtoul.3.html">strtoul</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAG">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:18 GMT, September 18, 2014
+</BODY>
+</HTML>

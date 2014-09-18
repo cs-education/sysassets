@@ -1,0 +1,344 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MKSTEMP</TITLE>
+</HEAD><BODY>
+<H1>MKSTEMP</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+mkstemp, mkostemp, mkstemps, mkostemps - create a unique temporary file
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;</B>
+
+<B>int mkstemp(char *</B><I>template</I><B>);</B>
+
+<B>int mkostemp(char *</B><I>template</I><B>, int </B><I>flags</I><B>);</B>
+
+<B>int mkstemps(char *</B><I>template</I><B>, int </B><I>suffixlen</I><B>);</B>
+
+<B>int mkostemps(char *</B><I>template</I><B>, int </B><I>suffixlen</I><B>, int </B><I>flags</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>mkstemp</B>():
+
+
+<DL COMPACT><DT><DD>
+
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED
+<BR>
+
+|| /* Since glibc 2.12: */ _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L
+
+</DL>
+
+
+<P>
+
+<B>mkostemp</B>():
+
+_GNU_SOURCE
+<BR>
+
+<B>mkstemps</B>():
+
+_BSD_SOURCE || _SVID_SOURCE
+<BR>
+
+<B>mkostemps</B>():
+
+_GNU_SOURCE
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>mkstemp</B>()
+
+function generates a unique temporary filename from
+<I>template</I>,
+
+creates and opens the file,
+and returns an open file descriptor for the file.
+<P>
+The last six characters of
+<I>template</I>
+
+must be &quot;XXXXXX&quot; and these are replaced with a string that makes the
+filename unique.
+Since it will be modified,
+<I>template</I>
+
+must not be a string constant, but should be declared as a character array.
+<P>
+The file is created with
+permissions 0600, that is, read plus write for owner only.
+The returned file descriptor provides both read and write access to the file.
+The file is opened with the
+<B><A HREF="../man2/open.2.html">open</A></B>(2)
+
+<B>O_EXCL</B>
+
+flag, guaranteeing that the caller is the process that creates the file.
+<P>
+The
+<B>mkostemp</B>()
+
+function is like
+<B>mkstemp</B>(),
+
+with the difference that the following bits---with the same meaning as for
+<B><A HREF="../man2/open.2.html">open</A></B>(2)---may
+
+be specified in
+<I>flags</I>:
+
+<B>O_APPEND</B>,
+
+<B>O_CLOEXEC</B>,
+
+and
+<B>O_SYNC</B>.
+
+Note that when creating the file,
+<B>mkostemp</B>()
+
+includes the values
+<B>O_RDWR</B>,
+
+<B>O_CREAT</B>,
+
+and
+<B>O_EXCL</B>
+
+in the
+<I>flags</I>
+
+argument given to
+<B><A HREF="../man2/open.2.html">open</A></B>(2);
+
+including these values in the
+<I>flags</I>
+
+argument given to
+<B>mkostemp</B>()
+
+is unnecessary, and produces errors on some
+
+systems.
+<P>
+The
+<B>mkstemps</B>()
+
+function is like
+<B>mkstemp</B>(),
+
+except that the string in
+<I>template</I>
+
+contains a suffix of
+<I>suffixlen</I>
+
+characters.
+Thus,
+<I>template</I>
+
+is of the form
+<I>prefixXXXXXXsuffix</I>,
+
+and the string XXXXXX is modified as for
+<B>mkstemp</B>().
+
+<P>
+The
+<B>mkostemps</B>()
+
+function is to
+<B>mkstemps</B>()
+
+as
+<B>mkostemp</B>()
+
+is to
+<B>mkstemp</B>().
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these functions return the file descriptor
+of the temporary file.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EEXIST</B>
+
+<DD>
+Could not create a unique temporary filename.
+Now the contents of <I>template</I> are undefined.
+<DT><B>EINVAL</B>
+
+<DD>
+For
+<B>mkstemp</B>()
+
+and
+<B>mkostemp</B>():
+
+The last six characters of <I>template</I> were not XXXXXX;
+now <I>template</I> is unchanged.
+<P>
+For
+<B>mkstemps</B>()
+
+and
+<B>mkostemps</B>():
+
+<I>template</I>
+
+is less than
+<I>(6 + suffixlen)</I>
+
+characters long, or the last 6 characters before the suffix in
+<I>template</I>
+
+were not XXXXXX.
+</DL>
+<P>
+
+These functions may also fail with any of the errors described for
+<B><A HREF="../man2/open.2.html">open</A></B>(2).
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>mkostemp</B>()
+
+is available since glibc 2.7.
+<B>mkstemps</B>()
+
+and
+<B>mkostemps</B>()
+
+are available since glibc 2.11.
+<A NAME="lbAH">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>mkstemp</B>(),
+
+<B>mkostemp</B>(),
+
+<B>mkstemps</B>(),
+
+and
+<B>mkostemps</B>()
+
+functions are thread-safe.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>mkstemp</B>():
+
+4.3BSD, POSIX.1-2001.
+<P>
+<B>mkstemps</B>():
+
+unstandardized, but appears on several other systems.
+
+
+<P>
+<B>mkostemp</B>()
+
+and
+<B>mkostemps</B>():
+
+are glibc extensions.
+<A NAME="lbAK">&nbsp;</A>
+<H2>NOTES</H2>
+
+In glibc versions 2.06 and earlier, the file is created with permissions 0666,
+that is, read and write for all users.
+This old behavior may be
+a security risk, especially since other UNIX flavors use 0600,
+and somebody might overlook this detail when porting programs.
+POSIX.1-2008 adds a requirement that the file be created with mode 0600.
+<P>
+More generally, the POSIX specification of
+<B>mkstemp</B>()
+
+does not say anything
+about file modes, so the application should make sure its
+file mode creation mask (see
+<B><A HREF="../man2/umask.2.html">umask</A></B>(2))
+
+is set appropriately before calling
+<B>mkstemp</B>()
+
+(and
+<B>mkostemp</B>()).
+
+
+
+
+
+
+
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/mkdtemp.3.html">mkdtemp</A></B>(3),
+
+<B><A HREF="../man3/mktemp.3.html">mktemp</A></B>(3),
+
+<B><A HREF="../man3/tempnam.3.html">tempnam</A></B>(3),
+
+<B><A HREF="../man3/tmpfile.3.html">tmpfile</A></B>(3),
+
+<B><A HREF="../man3/tmpnam.3.html">tmpnam</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAK">NOTES</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:03 GMT, September 18, 2014
+</BODY>
+</HTML>

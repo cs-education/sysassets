@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of S390_RUNTIME_INSTR</TITLE>
+</HEAD><BODY>
+<H1>S390_RUNTIME_INSTR</H1>
+Section: System Calls (2)<BR>Updated: 2012-12-17<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+s390_runtime_instr - enable/disable s390 CPU run-time instrumentation
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/asm/runtime_instr.h">asm/runtime_instr.h</A>&gt;</B>
+
+<B>int s390_runtime_instr(int </B><I>command</I><B>, int </B><I>signum</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>s390_runtime_instr</B>()
+
+system call starts or stops CPU run-time instrumentation for the
+calling thread.
+<P>
+The
+<I>command</I>
+
+argument controls whether run-time instrumentation is started
+(<B>S390_RUNTIME_INSTR_START</B>,
+
+1) or stopped
+(<B>S390_RUNTIME_INSTR_STOP</B>,
+
+2) for the calling thread.
+<P>
+The
+<I>signum</I>
+
+argument specifies the number of a real-time signal.
+The real-time signal is sent to the thread if the run-time instrumentation
+buffer is full or if the run-time-instrumentation-halted interrupt
+occurred.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>s390_runtime_instr</B>()
+
+returns 0 and enables the thread for
+run-time instrumentation by assigning the thread a default run-time
+instrumentation control block.
+The caller can then read and modify the control block and start the run-time
+instrumentation.
+On error, -1 is returned and
+<I>errno</I>
+
+is set to one of the error codes listed below.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+The value specified in
+<I>command</I>
+
+is not a valid command or the value specified in
+<I>signum</I>
+
+is not a real-time signal number.
+<DT><B>ENOMEM</B>
+
+<DD>
+Allocating memory for the run-time instrumentation control block failed.
+<DT><B>EOPNOTSUPP</B>
+
+<DD>
+The run-time instrumentation facility is not available.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+This system call is available since Linux 3.7.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This Linux-specific system call is available only on the s390 architecture.
+The run-time instrumentation facility is available beginning with System z EC12.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+Glibc does not provide a wrapper for this system call, use
+<B><A HREF="../man2/syscall.2.html">syscall</A></B>(2)
+
+to call it.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/syscall.2.html">syscall</A></B>(2),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

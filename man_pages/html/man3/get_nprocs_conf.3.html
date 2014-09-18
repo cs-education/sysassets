@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GET_NPROCS</TITLE>
+</HEAD><BODY>
+<H1>GET_NPROCS</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2012-03-20<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+get_nprocs, get_nprocs_conf - get number of processors
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/sysinfo.h">sys/sysinfo.h</A>&gt;</B>
+
+<P>
+<B>int get_nprocs(void);</B>
+
+<BR>
+
+<B>int get_nprocs_conf(void);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The function
+<B>get_nprocs_conf</B>()
+
+returns the number of processors configured by the operating system.
+<P>
+The function
+<B>get_nprocs</B>()
+
+returns the number of processors currently available in the system.
+This may be less than the number returned by
+<B>get_nprocs_conf</B>()
+
+because processors may be offline (e.g., on hotpluggable systems).
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+As given in DESCRIPTION.
+<A NAME="lbAF">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+These functions are GNU extensions.
+<A NAME="lbAG">&nbsp;</A>
+<H2>NOTES</H2>
+
+The current
+
+implementation of these functions is rather expensive,
+since they open and parse files in the
+<I>/sys</I>
+
+filesystem each time they are called.
+<P>
+The following
+<B><A HREF="../man3/sysconf.3.html">sysconf</A></B>(3)
+
+calls make use of the functions documented on this page
+to return the same information.
+<PRE>
+
+    np = sysconf(_SC_NPROCESSORS_CONF);     /* processors configured */
+    np = sysconf(_SC_NPROCESSORS_ONLN);     /* processors available */
+</PRE>
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The following example shows how
+<B>get_nprocs</B>()
+
+and
+<B>get_nprocs_conf</B>()
+
+can be used.
+<P>
+<PRE>
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/sys/sysinfo.h">sys/sysinfo.h</A>&gt;
+
+int
+main(int argc, char *argv[])
+{
+    printf(&quot;This system has %d processors configured and &quot;
+            &quot;%d processors available.\n&quot;,
+            get_nprocs_conf(), get_nprocs());
+    return 0;
+}
+</PRE>
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAG">NOTES</A><DD>
+<DT><A HREF="#lbAH">EXAMPLE</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:08 GMT, September 18, 2014
+</BODY>
+</HTML>

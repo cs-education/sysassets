@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETLINE</TITLE>
+</HEAD><BODY>
+<H1>GETLINE</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getline, getdelim - delimited string input
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;</B>
+
+<B>ssize_t getline(char **</B><I>lineptr</I><B>, size_t *</B><I>n</I><B>, FILE *</B><I>stream</I><B>);</B>
+
+<B>ssize_t getdelim(char **</B><I>lineptr</I><B>, size_t *</B><I>n</I><B>, int </B><I>delim</I><B>, FILE *</B><I>stream</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>getline</B>(),
+
+<B>getdelim</B>():
+
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Since glibc 2.10:<DD>
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;700
+<DT>Before glibc 2.10:<DD>
+_GNU_SOURCE
+</DL>
+</DL>
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>getline</B>()
+
+reads an entire line from <I>stream</I>,
+storing the address of the buffer containing the text into
+<I>*lineptr</I>.
+
+The buffer is null-terminated and includes the newline character, if
+one was found.
+<P>
+If
+<I>*lineptr</I>
+
+is set to NULL and
+<I>*n</I>
+
+is set 0 before the call, then
+<B>getline</B>()
+
+will allocate a buffer for storing the line.
+This buffer should be freed by the user program
+even if
+<B>getline</B>()
+
+failed.
+<P>
+Alternatively, before calling
+<B>getline</B>(),
+
+<I>*lineptr</I>
+
+can contain a pointer to a
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3)-allocated
+
+buffer
+<I>*n</I>
+
+bytes in size.
+If the buffer is not large enough to hold the line,
+<B>getline</B>()
+
+resizes it with
+<B><A HREF="../man3/realloc.3.html">realloc</A></B>(3),
+
+updating
+<I>*lineptr</I>
+
+and
+<I>*n</I>
+
+as necessary.
+<P>
+In either case, on a successful call,
+<I>*lineptr</I>
+
+and
+<I>*n</I>
+
+will be updated to reflect the buffer address and allocated size respectively.
+<P>
+<B>getdelim</B>()
+
+works like
+<B>getline</B>(),
+
+except that a line delimiter other than newline can be specified as the
+<I>delimiter</I>
+
+argument.
+As with
+<B>getline</B>(),
+
+a delimiter character is not added if one was not present
+in the input before end of file was reached.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>getline</B>()
+
+and
+<B>getdelim</B>()
+
+return the number of characters read, including the delimiter character,
+but not including the terminating null byte ('\0').
+This value can be used
+to handle embedded null bytes in the line read.
+<P>
+Both functions return -1 on failure to read a line (including end-of-file
+condition).
+In the event of an error,
+<I>errno</I>
+
+is set to indicate the cause.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+Bad arguments
+(<I>n</I>
+
+or
+<I>lineptr</I>
+
+is NULL, or
+<I>stream</I>
+
+is not valid).
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+Both
+<B>getline</B>()
+
+and
+<B>getdelim</B>()
+
+were originally GNU extensions.
+They were standardized in POSIX.1-2008.
+<A NAME="lbAH">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+<PRE>
+#define _GNU_SOURCE
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+
+int
+main(void)
+{
+    FILE *fp;
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t read;
+
+    fp = fopen(&quot;/etc/motd&quot;, &quot;r&quot;);
+    if (fp == NULL)
+        exit(EXIT_FAILURE);
+
+    while ((read = getline(&amp;line, &amp;len, fp)) != -1) {
+        printf(&quot;Retrieved line of length %zu :\n&quot;, read);
+        printf(&quot;%s&quot;, line);
+    }
+
+    free(line);
+    fclose(fp);
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/read.2.html">read</A></B>(2),
+
+<B><A HREF="../man3/fgets.3.html">fgets</A></B>(3),
+
+<B><A HREF="../man3/fopen.3.html">fopen</A></B>(3),
+
+<B><A HREF="../man3/fread.3.html">fread</A></B>(3),
+
+<B><A HREF="../man3/scanf.3.html">scanf</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">EXAMPLE</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:11 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,324 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of STRCPY</TITLE>
+</HEAD><BODY>
+<H1>STRCPY</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-05-21<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+strcpy, strncpy - copy a string
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/string.h">string.h</A>&gt;</B>
+
+<B>char *strcpy(char *</B><I>dest</I><B>, const char *</B><I>src</I><B>);</B>
+
+<B>char *strncpy(char *</B><I>dest</I><B>, const char *</B><I>src</I><B>, size_t </B><I>n</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>strcpy</B>()
+
+function copies the string pointed to by
+<I>src</I>,
+
+including the terminating null byte ('\0'),
+to the buffer pointed to by
+<I>dest</I>.
+
+The strings may not overlap, and the destination string
+<I>dest</I>
+
+must be large enough to receive the copy.
+<I>Beware of buffer overruns!</I>
+
+(See BUGS.)
+<P>
+
+The
+<B>strncpy</B>()
+
+function is similar, except that at most
+<I>n</I>
+
+bytes of
+<I>src</I>
+
+are copied.
+<B>Warning</B>:
+
+If there is no null byte
+among the first
+<I>n</I>
+
+bytes of
+<I>src</I>,
+
+the string placed in
+<I>dest</I>
+
+will not be null-terminated.
+<P>
+
+If the length of
+<I>src</I>
+
+is less than
+<I>n</I>,
+
+<B>strncpy</B>()
+
+writes additional null bytes to
+<I>dest</I>
+
+to ensure that a total of
+<I>n</I>
+
+bytes are written.
+<P>
+
+A simple implementation of
+<B>strncpy</B>()
+
+might be:
+
+<PRE>
+
+char *
+strncpy(char *dest, const char *src, size_t n)
+{
+    size_t i;
+
+    for (i = 0; i &lt; n &amp;&amp; src[i] != '\0'; i++)
+        dest[i] = src[i];
+    for ( ; i &lt; n; i++)
+        dest[i] = '\0';
+
+    return dest;
+}
+</PRE>
+
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>strcpy</B>()
+
+and
+<B>strncpy</B>()
+
+functions return a pointer to
+the destination string
+<I>dest</I>.
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>strcpy</B>()
+
+and
+<B>strncpy</B>()
+
+functions are thread-safe.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, 4.3BSD, C89, C99.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+Some programmers consider
+<B>strncpy</B>()
+
+to be inefficient and error prone.
+If the programmer knows (i.e., includes code to test!)
+that the size of
+<I>dest</I>
+
+is greater than
+the length of
+<I>src</I>,
+
+then
+<B>strcpy</B>()
+
+can be used.
+<P>
+One valid (and intended) use of
+<B>strncpy</B>()
+
+is to copy a C string to a fixed-length buffer
+while ensuring both that the buffer is not overflowed
+and that unused bytes in the target buffer are zeroed out
+(perhaps to prevent information leaks if the buffer is to be
+written to media or transmitted to another process via an
+interprocess communication technique).
+<P>
+If there is no terminating null byte in the first
+<I>n</I>
+
+bytes of
+<I>src</I>,
+
+<B>strncpy</B>()
+
+produces an unterminated string in
+<I>dest</I>.
+
+If
+<I>buf</I>
+
+has length
+<I>buflen</I>,
+
+you can force termination using something like the following:
+
+<PRE>
+
+strncpy(buf, str, buflen - 1);
+if (buflen &gt; 0)
+    buf[buflen - 1]= '\0';
+</PRE>
+
+
+<P>
+
+(Of course, the above technique ignores the fact that, if
+<I>src</I>
+
+contains more than
+<I>buflen&nbsp;-&nbsp;1</I>
+
+bytes, information is lost in the copying to
+<I>dest</I>.)
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H3>strlcpy()</H3>
+
+Some systems (the BSDs, Solaris, and others) provide the following function:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;size_t&nbsp;strlcpy(char&nbsp;*dest,&nbsp;const&nbsp;char&nbsp;*src,&nbsp;size_t&nbsp;size);
+<P>
+
+
+
+This function is similar to
+<B>strncpy</B>(),
+
+but it copies at most
+<I>size-1</I>
+
+bytes to
+<I>dest</I>,
+
+always adds a terminating null byte,
+and does not pad the target with (further) null bytes.
+This function fixes some of the problems of
+<B>strcpy</B>()
+
+and
+<B>strncpy</B>(),
+
+but the caller must still handle the possibility of data loss if
+<I>size</I>
+
+is too small.
+The return value of the function is the length of
+<I>src</I>,
+
+which allows truncation to be easily detected:
+if the return value is greater than or equal to
+<I>size</I>,
+
+truncation occurred.
+If loss of data matters, the caller
+<I>must</I>
+
+either check the arguments before the call,
+or test the function return value.
+<B>strlcpy</B>()
+
+is not present in glibc and is not standardized by POSIX,
+
+but is available on Linux via the
+<I>libbsd</I>
+
+library.
+<A NAME="lbAK">&nbsp;</A>
+<H2>BUGS</H2>
+
+If the destination string of a
+<B>strcpy</B>()
+
+is not large enough, then anything might happen.
+Overflowing fixed-length string buffers is a favorite cracker technique
+for taking complete control of the machine.
+Any time a program reads or copies data into a buffer,
+the program first needs to check that there's enough space.
+This may be unnecessary if you can show that overflow is impossible,
+but be careful: programs can get changed over time,
+in ways that may make the impossible possible.
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/bcopy.3.html">bcopy</A></B>(3),
+
+<B><A HREF="../man3/memccpy.3.html">memccpy</A></B>(3),
+
+<B><A HREF="../man3/memcpy.3.html">memcpy</A></B>(3),
+
+<B><A HREF="../man3/memmove.3.html">memmove</A></B>(3),
+
+<B><A HREF="../man3/stpcpy.3.html">stpcpy</A></B>(3),
+
+<B><A HREF="../man3/stpncpy.3.html">stpncpy</A></B>(3),
+
+<B><A HREF="../man3/strdup.3.html">strdup</A></B>(3),
+
+<B><A HREF="../man3/string.3.html">string</A></B>(3),
+
+<B><A HREF="../man3/wcscpy.3.html">wcscpy</A></B>(3),
+
+<B><A HREF="../man3/wcsncpy.3.html">wcsncpy</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAG">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAJ">strlcpy()</A><DD>
+</DL>
+<DT><A HREF="#lbAK">BUGS</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:56 GMT, September 18, 2014
+</BODY>
+</HTML>

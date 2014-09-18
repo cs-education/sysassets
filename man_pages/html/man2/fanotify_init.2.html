@@ -1,0 +1,371 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of FANOTIFY_INIT</TITLE>
+</HEAD><BODY>
+<H1>FANOTIFY_INIT</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-05-18<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+fanotify_init - create and initialize fanotify group
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;</B>
+
+<BR>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/fanotify.h">sys/fanotify.h</A>&gt;</B>
+
+<P>
+<B>int fanotify_init(unsigned int </B><I>flags</I><B>, unsigned int </B><I>event_f_flags</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+For an overview of the fanotify API, see
+<B><A HREF="../man7/fanotify.7.html">fanotify</A></B>(7).
+
+<P>
+
+<B>fanotify_init</B>()
+
+initializes a new fanotify group and returns a file descriptor for the event
+queue associated with the group.
+<P>
+
+The file descriptor is used in calls to
+<B><A HREF="../man2/fanotify_mark.2.html">fanotify_mark</A></B>(2)
+
+to specify the files, directories, and mounts for which fanotify events
+shall be created.
+These events are received by reading from the file descriptor.
+Some events are only informative, indicating that a file has been accessed.
+Other events can be used to determine whether
+another application is permitted to access a file or directory.
+Permission to access filesystem objects is granted by writing to the file
+descriptor.
+<P>
+
+Multiple programs may be using the fanotify interface at the same time to
+monitor the same files.
+<P>
+
+In the current implementation, the number of fanotify groups per user is
+limited to 128.
+This limit cannot be overridden.
+<P>
+
+Calling
+<B>fanotify_init</B>()
+
+requires the
+<B>CAP_SYS_ADMIN</B>
+
+capability.
+This constraint might be relaxed in future versions of the API.
+Therefore, certain additional capability checks have been implemented as
+indicated below.
+<P>
+
+The
+<I>flags</I>
+
+argument contains a multi-bit field defining the notification class of the
+listening application and further single bit fields specifying the behavior
+of the file descriptor.
+<P>
+
+If multiple listeners for permission events exist,
+the notification class is used to establish the sequence
+in which the listeners receive the events.
+<P>
+
+Only one of the following notification classes may be specified in
+<I>flags</I>:
+
+<DL COMPACT>
+<DT><B>FAN_CLASS_PRE_CONTENT</B>
+
+<DD>
+This value allows the receipt of events notifying that a file has been
+accessed and events for permission decisions if a file may be accessed.
+It is intended for event listeners that need to access files before they
+contain their final data.
+This notification class might be used by hierarchical storage managers,
+for example.
+<DT><B>FAN_CLASS_CONTENT</B>
+
+<DD>
+This value allows the receipt of events notifying that a file has been
+accessed and events for permission decisions if a file may be accessed.
+It is intended for event listeners that need to access files when they
+already contain their final content.
+This notification class might be used by malware detection programs, for
+example.
+<DT><B>FAN_CLASS_NOTIF</B>
+
+<DD>
+This is the default value.
+It does not need to be specified.
+This value only allows the receipt of events notifying that a file has been
+accessed.
+Permission decisions before the file is accessed are not possible.
+</DL>
+<P>
+
+Listeners with different notification classes will receive events in the
+order
+<B>FAN_CLASS_PRE_CONTENT</B>,
+
+<B>FAN_CLASS_CONTENT</B>,
+
+<B>FAN_CLASS_NOTIF</B>.
+
+The order of notification for listeners in the same notification class
+is undefined.
+<P>
+
+The following bits can additionally be set in
+<I>flags</I>:
+
+<DL COMPACT>
+<DT><B>FAN_CLOEXEC</B>
+
+<DD>
+Set the close-on-exec flag
+(<B>FD_CLOEXEC</B>)
+
+on the new file descriptor.
+See the description of the
+<B>O_CLOEXEC</B>
+
+flag in
+<B><A HREF="../man2/open.2.html">open</A></B>(2).
+
+<DT><B>FAN_NONBLOCK</B>
+
+<DD>
+Enable the nonblocking flag
+(<B>O_NONBLOCK</B>)
+
+for the file descriptor.
+Reading from the file descriptor will not block.
+Instead, if no data is available,
+<B><A HREF="../man2/read.2.html">read</A></B>(2)
+
+will fail with the error
+<B>EAGAIN</B>.
+
+<DT><B>FAN_UNLIMITED_QUEUE</B>
+
+<DD>
+Remove the limit of 16384 events for the event queue.
+Use of this flag requires the
+<B>CAP_SYS_ADMIN</B>
+
+capability.
+<DT><B>FAN_UNLIMITED_MARKS</B>
+
+<DD>
+Remove the limit of 8192 marks.
+Use of this flag requires the
+<B>CAP_SYS_ADMIN</B>
+
+capability.
+</DL>
+<P>
+
+The
+<I>event_f_flags</I>
+
+argument
+defines the file status flags that will be set on the open file descriptions
+that are created for fanotify events.
+For details of these flags, see the description of the
+<I>flags</I>
+
+values in
+<B><A HREF="../man2/open.2.html">open</A></B>(2).
+
+<I>event_f_flags</I>
+
+includes a multi-bit field for the access mode.
+This field can take the following values:
+<DL COMPACT>
+<DT><B>O_RDONLY</B>
+
+<DD>
+This value allows only read access.
+<DT><B>O_WRONLY</B>
+
+<DD>
+This value allows only write access.
+<DT><B>O_RDWR</B>
+
+<DD>
+This value allows read and write access.
+</DL>
+<P>
+
+Additional bits can be set in
+<I>event_f_flags</I>.
+
+The most useful values are:
+<DL COMPACT>
+<DT><B>O_LARGEFILE</B>
+
+<DD>
+Enable support for files exceeding 2 GB.
+Failing to set this flag will result in an
+<B>EOVERFLOW</B>
+
+error when trying to open a large file which is monitored by
+an fanotify group on a 32-bit system.
+<DT><B>O_CLOEXEC</B>
+
+<DD>
+Enable the close-on-exec flag for the file descriptor.
+See the description of the
+<B>O_CLOEXEC</B>
+
+flag in
+<B><A HREF="../man2/open.2.html">open</A></B>(2)
+
+for reasons why this may be useful.
+</DL>
+<P>
+
+The following are also allowable:
+<B>O_APPEND</B>,
+
+<B>O_DSYNC</B>,
+
+<B>O_NOATIME</B>,
+
+<B>O_NONBLOCK</B>,
+
+and
+<B>O_SYNC</B>.
+
+Specifying any other flag in
+<I>event_f_flags</I>
+
+yields the error
+<B>EINVAL</B>
+
+(but see BUGS).
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>fanotify_init</B>()
+
+returns a new file descriptor.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+An invalid value was passed in
+<I>flags</I>
+
+or
+<I>event_f_flags</I>.
+
+<B>FAN_ALL_INIT_FLAGS</B>
+
+defines all allowable bits for
+<I>flags</I>.
+
+<DT><B>EMFILE</B>
+
+<DD>
+The number of fanotify groups for this user exceeds 128.
+<DT><B>ENOMEM</B>
+
+<DD>
+The allocation of memory for the notification group failed.
+<DT><B>ENOSYS</B>
+
+<DD>
+This kernel does not implement
+<B>fanotify_init</B>().
+
+The fanotify API is available only if the kernel was configured with
+<B>CONFIG_FANOTIFY</B>.
+
+<DT><B>EPERM</B>
+
+<DD>
+The operation is not permitted because the caller lacks the
+<B>CAP_SYS_ADMIN</B>
+
+capability.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>fanotify_init</B>()
+
+was introduced in version 2.6.36 of the Linux kernel and enabled in version
+2.6.37.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This system call is Linux-specific.
+<A NAME="lbAI">&nbsp;</A>
+<H2>BUGS</H2>
+
+As of Linux 3.15,
+the following bug exists:
+<DL COMPACT>
+<DT>*<DD>
+
+The
+<I>event_f_flags</I>
+
+argument is not checked for invalid flags.
+Flags that are intended only for internal use,
+such as
+<B>FMODE_EXEC</B>,
+
+can be set, and will consequently be set for the file descriptors
+returned when reading from the fanotify file descriptor.
+</DL>
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/fanotify_mark.2.html">fanotify_mark</A></B>(2),
+
+<B><A HREF="../man7/fanotify.7.html">fanotify</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">BUGS</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:50 GMT, September 18, 2014
+</BODY>
+</HTML>

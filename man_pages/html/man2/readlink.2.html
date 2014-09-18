@@ -1,0 +1,434 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of READLINK</TITLE>
+</HEAD><BODY>
+<H1>READLINK</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+readlink, readlinkat - read value of a symbolic link
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<B>ssize_t readlink(const char *</B><I>pathname</I><B>, char *</B><I>buf</I><B>, size_t </B><I>bufsiz</I><B>);</B>
+
+<B>#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;           </B>/* Definition of AT_* constants */
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<B>ssize_t readlinkat(int </B><I>dirfd</I><B>, const char *</B><I>pathname</I><B>,</B>
+<B>                   char *</B><I>buf</I><B>, size_t </B><I>bufsiz</I><B>);</B>
+
+</PRE>
+
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>readlink</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED || _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L
+</DL>
+
+<P>
+<B>readlinkat</B>():
+
+
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Since glibc 2.10:<DD>
+_XOPEN_SOURCE&nbsp;&gt;=&nbsp;700 || _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+<DT>Before glibc 2.10:<DD>
+_ATFILE_SOURCE
+</DL>
+</DL>
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>readlink</B>()
+
+places the contents of the symbolic link
+<I>pathname</I>
+
+in the buffer
+<I>buf</I>,
+
+which has size
+<I>bufsiz</I>.
+
+<B>readlink</B>()
+
+does not append a null byte to
+<I>buf</I>.
+
+It will truncate the contents (to a length of
+<I>bufsiz</I>
+
+characters), in case the buffer is too small to hold all of the contents.
+<A NAME="lbAE">&nbsp;</A>
+<H3>readlinkat()</H3>
+
+The
+<B>readlinkat</B>()
+
+system call operates in exactly the same way as
+<B>readlink</B>(),
+
+except for the differences described here.
+<P>
+If the pathname given in
+<I>pathname</I>
+
+is relative, then it is interpreted relative to the directory
+referred to by the file descriptor
+<I>dirfd</I>
+
+(rather than relative to the current working directory of
+the calling process, as is done by
+<B>readlink</B>()
+
+for a relative pathname).
+<P>
+If
+<I>pathname</I>
+
+is relative and
+<I>dirfd</I>
+
+is the special value
+<B>AT_FDCWD</B>,
+
+then
+<I>pathname</I>
+
+is interpreted relative to the current working
+directory of the calling process (like
+<B>readlink</B>()).
+
+<P>
+If
+<I>pathname</I>
+
+is absolute, then
+<I>dirfd</I>
+
+is ignored.
+<P>
+Since Linux 2.6.39,
+
+<I>pathname</I>
+
+can be an empty string,
+in which case the call operates on the file referred to by
+<I>dirfd</I>
+
+(which may have been obtained using the
+<B><A HREF="../man2/open.2.html">open</A></B>(2)
+
+<B>O_PATH</B>
+
+flag).
+In this case,
+<I>dirfd</I>
+
+can refer to any type of file, not just a directory.
+<P>
+
+See
+<B><A HREF="../man2/openat.2.html">openat</A></B>(2)
+
+for an explanation of the need for
+<B>readlinkat</B>().
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these calls return the number of bytes placed in
+<I>buf</I>.
+
+On error, -1 is returned and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EACCES</B>
+
+<DD>
+Search permission is denied for a component of the path prefix.
+(See also
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7).)
+
+<DT><B>EFAULT</B>
+
+<DD>
+<I>buf</I>
+
+extends outside the process's allocated address space.
+<DT><B>EINVAL</B>
+
+<DD>
+<I>bufsiz</I>
+
+is not positive.
+
+
+
+
+
+<DT><B>EINVAL</B>
+
+<DD>
+The named file is not a symbolic link.
+<DT><B>EIO</B>
+
+<DD>
+An I/O error occurred while reading from the filesystem.
+<DT><B>ELOOP</B>
+
+<DD>
+Too many symbolic links were encountered in translating the pathname.
+<DT><B>ENAMETOOLONG</B>
+
+<DD>
+A pathname, or a component of a pathname, was too long.
+<DT><B>ENOENT</B>
+
+<DD>
+The named file does not exist.
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient kernel memory was available.
+<DT><B>ENOTDIR</B>
+
+<DD>
+A component of the path prefix is not a directory.
+</DL>
+<P>
+
+The following additional errors can occur for
+<B>readlinkat</B>():
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>dirfd</I>
+
+is not a valid file descriptor.
+<DT><B>ENOTDIR</B>
+
+<DD>
+<I>pathname</I>
+
+is relative and
+<I>dirfd</I>
+
+is a file descriptor referring to a file other than a directory.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>readlinkat</B>()
+
+was added to Linux in kernel 2.6.16;
+library support was added to glibc in version 2.4.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>readlink</B>():
+
+4.4BSD
+(<B>readlink</B>()
+
+first appeared in 4.2BSD),
+POSIX.1-2001, POSIX.1-2008.
+<P>
+<B>readlinkat</B>():
+
+POSIX.1-2008.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+In versions of glibc up to and including glibc 2.4, the return type of
+<B>readlink</B>()
+
+was declared as
+<I>int</I>.
+
+Nowadays, the return type is declared as
+<I>ssize_t</I>,
+
+as (newly) required in POSIX.1-2001.
+<P>
+Using a statically sized buffer might not provide enough room for the
+symbolic link contents.
+The required size for the buffer can be obtained from the
+<I>stat.st_size</I>
+
+value returned by a call to
+<B><A HREF="../man2/lstat.2.html">lstat</A></B>(2)
+
+on the link.
+However, the number of bytes written by
+<B>readlink</B>()
+
+and
+<B>readlinkat</B>()
+
+should be checked to make sure that the size of the
+symbolic link did not increase between the calls.
+Dynamically allocating the buffer for
+<B>readlink</B>()
+
+and
+<B>readlinkat</B>()
+
+also addresses a common portability problem when using
+<I>PATH_MAX</I>
+
+for the buffer size,
+as this constant is not guaranteed to be defined per POSIX
+if the system does not have such limit.
+<A NAME="lbAK">&nbsp;</A>
+<H3>Glibc notes</H3>
+
+On older kernels where
+<B>readlinkat</B>()
+
+is unavailable, the glibc wrapper function falls back to the use of
+<B>readlink</B>().
+
+When
+<I>pathname</I>
+
+is a relative pathname,
+glibc constructs a pathname based on the symbolic link in
+<I>/proc/self/fd</I>
+
+that corresponds to the
+<I>dirfd</I>
+
+argument.
+<A NAME="lbAL">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The following program allocates the buffer needed by
+<B>readlink</B>()
+
+dynamically from the information provided by
+<B>lstat</B>(),
+
+making sure there's no race condition between the calls.
+<PRE>
+
+#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;
+
+int
+main(int argc, char *argv[])
+{
+    struct stat sb;
+    char *linkname;
+    ssize_t r;
+
+    if (argc != 2) {
+        fprintf(stderr, &quot;Usage: %s &lt;pathname&gt;\n&quot;, argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    if (lstat(argv[1], &amp;sb) == -1) {
+        perror(&quot;lstat&quot;);
+        exit(EXIT_FAILURE);
+    }
+
+    linkname = malloc(sb.st_size + 1);
+    if (linkname == NULL) {
+        fprintf(stderr, &quot;insufficient memory\n&quot;);
+        exit(EXIT_FAILURE);
+    }
+
+    r = readlink(argv[1], linkname, sb.st_size + 1);
+
+    if (r == -1) {
+        perror(&quot;readlink&quot;);
+        exit(EXIT_FAILURE);
+    }
+
+    if (r &gt; sb.st_size) {
+        fprintf(stderr, &quot;symlink increased in size &quot;
+                        &quot;between lstat() and readlink()\n&quot;);
+        exit(EXIT_FAILURE);
+    }
+
+    linkname[r] = '\0';
+
+    printf(&quot;'%s' points to '%s'\n&quot;, argv[1], linkname);
+
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+<A NAME="lbAM">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/readlink.1.html">readlink</A></B>(1),
+
+<B><A HREF="../man2/lstat.2.html">lstat</A></B>(2),
+
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2),
+
+<B><A HREF="../man2/symlink.2.html">symlink</A></B>(2),
+
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7),
+
+<B><A HREF="../man7/symlink.7.html">symlink</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">readlinkat()</A><DD>
+</DL>
+<DT><A HREF="#lbAF">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">VERSIONS</A><DD>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAK">Glibc notes</A><DD>
+</DL>
+<DT><A HREF="#lbAL">EXAMPLE</A><DD>
+<DT><A HREF="#lbAM">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

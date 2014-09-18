@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of WCSNLEN</TITLE>
+</HEAD><BODY>
+<H1>WCSNLEN</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-11-25<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+wcsnlen - determine the length of a fixed-size wide-character string
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/wchar.h">wchar.h</A>&gt;</B>
+
+<B>size_t wcsnlen(const wchar_t *</B><I>s</I><B>, size_t </B><I>maxlen</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>wcsnlen</B>():
+
+
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Since glibc 2.10:<DD>
+_XOPEN_SOURCE&nbsp;&gt;=&nbsp;700 || _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+<DT>Before glibc 2.10:<DD>
+_GNU_SOURCE
+</DL>
+</DL>
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>wcsnlen</B>()
+
+function is the wide-character equivalent
+of the
+<B><A HREF="../man3/strnlen.3.html">strnlen</A></B>(3)
+
+function.
+It returns the number of wide-characters in the string pointed to by
+<I>s</I>,
+
+not including the terminating null wide character (L'\0'),
+but at most
+<I>maxlen</I>
+
+wide characters (note: this parameter is not a byte count).
+In doing this,
+<B>wcsnlen</B>()
+
+looks at only the first
+<I>maxlen</I>
+
+wide characters at
+<I>s</I>
+
+and never beyond
+<I>s+maxlen</I>.
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>wcsnlen</B>()
+
+function returns
+<I>wcslen(s)</I>,
+
+if that is less than
+<I>maxlen</I>,
+
+or
+<I>maxlen</I>
+
+if there is no null wide character among the
+first
+<I>maxlen</I>
+
+wide characters pointed to by
+<I>s</I>.
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>wcsnlen</B>()
+
+function is provided in glibc since version 2.1.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>wcsnlen</B>()
+
+function is thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2008.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/strnlen.3.html">strnlen</A></B>(3),
+
+<B><A HREF="../man3/wcslen.3.html">wcslen</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">VERSIONS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:55 GMT, September 18, 2014
+</BODY>
+</HTML>

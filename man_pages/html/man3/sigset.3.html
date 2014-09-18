@@ -1,0 +1,402 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SIGSET</TITLE>
+</HEAD><BODY>
+<H1>SIGSET</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2010-09-20<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+sigset, sighold, sigrelse, sigignore - System V signal API
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/signal.h">signal.h</A>&gt;</B>
+
+<P>
+<B>typedef void (*sighandler_t)(int);</B>
+
+<P>
+<B>sighandler_t sigset(int </B><I>sig</I><B>, sighandler_t </B><I>disp</I><B>);</B>
+
+<P>
+<B>int sighold(int </B><I>sig</I><B>);</B>
+
+<P>
+<B>int sigrelse(int </B><I>sig</I><B>);</B>
+
+<P>
+<B>int sigignore(int </B><I>sig</I><B>);</B>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>sigset</B>(),
+
+<B>sighold</B>(),
+
+<B>sigrelse</B>(),
+
+<B>sigignore</B>():
+
+<BR>
+
+<DL COMPACT><DT><DD>
+_XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+These functions are provided in glibc as a compatibility interface
+for programs that make use of the historical System V signal API.
+This API is obsolete: new applications should use the POSIX signal API
+(<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2),
+
+etc.)
+<P>
+The
+<B>sigset</B>()
+
+function modifies the disposition of the signal
+<I>sig</I>.
+
+The
+<I>disp</I>
+
+argument can be the address of a signal handler function,
+or one of the following constants:
+<DL COMPACT>
+<DT><B>SIG_DFL</B>
+
+<DD>
+Reset the disposition of
+<I>sig</I>
+
+to the default.
+<DT><B>SIG_IGN</B>
+
+<DD>
+Ignore
+<I>sig</I>.
+
+<DT><B>SIG_HOLD</B>
+
+<DD>
+Add
+<I>sig</I>
+
+to the process's signal mask, but leave the disposition of
+<I>sig</I>
+
+unchanged.
+</DL>
+<P>
+
+If
+<I>disp</I>
+
+specifies the address of a signal handler, then
+<I>sig</I>
+
+is added to the process's signal mask during execution of the handler.
+<P>
+
+If
+<I>disp</I>
+
+was specified as a value other than
+<B>SIG_HOLD</B>,
+
+then
+<I>sig</I>
+
+is removed from the process's signal mask.
+<P>
+
+The dispositions for
+<B>SIGKILL</B>
+
+and
+<B>SIGSTOP</B>
+
+cannot be changed.
+<P>
+
+The
+<B>sighold</B>()
+
+function adds
+<I>sig</I>
+
+to the calling process's signal mask.
+<P>
+The
+<B>sigrelse</B>()
+
+function removes
+<I>sig</I>
+
+from the calling process's signal mask.
+<P>
+The
+<B>sigignore</B>()
+
+function sets the disposition of
+<I>sig</I>
+
+to
+<B>SIG_IGN</B>.
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>sigset</B>()
+
+returns
+<B>SIG_HOLD</B>
+
+if
+<I>sig</I>
+
+was blocked before the call,
+or the signal's previous disposition
+if it was not blocked before the call.
+On error,
+<B>sigset</B>()
+
+returns -1, with
+<I>errno</I>
+
+set to indicate the error.
+(But see BUGS below.)
+<P>
+The
+<B>sighold</B>(),
+
+<B>sigrelse</B>(),
+
+and
+<B>sigignore</B>()
+
+functions return 0 on success; on error, these functions return -1 and set
+<I>errno</I>
+
+to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+For
+<B>sigset</B>()
+
+see the ERRORS under
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2)
+
+and
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2).
+
+<P>
+For
+<B>sighold</B>()
+
+and
+<B>sigrelse</B>()
+
+see the ERRORS under
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2).
+
+<P>
+For
+<B>sigignore</B>(),
+
+see the errors under
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2).
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, POSIX.1-2001.
+These functions are obsolete: do not use them in new programs.
+POSIX.1-2008 marks
+<B>sighold</B>(),
+
+<B>sigignore</B>(),
+
+<B>sigpause</B>(),
+
+<B>sigrelse</B>(),
+
+and
+<B>sigset</B>()
+
+as obsolete, recommending the use of
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2),
+
+<B><A HREF="../man3/pthread_sigmask.3.html">pthread_sigmask</A></B>(3),
+
+and
+<B><A HREF="../man2/sigsuspend.2.html">sigsuspend</A></B>(2)
+
+instead.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+These functions appeared in glibc version 2.1.
+<P>
+The
+<I>sighandler_t</I>
+
+type is a GNU extension; it is used on this page only to make the
+<B>sigset</B>()
+
+prototype more easily readable.
+<P>
+The
+<B>sigset</B>()
+
+function provides reliable signal handling semantics (as when calling
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2)
+
+with
+<I>sa_mask</I>
+
+equal to 0).
+<P>
+On System V, the
+<B>signal</B>()
+
+function provides unreliable semantics (as when calling
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2)
+
+with
+<I>sa_mask</I>
+
+equal to
+<I>SA_RESETHAND | SA_NODEFER</I>).
+
+On BSD,
+<B>signal</B>()
+
+provides reliable semantics.
+POSIX.1-2001 leaves these aspects of
+<B>signal</B>()
+
+unspecified.
+See
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2)
+
+for further details.
+<P>
+In order to wait for a signal,
+BSD and System V both provided a function named
+<B><A HREF="../man3/sigpause.3.html">sigpause</A></B>(3),
+
+but this function has a different argument on the two systems.
+See
+<B><A HREF="../man3/sigpause.3.html">sigpause</A></B>(3)
+
+for details.
+<A NAME="lbAI">&nbsp;</A>
+<H2>BUGS</H2>
+
+In versions of glibc before 2.2,
+<B>sigset</B>()
+
+did not unblock
+<I>sig</I>
+
+if
+<I>disp</I>
+
+was specified as a value other than
+<B>SIG_HOLD</B>.
+
+<P>
+In versions of glibc before 2.5,
+<B>sigset</B>()
+
+does not correctly return the previous disposition of the signal
+in two cases.
+First, if
+<I>disp</I>
+
+is specified as
+<B>SIG_HOLD</B>,
+
+then a successful
+<B>sigset</B>()
+
+always returns
+<B>SIG_HOLD</B>.
+
+Instead, it should return the previous disposition of the signal
+(unless the signal was blocked, in which case
+<B>SIG_HOLD</B>
+
+should be returned).
+Second, if the signal is currently blocked, then
+the return value of a successful
+<B>sigset</B>()
+
+should be
+<B>SIG_HOLD</B>.
+
+Instead, the previous disposition of the signal is returned.
+These problems have been fixed since glibc 2.5.
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/kill.2.html">kill</A></B>(2),
+
+<B><A HREF="../man2/pause.2.html">pause</A></B>(2),
+
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2),
+
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2),
+
+<B><A HREF="../man3/raise.3.html">raise</A></B>(3),
+
+<B><A HREF="../man3/sigpause.3.html">sigpause</A></B>(3),
+
+<B><A HREF="../man3/sigvec.3.html">sigvec</A></B>(3),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">BUGS</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:00 GMT, September 18, 2014
+</BODY>
+</HTML>

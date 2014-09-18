@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of FTIME</TITLE>
+</HEAD><BODY>
+<H1>FTIME</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+ftime - return date and time
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/timeb.h">sys/timeb.h</A>&gt;</B>
+
+<P>
+<B>int ftime(struct timeb *</B><I>tp</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+This function returns the current time as seconds and milliseconds
+since the Epoch, 1970-01-01 00:00:00 +0000 (UTC).
+The time is returned in
+<I>tp</I>,
+
+which is declared as follows:
+<P>
+
+<PRE>
+struct timeb {
+    time_t         time;
+    unsigned short millitm;
+    short          timezone;
+    short          dstflag;
+};
+</PRE>
+
+
+<P>
+
+Here <I>time</I> is the number of seconds since the Epoch,
+and <I>millitm</I> is the number of milliseconds since <I>time</I>
+seconds since the Epoch.
+The <I>timezone</I> field is the local timezone measured in minutes
+of time west of Greenwich (with a negative value indicating minutes
+east of Greenwich).
+The <I>dstflag</I> field
+is a flag that, if nonzero, indicates that Daylight Saving time
+applies locally during the appropriate part of the year.
+<P>
+
+POSIX.1-2001 says that the contents of the <I>timezone</I> and <I>dstflag</I>
+fields are unspecified; avoid relying on them.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+This function always returns 0.
+(POSIX.1-2001 specifies, and some systems document, a -1 error return.)
+<A NAME="lbAF">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>ftime</B>()
+
+function is thread-safe.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+4.2BSD, POSIX.1-2001.
+POSIX.1-2008 removes the specification of
+<B>ftime</B>().
+
+<P>
+This function is obsolete.
+Don't use it.
+If the time in seconds
+suffices,
+<B><A HREF="../man2/time.2.html">time</A></B>(2)
+
+can be used;
+<B><A HREF="../man2/gettimeofday.2.html">gettimeofday</A></B>(2)
+
+gives microseconds;
+<B><A HREF="../man2/clock_gettime.2.html">clock_gettime</A></B>(2)
+
+gives nanoseconds but is not as widely available.
+<A NAME="lbAI">&nbsp;</A>
+<H2>BUGS</H2>
+
+<P>
+
+Early glibc2 is buggy and returns 0 in the
+<I>millitm</I>
+
+field;
+glibc 2.1.1 is correct again.
+
+
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/gettimeofday.2.html">gettimeofday</A></B>(2),
+
+<B><A HREF="../man2/time.2.html">time</A></B>(2)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAG">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">BUGS</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:09 GMT, September 18, 2014
+</BODY>
+</HTML>

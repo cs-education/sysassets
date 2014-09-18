@@ -1,0 +1,221 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of EPOLL_CREATE</TITLE>
+</HEAD><BODY>
+<H1>EPOLL_CREATE</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2012-04-15<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+epoll_create, epoll_create1 - open an epoll file descriptor
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/epoll.h">sys/epoll.h</A>&gt;</B>
+
+<B>int epoll_create(int </B><I>size</I><B>);</B>
+<B>int epoll_create1(int </B><I>flags</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>epoll_create</B>()
+
+creates an
+<B><A HREF="../man7/epoll.7.html">epoll</A></B>(7)
+
+instance.
+Since Linux 2.6.8, the
+<I>size</I>
+
+argument is ignored, but must be greater than zero; see NOTES below.
+<P>
+<B>epoll_create</B>()
+
+returns a file descriptor referring to the new epoll instance.
+This file descriptor is used for all the subsequent calls to the
+<B>epoll</B>
+
+interface.
+When no longer required, the file descriptor returned by
+<B>epoll_create</B>()
+
+should be closed by using
+<B><A HREF="../man2/close.2.html">close</A></B>(2).
+
+When all file descriptors referring to an epoll instance have been closed,
+the kernel destroys the instance
+and releases the associated resources for reuse.
+<A NAME="lbAE">&nbsp;</A>
+<H3>epoll_create1()</H3>
+
+If
+<I>flags</I>
+
+is 0, then, other than the fact that the obsolete
+<I>size</I>
+
+argument is dropped,
+<B>epoll_create1</B>()
+
+is the same as
+<B>epoll_create</B>().
+
+The following value can be included in
+<I>flags</I>
+
+to obtain different behavior:
+<DL COMPACT>
+<DT><B>EPOLL_CLOEXEC</B>
+
+<DD>
+Set the close-on-exec
+(<B>FD_CLOEXEC</B>)
+
+flag on the new file descriptor.
+See the description of the
+<B>O_CLOEXEC</B>
+
+flag in
+<B><A HREF="../man2/open.2.html">open</A></B>(2)
+
+for reasons why this may be useful.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+these system calls
+return a nonnegative file descriptor.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+<I>size</I>
+
+is not positive.
+<DT><B>EINVAL</B>
+
+<DD>
+(<B>epoll_create1</B>())
+
+Invalid value specified in
+<I>flags</I>.
+
+<DT><B>EMFILE</B>
+
+<DD>
+The per-user limit on the number of epoll instances imposed by
+<I>/proc/sys/fs/epoll/max_user_instances</I>
+
+was encountered.
+See
+<B><A HREF="../man7/epoll.7.html">epoll</A></B>(7)
+
+for further details.
+<DT><B>ENFILE</B>
+
+<DD>
+The system limit on the total number of open files has been reached.
+<DT><B>ENOMEM</B>
+
+<DD>
+There was insufficient memory to create the kernel object.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>epoll_create</B>()
+
+was added to the kernel in version 2.6.
+Library support is provided in glibc starting with version 2.3.2.
+<P>
+
+
+<B>epoll_create1</B>()
+
+was added to the kernel in version 2.6.27.
+Library support is provided in glibc starting with version 2.9.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>epoll_create</B>()
+
+is Linux-specific.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+In the initial
+<B>epoll_create</B>()
+
+implementation, the
+<I>size</I>
+
+argument informed the kernel of the number of file descriptors
+that the caller expected to add to the
+<B>epoll</B>
+
+instance.
+The kernel used this information as a hint for the amount of
+space to initially allocate in internal data structures describing events.
+(If necessary, the kernel would allocate more space
+if the caller's usage exceeded the hint given in
+<I>size</I>.)
+
+Nowadays,
+this hint is no longer required
+(the kernel dynamically sizes the required data structures
+without needing the hint), but
+<I>size</I>
+
+must still be greater than zero,
+in order to ensure backward compatibility when new
+<B>epoll</B>
+
+applications are run on older kernels.
+<A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/close.2.html">close</A></B>(2),
+
+<B><A HREF="../man2/epoll_ctl.2.html">epoll_ctl</A></B>(2),
+
+<B><A HREF="../man2/epoll_wait.2.html">epoll_wait</A></B>(2),
+
+<B><A HREF="../man7/epoll.7.html">epoll</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">epoll_create1()</A><DD>
+</DL>
+<DT><A HREF="#lbAF">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">VERSIONS</A><DD>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:50 GMT, September 18, 2014
+</BODY>
+</HTML>

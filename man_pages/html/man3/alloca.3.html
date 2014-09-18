@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of ALLOCA</TITLE>
+</HEAD><BODY>
+<H1>ALLOCA</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-10-07<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+alloca - allocate memory that is automatically freed
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/alloca.h">alloca.h</A>&gt;</B>
+
+<P>
+<B>void *alloca(size_t </B><I>size</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>alloca</B>()
+
+function allocates
+<I>size</I>
+
+bytes of space in the stack frame of the caller.
+This temporary space is
+automatically freed when the function that called
+<B>alloca</B>()
+
+returns to its caller.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>alloca</B>()
+
+function returns a pointer to the beginning of the allocated space.
+If the allocation causes stack overflow, program behavior is undefined.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>alloca</B>()
+
+function is thread-safe.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function is not in POSIX.1-2001.
+<P>
+There is evidence that the
+<B>alloca</B>()
+
+function appeared in 32V, PWB, PWB.2, 3BSD, and 4BSD.
+There is a man page for it in 4.3BSD.
+Linux uses the GNU version.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+The
+<B>alloca</B>()
+
+function is machine- and compiler-dependent.
+For certain applications,
+its use can improve efficiency compared to the use of
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3)
+
+plus
+<B><A HREF="../man3/free.3.html">free</A></B>(3).
+
+In certain cases,
+it can also simplify memory deallocation in applications that use
+<B><A HREF="../man3/longjmp.3.html">longjmp</A></B>(3)
+
+or
+<B><A HREF="../man3/siglongjmp.3.html">siglongjmp</A></B>(3).
+
+Otherwise, its use is discouraged.
+<P>
+Because the space allocated by
+<B>alloca</B>()
+
+is allocated within the stack frame,
+that space is automatically freed if the function return
+is jumped over by a call to
+<B><A HREF="../man3/longjmp.3.html">longjmp</A></B>(3)
+
+or
+<B><A HREF="../man3/siglongjmp.3.html">siglongjmp</A></B>(3).
+
+<P>
+Do not attempt to
+<B><A HREF="../man3/free.3.html">free</A></B>(3)
+
+space allocated by
+<B>alloca</B>()!
+
+<A NAME="lbAJ">&nbsp;</A>
+<H3>Notes on the GNU version</H3>
+
+Normally,
+<B><A HREF="../man1/gcc.1.html">gcc</A></B>(1)
+
+translates calls to
+<B>alloca</B>()
+
+with inlined code.
+This is not done when either the
+<I>-ansi</I>,
+
+<I>-std=c89</I>,
+
+<I>-std=c99</I>,
+
+or the
+<I>-std=c11</I>
+
+option is given
+<B>and</B>
+
+the header
+<I>&lt;<A HREF="file:///usr/include/alloca.h">alloca.h</A>&gt;</I>
+
+is not included.
+Otherwise, (without an -ansi or -std=c* option) the glibc version of
+<I>&lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;</I>
+
+includes
+<I>&lt;<A HREF="file:///usr/include/alloca.h">alloca.h</A>&gt;</I>
+
+and that contains the lines:
+<PRE>
+
+    #ifdef  __GNUC__
+    #define alloca(size)   __builtin_alloca (size)
+    #endif
+
+</PRE>
+
+with messy consequences if one has a private version of this function.
+<P>
+
+The fact that the code is inlined means that it is impossible
+to take the address of this function, or to change its behavior
+by linking with a different library.
+<P>
+
+The inlined code often consists of a single instruction adjusting
+the stack pointer, and does not check for stack overflow.
+Thus, there is no NULL error return.
+<A NAME="lbAK">&nbsp;</A>
+<H2>BUGS</H2>
+
+There is no error indication if the stack frame cannot be extended.
+(However, after a failed allocation, the program is likely to receive a
+<B>SIGSEGV</B>
+
+signal if it attempts to access the unallocated space.)
+<P>
+On many systems
+<B>alloca</B>()
+
+cannot be used inside the list of arguments of a function call, because
+the stack space reserved by
+<B>alloca</B>()
+
+would appear on the stack in the middle of the space for the
+function arguments.
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/brk.2.html">brk</A></B>(2),
+
+<B><A HREF="../man3/longjmp.3.html">longjmp</A></B>(3),
+
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAG">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAJ">Notes on the GNU version</A><DD>
+</DL>
+<DT><A HREF="#lbAK">BUGS</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:18 GMT, September 18, 2014
+</BODY>
+</HTML>

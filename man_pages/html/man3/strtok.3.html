@@ -1,0 +1,366 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of STRTOK</TITLE>
+</HEAD><BODY>
+<H1>STRTOK</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-05-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+strtok, strtok_r - extract tokens from strings
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/string.h">string.h</A>&gt;</B>
+
+<B>char *strtok(char *</B><I>str</I><B>, const char *</B><I>delim</I><B>);</B>
+
+<B>char *strtok_r(char *</B><I>str</I><B>, const char *</B><I>delim</I><B>, char **</B><I>saveptr</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>strtok_r</B>():
+
+_SVID_SOURCE || _BSD_SOURCE || _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;1 ||
+_XOPEN_SOURCE || _POSIX_SOURCE
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>strtok</B>()
+
+function breaks a string into a sequence of zero or more nonempty tokens.
+On the first call to
+<B>strtok</B>()
+
+the string to be parsed should be
+specified in
+<I>str</I>.
+
+In each subsequent call that should parse the same string,
+<I>str</I>
+
+must be NULL.
+<P>
+The
+<I>delim</I>
+
+argument specifies a set of bytes that
+delimit the tokens in the parsed string.
+The caller may specify different strings in
+<I>delim</I>
+
+in successive
+calls that parse the same string.
+<P>
+Each call to
+<B>strtok</B>()
+
+returns a pointer to a
+null-terminated string containing the next token.
+This string does not include the delimiting byte.
+If no more tokens are found,
+<B>strtok</B>()
+
+returns NULL.
+<P>
+A sequence of calls to
+<B>strtok</B>()
+
+that operate on the same string maintains a pointer
+that determines the point from which to start searching for the next token.
+The first call to
+<B>strtok</B>()
+
+sets this pointer to point to the first byte of the string.
+The start of the next token is determined by scanning forward
+for the next nondelimiter byte in
+<I>str</I>.
+
+If such a byte is found, it is taken as the start of the next token.
+If no such byte is found,
+then there are no more tokens, and
+<B>strtok</B>()
+
+returns NULL.
+(A string that is empty or that contains only delimiters
+will thus cause
+<B>strtok</B>()
+
+to return NULL on the first call.)
+<P>
+The end of each token is found by scanning forward until either
+the next delimiter byte is found or until the
+terminating null byte ('\0') is encountered.
+If a delimiter byte is found, it is overwritten with
+a null byte to terminate the current token, and
+<B>strtok</B>()
+
+saves a pointer to the following byte;
+that pointer will be used as the starting point
+when searching for the next token.
+In this case,
+<B>strtok</B>()
+
+returns a pointer to the start of the found token.
+<P>
+From the above description,
+it follows that a sequence of two or more contiguous delimiter bytes in
+the parsed string is considered to be a single delimiter, and that
+delimiter bytes at the start or end of the string are ignored.
+Put another way: the tokens returned by
+<B>strtok</B>()
+
+are always nonempty strings.
+Thus, for example, given the string &quot;<I>aaa;;bbb,</I>&quot;,
+successive calls to
+<B>strtok</B>()
+
+that specify the delimiter string &quot;<I>;,</I>&quot;
+would return the strings &quot;<I>aaa</I>&quot; and &quot;<I>bbb</I>&quot;,
+and then a null pointer.
+<P>
+The
+<B>strtok_r</B>()
+
+function is a reentrant version
+<B>strtok</B>().
+
+The
+<I>saveptr</I>
+
+argument is a pointer to a
+<I>char&nbsp;*</I>
+
+variable that is used internally by
+<B>strtok_r</B>()
+
+in order to maintain context between successive calls that parse the
+same string.
+<P>
+On the first call to
+<B>strtok_r</B>(),
+
+<I>str</I>
+
+should point to the string to be parsed, and the value of
+<I>saveptr</I>
+
+is ignored.
+In subsequent calls,
+<I>str</I>
+
+should be NULL, and
+<I>saveptr</I>
+
+should be unchanged since the previous call.
+<P>
+Different strings may be parsed concurrently using sequences of calls to
+<B>strtok_r</B>()
+
+that specify different
+<I>saveptr</I>
+
+arguments.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>strtok</B>()
+
+and
+<B>strtok_r</B>()
+
+functions return a pointer to
+the next token, or NULL if there are no more tokens.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>strtok</B>()
+
+function is not thread-safe.
+<P>
+
+The
+<B>strtok_r</B>()
+
+function is thread-safe.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<DL COMPACT>
+<DT><B>strtok</B>()
+
+<DD>
+SVr4, POSIX.1-2001, 4.3BSD, C89, C99.
+<DT><B>strtok_r</B>()
+
+<DD>
+POSIX.1-2001.
+</DL>
+<A NAME="lbAI">&nbsp;</A>
+<H2>BUGS</H2>
+
+Be cautious when using these functions.
+If you do use them, note that:
+<DL COMPACT>
+<DT>*<DD>
+These functions modify their first argument.
+<DT>*<DD>
+These functions cannot be used on constant strings.
+<DT>*<DD>
+The identity of the delimiting byte is lost.
+<DT>*<DD>
+The
+<B>strtok</B>()
+
+function uses a static buffer while parsing, so it's not thread safe.
+Use
+<B>strtok_r</B>()
+
+if this matters to you.
+</DL>
+<A NAME="lbAJ">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The program below uses nested loops that employ
+<B>strtok_r</B>()
+
+to break a string into a two-level hierarchy of tokens.
+The first command-line argument specifies the string to be parsed.
+The second argument specifies the delimiter byte(s)
+to be used to separate that string into &quot;major&quot; tokens.
+The third argument specifies the delimiter byte(s)
+to be used to separate the &quot;major&quot; tokens into subtokens.
+<P>
+
+An example of the output produced by this program is the following:
+<P>
+
+
+<PRE>
+$<B> ./a.out 'a/bbb///cc;xxx:yyy:' ':;' '/'</B>
+1: a/bbb///cc
+         --&gt; a
+         --&gt; bbb
+         --&gt; cc
+2: xxx
+         --&gt; xxx
+3: yyy
+         --&gt; yyy
+</PRE>
+
+
+<A NAME="lbAK">&nbsp;</A>
+<H3>Program source</H3>
+
+
+<PRE>
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/string.h">string.h</A>&gt;
+
+int
+main(int argc, char *argv[])
+{
+    char *str1, *str2, *token, *subtoken;
+    char *saveptr1, *saveptr2;
+    int j;
+
+    if (argc != 4) {
+        fprintf(stderr, &quot;Usage: %s string delim subdelim\n&quot;,
+                argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    for (j = 1, str1 = argv[1]; ; j++, str1 = NULL) {
+        token = strtok_r(str1, argv[2], &amp;saveptr1);
+        if (token == NULL)
+            break;
+        printf(&quot;%d: %s\n&quot;, j, token);
+
+        for (str2 = token; ; str2 = NULL) {
+            subtoken = strtok_r(str2, argv[3], &amp;saveptr2);
+            if (subtoken == NULL)
+                break;
+            printf(&quot;	 --&gt; %s\n&quot;, subtoken);
+        }
+    }
+
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+<P>
+
+Another example program using
+<B>strtok</B>()
+
+can be found in
+<B><A HREF="../man3/getaddrinfo_a.3.html">getaddrinfo_a</A></B>(3).
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/index.3.html">index</A></B>(3),
+
+<B><A HREF="../man3/memchr.3.html">memchr</A></B>(3),
+
+<B><A HREF="../man3/rindex.3.html">rindex</A></B>(3),
+
+<B><A HREF="../man3/strchr.3.html">strchr</A></B>(3),
+
+<B><A HREF="../man3/string.3.html">string</A></B>(3),
+
+<B><A HREF="../man3/strpbrk.3.html">strpbrk</A></B>(3),
+
+<B><A HREF="../man3/strsep.3.html">strsep</A></B>(3),
+
+<B><A HREF="../man3/strspn.3.html">strspn</A></B>(3),
+
+<B><A HREF="../man3/strstr.3.html">strstr</A></B>(3),
+
+<B><A HREF="../man3/wcstok.3.html">wcstok</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAG">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">BUGS</A><DD>
+<DT><A HREF="#lbAJ">EXAMPLE</A><DD>
+<DL>
+<DT><A HREF="#lbAK">Program source</A><DD>
+</DL>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:57 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,325 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETAUXVAL</TITLE>
+</HEAD><BODY>
+<H1>GETAUXVAL</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getauxval - retrieve a value from the auxiliary vector
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/auxv.h">sys/auxv.h</A>&gt;</B>
+
+<B>unsigned long getauxval(unsigned long </B><I>type</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>getauxval</B>()
+
+function retrieves values from the auxiliary vector,
+a mechanism that the kernel's ELF binary loader
+uses to pass certain information to
+user space when a program is executed.
+<P>
+Each entry in the auxiliary vector consists of a pair of values:
+a type that identifies what this entry represents,
+and a value for that type.
+Given the argument
+<I>type</I>,
+
+<B>getauxval</B>()
+
+returns the corresponding value.
+<P>
+The value returned for each
+<I>type</I>
+
+is given in the following list.
+Not all
+<I>type</I>
+
+values are present on all architectures.
+<DL COMPACT>
+<DT><B>AT_BASE</B>
+
+<DD>
+The base address of the program interpreter (usually, the dynamic linker).
+<DT><B>AT_BASE_PLATFORM</B>
+
+<DD>
+A string identifying the real platform; may differ from
+<B>AT_PLATFORM</B>
+
+(PowerPC only).
+<DT><B>AT_CLKTCK</B>
+
+<DD>
+The frequency with which
+<B><A HREF="../man2/times.2.html">times</A></B>(2)
+
+counts.
+This value can also be obtained via
+<I>sysconf(_SC_CLK_TCK)</I>.
+
+<DT><B>AT_DCACHEBSIZE</B>
+
+<DD>
+The data cache block size.
+<DT><B>AT_EGID</B>
+
+<DD>
+The effective group ID of the thread.
+<DT><B>AT_ENTRY</B>
+
+<DD>
+The entry address of the executable.
+<DT><B>AT_EUID</B>
+
+<DD>
+The effective user ID of the thread.
+<DT><B>AT_EXECFD</B>
+
+<DD>
+File descriptor of program.
+<DT><B>AT_EXECFN</B>
+
+<DD>
+Pathname used to execute program.
+<DT><B>AT_FLAGS</B>
+
+<DD>
+Flags (unused).
+<DT><B>AT_FPUCW</B>
+
+<DD>
+Used FPU control word (SuperH architecture only).
+This gives some information about the FPU initialization
+performed by the kernel.
+<DT><B>AT_GID</B>
+
+<DD>
+The real group ID of the thread.
+<DT><B>AT_HWCAP</B>
+
+<DD>
+A pointer to a multibyte mask of bits whose settings
+indicate detailed processor capabilities.
+The contents of the bit mask are hardware dependent
+(for example, see the kernel source file
+<I>arch/x86/include/asm/cpufeature.h</I>
+
+for details relating to the Intel x86 architecture).
+A human-readable version of the same information is available via
+<I>/proc/cpuinfo</I>.
+
+<DT><B>AT_ICACHEBSIZE</B>
+
+<DD>
+The instruction cache block size.
+
+
+
+
+
+
+<DT><B>AT_PAGESZ</B>
+
+<DD>
+The system page size (the same value returned by
+<I>sysconf(_SC_PAGESIZE)</I>).
+
+<DT><B>AT_PHDR</B>
+
+<DD>
+The address of the program headers of the executable.
+<DT><B>AT_PHENT</B>
+
+<DD>
+The size of program header entry.
+<DT><B>AT_PHNUM</B>
+
+<DD>
+The number of program headers.
+<DT><B>AT_PLATFORM</B>
+
+<DD>
+A pointer to a string that identifies the hardware platform
+that the program is running on.
+The dynamic linker uses this in the interpretation of
+<I>rpath</I>
+
+values.
+<DT><B>AT_RANDOM</B>
+
+<DD>
+The address of sixteen bytes containing a random value.
+<DT><B>AT_SECURE</B>
+
+<DD>
+Has a nonzero value if this executable should be treated securely.
+Most commonly, a nonzero value indicates that the process is
+executing a set-user-ID or set-group-ID program; alternatively,
+a nonzero value may be triggered by a Linux Security Module.
+When this value is nonzero,
+the dynamic linker disables the use of certain environment variables (see
+<B><A HREF="../man8/ld-linux.so.8.html">ld-linux.so</A></B>(8))
+
+and glibc changes other aspects of its behavior.
+(See also
+<B><A HREF="../man3/secure_getenv.3.html">secure_getenv</A></B>(3).)
+
+<DT><B>AT_SYSINFO</B>
+
+<DD>
+The entry point to the system call function in the vDSO.
+Not present/needed on all architectures (e.g., absent on x86-64).
+<DT><B>AT_SYSINFO_EHDR</B>
+
+<DD>
+The address of a page containing the virtual Dynamic Shared Object (vDSO)
+that the kernel creates in order to provide fast implementations of
+certain system calls.
+<DT><B>AT_UCACHEBSIZE</B>
+
+<DD>
+The unified cache block size.
+<DT><B>AT_UID</B>
+
+<DD>
+The real user ID of the thread.
+</DL>
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>getauxval</B>()
+
+returns the value corresponding to
+<I>type</I>.
+
+If
+<I>type</I>
+
+is not found, 0 is returned.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>ENOENT</B> (since glibc 2.19)
+
+<DD>
+
+No entry corresponding to
+<I>type</I>
+
+could be found in the auxiliary vector.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>getauxval</B>()
+
+function was added to glibc in version 2.16.
+<A NAME="lbAH">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>getauxval</B>()
+
+function is thread-safe.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function is a nonstandard glibc extension.
+<A NAME="lbAK">&nbsp;</A>
+<H2>NOTES</H2>
+
+The primary consumer of the information in the auxiliary vector
+is the dynamic linker
+<B><A HREF="../man8/ld-linux.so.8.html">ld-linux.so</A></B>(8).
+
+The auxiliary vector is a convenient and efficient shortcut
+that allows the kernel to communicate a certain set of standard
+information that the dynamic linker usually or always needs.
+In some cases, the same information could be obtained by system calls,
+but using the auxiliary vector is cheaper.
+<P>
+The auxiliary vector resides just above the argument list and
+environment in the process address space.
+The auxiliary vector supplied to a program can be viewed by setting the
+<B>LD_SHOW_AUXV</B>
+
+environment variable when running a program:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;$&nbsp;LD_SHOW_AUXV=1&nbsp;sleep&nbsp;1
+<P>
+The auxiliary vector of any process can (subject to file permissions)
+be obtained via
+<I>/proc/PID/auxv</I>;
+
+see
+<B><A HREF="../man5/proc.5.html">proc</A></B>(5)
+
+for more information.
+<A NAME="lbAL">&nbsp;</A>
+<H2>BUGS</H2>
+
+Before the addition of the
+<B>ENOENT</B>
+
+error in glibc 2.19,
+there was no way to unambiguously distinguish the case where
+<I>type</I>
+
+could not be found from the case where the value corresponding to
+<I>type</I>
+
+was zer0.
+<A NAME="lbAM">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/secure_getenv.3.html">secure_getenv</A></B>(3),
+
+<B><A HREF="../man7/vdso.7.html">vdso</A></B>(7),
+
+<B><A HREF="../man8/ld-linux.so.8.html">ld-linux.so</A></B>(8)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAK">NOTES</A><DD>
+<DT><A HREF="#lbAL">BUGS</A><DD>
+<DT><A HREF="#lbAM">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:10 GMT, September 18, 2014
+</BODY>
+</HTML>

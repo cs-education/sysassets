@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of FSYNC</TITLE>
+</HEAD><BODY>
+<H1>FSYNC</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+fsync, fdatasync - synchronize a file's in-core state with storage device
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<P>
+<B>int fsync(int </B><I>fd</I><B>);</B>
+
+<P>
+<B>int fdatasync(int </B><I>fd</I><B>);</B>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>fsync</B>():
+
+_BSD_SOURCE || _XOPEN_SOURCE
+<BR>
+
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;||&nbsp;/*&nbsp;since&nbsp;glibc&nbsp;2.8:&nbsp;*/&nbsp;_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L
+
+<BR>
+
+<B>fdatasync</B>():
+
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;199309L || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>fsync</B>()
+
+transfers (&quot;flushes&quot;) all modified in-core data of
+(i.e., modified buffer cache pages for) the
+file referred to by the file descriptor
+<I>fd</I>
+
+to the disk device (or other permanent storage device) so that all
+changed information can be retrieved even after the system crashed or
+was rebooted.
+This includes writing through or flushing a disk cache if present.
+The call blocks until the device reports that the transfer has completed.
+It also flushes metadata information associated with the file (see
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2)).
+
+<P>
+Calling
+<B>fsync</B>()
+
+does not necessarily ensure
+that the entry in the directory containing the file has also reached disk.
+For that an explicit
+<B>fsync</B>()
+
+on a file descriptor for the directory is also needed.
+<P>
+<B>fdatasync</B>()
+
+is similar to
+<B>fsync</B>(),
+
+but does not flush modified metadata unless that metadata
+is needed in order to allow a subsequent data retrieval to be
+correctly handled.
+For example, changes to
+<I>st_atime</I>
+
+or
+<I>st_mtime</I>
+
+(respectively, time of last access and
+time of last modification; see
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2))
+
+do not require flushing because they are not necessary for
+a subsequent data read to be handled correctly.
+On the other hand, a change to the file size
+(<I>st_size</I>,
+
+as made by say
+<B><A HREF="../man2/ftruncate.2.html">ftruncate</A></B>(2)),
+
+would require a metadata flush.
+<P>
+The aim of
+<B>fdatasync</B>()
+
+is to reduce disk activity for applications that do not
+require all metadata to be synchronized with the disk.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these system calls return zero.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>fd</I>
+
+is not a valid open file descriptor.
+<DT><B>EIO</B>
+
+<DD>
+An error occurred during synchronization.
+<DT><B>EROFS</B>, <B>EINVAL</B>
+
+<DD>
+<I>fd</I>
+
+is bound to a special file which does not support synchronization.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+4.3BSD, POSIX.1-2001.
+<A NAME="lbAH">&nbsp;</A>
+<H2>AVAILABILITY</H2>
+
+On POSIX systems on which
+<B>fdatasync</B>()
+
+is available,
+<B>_POSIX_SYNCHRONIZED_IO</B>
+
+is defined in
+<I>&lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</I>
+
+to a value greater than 0.
+(See also
+<B><A HREF="../man3/sysconf.3.html">sysconf</A></B>(3).)
+
+
+
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+On some UNIX systems (but not Linux),
+<I>fd</I>
+
+must be a
+<I>writable</I>
+
+file descriptor.
+<P>
+In Linux 2.2 and earlier,
+<B>fdatasync</B>()
+
+is equivalent to
+<B>fsync</B>(),
+
+and so has no performance advantage.
+<P>
+The
+<B>fsync</B>()
+
+implementations in older kernels and lesser used filesystems
+does not know how to flush disk caches.
+In these cases disk caches need to be disabled using
+<B><A HREF="../man8/hdparm.8.html">hdparm</A></B>(8)
+
+or
+<B><A HREF="../man8/sdparm.8.html">sdparm</A></B>(8)
+
+to guarantee safe operation.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/bdflush.2.html">bdflush</A></B>(2),
+
+<B><A HREF="../man2/open.2.html">open</A></B>(2),
+
+<B><A HREF="../man2/sync.2.html">sync</A></B>(2),
+
+<B><A HREF="../man2/sync_file_range.2.html">sync_file_range</A></B>(2),
+
+<B><A HREF="../man8/hdparm.8.html">hdparm</A></B>(8),
+
+<B><A HREF="../man8/mount.8.html">mount</A></B>(8),
+
+<B><A HREF="../man1/sync.1.html">sync</A></B>(1)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">AVAILABILITY</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:51 GMT, September 18, 2014
+</BODY>
+</HTML>

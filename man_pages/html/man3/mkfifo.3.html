@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MKFIFO</TITLE>
+</HEAD><BODY>
+<H1>MKFIFO</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-03-24<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+mkfifo, mkfifoat - make a FIFO special file (a named pipe)
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</B>
+
+<B>int mkfifo(const char *</B><I>pathname</I><B>, mode_t </B><I>mode</I><B>);</B>
+
+<B>#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;           </B>/* Definition of AT_* constants */
+<B>#include &lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</B>
+
+<B>int mkfifoat(int </B><I>dirfd</I><B>, const char *</B><I>pathname</I><B>, mode_t </B><I>mode</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>mkfifoat</B>():
+
+
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Since glibc 2.10:<DD>
+_XOPEN_SOURCE&nbsp;&gt;=&nbsp;700 || _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+<DT>Before glibc 2.10:<DD>
+_ATFILE_SOURCE
+</DL>
+</DL>
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>mkfifo</B>()
+
+makes a FIFO special file with name <I>pathname</I>.
+<I>mode</I> specifies the FIFO's permissions.
+It is modified by the
+process's <B>umask</B> in the usual way: the permissions of the created
+file are <B>(</B><I>mode</I><B> &amp; ~umask)</B>.
+<P>
+
+A FIFO special file is similar to a pipe, except that it is created
+in a different way.
+Instead of being an anonymous communications
+channel, a FIFO special file is entered into the filesystem by
+calling
+<B>mkfifo</B>().
+
+<P>
+
+Once you have created a FIFO special file in this way, any process can
+open it for reading or writing, in the same way as an ordinary file.
+However, it has to be open at both ends simultaneously before you can
+proceed to do any input or output operations on it.
+Opening a FIFO for reading normally blocks until some
+other process opens the same FIFO for writing, and vice versa.
+See
+<B><A HREF="../man7/fifo.7.html">fifo</A></B>(7)
+
+for nonblocking handling of FIFO special files.
+<A NAME="lbAE">&nbsp;</A>
+<H3>mkfifoat()</H3>
+
+The
+<B>mkfifoat</B>()
+
+function operates in exactly the same way as
+<B>mkfifo</B>(),
+
+except for the differences described here.
+<P>
+If the pathname given in
+<I>pathname</I>
+
+is relative, then it is interpreted relative to the directory
+referred to by the file descriptor
+<I>dirfd</I>
+
+(rather than relative to the current working directory of
+the calling process, as is done by
+<B>mkfifo</B>()
+
+for a relative pathname).
+<P>
+If
+<I>pathname</I>
+
+is relative and
+<I>dirfd</I>
+
+is the special value
+<B>AT_FDCWD</B>,
+
+then
+<I>pathname</I>
+
+is interpreted relative to the current working
+directory of the calling process (like
+<B>mkfifo</B>()).
+
+<P>
+If
+<I>pathname</I>
+
+is absolute, then
+<I>dirfd</I>
+
+is ignored.
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success
+<B>mkfifo</B>()
+
+and
+<B>mkfifoat</B>()
+
+return 0.
+In the case of an error, -1 is returned (in which case, <I>errno</I>
+is set appropriately).
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EACCES</B>
+
+<DD>
+One of the directories in <I>pathname</I> did not allow search
+(execute) permission.
+<DT><B>EDQUOT</B>
+
+<DD>
+The user's quota of disk blocks or inodes on the filesystem has been
+exhausted.
+<DT><B>EEXIST</B>
+
+<DD>
+<I>pathname</I> already exists.
+This includes the case where
+<I>pathname</I>
+
+is a symbolic link, dangling or not.
+<DT><B>ENAMETOOLONG</B>
+
+<DD>
+Either the total length of <I>pathname</I> is greater than
+<B>PATH_MAX</B>, or an individual filename component has a length
+greater than <B>NAME_MAX</B>.
+In the GNU system, there is no imposed
+limit on overall filename length, but some filesystems may place
+limits on the length of a component.
+<DT><B>ENOENT</B>
+
+<DD>
+A directory component in <I>pathname</I> does not exist or is a
+dangling symbolic link.
+<DT><B>ENOSPC</B>
+
+<DD>
+The directory or filesystem has no room for the new file.
+<DT><B>ENOTDIR</B>
+
+<DD>
+A component used as a directory in <I>pathname</I> is not, in fact, a
+directory.
+<DT><B>EROFS</B>
+
+<DD>
+<I>pathname</I> refers to a read-only filesystem.
+</DL>
+<P>
+
+The following additional errors can occur for
+<B>mkfifoat</B>():
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>dirfd</I>
+
+is not a valid file descriptor.
+<DT><B>ENOTDIR</B>
+
+<DD>
+<I>pathname</I>
+
+is a relative path and
+<I>dirfd</I>
+
+is a file descriptor referring to a file other than a directory.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>mkfifoat</B>()
+
+was added to glibc in version 2.4.
+It is implemented using
+<B><A HREF="../man2/mknodat.2.html">mknodat</A></B>(2),
+
+available on Linux since kernel 2.6.16.
+<A NAME="lbAI">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAJ">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>mkfifo</B>()
+
+and
+<B>mkfifoat</B>()
+
+functions are thread-safe.
+<A NAME="lbAK">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>mkfifo</B>():
+
+POSIX.1-2001, POSIX.1-2008.
+<P>
+<B>mkfifoat</B>():
+
+POSIX.1-2008.
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/mkfifo.1.html">mkfifo</A></B>(1),
+
+<B><A HREF="../man2/close.2.html">close</A></B>(2),
+
+<B><A HREF="../man2/open.2.html">open</A></B>(2),
+
+<B><A HREF="../man2/read.2.html">read</A></B>(2),
+
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2),
+
+<B><A HREF="../man2/umask.2.html">umask</A></B>(2),
+
+<B><A HREF="../man2/write.2.html">write</A></B>(2),
+
+<B><A HREF="../man7/fifo.7.html">fifo</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">mkfifoat()</A><DD>
+</DL>
+<DT><A HREF="#lbAF">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">VERSIONS</A><DD>
+<DT><A HREF="#lbAI">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAJ">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAK">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:03 GMT, September 18, 2014
+</BODY>
+</HTML>

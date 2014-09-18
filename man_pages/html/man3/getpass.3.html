@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETPASS</TITLE>
+</HEAD><BODY>
+<H1>GETPASS</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getpass - get a password
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<P>
+<B>char *getpass( const char *</B><I>prompt</I><B>);</B>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>getpass</B>():
+
+
+<DL COMPACT><DT><DD>
+
+<DL COMPACT>
+<DT>Since glibc 2.2.2:<DD>
+<PRE>
+_BSD_SOURCE ||
+    (_XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+        _XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED) &amp;&amp;
+    !(_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600)
+</PRE>
+
+<DT>Before glibc 2.2.2:<DD>
+none
+
+</DL>
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+This function is obsolete.
+Do not use it.
+If you want to read input without terminal echoing enabled,
+see the description of the
+<I>ECHO</I>
+
+flag in
+<B><A HREF="../man3/termios.3.html">termios</A></B>(3).
+
+<P>
+
+The
+<B>getpass</B>()
+
+function opens
+<I>/dev/tty</I>
+
+(the controlling terminal of the process), outputs the string
+<I>prompt</I>,
+
+turns off echoing, reads one line (the &quot;password&quot;),
+restores the terminal state and closes
+<I>/dev/tty</I>
+
+again.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The function
+<B>getpass</B>()
+
+returns a pointer to a static buffer containing (the first
+<B>PASS_MAX</B>
+
+bytes of) the password without the trailing
+newline, terminated by a null byte ('\0').
+This buffer may be overwritten by a following call.
+On error, the terminal state is restored,
+<I>errno</I>
+
+is set appropriately, and NULL is returned.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+The function may fail if
+<DL COMPACT>
+<DT><B>ENXIO</B>
+
+<DD>
+The process does not have a controlling terminal.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>FILES</H2>
+
+<I>/dev/tty</I>
+
+
+
+
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>getpass</B>()
+
+function is not thread-safe.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+Present in SUSv2, but marked LEGACY.
+Removed in POSIX.1-2001.
+<A NAME="lbAK">&nbsp;</A>
+<H2>NOTES</H2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<P>
+
+In the GNU C library implementation, if
+<I>/dev/tty</I>
+
+cannot be opened, the prompt is written to
+<I>stderr</I>
+
+and the password is read from
+<I>stdin</I>.
+
+There is no limit on the length of the password.
+Line editing is not disabled.
+<P>
+
+According to SUSv2, the value of
+<B>PASS_MAX</B>
+
+must be defined in
+<I>&lt;<A HREF="file:///usr/include/limits.h">limits.h</A>&gt;</I>
+
+in case it is smaller than 8, and can in any case be obtained using
+<I>sysconf(_SC_PASS_MAX)</I>.
+
+However, POSIX.2 withdraws the constants
+<B>PASS_MAX</B>
+
+and
+<B>_SC_PASS_MAX</B>,
+
+and the function
+<B>getpass</B>().
+
+
+
+
+
+The glibc version accepts
+<B>_SC_PASS_MAX</B>
+
+and returns
+<B>BUFSIZ</B>
+
+(e.g., 8192).
+<A NAME="lbAL">&nbsp;</A>
+<H2>BUGS</H2>
+
+The calling process should zero the password as soon as possible to avoid
+leaving the cleartext password visible in the process's address space.
+<A NAME="lbAM">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/crypt.3.html">crypt</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">FILES</A><DD>
+<DT><A HREF="#lbAH">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAK">NOTES</A><DD>
+<DT><A HREF="#lbAL">BUGS</A><DD>
+<DT><A HREF="#lbAM">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:11 GMT, September 18, 2014
+</BODY>
+</HTML>

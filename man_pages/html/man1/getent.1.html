@@ -1,0 +1,543 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETENT</TITLE>
+</HEAD><BODY>
+<H1>GETENT</H1>
+Section: User Commands (1)<BR>Updated: 2013-03-15<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getent - get entries from Name Service Switch libraries
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>getent</B>
+
+<I>database</I> [<I>key</I> ...]
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>getent</B>
+
+command displays entries from databases supported by the
+Name Service Switch libraries,
+which are configured in
+<I>/etc/nsswitch.conf</I>.
+
+If one or more
+<I>key</I>
+
+arguments are provided,
+then only the entries that match the supplied keys will be displayed.
+Otherwise, if no
+<I>key</I>
+
+is provided, all entries will be displayed (unless the database does not
+support enumeration).
+<P>
+
+The
+<I>database</I>
+
+may be any of those supported by the GNU C Library, listed below:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>ahosts</B>
+
+<DD>
+When no
+<I>key</I>
+
+is provided, use
+<B><A HREF="../man3/sethostent.3.html">sethostent</A></B>(3),
+
+<B><A HREF="../man3/gethostent.3.html">gethostent</A></B>(3),
+
+and
+<B><A HREF="../man3/endhostent.3.html">endhostent</A></B>(3)
+
+to enumerate the hosts database.
+This is identical to using
+<B>hosts</B>.
+
+When one or more
+<I>key</I>
+
+arguments are provided, pass each
+<I>key</I>
+
+in succession to
+<B><A HREF="../man3/getaddrinfo.3.html">getaddrinfo</A></B>(3)
+
+with the address family
+<B>AF_UNSPEC</B>,
+
+enumerating each socket address structure returned.
+<DT><B>ahostsv4</B>
+
+<DD>
+Same as
+<B>ahosts</B>,
+
+but use the address family
+<B>AF_INET</B>.
+
+<DT><B>ahostsv6</B>
+
+<DD>
+Same as
+<B>ahosts</B>,
+
+but use the address family
+<B>AF_INET6</B>.
+
+The call to
+<B><A HREF="../man3/getaddrinfo.3.html">getaddrinfo</A></B>(3)
+
+in this case includes the
+<B>AI_V4MAPPED</B>
+
+flag.
+<DT><B>aliases</B>
+
+<DD>
+When no
+<I>key</I>
+
+is provided, use
+<B><A HREF="../man3/setaliasent.3.html">setaliasent</A></B>(3),
+
+<B><A HREF="../man3/getaliasent.3.html">getaliasent</A></B>(3),
+
+and
+<B><A HREF="../man3/endaliasent.3.html">endaliasent</A></B>(3)
+
+to enumerate the aliases database.
+When one or more
+<I>key</I>
+
+arguments are provided, pass each
+<I>key</I>
+
+in succession to
+<B><A HREF="../man3/getaliasbyname.3.html">getaliasbyname</A></B>(3)
+
+and display the result.
+<DT><B>ethers</B>
+
+<DD>
+When one or more
+<I>key</I>
+
+arguments are provided, pass each
+<I>key</I>
+
+in succession to
+<B><A HREF="../man3/ether_aton.3.html">ether_aton</A></B>(3)
+
+and
+<B><A HREF="../man3/ether_hostton.3.html">ether_hostton</A></B>(3)
+
+until a result is obtained, and display the result.
+Enumeration is not supported on
+<B>ethers</B>,
+
+so a
+<I>key</I>
+
+must be provided.
+<DT><B>group</B>
+
+<DD>
+When no
+<I>key</I>
+
+is provided, use
+<B><A HREF="../man3/setgrent.3.html">setgrent</A></B>(3),
+
+<B><A HREF="../man3/getgrent.3.html">getgrent</A></B>(3),
+
+and
+<B><A HREF="../man3/endgrent.3.html">endgrent</A></B>(3)
+
+to enumerate the group database.
+When one or more
+<I>key</I>
+
+arguments are provided, pass each numeric
+<I>key</I>
+
+to
+<B><A HREF="../man3/getgrgid.3.html">getgrgid</A></B>(3)
+
+and each nonnumeric
+<I>key</I>
+
+to
+<B><A HREF="../man3/getgrnam.3.html">getgrnam</A></B>(3)
+
+and display the result.
+<DT><B>gshadow</B>
+
+<DD>
+When no
+<I>key</I>
+
+is provided, use
+<B><A HREF="../man3/setsgent.3.html">setsgent</A></B>(3),
+
+<B><A HREF="../man3/getsgent.3.html">getsgent</A></B>(3),
+
+and
+<B><A HREF="../man3/endsgent.3.html">endsgent</A></B>(3)
+
+to enumerate the gshadow database.
+When one or more
+<I>key</I>
+
+arguments are provided, pass each
+<I>key</I>
+
+in succession to
+<B><A HREF="../man3/getsgnam.3.html">getsgnam</A></B>(3)
+
+and display the result.
+<DT><B>hosts</B>
+
+<DD>
+When no
+<I>key</I>
+
+is provided, use
+<B><A HREF="../man3/sethostent.3.html">sethostent</A></B>(3),
+
+<B><A HREF="../man3/gethostent.3.html">gethostent</A></B>(3),
+
+and
+<B><A HREF="../man3/endhostent.3.html">endhostent</A></B>(3)
+
+to enumerate the hosts database.
+When one or more
+<I>key</I>
+
+arguments are provided, pass each
+<I>key</I>
+
+to
+<B><A HREF="../man3/gethostbyaddr.3.html">gethostbyaddr</A></B>(3)
+
+or
+<B><A HREF="../man3/gethostbyname2.3.html">gethostbyname2</A></B>(3),
+
+depending on whether a call to
+<B><A HREF="../man3/inet_pton.3.html">inet_pton</A></B>(3)
+
+indicates that the
+<I>key</I>
+
+is an IPv6 or IPv4 address or not, and display the result.
+<DT><B>initgroups</B>
+
+<DD>
+When one or more
+<I>key</I>
+
+arguments are provided, pass each
+<I>key</I>
+
+in succession to
+<B><A HREF="../man3/getgrouplist.3.html">getgrouplist</A></B>(3)
+
+and display the result.
+Enumeration is not supported on
+<B>initgroups</B>,
+
+so a
+<I>key</I>
+
+must be provided.
+<DT><B>netgroup</B>
+
+<DD>
+When one
+<I>key</I>
+
+is provided, pass the
+<I>key</I>
+
+to
+<B><A HREF="../man3/setnetgrent.3.html">setnetgrent</A></B>(3)
+
+and, using
+<B><A HREF="../man3/getnetgrent.3.html">getnetgrent</A></B>(3)
+
+display the resulting string triple
+(<I>hostname</I>, <I>username</I>, <I>domainname</I>).
+
+Alternatively, three
+<I>keys</I>
+
+may be provided, which are interpreted as the
+<I>hostname</I>,
+
+<I>username</I>
+
+and
+<I>domainname</I>
+
+to match to a netgroup name via
+<B><A HREF="../man3/innetgr.3.html">innetgr</A></B>(3).
+
+Enumeration is not supported on
+<B>netgroup</B>,
+
+so either one or three
+<I>keys</I>
+
+must be provided.
+<DT><B>networks</B>
+
+<DD>
+When no
+<I>key</I>
+
+is provided, use
+<B><A HREF="../man3/setnetent.3.html">setnetent</A></B>(3),
+
+<B><A HREF="../man3/getnetent.3.html">getnetent</A></B>(3),
+
+and
+<B><A HREF="../man3/endnetent.3.html">endnetent</A></B>(3)
+
+to enumerate the networks database.
+When one or more
+<I>key</I>
+
+arguments are provided, pass each numeric
+<I>key</I>
+
+to
+<B><A HREF="../man3/getnetbyaddr.3.html">getnetbyaddr</A></B>(3)
+
+and each nonnumeric
+<I>key</I>
+
+to
+<B><A HREF="../man3/getnetbyname.3.html">getnetbyname</A></B>(3)
+
+and display the result.
+<DT><B>passwd</B>
+
+<DD>
+When no
+<I>key</I>
+
+is provided, use
+<B><A HREF="../man3/setpwent.3.html">setpwent</A></B>(3),
+
+<B><A HREF="../man3/getpwent.3.html">getpwent</A></B>(3),
+
+and
+<B><A HREF="../man3/endpwent.3.html">endpwent</A></B>(3)
+
+to enumerate the passwd database.
+When one or more
+<I>key</I>
+
+arguments are provided, pass each numeric
+<I>key</I>
+
+to
+<B><A HREF="../man3/getpwuid.3.html">getpwuid</A></B>(3)
+
+and each nonnumeric
+<I>key</I>
+
+to
+<B><A HREF="../man3/getpwnam.3.html">getpwnam</A></B>(3)
+
+and display the result.
+<DT><B>protocols</B>
+
+<DD>
+When no
+<I>key</I>
+
+is provided, use
+<B><A HREF="../man3/setprotoent.3.html">setprotoent</A></B>(3),
+
+<B><A HREF="../man3/getprotoent.3.html">getprotoent</A></B>(3),
+
+and
+<B><A HREF="../man3/endprotoent.3.html">endprotoent</A></B>(3)
+
+to enumerate the protocols database.
+When one or more
+<I>key</I>
+
+arguments are provided, pass each numeric
+<I>key</I>
+
+to
+<B><A HREF="../man3/getprotobynumber.3.html">getprotobynumber</A></B>(3)
+
+and each nonnumeric
+<I>key</I>
+
+to
+<B><A HREF="../man3/getprotobyname.3.html">getprotobyname</A></B>(3)
+
+and display the result.
+<DT><B>rpc</B>
+
+<DD>
+When no
+<I>key</I>
+
+is provided, use
+<B><A HREF="../man3/setrpcent.3.html">setrpcent</A></B>(3),
+
+<B><A HREF="../man3/getrpcent.3.html">getrpcent</A></B>(3),
+
+and
+<B><A HREF="../man3/endrpcent.3.html">endrpcent</A></B>(3)
+
+to enumerate the rpc database.
+When one or more
+<I>key</I>
+
+arguments are provided, pass each numeric
+<I>key</I>
+
+to
+<B><A HREF="../man3/getrpcbynumber.3.html">getrpcbynumber</A></B>(3)
+
+and each nonnumeric
+<I>key</I>
+
+to
+<B><A HREF="../man3/getrpcbyname.3.html">getrpcbyname</A></B>(3)
+
+and display the result.
+<DT><B>services</B>
+
+<DD>
+When no
+<I>key</I>
+
+is provided, use
+<B><A HREF="../man3/setservent.3.html">setservent</A></B>(3),
+
+<B><A HREF="../man3/getservent.3.html">getservent</A></B>(3),
+
+and
+<B><A HREF="../man3/endservent.3.html">endservent</A></B>(3)
+
+to enumerate the services database.
+When one or more
+<I>key</I>
+
+arguments are provided, pass each numeric
+<I>key</I>
+
+to
+<B><A HREF="../man3/getservbynumber.3.html">getservbynumber</A></B>(3)
+
+and each nonnumeric
+<I>key</I>
+
+to
+<B><A HREF="../man3/getservbyname.3.html">getservbyname</A></B>(3)
+
+and display the result.
+<DT><B>shadow</B>
+
+<DD>
+When no
+<I>key</I>
+
+is provided, use
+<B><A HREF="../man3/setspent.3.html">setspent</A></B>(3),
+
+<B><A HREF="../man3/getspent.3.html">getspent</A></B>(3),
+
+and
+<B><A HREF="../man3/endspent.3.html">endspent</A></B>(3)
+
+to enumerate the shadow database.
+When one or more
+<I>key</I>
+
+arguments are provided, pass each
+<I>key</I>
+
+in succession to
+<B><A HREF="../man3/getspnam.3.html">getspnam</A></B>(3)
+
+and display the result.
+</DL>
+</DL>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>EXIT STATUS</H2>
+
+One of the following exit values can be returned by
+<B>getent</B>:
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>0</B>
+
+<DD>
+Command completed successfully.
+<DT><B>1</B>
+
+<DD>
+Missing arguments, or
+<I>database</I>
+
+unknown.
+<DT><B>2</B>
+
+<DD>
+One or more supplied
+<I>key</I>
+
+could not be found in the
+<I>database</I>.
+
+<DT><B>3</B>
+
+<DD>
+Enumeration not supported on this
+<I>database</I>.
+
+</DL>
+</DL>
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man5/nsswitch.conf.5.html">nsswitch.conf</A></B>(5)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">EXIT STATUS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:44 GMT, September 18, 2014
+</BODY>
+</HTML>

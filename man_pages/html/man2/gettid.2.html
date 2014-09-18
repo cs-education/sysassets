@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETTID</TITLE>
+</HEAD><BODY>
+<H1>GETTID</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-02-11<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+gettid - get thread identification
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+
+<B>pid_t gettid(void);</B>
+</PRE>
+
+<P>
+<I>Note</I>:
+
+There is no glibc wrapper for this system call; see NOTES.
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>gettid</B>()
+
+returns the caller's thread ID (TID).
+In a single-threaded process, the thread ID
+is equal to the process ID (PID, as returned by
+<B><A HREF="../man2/getpid.2.html">getpid</A></B>(2)).
+
+In a multithreaded process, all threads
+have the same PID, but each one has a unique TID.
+For further details, see the discussion of
+<B>CLONE_THREAD</B>
+
+in
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2).
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, returns the thread ID of the calling process.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+This call is always successful.
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>gettid</B>()
+
+system call first appeared on Linux in kernel 2.4.11.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>gettid</B>()
+
+is Linux-specific and should not be used in programs that
+are intended to be portable.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+Glibc does not provide a wrapper for this system call; call it using
+<B><A HREF="../man2/syscall.2.html">syscall</A></B>(2).
+
+
+
+<P>
+The thread ID returned by this call is not the same thing as a
+POSIX thread ID (i.e., the opaque value returned by
+<B><A HREF="../man3/pthread_self.3.html">pthread_self</A></B>(3)).
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/capget.2.html">capget</A></B>(2),
+
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2),
+
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2),
+
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2),
+
+<B><A HREF="../man2/get_robust_list.2.html">get_robust_list</A></B>(2),
+
+<B><A HREF="../man2/getpid.2.html">getpid</A></B>(2),
+
+
+<B><A HREF="../man2/ioprio_set.2.html">ioprio_set</A></B>(2),
+
+
+
+<B><A HREF="../man2/perf_event_open.2.html">perf_event_open</A></B>(2),
+
+
+
+<B><A HREF="../man2/sched_setaffinity.2.html">sched_setaffinity</A></B>(2),
+
+<B><A HREF="../man2/sched_setparam.2.html">sched_setparam</A></B>(2),
+
+<B><A HREF="../man2/sched_setscheduler.2.html">sched_setscheduler</A></B>(2),
+
+<B><A HREF="../man2/tgkill.2.html">tgkill</A></B>(2),
+
+<B><A HREF="../man2/timer_create.2.html">timer_create</A></B>(2)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:48 GMT, September 18, 2014
+</BODY>
+</HTML>

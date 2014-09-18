@@ -1,0 +1,328 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of LIO_LISTIO</TITLE>
+</HEAD><BODY>
+<H1>LIO_LISTIO</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2012-05-08<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+lio_listio - initiate a list of I/O requests
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/aio.h">aio.h</A>&gt;</B>
+
+<B>int lio_listio(int </B><I>mode</I><B>, struct aiocb *const </B><I>aiocb_list</I><B>[],</B>
+<B>               int </B><I>nitems</I><B>, struct sigevent *</B><I>sevp</I><B>);</B>
+
+Link with <I>-lrt</I>.
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>lio_listio</B>()
+
+function initiates the list of I/O operations described by the array
+<I>aiocb_list</I>.
+
+<P>
+The
+<I>mode</I>
+
+operation has one of the following values:
+<DL COMPACT>
+<DT><B>LIO_WAIT</B>
+
+<DD>
+The call blocks until all operations are complete.
+The
+<I>sevp</I>
+
+argument is ignored.
+<DT><B>LIO_NOWAIT</B>
+
+<DD>
+The I/O operations are queued for processing and the call returns immediately.
+When all of the I/O operations complete, asynchronous notification occurs,
+as specified by the
+<I>sevp</I>
+
+argument; see
+<B><A HREF="../man7/sigevent.7.html">sigevent</A></B>(7)
+
+for details.
+If
+<I>sevp</I>
+
+is NULL, no asynchronous notification occurs.
+</DL>
+<P>
+
+The
+<I>aiocb_list</I>
+
+argument is an array of pointers to
+<I>aiocb</I>
+
+structures that describe I/O operations.
+These operations are executed in an unspecified order.
+The
+<I>nitems</I>
+
+argument specifies the size of the array
+<I>aiocb_list</I>.
+
+null pointers in
+<I>aiocb_list</I>
+
+are ignored.
+<P>
+In each control block in
+<I>aiocb_list</I>,
+
+the
+<I>aio_lio_opcode</I>
+
+field specifies the I/O operation to be initiated, as follows:
+<DL COMPACT>
+<DT><B>LIO_READ</B>
+
+<DD>
+Initiate a read operation.
+The operation is queued as for a call to
+<B><A HREF="../man3/aio_read.3.html">aio_read</A></B>(3)
+
+specifying this control block.
+<DT><B>LIO_WRITE</B>
+
+<DD>
+Initiate a write operation.
+The operation is queued as for a call to
+<B><A HREF="../man3/aio_write.3.html">aio_write</A></B>(3)
+
+specifying this control block.
+<DT><B>LIO_NOP</B>
+
+<DD>
+Ignore this control block.
+</DL>
+<P>
+
+The remaining fields in each control block have the same meanings as for
+<B><A HREF="../man3/aio_read.3.html">aio_read</A></B>(3)
+
+and
+<B><A HREF="../man3/aio_write.3.html">aio_write</A></B>(3).
+
+The
+<I>aio_sigevent</I>
+
+fields of each control block can be used to specify notifications
+for the individual I/O operations (see
+<B><A HREF="../man7/sigevent.7.html">sigevent</A></B>(7)).
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+If
+<I>mode</I>
+
+is
+<B>LIO_NOWAIT</B>,
+
+<B>lio_listio</B>()
+
+returns 0 if all I/O operations are successfully queued.
+Otherwise, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<P>
+If
+<I>mode</I>
+
+is
+<B>LIO_WAIT</B>,
+
+<B>lio_listio</B>()
+
+returns 0 when all of the I/O operations have completed successfully.
+Otherwise, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<P>
+The return status from
+<B>lio_listio</B>()
+
+provides information only about the call itself,
+not about the individual I/O operations.
+One or more of the I/O operations may fail,
+but this does not prevent other operations completing.
+The status of individual I/O operations in
+<I>aiocb_list</I>
+
+can be determined using
+<B><A HREF="../man3/aio_error.3.html">aio_error</A></B>(3).
+
+When an operation has completed,
+its return status can be obtained using
+<B><A HREF="../man3/aio_return.3.html">aio_return</A></B>(3).
+
+Individual I/O operations can fail for the reasons described in
+<B><A HREF="../man3/aio_read.3.html">aio_read</A></B>(3)
+
+and
+<B><A HREF="../man3/aio_write.3.html">aio_write</A></B>(3).
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+The
+<B>lio_listio</B>()
+
+function may fail for the following reasons:
+<DL COMPACT>
+<DT><B>EAGAIN</B>
+
+<DD>
+Out of resources.
+<DT><B>EAGAIN</B>
+
+<DD>
+
+The number of I/O operations specified by
+<I>nitems</I>
+
+would cause the limit
+<B>AIO_MAX</B>
+
+to be exceeded.
+<DT><B>EINVAL</B>
+
+<DD>
+<I>mode</I>
+
+is invalid, or
+
+<I>nitems</I>
+
+exceeds the limit
+<B>AIO_LISTIO_MAX</B>.
+
+<DT><B>EINTR</B>
+
+<DD>
+<I>mode</I>
+
+was
+<B>LIO_WAIT</B>
+
+and a signal
+was caught before all I/O operations completed.
+(This may even be one of the signals used for
+asynchronous I/O completion notification.)
+<DT><B>EIO</B>
+
+<DD>
+One of more of the operations specified by
+<I>aiocb_list</I>
+
+failed.
+
+The application can check the status of each operation using
+<B><A HREF="../man3/aio_return.3.html">aio_return</A></B>(3).
+
+</DL>
+<P>
+
+If
+<B>lio_listio</B>()
+
+fails with the error
+<B>EAGAIN</B>,
+
+<B>EINTR</B>,
+
+or
+<B>EIO</B>,
+
+then some of the operations in
+<I>aiocb_list</I>
+
+may have been initiated.
+If
+<B>lio_listio</B>()
+
+fails for any other reason,
+then none of the I/O operations has been initiated.
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>lio_listio</B>()
+
+function is available since glibc 2.1.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001, POSIX.1-2008.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+It is a good idea to zero out the control blocks before use.
+The control blocks must not be changed while the I/O operations
+are in progress.
+The buffer areas being read into or written from
+
+must not be accessed during the operations or undefined results may occur.
+The memory areas involved must remain valid.
+<P>
+Simultaneous I/O operations specifying the same
+<I>aiocb</I>
+
+structure produce undefined results.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/aio_cancel.3.html">aio_cancel</A></B>(3),
+
+<B><A HREF="../man3/aio_error.3.html">aio_error</A></B>(3),
+
+<B><A HREF="../man3/aio_fsync.3.html">aio_fsync</A></B>(3),
+
+<B><A HREF="../man3/aio_return.3.html">aio_return</A></B>(3),
+
+<B><A HREF="../man3/aio_suspend.3.html">aio_suspend</A></B>(3),
+
+<B><A HREF="../man3/aio_write.3.html">aio_write</A></B>(3),
+
+<B><A HREF="../man7/aio.7.html">aio</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:06 GMT, September 18, 2014
+</BODY>
+</HTML>

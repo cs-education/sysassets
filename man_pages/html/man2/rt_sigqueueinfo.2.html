@@ -1,0 +1,284 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of RT_SIGQUEUEINFO</TITLE>
+</HEAD><BODY>
+<H1>RT_SIGQUEUEINFO</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2012-07-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+rt_sigqueueinfo, rt_tgsigqueueinfo - queue a signal and data
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>int rt_sigqueueinfo(pid_t </B><I>tgid</I><B>, int </B><I>sig</I><B>, siginfo_t *</B><I>uinfo</I><B>);</B>
+
+<B>int rt_tgsigqueueinfo(pid_t </B><I>tgid</I><B>, pid_t </B><I>tid</I><B>, int </B><I>sig</I><B>,</B>
+<B>                      siginfo_t *</B><I>uinfo</I><B>);</B>
+</PRE>
+
+<P>
+<I>Note</I>:
+
+There are no glibc wrappers for these system calls; see NOTES.
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>rt_sigqueueinfo</B>()
+
+and
+<B>rt_tgsigqueueinfo</B>()
+
+system calls are the low-level interfaces used to send a signal plus data
+to a process or thread.
+The receiver of the signal can obtain the accompanying data
+by establishing a signal handler with the
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2)
+
+<B>SA_SIGINFO</B>
+
+flag.
+<P>
+These system calls are not intended for direct application use;
+they are provided to allow the implementation of
+<B><A HREF="../man3/sigqueue.3.html">sigqueue</A></B>(3)
+
+and
+<B><A HREF="../man3/pthread_sigqueue.3.html">pthread_sigqueue</A></B>(3).
+
+<P>
+The
+<B>rt_sigqueueinfo</B>()
+
+system call sends the signal
+<I>sig</I>
+
+to the thread group with the ID
+<I>tgid</I>.
+
+(The term &quot;thread group&quot; is synonymous with &quot;process&quot;, and
+<I>tid</I>
+
+corresponds to the traditional UNIX process ID.)
+The signal will be delivered to an arbitrary member of the thread group
+(i.e., one of the threads that is not currently blocking the signal).
+<P>
+The
+<I>uinfo</I>
+
+argument specifies the data to accompany the signal.
+This argument is a pointer to a structure of type
+<I>siginfo_t</I>,
+
+described in
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2)
+
+(and defined by including
+<I>&lt;<A HREF="file:///usr/include/sigaction.h">sigaction.h</A>&gt;</I>).
+
+The caller should set the following fields in this structure:
+<DL COMPACT>
+<DT><I>si_code</I>
+
+<DD>
+This must be one of the
+<B>SI_*</B>
+
+codes in the Linux kernel source file
+<I>include/asm-generic/siginfo.h</I>,
+
+with the restriction that the code must be negative
+(i.e., cannot be
+<B>SI_USER</B>,
+
+which is used by the kernel to indicate a signal sent by
+<B><A HREF="../man2/kill.2.html">kill</A></B>(2))
+
+and cannot (since Linux 2.6.39) be
+<B>SI_TKILL</B>
+
+(which is used by the kernel to indicate a signal sent using
+
+<B><A HREF="../man2/tgkill.2.html">tgkill</A></B>(2)).
+
+<DT><I>si_pid</I>
+
+<DD>
+This should be set to a process ID,
+typically the process ID of the sender.
+<DT><I>si_uid</I>
+
+<DD>
+This should be set to a user ID,
+typically the real user ID of the sender.
+<DT><I>si_value</I>
+
+<DD>
+This field contains the user data to accompany the signal.
+For more information, see the description of the last
+(<I>union sigval</I>)
+
+argument of
+<B><A HREF="../man3/sigqueue.3.html">sigqueue</A></B>(3).
+
+</DL>
+<P>
+
+Internally, the kernel sets the
+<I>si_signo</I>
+
+field to the value specified in
+<I>sig</I>,
+
+so that the receiver of the signal can also obtain
+the signal number via that field.
+<P>
+The
+<B>rt_tgsigqueueinfo</B>()
+
+system call is like
+<B>rt_sigqueueinfo</B>(),
+
+but sends the signal and data to the single thread
+specified by the combination of
+<I>tgid</I>,
+
+a thread group ID,
+and
+<I>tid</I>,
+
+a thread in that thread group.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these system calls return 0.
+On error, they return -1 and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EAGAIN</B>
+
+<DD>
+The limit of signals which may be queued has been reached.
+(See
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+for further information.)
+<DT><B>EINVAL</B>
+
+<DD>
+<I>sig</I>,
+
+<I>tgid</I>,
+
+or
+<I>tid</I>
+
+was invalid.
+<DT><B>EPERM</B>
+
+<DD>
+The caller does not have permission to send the signal to the target.
+For the required permissions, see
+<B><A HREF="../man2/kill.2.html">kill</A></B>(2).
+
+Or:
+<I>uinfo-&gt;si_code</I>
+
+is invalid.
+<DT><B>ESRCH</B>
+
+<DD>
+<B>rt_sigqueueinfo</B>():
+
+No thread group matching
+<I>tgid</I>
+
+was found.
+<BR>
+
+<B>rt_tgsigqueinfo</B>():
+
+No thread matching
+<I>tgid</I>
+
+and
+<I>tid</I>
+
+was found.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>rt_sigqueueinfo</B>()
+
+system call was added to Linux in version 2.2.
+The
+<B>rt_tgsigqueueinfo</B>()
+
+system call was added to Linux in version 2.6.31.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+These system calls are Linux-specific.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+Since these system calls are not intended for application use,
+there are no glibc wrapper functions; use
+<B><A HREF="../man2/syscall.2.html">syscall</A></B>(2)
+
+in the unlikely case that you want to call them directly.
+<P>
+As with
+<B><A HREF="../man2/kill.2.html">kill</A></B>(2),
+
+the null signal (0) can be used to check if the specified process
+or thread exists.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/kill.2.html">kill</A></B>(2),
+
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2),
+
+<B><A HREF="../man2/tgkill.2.html">tgkill</A></B>(2),
+
+<B><A HREF="../man3/pthread_sigqueue.3.html">pthread_sigqueue</A></B>(3),
+
+<B><A HREF="../man3/sigqueue.3.html">sigqueue</A></B>(3),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

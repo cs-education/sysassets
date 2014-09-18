@@ -1,0 +1,1145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MAN-PAGES</TITLE>
+</HEAD><BODY>
+<H1>MAN-PAGES</H1>
+Section: Linux Programmer's Manual (7)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+man-pages - conventions for writing Linux man pages
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>man</B>
+
+[<I>section</I>]
+
+<I>title</I>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+This page describes the conventions that should be employed
+when writing man pages for the Linux <I>man-pages</I> project,
+which documents the user-space API provided by the Linux kernel
+and the GNU C library.
+The project thus provides most of the pages in Section 2,
+as well as many of the pages that appear
+in Sections 3, 4, 5, and 7 of the man pages on a Linux system.
+The conventions described on this page may also be useful
+for authors writing man pages for other projects.
+<A NAME="lbAE">&nbsp;</A>
+<H3>Sections of the manual pages</H3>
+
+<P>
+
+The manual Sections are traditionally defined as follows:
+<DL COMPACT>
+<DT><B>1 Commands (Programs)</B>
+
+<DD>
+Those commands that can be executed by the user from within
+a shell.
+<DT><B>2 System calls</B>
+
+<DD>
+Those functions which must be performed by the kernel.
+<DT><B>3 Library calls</B>
+
+<DD>
+Most of the
+<I>libc</I>
+
+functions.
+<DT><B>4 Special files (devices)</B>
+
+<DD>
+Files found in
+<I>/dev</I>.
+
+<DT><B>5 File formats and conventions</B>
+
+<DD>
+The format for
+<I>/etc/passwd</I>
+
+and other human-readable files.
+<DT><B>6 Games</B>
+
+<DD>
+<DT><B>7 Overview, conventions, and miscellaneous</B>
+
+<DD>
+Overviews of various topics, conventions and protocols,
+character set standards, and miscellaneous other things.
+<DT><B>8 System management commands</B>
+
+<DD>
+Commands like
+<B><A HREF="../man8/mount.8.html">mount</A></B>(8),
+
+many of which only root can execute.
+
+
+
+
+
+
+
+
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H3>Macro package</H3>
+
+New manual pages should be marked up using the
+<B>groff an.tmac</B>
+
+package described in
+<B><A HREF="../man7/man.7.html">man</A></B>(7).
+
+This choice is mainly for consistency: the vast majority of
+existing Linux manual pages are marked up using these macros.
+<A NAME="lbAG">&nbsp;</A>
+<H3>Conventions for source file layout</H3>
+
+Please limit source code line length to no more than about 75 characters
+wherever possible.
+This helps avoid line-wrapping in some mail clients when patches are
+submitted inline.
+<P>
+New sentences should be started on new lines.
+This makes it easier to see the effect of patches,
+which often operate at the level of individual sentences.
+<A NAME="lbAH">&nbsp;</A>
+<H3>Title line</H3>
+
+The first command in a man page should be a
+<B>TH</B>
+
+command:
+<DL COMPACT><DT><DD>
+<P>
+<B>.TH</B>
+
+<I>title section date source manual</I>
+
+<P>
+</DL>
+
+where:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><I>title</I>
+
+<DD>
+The title of the man page, written in all caps (e.g.,
+<I>MAN-PAGES</I>).
+
+<DT><I>section</I>
+
+<DD>
+The section number in which the man page should be placed (e.g.,
+<I>7</I>).
+
+<DT><I>date</I>
+
+<DD>
+The date of the last nontrivial change that was made to the man page.
+(Within the
+<I>man-pages</I>
+
+project, the necessary updates to these timetamps are handled
+automatically by scripts, so there is no need to manually update
+them as part of a patch.)
+Dates should be written in the form YYYY-MM-DD.
+<DT><I>source</I>
+
+<DD>
+The source of the command, function, or system call.
+<P>
+For those few <I>man-pages</I> pages in Sections 1 and 8,
+probably you just want to write
+<I>GNU</I>.
+
+<P>
+For system calls, just write
+<I>Linux</I>.
+
+(An earlier practice was to write the version number
+of the kernel from which the manual page was being written/checked.
+However, this was never done consistently, and so was
+probably worse than including no version number.
+Henceforth, avoid including a version number.)
+<P>
+For library calls that are part of glibc or one of the
+other common GNU libraries, just use
+<I>GNU C Library</I>, <I>GNU</I>,
+
+or an empty string.
+<P>
+For Section 4 pages, use
+<I>Linux</I>.
+
+<P>
+In cases of doubt, just write
+<I>Linux</I>, or <I>GNU</I>.
+
+<DT><I>manual</I>
+
+<DD>
+The title of the manual (e.g., for Section 2 and 3 pages in
+the <I>man-pages</I> package, use
+<I>Linux Programmer's Manual</I>).
+
+</DL>
+</DL>
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Sections within a manual page</H3>
+
+The list below shows conventional or suggested sections.
+Most manual pages should include at least the
+<B>highlighted</B>
+
+sections.
+Arrange a new manual page so that sections
+are placed in the order shown in the list.
+
+<PRE>
+
+<B>NAME</B>
+<B>SYNOPSIS</B>
+CONFIGURATION      [Normally only in Section 4]
+<B>DESCRIPTION</B>
+OPTIONS            [Normally only in Sections 1, 8]
+EXIT STATUS        [Normally only in Sections 1, 8]
+RETURN VALUE       [Normally only in Sections 2, 3]
+ERRORS             [Typically only in Sections 2, 3]
+ENVIRONMENT
+FILES
+VERSIONS           [Normally only in Sections 2, 3]
+ATTRIBUTES         [Normally only in Sections 2, 3]
+CONFORMING TO
+NOTES
+BUGS
+EXAMPLE
+<B>SEE ALSO</B>
+
+</PRE>
+
+
+<I>Where a traditional heading would apply</I>, <I>please use it</I>;
+
+this kind of consistency can make the information easier to understand.
+If you must, you can create your own
+headings if they make things easier to understand (this can
+be especially useful for pages in Sections 4 and 5).
+However, before doing this, consider whether you could use the
+traditional headings, with some subsections (<I>.SS</I>) within
+those sections.
+<P>
+The following list elaborates on the contents of each of
+the above sections.
+<DL COMPACT>
+<DT><B>NAME</B>
+
+<DD>
+The name of this manual page.
+<P>
+See
+<B><A HREF="../man7/man.7.html">man</A></B>(7)
+
+for important details of the line(s) that should follow the
+<B>.SH NAME</B> command.
+All words in this line (including the word immediately
+following the &quot;\-&quot;) should be in lowercase,
+except where English or technical terminological convention
+dictates otherwise.
+<DT><B>SYNOPSIS</B>
+
+<DD>
+A brief summary of the command or function's interface.
+<P>
+For commands, this shows the syntax of the command and its arguments
+(including options);
+boldface is used for as-is text and italics are used to
+indicate replaceable arguments.
+Brackets ([]) surround optional arguments, vertical bars (|)
+separate choices, and ellipses (...) can be repeated.
+For functions, it shows any required data declarations or
+<B>#include</B>
+
+directives, followed by the function declaration.
+<P>
+Where a feature test macro must be defined in order to obtain
+the declaration of a function (or a variable) from a header file,
+then the SYNOPSIS should indicate this, as described in
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7).
+
+
+<DT><B>CONFIGURATION</B>
+
+<DD>
+Configuration details for a device.
+<P>
+This section normally appears only in Section 4 pages.
+<DT><B>DESCRIPTION</B>
+
+<DD>
+An explanation of what the program, function, or format does.
+<P>
+Discuss how it interacts with files and standard input, and what it
+produces on standard output or standard error.
+Omit internals and implementation details unless they're critical for
+understanding the interface.
+Describe the usual case;
+for information on command-line options of a program use the
+<B>OPTIONS</B>
+
+section.
+
+
+
+
+
+
+<P>
+When describing new behavior or new flags for
+a system call or library function,
+be careful to note the kernel or C library version
+that introduced the change.
+The preferred method of noting this information for flags is as part of a
+<B>.TP</B>
+
+list, in the following form (here, for a new system call flag):
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>XYZ_FLAG</B> (since Linux 3.7)
+
+<DD>
+Description of flag...
+</DL>
+</DL>
+
+<DT><DD>
+Including version information is especially useful to users
+who are constrained to using older kernel or C library versions
+(which is typical in embedded systems, for example).
+<DT><B>OPTIONS</B>
+
+<DD>
+A description of the command-line options accepted by a
+program and how they change its behavior.
+<P>
+This section should appear only for Section 1 and 8 manual pages.
+
+
+
+<DT><B>EXIT STATUS</B>
+
+<DD>
+A list of the possible exit status values of a program and
+the conditions that cause these values to be returned.
+<P>
+This section should appear only for Section 1 and 8 manual pages.
+<DT><B>RETURN VALUE</B>
+
+<DD>
+For Section 2 and 3 pages, this section gives a
+list of the values the library routine will return to the caller
+and the conditions that cause these values to be returned.
+<DT><B>ERRORS</B>
+
+<DD>
+For Section 2 and 3 manual pages, this is a list of the
+values that may be placed in
+<I>errno</I>
+
+in the event of an error, along with information about the cause
+of the errors.
+<P>
+<I>The error list should be in alphabetical order</I>.
+
+<DT><B>ENVIRONMENT</B>
+
+<DD>
+A list of all environment variables that affect the program or function
+and how they affect it.
+<DT><B>FILES</B>
+
+<DD>
+A list of the files the program or function uses, such as
+configuration files, startup files,
+and files the program directly operates on.
+<P>
+Give the full pathname of these files, and use the installation
+process to modify the directory part to match user preferences.
+For many programs, the default installation location is in
+<I>/usr/local</I>,
+
+so your base manual page should use
+<I>/usr/local</I>
+
+as the base.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<DT><B>ATTRIBUTES</B>
+
+<DD>
+A summary of various attributes of the function(s) documented on this page,
+broken into subsections.
+<P>
+The following subsections are defined:
+<P>
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</B>
+
+<DD>
+This subsection notes attributes relating to multithreaded applications:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>*<DD>
+Whether the function is thread-safe.
+<DT>*<DD>
+Whether the function is a cancellation point.
+<DT>*<DD>
+Whether the function is async-cancel-safe.
+</DL>
+</DL>
+
+<DT><DD>
+Details of these attributes can be found in
+<B><A HREF="../man7/pthreads.7.html">pthreads</A></B>(7).
+
+</DL>
+</DL>
+
+<DT><B>VERSIONS</B>
+
+<DD>
+A brief summary of the Linux kernel or glibc versions where a
+system call or library function appeared,
+or changed significantly in its operation.
+<P>
+As a general rule, every new interface should
+include a VERSIONS section in its manual page.
+Unfortunately,
+many existing manual pages don't include this information
+(since there was no policy to do so when they were written).
+Patches to remedy this are welcome,
+but, from the perspective of programmers writing new code,
+this information probably matters only in the case of kernel
+interfaces that have been added in Linux 2.4 or later
+(i.e., changes since kernel 2.2),
+and library functions that have been added to glibc since version 2.1
+(i.e., changes since glibc 2.0).
+<P>
+The
+<B><A HREF="../man2/syscalls.2.html">syscalls</A></B>(2)
+
+manual page also provides information about kernel versions
+in which various system calls first appeared.
+<DT><B>CONFORMING TO</B>
+
+<DD>
+A description of any standards or conventions that relate to the function
+or command described by the manual page.
+<P>
+The preferred terms to use for the various standards are listed as
+headings in
+<B><A HREF="../man7/standards.7.html">standards</A></B>(7).
+
+<P>
+For a page in Section 2 or 3,
+this section should note the POSIX.1
+version(s) that the call conforms to,
+and also whether the call is specified in C99.
+(Don't worry too much about other standards like SUS, SUSv2, and XPG,
+or the SVr4 and 4.xBSD implementation standards,
+unless the call was specified in those standards,
+but isn't in the current version of POSIX.1.)
+<P>
+If the call is not governed by any standards but commonly
+exists on other systems, note them.
+If the call is Linux-specific, note this.
+<P>
+If this section consists of just a list of standards
+(which it commonly does),
+terminate the list with a period ('.').
+<DT><B>NOTES</B>
+
+<DD>
+Miscellaneous notes.
+<P>
+For Section 2 and 3 man pages you may find it useful to include
+subsections (<B>SS</B>) named <I>Linux Notes</I> and <I>Glibc Notes</I>.
+<P>
+In Section 2, use the heading
+<I>C library/kernel ABI differences</I>
+
+to mark off notes that describe the differences (if any) between
+the C library wrapper function for a system call and
+the raw system call interface provided by the kernel.
+<DT><B>BUGS</B>
+
+<DD>
+A list of limitations, known defects or inconveniences,
+and other questionable activities.
+<DT><B>EXAMPLE</B>
+
+<DD>
+One or more examples demonstrating how this function, file or
+command is used.
+<P>
+For details on writing example programs,
+see <I>Example Programs</I> below.
+<DT><B>AUTHORS</B>
+
+<DD>
+A list of authors of the documentation or program.
+<P>
+<B>Use of an AUTHORS section is strongly discouraged</B>.
+Generally, it is better not to clutter every page with a list
+of (over time potentially numerous) authors;
+if you write or significantly amend a page,
+add a copyright notice as a comment in the source file.
+If you are the author of a device driver and want to include
+an address for reporting bugs, place this under the BUGS section.
+<DT><B>SEE ALSO</B>
+
+<DD>
+A comma-separated list of related man pages, possibly followed by
+other related pages or documents.
+<P>
+The list should be ordered by section number and
+then alphabetically by name
+Do not terminate this with a period.
+<DT><DD>
+Where the SEE ALSO list contains many long manual page names,
+to improve the visual result of the output, it may be useful to employ the
+<I>.ad l</I>
+
+(don't right justify)
+and
+<I>.nh</I>
+
+(don't hyphenate)
+directives.
+Hyphenation of individual page names can be prevented
+by preceding words with the string &quot;\%&quot;.
+</DL>
+<A NAME="lbAJ">&nbsp;</A>
+<H2>STYLE GUIDE</H2>
+
+The following subsections describe the preferred style for the
+<I>man-pages</I>
+
+project.
+For details not covered below, the Chicago Manual of Style
+is usually a good source;
+try also grepping for preexisting usage in the project source tree.
+<A NAME="lbAK">&nbsp;</A>
+<H3>Use of gender-neutral language</H3>
+
+As far as possible, use gender-neutral language in the text of man
+pages.
+Use of &quot;they&quot; (&quot;them&quot;, &quot;themself&quot;, &quot;their&quot;) as a gender-neutral singular
+pronoun is acceptable.
+<A NAME="lbAL">&nbsp;</A>
+<H3>Font conventions</H3>
+
+<P>
+
+For functions, the arguments are always specified using italics,
+<I>even in the SYNOPSIS section</I>,
+
+where the rest of the function is specified in bold:
+<P>
+
+<B>    int myfunction(int </B><I>argc</I><B>, char **</B><I>argv</I><B>);</B>
+
+<P>
+
+Variable names should, like argument names, be specified in italics.
+<P>
+
+Filenames (whether pathnames, or references to header files)
+are always in italics (e.g.,
+<I>&lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;</I>),
+
+except in the SYNOPSIS section, where included files are in bold (e.g.,
+<B>#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;</B>).
+
+When referring to a standard header file include,
+specify the header file surrounded by angle brackets,
+in the usual C way (e.g.,
+<I>&lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;</I>).
+
+<P>
+
+Special macros, which are usually in uppercase, are in bold (e.g.,
+<B>MAXINT</B>).
+
+Exception: don't boldface NULL.
+<P>
+
+When enumerating a list of error codes, the codes are in bold (this list
+usually uses the
+<B>.TP</B>
+
+macro).
+<P>
+
+Complete commands should, if long,
+be written as an indented line on their own,
+with a blank line before and after the command, for example
+
+<PRE>
+
+man 7 man-pages
+
+</PRE>
+
+
+If the command is short, then it can be included inline in the text,
+in italic format, for example,
+<I>man 7 man-pages</I>.
+
+In this case, it may be worth using nonbreaking spaces
+(&quot;\&nbsp;&quot;) at suitable places in the command.
+Command options should be written in italics (e.g.,
+<I>-l</I>).
+
+<P>
+
+Expressions, if not written on a separate indented line, should
+be specified in italics.
+Again, the use of nonbreaking spaces may be appropriate
+if the expression is inlined with normal text.
+<P>
+
+Any reference to the subject of the current manual page
+should be written with the name in bold.
+If the subject is a function (i.e., this is a Section 2 or 3 page),
+then the name should be followed by a pair of parentheses
+in Roman (normal) font.
+For example, in the
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+man page, references to the subject of the page would be written as:
+<B>fcntl</B>().
+
+The preferred way to write this in the source file is:
+<PRE>
+
+    .BR fcntl ()
+
+</PRE>
+
+(Using this format, rather than the use of &quot;\fB...\fP()&quot;
+makes it easier to write tools that parse man page source files.)
+<P>
+
+Any reference to another man page
+should be written with the name in bold,
+<I>always</I>
+
+followed by the section number,
+formatted in Roman (normal) font, without any
+separating spaces (e.g.,
+<B><A HREF="../man2/intro.2.html">intro</A></B>(2)).
+
+The preferred way to write this in the source file is:
+<PRE>
+
+    .BR intro (2)
+
+</PRE>
+
+(Including the section number in cross references lets tools like
+<B><A HREF="../man1/man2html.1.html">man2html</A></B>(1)
+
+create properly hyperlinked pages.)
+<P>
+Control characters should be written in bold face,
+with no quotes; for example,
+<B>^X</B>.
+
+<A NAME="lbAM">&nbsp;</A>
+<H3>Spelling</H3>
+
+Starting with release 2.59,
+<I>man-pages</I>
+
+follows American spelling conventions
+(previously, there was a random mix of British and American spellings);
+please write all new pages and patches according to these conventions.
+<P>
+Aside from the well-known spelling differences,
+there are a few other subtleties to watch for:
+<DL COMPACT>
+<DT>*<DD>
+American English tends to use the forms &quot;backward&quot;, &quot;upward&quot;, &quot;toward&quot;,
+and so on
+rather than the British forms &quot;backwards&quot;, &quot;upwards&quot;, &quot;towards&quot;, and so on.
+</DL>
+<A NAME="lbAN">&nbsp;</A>
+<H3>BSD version numbers</H3>
+
+The classical scheme for writing BSD version numbers is
+<I>x.yBSD</I>,
+
+where
+<I>x.y</I>
+
+is the version number (e.g., 4.2BSD).
+Avoid forms such as
+<I>BSD 4.3</I>.
+
+<A NAME="lbAO">&nbsp;</A>
+<H3>Capitalization</H3>
+
+In subsection (&quot;SS&quot;) headings,
+capitalize the first word in the heading, but otherwise use lowercase,
+except where English usage (e.g., proper nouns) or programming
+language requirements (e.g., identifier names) dictate otherwise.
+For example:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;.SS&nbsp;Unicode&nbsp;under&nbsp;Linux
+<P>
+<A NAME="lbAP">&nbsp;</A>
+<H3>Indentation of structure definitions, shell session logs, and so on</H3>
+
+When structure definitions, shell session logs, and so on are included
+in running text, indent them by 4 spaces (i.e., a block enclosed by
+<I>.in&nbsp;+4n</I>
+
+and
+<I>.in</I>).
+
+<A NAME="lbAQ">&nbsp;</A>
+<H3>Preferred terms</H3>
+
+The following table lists some preferred terms to use in man pages,
+mainly to ensure consistency across pages.
+<TABLE>
+<TR VALIGN=top><TD>Term</TD><TD>Avoid using</TD><TD>Notes<BR></TD></TR>
+<TR VALIGN=top><TD></TD></TR>
+<TR VALIGN=top><TD>bit mask</TD><TD>bitmask</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>built-in</TD><TD>builtin</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>Epoch</TD><TD>epoch</TD><TD>
+For the UNIX Epoch (00:00:00, 1 Jan 1970 UTC)
+<BR></TD></TR>
+<TR VALIGN=top><TD>filename</TD><TD>file name</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>filesystem</TD><TD>file system</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>hostname</TD><TD>host name</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>inode</TD><TD>i-node</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>lowercase</TD><TD>lower case, lower-case</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>pathname</TD><TD>path name</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>pseudoterminal</TD><TD>pseudo-terminal</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>privileged port</TD><TD>
+reserved port,
+system port
+</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>real-time</TD><TD>
+realtime,
+real time
+</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>run time</TD><TD>runtime</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>saved set-group-ID</TD><TD>
+saved group ID,
+saved set-GID
+</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>saved set-user-ID</TD><TD>
+saved user ID,
+saved set-UID
+</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>set-group-ID</TD><TD>set-GID, setgid</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>set-user-ID</TD><TD>set-UID, setuid</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>superuser</TD><TD>
+super user,
+super-user
+</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>superblock</TD><TD>
+super block,
+super-block
+</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>timestamp</TD><TD>time stamp</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>timezone</TD><TD>time zone</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>uppercase</TD><TD>upper case, upper-case</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>usable</TD><TD>useable</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>user space</TD><TD>userspace</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>username</TD><TD>user name</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>zeros</TD><TD>zeroes</TD><TD><BR></TD></TR>
+</TABLE>
+
+<P>
+
+See also the discussion
+<I>Hyphenation of attributive compounds</I>
+
+below.
+<A NAME="lbAR">&nbsp;</A>
+<H3>Terms to avoid</H3>
+
+The following table lists some terms to avoid using in man pages,
+along with some suggested alternatives,
+mainly to ensure consistency across pages.
+<TABLE>
+<TR VALIGN=top><TD>Avoid</TD><TD>Use instead</TD><TD>Notes<BR></TD></TR>
+<TR VALIGN=top><TD></TD></TR>
+<TR VALIGN=top><TD>32bit</TD><TD>32-bit</TD><TD>
+same for 8-bit, 16-bit, etc.
+<BR></TD></TR>
+<TR VALIGN=top><TD>current process</TD><TD>calling process</TD><TD>
+A common mistake made by kernel programmers when writing man pages
+<BR></TD></TR>
+<TR VALIGN=top><TD>manpage</TD><TD>
+man page, manual page
+</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>minus infinity</TD><TD>negative infinity</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>non-root</TD><TD>unprivileged user</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>non-superuser</TD><TD>unprivileged user</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>nonprivileged</TD><TD>unprivileged</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>OS</TD><TD>operating system</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>plus infinity</TD><TD>positive infinity</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>pty</TD><TD>pseudoterminal</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>tty</TD><TD>terminal</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>Unices</TD><TD>UNIX systems</TD><TD><BR></TD></TR>
+<TR VALIGN=top><TD>Unixes</TD><TD>UNIX systems</TD><TD><BR></TD></TR>
+</TABLE>
+
+<A NAME="lbAS">&nbsp;</A>
+<H3>Trademarks</H3>
+
+Use the correct spelling and case for trademarks.
+The following is a list of the correct spellings of various
+relevant trademarks that are sometimes misspelled:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DG/UX
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HP-UX
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNIX
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UnixWare
+<A NAME="lbAT">&nbsp;</A>
+<H3>NULL, NUL, null pointer, and null character</H3>
+
+A
+<I>null pointer</I>
+
+is a pointer that points to nothing,
+and is normally indicated by the constant
+<I>NULL</I>.
+
+On the other hand,
+<I>NUL</I>
+
+is the
+<I>null byte,</I>
+
+a byte with the value 0, represented in C via the character constant
+<I>'\0'</I>.
+
+<P>
+The preferred term for the pointer is &quot;null pointer&quot; or simply &quot;NULL&quot;;
+avoid writing &quot;NULL pointer&quot;.
+<P>
+The preferred term for the byte is &quot;null byte&quot;.
+Avoid writing &quot;NUL&quot;, since it is too easily confused with &quot;NULL&quot;.
+Avoid also the terms &quot;zero byte&quot; and &quot;null character&quot;.
+The byte that terminates a C string should be described
+as &quot;the terminating null byte&quot;;
+strings may be described as &quot;null-terminated&quot;,
+but avoid the use of &quot;NUL-terminated&quot;.
+<A NAME="lbAU">&nbsp;</A>
+<H3>Hyperlinks</H3>
+
+For hyperlinks, use the
+<I>.UR</I>/<I>.UE</I>
+
+macro pair
+(see
+<B><A HREF="../man7/groff_man.7.html">groff_man</A></B>(7)).
+
+This produces proper hyperlinks that can be used in a web browser,
+when rendering a page with, say:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BROWSER=firefox&nbsp;man&nbsp;-H&nbsp;pagename
+<A NAME="lbAV">&nbsp;</A>
+<H3>Use of e.g., i.e., etc., a.k.a., and similar</H3>
+
+In general, the use of abbreviations such as &quot;e.g.&quot;, &quot;i.e.&quot;, &quot;etc.&quot;, &quot;a.k.a.&quot;
+should be avoided, in favor of suitable full wordings
+(&quot;for example&quot;, &quot;that is&quot;, &quot;and so on&quot;, &quot;also known as&quot;).
+<P>
+The only place where such abbreviations may be acceptable is in
+<I>short</I>
+
+parenthetical asides (e.g., like this one).
+<P>
+Always include periods in such abbreviations, as shown here.
+In addition, &quot;e.g.&quot; and &quot;i.e.&quot; should always be followed by a comma.
+<A NAME="lbAW">&nbsp;</A>
+<H3>Em-dashes</H3>
+
+The way to write an em-dash---the glyph that appears
+at either end of this subphrase---in *roff is with the macro &quot;\(em&quot;.
+(On an ASCII terminal, an em-dash typically renders as two hyphens,
+but in other typographical contexts it renders as a long dash.)
+Em-dashes should be written
+<I>without</I>
+
+surrounding spaces.
+<A NAME="lbAX">&nbsp;</A>
+<H3>Hyphenation of attributive compounds</H3>
+
+Compound terms should be hyphenated when used attributively
+(i.e., to qualify a following noun). Some examples:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;32-bit&nbsp;value
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;command-line&nbsp;argument
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;floating-point&nbsp;number
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;run-time&nbsp;check
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;user-space&nbsp;function
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;wide-character&nbsp;string
+<A NAME="lbAY">&nbsp;</A>
+<H3>Hyphenation with multi, non, pre, re, sub, and so on</H3>
+
+The general tendency in modern English is not to hyphenate
+after prefixes such as &quot;multi&quot;, &quot;non&quot;, &quot;pre&quot;, &quot;re&quot;, &quot;sub&quot;, and so on.
+Manual pages should generally follow this rule when these prefixes are
+used in natural English constructions with simple suffixes.
+The following list gives some examples of the preferred forms:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;interprocess
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;multithreaded
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;multiprocess
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;nonblocking
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;nondefault
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;nonempty
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;noninteractive
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;nonnegative
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;nonportable
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;nonzero
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;preallocated
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;precreate
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;prerecorded
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;reestablished
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;reinitialize
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;rearm
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;reread
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;subcomponent
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;subdirectory
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;subsystem
+<P>
+Hyphens should be retained when the prefixes are used in nonstandard
+English words, with trademarks, proper nouns, acronyms, or compound terms.
+Some examples:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;non-ASCII
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;non-English
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;non-NULL
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;non-real-time
+<P>
+Finally, note that &quot;re-create&quot; and &quot;recreate&quot; are two different verbs,
+and the former is probably what you want.
+<A NAME="lbAZ">&nbsp;</A>
+<H3>Real minus character</H3>
+
+Where a real minus character is required (e.g., for numbers such as -1,
+or when writing options that have a leading dash, such as in
+<I>ls&nbsp;-l),</I>
+
+use the following form in the man page source:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;\-
+<P>
+This guideline applies also to code examples.
+<A NAME="lbBA">&nbsp;</A>
+<H3>Character constants</H3>
+
+To produce single quotes that render well in both ASCII and UTF-8,
+use the following form for character constants in the man page source:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;\(aqC\(aq
+<P>
+where
+<I>C</I>
+
+is the quoted character.
+This guideline applies also to character constants used in code examples.
+<A NAME="lbBB">&nbsp;</A>
+<H3>Example programs and shell sessions</H3>
+
+Manual pages may include example programs demonstrating how to
+use a system call or library function.
+However, note the following:
+<DL COMPACT>
+<DT>*<DD>
+Example programs should be written in C.
+<DT>*<DD>
+An example program is necessary and useful only if it demonstrates
+something beyond what can easily be provided in a textual
+description of the interface.
+An example program that does nothing
+other than call an interface usually serves little purpose.
+<DT>*<DD>
+Example programs should be fairly short (preferably less than 100 lines;
+ideally less than 50 lines).
+<DT>*<DD>
+Example programs should do error checking after system calls and
+library function calls.
+<DT>*<DD>
+Example programs should be complete, and compile without
+warnings when compiled with <I>cc&nbsp;-Wall</I>.
+<DT>*<DD>
+Where possible and appropriate, example programs should allow
+experimentation, by varying their behavior based on inputs
+(ideally from command-line arguments, or alternatively, via
+input read by the program).
+<DT>*<DD>
+Example programs should be laid out according to Kernighan and
+Ritchie style, with 4-space indents.
+(Avoid the use of TAB characters in source code!)
+<DT>*<DD>
+For consistency, all example programs should terminate using either of:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(EXIT_SUCCESS);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(EXIT_FAILURE);
+<P>
+Avoid using the following forms to terminate a program:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="../man1/exit.1.html">exit</A>(1);
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;n;
+<DT>*<DD>
+If there is extensive explanatory text before the
+program source code, mark off the source code
+with a subsection heading
+<I>Program source</I>,
+
+as in:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;.SS&nbsp;Program&nbsp;source
+<P>
+Always do this if the explanatory text includes a shell session log.
+</DL>
+<P>
+
+If you include a shell session log demonstrating the use of a program
+or other system feature:
+<DL COMPACT>
+<DT>*<DD>
+Place the session log above the source code listing
+<DT>*<DD>
+Indent the session log by four spaces.
+<DT>*<DD>
+Boldface the user input text,
+to distinguish it from output produced by the system.
+</DL>
+<P>
+
+For some examples of what example programs should look like, see
+<B><A HREF="../man2/wait.2.html">wait</A></B>(2)
+
+and
+<B><A HREF="../man2/pipe.2.html">pipe</A></B>(2).
+
+<A NAME="lbBC">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+For canonical examples of how man pages in the
+<I>man-pages</I>
+
+package should look, see
+<B><A HREF="../man2/pipe.2.html">pipe</A></B>(2)
+
+and
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2).
+
+<A NAME="lbBD">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/man.1.html">man</A></B>(1),
+
+<B><A HREF="../man1/man2html.1.html">man2html</A></B>(1),
+
+<B><A HREF="../man7/groff.7.html">groff</A></B>(7),
+
+<B><A HREF="../man7/groff_man.7.html">groff_man</A></B>(7),
+
+<B><A HREF="../man7/man.7.html">man</A></B>(7),
+
+<B><A HREF="../man7/mdoc.7.html">mdoc</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">Sections of the manual pages</A><DD>
+<DT><A HREF="#lbAF">Macro package</A><DD>
+<DT><A HREF="#lbAG">Conventions for source file layout</A><DD>
+<DT><A HREF="#lbAH">Title line</A><DD>
+<DT><A HREF="#lbAI">Sections within a manual page</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">STYLE GUIDE</A><DD>
+<DL>
+<DT><A HREF="#lbAK">Use of gender-neutral language</A><DD>
+<DT><A HREF="#lbAL">Font conventions</A><DD>
+<DT><A HREF="#lbAM">Spelling</A><DD>
+<DT><A HREF="#lbAN">BSD version numbers</A><DD>
+<DT><A HREF="#lbAO">Capitalization</A><DD>
+<DT><A HREF="#lbAP">Indentation of structure definitions, shell session logs, and so on</A><DD>
+<DT><A HREF="#lbAQ">Preferred terms</A><DD>
+<DT><A HREF="#lbAR">Terms to avoid</A><DD>
+<DT><A HREF="#lbAS">Trademarks</A><DD>
+<DT><A HREF="#lbAT">NULL, NUL, null pointer, and null character</A><DD>
+<DT><A HREF="#lbAU">Hyperlinks</A><DD>
+<DT><A HREF="#lbAV">Use of e.g., i.e., etc., a.k.a., and similar</A><DD>
+<DT><A HREF="#lbAW">Em-dashes</A><DD>
+<DT><A HREF="#lbAX">Hyphenation of attributive compounds</A><DD>
+<DT><A HREF="#lbAY">Hyphenation with multi, non, pre, re, sub, and so on</A><DD>
+<DT><A HREF="#lbAZ">Real minus character</A><DD>
+<DT><A HREF="#lbBA">Character constants</A><DD>
+<DT><A HREF="#lbBB">Example programs and shell sessions</A><DD>
+</DL>
+<DT><A HREF="#lbBC">EXAMPLE</A><DD>
+<DT><A HREF="#lbBD">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:22 GMT, September 18, 2014
+</BODY>
+</HTML>

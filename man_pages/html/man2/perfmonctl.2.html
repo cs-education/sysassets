@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of PERFMONCTL</TITLE>
+</HEAD><BODY>
+<H1>PERFMONCTL</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2013-02-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+perfmonctl - interface to IA-64 performance monitoring unit
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/syscall.h">syscall.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/perfmon.h">perfmon.h</A>&gt;</B>
+
+<B>long perfmonctl(int </B><I>fd</I><B>, int </B><I>cmd</I><B>, void *</B><I>arg</I><B>, int </B><I>narg</I><B>);</B>
+</PRE>
+
+<I>Note</I>:
+
+There is no glibc wrapper for this system call; see NOTES.
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The IA-64-specific
+<B>perfmonctl</B>()
+
+system call provides an interface to the
+PMU (performance monitoring unit).
+The PMU consists of PMD (performance monitoring data) registers and
+PMC (performance monitoring control) registers,
+which gather hardware statistics.
+<P>
+<B>perfmonctl</B>()
+
+applies the operation
+<I>cmd</I>
+
+to the input arguments specified by
+<I>arg</I>.
+
+The number of arguments is defined by <I>narg</I>.
+The
+<I>fd</I>
+
+argument specifies the perfmon context to operate on.
+<P>
+Supported values for
+<I>cmd</I>
+
+are:
+<DL COMPACT>
+<DT><B>PFM_CREATE_CONTEXT</B>
+
+<DD>
+<PRE>
+<B>perfmonctl(int </B><I>fd</I><B>, PFM_CREATE_CONTEXT, pfarg_context_t *</B><I>ctxt</I><B>, 1);</B>
+</PRE>
+
+Set up a context.
+<P>
+The
+<I>fd</I>
+
+parameter is ignored.
+A new perfmon context is created as specified in
+<I>ctxt</I>
+
+and its file descriptor is returned in <I>ctxt-&gt;ctx_fd</I>.
+<P>
+The file descriptor can be used in subsequent calls to
+<B>perfmonctl</B>()
+
+and can be used to read event notifications (type
+<I>pfm_msg_t</I>)
+
+using
+<B><A HREF="../man2/read.2.html">read</A></B>(2).
+
+The file descriptor is pollable using
+<B><A HREF="../man2/select.2.html">select</A></B>(2),
+
+<B><A HREF="../man2/poll.2.html">poll</A></B>(2),
+
+and
+<B><A HREF="../man7/epoll.7.html">epoll</A></B>(7).
+
+<P>
+The context can be destroyed by calling
+<B><A HREF="../man2/close.2.html">close</A></B>(2)
+
+on the file descriptor.
+<DT><B>PFM_WRITE_PMCS</B>
+
+<DD>
+
+<PRE>
+<B>perfmonctl(int </B><I>fd</I><B>, PFM_WRITE_PMCS, pfarg_reg_t *</B><I>pmcs</I><B>, n);</B>
+</PRE>
+
+Set PMC registers.
+<DT><B>PFM_WRITE_PMDS</B>
+
+<DD>
+<PRE>
+<B>perfmonctl(int </B><I>fd</I><B>, PFM_WRITE_PMDS, pfarg_reg_t *</B><I>pmds</I><B>, n);</B>
+</PRE>
+
+
+Set PMD registers.
+<DT><B>PFM_READ_PMDS</B>
+
+<DD>
+
+<PRE>
+<B>perfmonctl(int </B><I>fd</I><B>, PFM_READ_PMDS, pfarg_reg_t *</B><I>pmds</I><B>, n);</B>
+</PRE>
+
+Read PMD registers.
+<DT><B>PFM_START</B>
+
+<DD>
+
+<PRE>
+<B>perfmonctl(int </B><I>fd</I><B>, PFM_START, NULL, 0);</B>
+</PRE>
+
+Start monitoring.
+<DT><B>PFM_STOP</B>
+
+<DD>
+
+<PRE>
+<B>perfmonctl(int </B><I>fd</I><B>, PFM_STOP, NULL, 0);</B>
+</PRE>
+
+Stop monitoring.
+<DT><B>PFM_LOAD_CONTEXT</B>
+
+<DD>
+
+<PRE>
+<B>perfmonctl(int </B><I>fd</I><B>, PFM_LOAD_CONTEXT, pfarg_load_t *</B><I>largs</I><B>, 1);</B>
+</PRE>
+
+Attach the context to a thread.
+<DT><B>PFM_UNLOAD_CONTEXT</B>
+
+<DD>
+
+<PRE>
+<B>perfmonctl(int </B><I>fd</I><B>, PFM_UNLOAD_CONTEXT, NULL, 0);</B>
+</PRE>
+
+Detach the context from a thread.
+<DT><B>PFM_RESTART</B>
+
+<DD>
+
+<PRE>
+<B>perfmonctl(int </B><I>fd</I><B>, PFM_RESTART, NULL, 0);</B>
+</PRE>
+
+Restart monitoring after receiving an overflow notification.
+<DT><B>PFM_GET_FEATURES</B>
+
+<DD>
+
+<PRE>
+<B>perfmonctl(int </B><I>fd</I><B>, PFM_GET_FEARURES, pfarg_features_t *</B><I>arg</I><B>, 1);</B>
+</PRE>
+
+<DT><B>PFM_DEBUG</B>
+
+<DD>
+
+<PRE>
+<B>perfmonctl(int </B><I>fd</I><B>, PFM_DEBUG, </B><I>val</I><B>, 0);</B>
+</PRE>
+
+If
+<I>val</I>
+
+is nonzero, enable debugging mode, otherwise disable.
+<DT><B>PFM_GET_PMC_RESET_VAL</B>
+
+<DD>
+
+<PRE>
+<B>perfmonctl(int </B><I>fd</I><B>, PFM_GET_PMC_RESET_VAL, pfarg_reg_t * </B><I>req</I><B>, n);</B>
+</PRE>
+
+Reset PMC registers to default values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</DL>
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+<B>perfmonctl</B>()
+
+returns zero when the operation is successful.
+On error, -1 is returned and
+<I>errno</I>
+
+is set to indicate the cause of the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>perfmonctl</B>()
+
+is available since Linux 2.4.
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>perfmonctl</B>()
+
+is Linux-specific and is available only on the IA-64 architecture.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+Glibc does not provide a wrapper for this system call; call it using
+<B><A HREF="../man2/syscall.2.html">syscall</A></B>(2).
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/gprof.1.html">gprof</A></B>(1)
+
+<P>
+The perfmon2 interface specification
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">VERSIONS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:46 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SIGSUSPEND</TITLE>
+</HEAD><BODY>
+<H1>SIGSUSPEND</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2013-04-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+sigsuspend - wait for a signal
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/signal.h">signal.h</A>&gt;</B>
+
+<P>
+<B>int sigsuspend(const sigset_t *</B><I>mask</I><B>);</B>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>sigsuspend</B>():
+
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;1 || _XOPEN_SOURCE || _POSIX_SOURCE
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>sigsuspend</B>()
+
+temporarily replaces the signal mask of the calling process with the
+mask given by
+<I>mask</I>
+
+and then suspends the process until delivery of a signal whose
+action is to invoke a signal handler or to terminate a process.
+<P>
+If the signal terminates the process, then
+<B>sigsuspend</B>()
+
+does not return.
+If the signal is caught, then
+<B>sigsuspend</B>()
+
+returns after the signal handler returns,
+and the signal mask is restored to the state before the call to
+<B>sigsuspend</B>().
+
+<P>
+It is not possible to block
+<B>SIGKILL</B>
+
+or
+<B>SIGSTOP</B>;
+
+specifying these signals in
+<I>mask</I>,
+
+has no effect on the process's signal mask.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+<B>sigsuspend</B>()
+
+always returns -1, with
+<I>errno</I>
+
+set to indicate the error (normally,
+<B>EINTR</B>).
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EFAULT</B>
+
+<DD>
+<I>mask</I>
+
+points to memory which is not a valid part of the process address space.
+<DT><B>EINTR</B>
+
+<DD>
+The call was interrupted by a signal.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+<P>
+
+Normally,
+<B>sigsuspend</B>()
+
+is used in conjunction with
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2)
+
+in order to prevent delivery of a signal during the execution of a
+critical code section.
+The caller first blocks the signals with
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2).
+
+When the critical code has completed, the caller then waits for the
+signals by calling
+<B>sigsuspend</B>()
+
+with the signal mask that was returned by
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2)
+
+(in the
+<I>oldset</I>
+
+argument).
+<P>
+
+See
+<B><A HREF="../man3/sigsetops.3.html">sigsetops</A></B>(3)
+
+for details on manipulating signal sets.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/kill.2.html">kill</A></B>(2),
+
+<B><A HREF="../man2/pause.2.html">pause</A></B>(2),
+
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2),
+
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2),
+
+<B><A HREF="../man2/sigwaitinfo.2.html">sigwaitinfo</A></B>(2),
+
+<B><A HREF="../man3/sigsetops.3.html">sigsetops</A></B>(3),
+
+<B><A HREF="../man3/sigwait.3.html">sigwait</A></B>(3),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:45 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of FINITE</TITLE>
+</HEAD><BODY>
+<H1>FINITE</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-07-22<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+finite, finitef, finitel, isinf, isinff, isinfl, isnan, isnanf, isnanl -
+BSD floating-point classification functions
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/math.h">math.h</A>&gt;</B>
+
+<B>int finite(double </B><I>x</I><B>);</B>
+<BR>
+<B>int finitef(float </B><I>x</I><B>);</B>
+<BR>
+<B>int finitel(long double </B><I>x</I><B>);</B>
+
+<B>int isinf(double </B><I>x</I><B>);</B>
+<BR>
+<B>int isinff(float </B><I>x</I><B>);</B>
+<BR>
+<B>int isinfl(long double </B><I>x</I><B>);</B>
+
+<B>int isnan(double </B><I>x</I><B>);</B>
+<BR>
+<B>int isnanf(float </B><I>x</I><B>);</B>
+<BR>
+<B>int isnanl(long double </B><I>x</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>finite</B>(),
+
+<B>finitef</B>(),
+
+<B>finitel</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE
+</DL>
+
+<B>isinf</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600 || _ISOC99_SOURCE;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+<BR>
+
+<B>isinff</B>(),
+
+<B>isinfl</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE
+</DL>
+
+<B>isnan</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE || _ISOC99_SOURCE;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+<B>isnanf</B>(),
+
+<B>isnanl</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>finite</B>(),
+
+<B>finitef</B>(),
+
+and
+<B>finitel</B>()
+
+functions return a nonzero value if
+<I>x</I>
+
+is neither infinite
+nor a &quot;not-a-number&quot; (NaN) value, and 0 otherwise.
+<P>
+The
+<B>isnan</B>(),
+
+<B>isnanf</B>(),
+
+and
+<B>isnanl</B>()
+
+functions return a nonzero value if
+<I>x</I>
+
+is a NaN value,
+and 0 otherwise.
+<P>
+The
+<B>isinf</B>(),
+
+<B>isinff</B>(),
+
+and
+<B>isinfl</B>()
+
+functions return 1 if
+<I>x</I>
+
+is positive infinity, -1 if
+<I>x</I>
+
+is negative infinity, and 0 otherwise.
+<A NAME="lbAE">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAF">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>finite</B>(),
+
+<B>finitef</B>(),
+
+<B>finitel</B>(),
+
+<B>isinf</B>(),
+
+<B>isinff</B>(),
+
+<B>isinfl</B>(),
+
+<B>isnan</B>(),
+
+<B>isnanf</B>(),
+
+and
+<B>isnanl</B>()
+
+functions are thread-safe.
+<A NAME="lbAG">&nbsp;</A>
+<H2>NOTES</H2>
+
+Note that these functions are obsolete.
+C99 defines macros
+<B>isfinite</B>(),
+
+<B>isinf</B>(),
+
+and
+<B>isnan</B>()
+
+(for all types) replacing them.
+Further note that the C99
+<B>isinf</B>()
+
+has weaker guarantees on the return value.
+See
+<B><A HREF="../man3/fpclassify.3.html">fpclassify</A></B>(3).
+
+
+
+
+
+
+
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/fpclassify.3.html">fpclassify</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAF">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAG">NOTES</A><DD>
+<DT><A HREF="#lbAH">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:12 GMT, September 18, 2014
+</BODY>
+</HTML>

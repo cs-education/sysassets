@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MTRACE</TITLE>
+</HEAD><BODY>
+<H1>MTRACE</H1>
+Section: Linux user manual (1)<BR>Updated: 2014-09-01<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+mtrace - interpret the malloc trace log
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>mtrace</B> [<I>option</I>]... [<I>binary</I>] <I>mtracedata</I>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>mtrace</B>
+
+is a Perl script used to interpret and provide human readable output
+of the trace log contained in the file
+<I>mtracedata</I>,
+
+whose contents were produced by
+<B><A HREF="../man3/mtrace.3.html">mtrace</A></B>(3).
+
+If
+<I>binary</I>
+
+is provided, the output of
+<B>mtrace</B>
+
+also contains the source file name with line number information
+for problem locations
+(assuming that
+<I>binary</I>
+
+was compiled with debugging information).
+<P>
+For more information about the
+<B><A HREF="../man3/mtrace.3.html">mtrace</A></B>(3)
+
+function and
+<B>mtrace</B>
+
+script usage, see
+<B><A HREF="../man3/mtrace.3.html">mtrace</A></B>(3).
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>--help</B>
+
+<DD>
+Print help and exit.
+<DT><B>--version</B>
+
+<DD>
+Print version information and exit.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>BUGS</H2>
+
+For bug reporting instructions, please see:
+&lt;<A HREF="http://www.gnu.org/software/libc/bugs.html">http://www.gnu.org/software/libc/bugs.html</A>&gt;.
+<A NAME="lbAG">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/memusage.1.html">memusage</A></B>(1),
+
+<B><A HREF="../man3/mtrace.3.html">mtrace</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">BUGS</A><DD>
+<DT><A HREF="#lbAG">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:44 GMT, September 18, 2014
+</BODY>
+</HTML>

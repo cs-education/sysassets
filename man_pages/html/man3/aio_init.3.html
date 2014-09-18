@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of AIO_INIT</TITLE>
+</HEAD><BODY>
+<H1>AIO_INIT</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2012-04-26<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+aio_init - asynchronous I/O initialization
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#define _GNU_SOURCE</B>         /* See <A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A>(7) */
+<B>#include &lt;<A HREF="file:///usr/include/aio.h">aio.h</A>&gt;</B>
+
+<B>void aio_init(const struct aioinit *</B><I>init</I><B>);</B>
+</PRE>
+
+<P>
+Link with <I>-lrt</I>.
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The GNU-specific
+<B>aio_init</B>()
+
+function allows the caller to provide tuning hints to the
+glibc POSIX AIO implementation.
+Use of this function is optional, but to be effective,
+it must be called before employing any other functions in the POSIX AIO API.
+<P>
+The tuning information is provided in the buffer pointed to by the argument
+<I>init</I>.
+
+This buffer is a structure of the following form:
+<P>
+
+
+<PRE>
+struct aioinit {
+    int aio_threads;    /* Maximum number of threads */
+    int aio_num;        /* Number of expected simultaneous
+                           requests */
+    int aio_locks;      /* Not used */
+    int aio_usedba;     /* Not used */
+    int aio_debug;      /* Not used */
+    int aio_numusers;   /* Not used */
+    int aio_idle_time;  /* Number of seconds before idle thread
+                           terminates (since glibc 2.2) */
+    int aio_reserved;
+};
+</PRE>
+
+
+<P>
+
+The following fields are used in the
+<I>aioinit</I>
+
+structure:
+<DL COMPACT>
+<DT><I>aio_threads</I>
+
+<DD>
+This field specifies the maximum number of worker threads that
+may be used by the implementation.
+If the number of outstanding I/O operations exceeds this limit,
+then excess operations will be queued until a worker thread becomes free.
+If this field is specified with a value less than 1, the value 1 is used.
+The default value is 20.
+<DT><I>aio_num</I>
+
+<DD>
+This field should specify the maximum number of simultaneous I/O requests
+that the caller expects to enqueue.
+If a value less than 32 is specified for this field,
+it is rounded up to 32.
+
+
+The default value is 64.
+<DT><I>aio_idle_time</I>
+
+<DD>
+This field specifies the amount of time in seconds that a
+worker thread should wait for further requests before terminating,
+after having completed a previous request.
+The default value is 1.
+</DL>
+<A NAME="lbAE">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>aio_init</B>()
+
+function is available since glibc 2.1.
+<A NAME="lbAF">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function is a GNU extension.
+<A NAME="lbAG">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man7/aio.7.html">aio</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">VERSIONS</A><DD>
+<DT><A HREF="#lbAF">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAG">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:18 GMT, September 18, 2014
+</BODY>
+</HTML>
