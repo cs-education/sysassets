@@ -1,37 +1,272 @@
-
-[
-{ keys: {"Vidbase1" : "http://..." }
-
-},
-
 {
-"name":"Chapter 1",
-"challenge_html": "chapter1documentation.html",
-"sections": [
-{
-   name:"Hello World (System call style)",
-   activities: [
-{ "type": "video", "file:","Vidbase1/mp4/0100-CharArraySearching", topics:"a\nb\nc\n"}, 
-{type:play, "code":"int main() {return 0;}","gcc_opts":"-lm", prog_args:"",text_div:"chapter1_1div" }
-   ]
-
+    "chapters": [
+        {
+            "name": "Chapter 1",
+            "description": "In which our intrepid hero battles standard out, standard error, file descriptors and writing to files.",
+            "sections": [
+                {
+                    "name": "Hello World (System call style)",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0010-HelloWorld-v2",
+                            "topics": "a\nb\nc\n"
+                        },
+                        {
+                            "type": "play",
+                            "code": "int main() {return 0;}",
+                            "gccOptions": "-lm -Wall -fmax-errors=10 -Wextra",
+                            "programCommandLineArgs": "",
+                            "docFile": "chapter01/play-1-1.md"
+                        }
+                    ]
+                },
+                {
+                    "name": "Hello Standard Error Stream",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0020-HelloStdErr-24fps600kbs",
+                            "topics": "a\nb\nc\n",
+                            "docFile": "chapter01/0020-HelloStdErr-Doc.md"
+                        },
+                        {
+                            "type": "play",
+                            "code": "int main() {return 0;}",
+                            "gccOptions": "-lm -Wall -fmax-errors=10 -Wextra",
+                            "programCommandLineArgs": "",
+                            "docFile": "chapter01/play-2-1.md"
+                        }
+                    ]
+                },
+                {
+                    "name": "Writing to files",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0030-OpenCreateAFile-650kb",
+                            "topics": "a\nb\nc\n"
+                        },
+                        {
+                            "type": "play",
+                            "code": "int main() {return 0;}",
+                            "gccOptions": "-lm -Wall -fmax-errors=10 -Wextra",
+                            "programCommandLineArgs": "",
+                            "docFile": "chapter01/play-3-1.md"
+                        },
+                        {
+                            "type": "play",
+                            "code": "int main() {return 0;}",
+                            "gccOptions": "-lm -Wall -fmax-errors=10 -Wextra",
+                            "programCommandLineArgs": "",
+                            "docFile": "chapter01/play-3-2.md"
+                        }
+                    ]
+                },
+                {
+                    "name": "Not everything is a system call",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0040-OpenErrorsPrintf-600kbs",
+                            "topics": "a\nb\nc\n"
+                        },
+                        {
+                            "type": "play",
+                            "code": "int main() {return 0;}",
+                            "gccOptions": "-lm -Wall -fmax-errors=10 -Wextra",
+                            "programCommandLineArgs": "",
+                            "docFile": "chapter01/play-4-1.md"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Chapter 2",
+            "description": "Sizing up C types and their limits, int, char arrays and incrementing pointers.",
+            "sections": [
+                {
+                    "name": "Not all bytes are 8 bits?",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0050-NotAllBytesAre8Bits"
+                        },
+                        {
+                            "type": "play",
+                            "docFile": "chapter02/play-1-1.md"
+                        }
+                    ]
+                },
+                {
+                    "name": "Follow the int pointer",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0060-FollowTheIntPointer"
+                        },
+                        {
+                            "type": "play",
+                            "docFile": "chapter02/play-2-1.md"
+                        }
+                    ]
+                },
+                {
+                    "name": "sizeof character arrays, incrementing pointers",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0070-CharacterPointers"
+                        },
+                        {
+                            "type": "play",
+                            "docFile": "chapter02/play-3-1.md"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Chapter 3",
+            "description": "Program arguments, environment variables, working with character arrays (strings)",
+            "sections": [
+                {
+                    "name": "Program arguments argc argv",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0080-ProgramArguments"
+                        }
+                    ]
+                },
+                {
+                    "name": "Environment Variables",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0090-Environment"
+                        }
+                    ]
+                },
+                {
+                    "name": "String searching (Strings are just char arrays)",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0100-CharArraySearching"
+                        }
+                    ]
+                },
+                {
+                    "name": "Lifetime of automatic variables",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0110-PointersToAutomaticVariables-v2"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Chapter 4",
+            "description": "Heap and stack memory. Working with structs.",
+            "sections": [
+                {
+                    "name": "Malloc, heap and time",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0120-TimeForMallocingHeapMemory"
+                        }
+                    ]
+                },
+                {
+                    "name": "Heap allocation Gotchas",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0130-HeapGotchas-DanglingPointersAndDoubleFree"
+                        }
+                    ]
+                },
+                {
+                    "name": "struct, typedefs and a linked list",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0140-StructTypedefLinkedList"
+                        }
+                    ]
+                },
+                {
+                    "name": "Duplicating strings, memory allocation and deallocation of structures",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0150-CreatingLinksStrdup"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Chapter 5",
+            "description": "Text input and output and parsing using getchar, gets, getline",
+            "sections": [
+                {
+                    "name": "Reading characters, Trouble with gets",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0160-getputchar-gets-puts-v2"
+                        }
+                    ]
+                },
+                {
+                    "name": "Introducing sscanf and friends",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0170-scanf-intro"
+                        }
+                    ]
+                },
+                {
+                    "name": "getline is useful",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0180-getline"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Chapter 6",
+            "description": "Introducing signals and process forking",
+            "sections": [
+                {
+                    "name": "Introducing signals and forks",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0190-SIGINT-SIGALRM"
+                        }
+                    ]
+                },
+                {
+                    "name": "Introducing fork and waitpid",
+                    "activities": [
+                        {
+                            "type": "video",
+                            "file": "mp4/0200-forkwaitpid-forkbomb"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }
-
-
-]
-
-}
-
-]
-
-
-chapter1documentation.html
-<description>Introducing Sys Prog</description>
-<div id=chapter1_1div>
-	<h1>time to play</h1>
-	<div>Here's some code and a picture</div>
-	<pre>bashdbhasbdasd asjd<
-	asdjahsjdkashd</rep>
-	Good luck!
-	Imagine there's a picture here. <img src=somewhere title=apicture/>
-</div>
