@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of INVOCATION_NAME</TITLE>
+</HEAD><BODY>
+<H1>INVOCATION_NAME</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2006-04-29<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+program_invocation_name, program_invocation_short_name - obtain name used to invoke calling program
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#define _GNU_SOURCE</B>         /* See <A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A>(7) */
+<B>#include &lt;<A HREF="file:///usr/include/errno.h">errno.h</A>&gt;</B>
+
+<B>extern char *</B><I>program_invocation_name</I><B>;</B>
+<B>extern char *</B><I>program_invocation_short_name</I><B>;</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<I>program_invocation_name</I>
+
+contains the name that was used to invoke the calling program.
+This is the same as the value of
+<I>argv[0]</I>
+
+in
+<I>main</I>(),
+
+with the difference that the scope of
+<I>program_invocation_name</I>
+
+is global.
+<P>
+<I>program_invocation_short_name</I>
+
+contains the basename component of name that was used to invoke
+the calling program.
+That is, it is the same value as
+<I>program_invocation_name</I>,
+
+with all text up to and including the final slash (/), if any, removed.
+<P>
+These variables are automatically initialized by the glibc run-time
+startup code.
+<A NAME="lbAE">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+These variables are GNU extensions, and should not be
+used in programs intended to be portable.
+<A NAME="lbAF">&nbsp;</A>
+<H2>NOTES</H2>
+
+The Linux-specific
+<I>/proc/[number]/cmdline</I>
+
+file provides access to similar information.
+<A NAME="lbAG">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man5/proc.5.html">proc</A></B>(5)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAF">NOTES</A><DD>
+<DT><A HREF="#lbAG">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:00 GMT, September 18, 2014
+</BODY>
+</HTML>

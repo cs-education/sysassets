@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETRPCENT</TITLE>
+</HEAD><BODY>
+<H1>GETRPCENT</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-05-28<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getrpcent, getrpcbyname, getrpcbynumber, setrpcent, endrpcent - get
+RPC entry
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/netdb.h">netdb.h</A>&gt;</B>
+
+<B>struct rpcent *getrpcent(void);</B>
+
+<B>struct rpcent *getrpcbyname(const char *</B><I>name</I><B>);</B>
+
+<B>struct rpcent *getrpcbynumber(int </B><I>number</I><B>);</B>
+
+<B>void setrpcent(int </B><I>stayopen</I><B>);</B>
+
+<B>void endrpcent(void);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<P>
+
+The
+<B>getrpcent</B>(),
+
+<B>getrpcbyname</B>(),
+
+and
+<B>getrpcbynumber</B>()
+
+functions each return a pointer to an object with the
+following structure containing the broken-out
+fields of an entry in the RPC program number data base.
+
+<PRE>
+
+struct rpcent {
+    char  *r_name;     /* name of server for this RPC program */
+    char **r_aliases;  /* alias list */
+    long   r_number;   /* RPC program number */
+};
+</PRE>
+
+
+<P>
+
+The members of this structure are:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><I>r_name</I>
+
+<DD>
+The name of the server for this RPC program.
+<DT><I>r_aliases</I>
+
+<DD>
+A NULL-terminated list of alternate names for the RPC program.
+<DT><I>r_number</I>
+
+<DD>
+The RPC program number for this service.
+</DL>
+</DL>
+
+<P>
+
+The
+<B>getrpcent</B>()
+
+function reads the next entry from the database.
+A connection is opened to the database if necessary.
+<P>
+
+The
+<B>setrpcent</B>()
+
+function opens a connection to the database,
+and sets the next entry to the first entry.
+If
+<I>stayopen</I>
+
+is nonzero,
+then the connection to the database
+will not be closed between calls to one of the
+<B>getrpc*</B>()
+
+functions.
+<P>
+
+The
+<B>endrpcent</B>()
+
+function closes the connection to the database.
+<P>
+
+The
+<B>getrpcbyname</B>()
+
+and
+<B>getrpcbynumber</B>()
+
+functions sequentially search from the beginning
+of the file until a matching RPC program name or
+program number is found, or until end-of-file is encountered.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>getrpcent</B>(),
+
+<B>getrpcbyname</B>(),
+
+and
+<B>getrpcbynumber</B>()
+
+return a pointer to a statically allocated
+<I>rpcent</I>
+
+structure.
+NULL is returned on EOF or error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>FILES</H2>
+
+<DL COMPACT>
+<DT><I>/etc/rpc</I>
+
+<DD>
+RPC program number database.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+Not in POSIX.1-2001.
+Present on the BSDs, Solaris, and many other systems.
+<A NAME="lbAH">&nbsp;</A>
+<H2>BUGS</H2>
+
+All information
+is contained in a static area
+so it must be copied if it is
+to be saved.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/getrpcent_r.3.html">getrpcent_r</A></B>(3),
+
+<B><A HREF="../man5/rpc.5.html">rpc</A></B>(5),
+
+<B><A HREF="../man8/rpcinfo.8.html">rpcinfo</A></B>(8),
+
+<B><A HREF="../man8/ypserv.8.html">ypserv</A></B>(8)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">FILES</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">BUGS</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:11 GMT, September 18, 2014
+</BODY>
+</HTML>

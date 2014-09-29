@@ -1,0 +1,338 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETRUSAGE</TITLE>
+</HEAD><BODY>
+<H1>GETRUSAGE</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-05-10<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getrusage - get resource usage
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/time.h">sys/time.h</A>&gt;</B>
+
+<BR>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/resource.h">sys/resource.h</A>&gt;</B>
+
+<P>
+<B>int getrusage(int </B><I>who</I><B>, struct rusage *</B><I>usage</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<P>
+
+<B>getrusage</B>()
+
+returns resource usage measures for
+<I>who</I>,
+
+which can be one of the following:
+<DL COMPACT>
+<DT><B>RUSAGE_SELF</B>
+
+<DD>
+Return resource usage statistics for the calling process,
+which is the sum of resources used by all threads in the process.
+<DT><B>RUSAGE_CHILDREN</B>
+
+<DD>
+Return resource usage statistics for all children of the
+calling process that have terminated and been waited for.
+These statistics will include the resources used by grandchildren,
+and further removed descendants,
+if all of the intervening descendants waited on their terminated children.
+<DT><B>RUSAGE_THREAD</B> (since Linux 2.6.26)
+
+<DD>
+Return resource usage statistics for the calling thread.
+The
+<B>_GNU_SOURCE</B>
+
+feature test macro must be defined (before including
+<I>any</I>
+
+header file)
+in order to obtain the definition of this constant from
+<I>&lt;<A HREF="file:///usr/include/sys/resource.h">sys/resource.h</A>&gt;</I>.
+
+</DL>
+<P>
+
+The resource usages are returned in the structure pointed to by
+<I>usage</I>,
+
+which has the following form:
+<P>
+
+
+<PRE>
+struct rusage {
+    struct timeval ru_utime; /* user CPU time used */
+    struct timeval ru_stime; /* system CPU time used */
+    long   ru_maxrss;        /* maximum resident set size */
+    long   ru_ixrss;         /* integral shared memory size */
+    long   ru_idrss;         /* integral unshared data size */
+    long   ru_isrss;         /* integral unshared stack size */
+    long   ru_minflt;        /* page reclaims (soft page faults) */
+    long   ru_majflt;        /* page faults (hard page faults) */
+    long   ru_nswap;         /* swaps */
+    long   ru_inblock;       /* block input operations */
+    long   ru_oublock;       /* block output operations */
+    long   ru_msgsnd;        /* IPC messages sent */
+    long   ru_msgrcv;        /* IPC messages received */
+    long   ru_nsignals;      /* signals received */
+    long   ru_nvcsw;         /* voluntary context switches */
+    long   ru_nivcsw;        /* involuntary context switches */
+};
+</PRE>
+
+
+<P>
+
+Not all fields are completed;
+unmaintained fields are set to zero by the kernel.
+(The unmaintained fields are provided for compatibility with other systems,
+and because they may one day be supported on Linux.)
+The fields are interpreted as follows:
+<DL COMPACT>
+<DT><I>ru_utime</I>
+
+<DD>
+This is the total amount of time spent executing in user mode,
+expressed in a
+<I>timeval</I>
+
+structure (seconds plus microseconds).
+<DT><I>ru_stime</I>
+
+<DD>
+This is the total amount of time spent executing in kernel mode,
+expressed in a
+<I>timeval</I>
+
+structure (seconds plus microseconds).
+<DT><I>ru_maxrss</I> (since Linux 2.6.32)
+
+<DD>
+This is the maximum resident set size used (in kilobytes).
+For
+<B>RUSAGE_CHILDREN</B>,
+
+this is the resident set size of the largest child, not the maximum
+resident set size of the process tree.
+<DT><I>ru_ixrss</I> (unmaintained)
+
+<DD>
+This field is currently unused on Linux.
+
+
+
+<DT><I>ru_idrss</I> (unmaintained)
+
+<DD>
+This field is currently unused on Linux.
+
+
+<DT><I>ru_isrss</I> (unmaintained)
+
+<DD>
+This field is currently unused on Linux.
+
+
+<DT><I>ru_minflt</I>
+
+<DD>
+The number of page faults serviced without any I/O activity; here
+I/O activity is avoided by ``reclaiming'' a page frame from
+the list of pages awaiting reallocation.
+<DT><I>ru_majflt</I>
+
+<DD>
+The number of page faults serviced that required I/O activity.
+<DT><I>ru_nswap</I> (unmaintained)
+
+<DD>
+This field is currently unused on Linux.
+
+<DT><I>ru_inblock</I> (since Linux 2.6.22)
+
+<DD>
+The number of times the filesystem had to perform input.
+<DT><I>ru_oublock</I> (since Linux 2.6.22)
+
+<DD>
+The number of times the filesystem had to perform output.
+<DT><I>ru_msgsnd</I> (unmaintained)
+
+<DD>
+This field is currently unused on Linux.
+
+
+
+<DT><I>ru_msgrcv</I> (unmaintained)
+
+<DD>
+This field is currently unused on Linux.
+
+
+
+<DT><I>ru_nsignals</I> (unmaintained)
+
+<DD>
+This field is currently unused on Linux.
+
+<DT><I>ru_nvcsw</I> (since Linux 2.6)
+
+<DD>
+The number of times a context switch resulted due to a process
+voluntarily giving up the processor before its time slice was
+completed (usually to await availability of a resource).
+<DT><I>ru_nivcsw</I> (since Linux 2.6)
+
+<DD>
+The number of times a context switch resulted due to a higher
+priority process becoming runnable or because the current process
+exceeded its time slice.
+</DL>
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, zero is returned.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EFAULT</B>
+
+<DD>
+<I>usage</I>
+
+points outside the accessible address space.
+<DT><B>EINVAL</B>
+
+<DD>
+<I>who</I>
+
+is invalid.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, 4.3BSD.
+POSIX.1-2001 specifies
+<B>getrusage</B>(),
+
+but specifies only the fields
+<I>ru_utime</I>
+
+and
+<I>ru_stime</I>.
+
+<P>
+<B>RUSAGE_THREAD</B>
+
+is Linux-specific.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+Resource usage metrics are preserved across an
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2).
+
+<P>
+Including
+<I>&lt;<A HREF="file:///usr/include/sys/time.h">sys/time.h</A>&gt;</I>
+
+is not required these days, but increases portability.
+(Indeed,
+<I>struct timeval</I>
+
+is defined in
+<I>&lt;<A HREF="file:///usr/include/sys/time.h">sys/time.h</A>&gt;</I>.)
+
+<P>
+
+In Linux kernel versions before 2.6.9, if the disposition of
+<B>SIGCHLD</B>
+
+is set to
+<B>SIG_IGN</B>
+
+then the resource usages of child processes
+are automatically included in the value returned by
+<B>RUSAGE_CHILDREN</B>,
+
+although POSIX.1-2001 explicitly prohibits this.
+This nonconformance is rectified in Linux 2.6.9 and later.
+
+
+<P>
+
+The structure definition shown at the start of this page
+was taken from 4.3BSD Reno.
+<P>
+Ancient systems provided a
+<B>vtimes</B>()
+
+function with a similar purpose to
+<B>getrusage</B>().
+
+For backward compatibility, glibc also provides
+<B>vtimes</B>().
+
+All new applications should be written using
+<B>getrusage</B>().
+
+<P>
+See also the description of
+<I>/proc/PID/stat</I>
+
+in
+<B><A HREF="../man5/proc.5.html">proc</A></B>(5).
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/clock_gettime.2.html">clock_gettime</A></B>(2),
+
+<B><A HREF="../man2/getrlimit.2.html">getrlimit</A></B>(2),
+
+<B><A HREF="../man2/times.2.html">times</A></B>(2),
+
+<B><A HREF="../man2/wait.2.html">wait</A></B>(2),
+
+<B><A HREF="../man2/wait4.2.html">wait4</A></B>(2),
+
+<B><A HREF="../man3/clock.3.html">clock</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:48 GMT, September 18, 2014
+</BODY>
+</HTML>

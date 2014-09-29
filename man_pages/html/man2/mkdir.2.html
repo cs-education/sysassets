@@ -1,0 +1,381 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MKDIR</TITLE>
+</HEAD><BODY>
+<H1>MKDIR</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+mkdir, mkdirat - create a directory
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+
+<B>int mkdir(const char *</B><I>pathname</I><B>, mode_t </B><I>mode</I><B>);</B>
+
+<B>#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;           </B>/* Definition of AT_* constants */
+<B>#include &lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</B>
+
+<B>int mkdirat(int </B><I>dirfd</I><B>, const char *</B><I>pathname</I><B>, mode_t </B><I>mode</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>mkdirat</B>():
+
+
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Since glibc 2.10:<DD>
+_XOPEN_SOURCE&nbsp;&gt;=&nbsp;700 || _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+<DT>Before glibc 2.10:<DD>
+_ATFILE_SOURCE
+</DL>
+</DL>
+
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>mkdir</B>()
+
+attempts to create a directory named
+<I>pathname</I>.
+
+<P>
+The argument
+<I>mode</I>
+
+specifies the permissions to use.
+It is modified by the process's
+<I>umask</I>
+
+in the usual way: the permissions of the created directory are
+(<I>mode</I> &amp; ~<I>umask</I> &amp; 0777).
+
+Other mode bits of the created directory depend on the operating system.
+For Linux, see below.
+<P>
+The newly created directory will be owned by the effective user ID of the
+process.
+If the directory containing the file has the set-group-ID
+bit set, or if the filesystem is mounted with BSD group semantics
+(<I>mount -o bsdgroups</I>
+
+or, synonymously
+<I>mount -o grpid</I>),
+
+the new directory will inherit the group ownership from its parent;
+otherwise it will be owned by the effective group ID of the process.
+<P>
+If the parent directory has the set-group-ID bit set, then so will the
+newly created directory.
+
+
+<A NAME="lbAE">&nbsp;</A>
+<H3>mkdirat()</H3>
+
+The
+<B>mkdirat</B>()
+
+system call operates in exactly the same way as
+<B>mkdir</B>(),
+
+except for the differences described here.
+<P>
+If the pathname given in
+<I>pathname</I>
+
+is relative, then it is interpreted relative to the directory
+referred to by the file descriptor
+<I>dirfd</I>
+
+(rather than relative to the current working directory of
+the calling process, as is done by
+<B>mkdir</B>()
+
+for a relative pathname).
+<P>
+If
+<I>pathname</I>
+
+is relative and
+<I>dirfd</I>
+
+is the special value
+<B>AT_FDCWD</B>,
+
+then
+<I>pathname</I>
+
+is interpreted relative to the current working
+directory of the calling process (like
+<B>mkdir</B>()).
+
+<P>
+If
+<I>pathname</I>
+
+is absolute, then
+<I>dirfd</I>
+
+is ignored.
+<P>
+
+See
+<B><A HREF="../man2/openat.2.html">openat</A></B>(2)
+
+for an explanation of the need for
+<B>mkdirat</B>().
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+<B>mkdir</B>()
+
+and
+<B>mkdirat</B>()
+
+return zero on success, or -1 if an error occurred (in which case,
+<I>errno</I>
+
+is set appropriately).
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EACCES</B>
+
+<DD>
+The parent directory does not allow write permission to the process,
+or one of the directories in
+<I>pathname</I>
+
+did not allow search permission.
+(See also
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7).)
+
+<DT><B>EDQUOT</B>
+
+<DD>
+The user's quota of disk blocks or inodes on the filesystem has been
+exhausted.
+<DT><B>EEXIST</B>
+
+<DD>
+<I>pathname</I>
+
+already exists (not necessarily as a directory).
+This includes the case where
+<I>pathname</I>
+
+is a symbolic link, dangling or not.
+<DT><B>EFAULT</B>
+
+<DD>
+<I>pathname</I> points outside your accessible address space.
+
+<DT><B>ELOOP</B>
+
+<DD>
+Too many symbolic links were encountered in resolving
+<I>pathname</I>.
+
+<DT><B>EMLINK</B>
+
+<DD>
+The number of links to the parent directory would exceed
+<B>LINK_MAX</B>.
+
+<DT><B>ENAMETOOLONG</B>
+
+<DD>
+<I>pathname</I> was too long.
+
+<DT><B>ENOENT</B>
+
+<DD>
+A directory component in
+<I>pathname</I>
+
+does not exist or is a dangling symbolic link.
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient kernel memory was available.
+<DT><B>ENOSPC</B>
+
+<DD>
+The device containing
+<I>pathname</I>
+
+has no room for the new directory.
+<DT><B>ENOSPC</B>
+
+<DD>
+The new directory cannot be created because the user's disk quota is
+exhausted.
+<DT><B>ENOTDIR</B>
+
+<DD>
+A component used as a directory in
+<I>pathname</I>
+
+is not, in fact, a directory.
+<DT><B>EPERM</B>
+
+<DD>
+The filesystem containing
+<I>pathname</I>
+
+does not support the creation of directories.
+<DT><B>EROFS</B>
+
+<DD>
+<I>pathname</I>
+
+refers to a file on a read-only filesystem.
+</DL>
+<P>
+
+The following additional errors can occur for
+<B>mkdirat</B>():
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>dirfd</I>
+
+is not a valid file descriptor.
+<DT><B>ENOTDIR</B>
+
+<DD>
+<I>pathname</I>
+
+is relative and
+<I>dirfd</I>
+
+is a file descriptor referring to a file other than a directory.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>mkdirat</B>()
+
+was added to Linux in kernel 2.6.16;
+library support was added to glibc in version 2.4.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>mkdir</B>():
+
+SVr4, BSD, POSIX.1-2001, POSIX.1-2008.
+
+<P>
+<B>mkdirat</B>():
+
+POSIX.1-2008.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+Under Linux, apart from the permission bits, only the
+<B>S_ISVTX</B>
+
+mode bit is honored.
+That is, under Linux the created directory actually gets mode
+(<I>mode</I> &amp; ~<I>umask</I> &amp; 01777).
+
+See also
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2).
+
+<P>
+
+There are many infelicities in the protocol underlying NFS.
+Some of these affect
+<B>mkdir</B>().
+
+<A NAME="lbAK">&nbsp;</A>
+<H3>Glibc notes</H3>
+
+On older kernels where
+<B>mkdirat</B>()
+
+is unavailable, the glibc wrapper function falls back to the use of
+<B>mkdir</B>().
+
+When
+<I>pathname</I>
+
+is a relative pathname,
+glibc constructs a pathname based on the symbolic link in
+<I>/proc/self/fd</I>
+
+that corresponds to the
+<I>dirfd</I>
+
+argument.
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/mkdir.1.html">mkdir</A></B>(1),
+
+<B><A HREF="../man2/chmod.2.html">chmod</A></B>(2),
+
+<B><A HREF="../man2/chown.2.html">chown</A></B>(2),
+
+<B><A HREF="../man2/mknod.2.html">mknod</A></B>(2),
+
+<B><A HREF="../man2/mount.2.html">mount</A></B>(2),
+
+<B><A HREF="../man2/rmdir.2.html">rmdir</A></B>(2),
+
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2),
+
+<B><A HREF="../man2/umask.2.html">umask</A></B>(2),
+
+<B><A HREF="../man2/unlink.2.html">unlink</A></B>(2),
+
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">mkdirat()</A><DD>
+</DL>
+<DT><A HREF="#lbAF">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">VERSIONS</A><DD>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAK">Glibc notes</A><DD>
+</DL>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:49 GMT, September 18, 2014
+</BODY>
+</HTML>

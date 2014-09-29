@@ -1,0 +1,4842 @@
+[
+    {
+        "name": "getent", 
+        "section": 1, 
+        "summary": "getent - get entries from Name Service Switch libraries"
+    }, 
+    {
+        "name": "iconv", 
+        "section": 1, 
+        "summary": "iconv - convert text from one character encoding to another"
+    }, 
+    {
+        "name": "intro", 
+        "section": 1, 
+        "summary": "intro - introduction to user commands"
+    }, 
+    {
+        "name": "ldd", 
+        "section": 1, 
+        "summary": "ldd - print shared library dependencies"
+    }, 
+    {
+        "name": "locale", 
+        "section": 1, 
+        "summary": "locale - get locale-specific information"
+    }, 
+    {
+        "name": "localedef", 
+        "section": 1, 
+        "summary": "localedef - compile locale definition files"
+    }, 
+    {
+        "name": "memusage", 
+        "section": 1, 
+        "summary": "memusage - profile memory usage of a program"
+    }, 
+    {
+        "name": "memusagestat", 
+        "section": 1, 
+        "summary": "memusagestat - generate graphic from memory profiling data"
+    }, 
+    {
+        "name": "mtrace", 
+        "section": 1, 
+        "summary": "mtrace - interpret the malloc trace log"
+    }, 
+    {
+        "name": "sprof", 
+        "section": 1, 
+        "summary": "sprof - read and display shared object profiling data"
+    }, 
+    {
+        "name": "time", 
+        "section": 1, 
+        "summary": "time - time a simple command or give resource usage"
+    }, 
+    {
+        "name": "accept", 
+        "section": 2, 
+        "summary": "accept, accept4 - accept a connection on a socket"
+    }, 
+    {
+        "name": "access", 
+        "section": 2, 
+        "summary": "access, faccessat - check user's permissions for a file"
+    }, 
+    {
+        "name": "acct", 
+        "section": 2, 
+        "summary": "acct - switch process accounting on or off"
+    }, 
+    {
+        "name": "add_key", 
+        "section": 2, 
+        "summary": "add_key - add a key to the kernel's key management facility"
+    }, 
+    {
+        "name": "adjtimex", 
+        "section": 2, 
+        "summary": "adjtimex - tune kernel clock"
+    }, 
+    {
+        "name": "alarm", 
+        "section": 2, 
+        "summary": "alarm - set an alarm clock for delivery of a signal"
+    }, 
+    {
+        "name": "alloc_hugepages", 
+        "section": 2, 
+        "summary": "alloc_hugepages, free_hugepages - allocate or free huge pages"
+    }, 
+    {
+        "name": "arch_prctl", 
+        "section": 2, 
+        "summary": "arch_prctl - set architecture-specific thread state"
+    }, 
+    {
+        "name": "bdflush", 
+        "section": 2, 
+        "summary": "bdflush - start, flush, or tune buffer-dirty-flush daemon"
+    }, 
+    {
+        "name": "bind", 
+        "section": 2, 
+        "summary": "bind - bind a name to a socket"
+    }, 
+    {
+        "name": "brk", 
+        "section": 2, 
+        "summary": "brk, sbrk - change data segment size"
+    }, 
+    {
+        "name": "cacheflush", 
+        "section": 2, 
+        "summary": "cacheflush - flush contents of instruction and/or data cache"
+    }, 
+    {
+        "name": "capget", 
+        "section": 2, 
+        "summary": "capget, capset - set/get capabilities of thread(s)"
+    }, 
+    {
+        "name": "chdir", 
+        "section": 2, 
+        "summary": "chdir, fchdir - change working directory"
+    }, 
+    {
+        "name": "chmod", 
+        "section": 2, 
+        "summary": "chmod, fchmod, fchmodat - change permissions of a file"
+    }, 
+    {
+        "name": "chown", 
+        "section": 2, 
+        "summary": "chown, fchown, lchown, fchownat - change ownership of a file"
+    }, 
+    {
+        "name": "chroot", 
+        "section": 2, 
+        "summary": "chroot - change root directory"
+    }, 
+    {
+        "name": "clock_getres", 
+        "section": 2, 
+        "summary": "clock_getres, clock_gettime, clock_settime - clock and time functions"
+    }, 
+    {
+        "name": "clock_nanosleep", 
+        "section": 2, 
+        "summary": "clock_nanosleep - high-resolution sleep with specifiable clock"
+    }, 
+    {
+        "name": "clone", 
+        "section": 2, 
+        "summary": "clone, __clone2 - create a child process"
+    }, 
+    {
+        "name": "close", 
+        "section": 2, 
+        "summary": "close - close a file descriptor"
+    }, 
+    {
+        "name": "connect", 
+        "section": 2, 
+        "summary": "connect - initiate a connection on a socket"
+    }, 
+    {
+        "name": "create_module", 
+        "section": 2, 
+        "summary": "create_module - create a loadable module entry"
+    }, 
+    {
+        "name": "delete_module", 
+        "section": 2, 
+        "summary": "delete_module - unload a kernel module"
+    }, 
+    {
+        "name": "dup", 
+        "section": 2, 
+        "summary": "dup, dup2, dup3 - duplicate a file descriptor"
+    }, 
+    {
+        "name": "epoll_create", 
+        "section": 2, 
+        "summary": "epoll_create, epoll_create1 - open an epoll file descriptor"
+    }, 
+    {
+        "name": "epoll_ctl", 
+        "section": 2, 
+        "summary": "epoll_ctl - control interface for an epoll descriptor"
+    }, 
+    {
+        "name": "epoll_wait", 
+        "section": 2, 
+        "summary": "epoll_wait, epoll_pwait - wait for an I/O event on an epoll file descriptor"
+    }, 
+    {
+        "name": "eventfd", 
+        "section": 2, 
+        "summary": "eventfd - create a file descriptor for event notification"
+    }, 
+    {
+        "name": "execve", 
+        "section": 2, 
+        "summary": "execve - execute program"
+    }, 
+    {
+        "name": "exit_group", 
+        "section": 2, 
+        "summary": "exit_group - exit all threads in a process"
+    }, 
+    {
+        "name": "fallocate", 
+        "section": 2, 
+        "summary": "fallocate - manipulate file space"
+    }, 
+    {
+        "name": "fanotify_init", 
+        "section": 2, 
+        "summary": "fanotify_init - create and initialize fanotify group"
+    }, 
+    {
+        "name": "fanotify_mark", 
+        "section": 2, 
+        "summary": "fanotify_mark - add, remove, or modify an fanotify mark on a filesystem\nobject"
+    }, 
+    {
+        "name": "fcntl", 
+        "section": 2, 
+        "summary": "fcntl - manipulate file descriptor"
+    }, 
+    {
+        "name": "flock", 
+        "section": 2, 
+        "summary": "flock - apply or remove an advisory lock on an open file"
+    }, 
+    {
+        "name": "fork", 
+        "section": 2, 
+        "summary": "fork - create a child process"
+    }, 
+    {
+        "name": "fsync", 
+        "section": 2, 
+        "summary": "fsync, fdatasync - synchronize a file's in-core state with storage device"
+    }, 
+    {
+        "name": "futex", 
+        "section": 2, 
+        "summary": "futex - fast user-space locking"
+    }, 
+    {
+        "name": "futimesat", 
+        "section": 2, 
+        "summary": "futimesat - change timestamps of a file relative to a directory file descriptor"
+    }, 
+    {
+        "name": "getcpu", 
+        "section": 2, 
+        "summary": "getcpu - determine CPU and NUMA node on which the calling thread is running"
+    }, 
+    {
+        "name": "getdents", 
+        "section": 2, 
+        "summary": "getdents - get directory entries"
+    }, 
+    {
+        "name": "getdomainname", 
+        "section": 2, 
+        "summary": "getdomainname, setdomainname - get/set NIS domain name"
+    }, 
+    {
+        "name": "getgid", 
+        "section": 2, 
+        "summary": "getgid, getegid - get group identity"
+    }, 
+    {
+        "name": "getgroups", 
+        "section": 2, 
+        "summary": "getgroups, setgroups - get/set list of supplementary group IDs"
+    }, 
+    {
+        "name": "gethostname", 
+        "section": 2, 
+        "summary": "gethostname, sethostname - get/set hostname"
+    }, 
+    {
+        "name": "getitimer", 
+        "section": 2, 
+        "summary": "getitimer, setitimer - get or set value of an interval timer"
+    }, 
+    {
+        "name": "getpagesize", 
+        "section": 2, 
+        "summary": "getpagesize - get memory page size"
+    }, 
+    {
+        "name": "getpeername", 
+        "section": 2, 
+        "summary": "getpeername - get name of connected peer socket"
+    }, 
+    {
+        "name": "getpid", 
+        "section": 2, 
+        "summary": "getpid, getppid - get process identification"
+    }, 
+    {
+        "name": "getpriority", 
+        "section": 2, 
+        "summary": "getpriority, setpriority - get/set program scheduling priority"
+    }, 
+    {
+        "name": "getresuid", 
+        "section": 2, 
+        "summary": "getresuid, getresgid - get real, effective and saved user/group IDs"
+    }, 
+    {
+        "name": "getrlimit", 
+        "section": 2, 
+        "summary": "getrlimit, setrlimit, prlimit - get/set resource limits"
+    }, 
+    {
+        "name": "getrusage", 
+        "section": 2, 
+        "summary": "getrusage - get resource usage"
+    }, 
+    {
+        "name": "getsid", 
+        "section": 2, 
+        "summary": "getsid - get session ID"
+    }, 
+    {
+        "name": "getsockname", 
+        "section": 2, 
+        "summary": "getsockname - get socket name"
+    }, 
+    {
+        "name": "getsockopt", 
+        "section": 2, 
+        "summary": "getsockopt, setsockopt - get and set options on sockets"
+    }, 
+    {
+        "name": "gettid", 
+        "section": 2, 
+        "summary": "gettid - get thread identification"
+    }, 
+    {
+        "name": "gettimeofday", 
+        "section": 2, 
+        "summary": "gettimeofday, settimeofday - get / set time"
+    }, 
+    {
+        "name": "getuid", 
+        "section": 2, 
+        "summary": "getuid, geteuid - get user identity"
+    }, 
+    {
+        "name": "getunwind", 
+        "section": 2, 
+        "summary": "getunwind - copy the unwind data to caller's buffer"
+    }, 
+    {
+        "name": "getxattr", 
+        "section": 2, 
+        "summary": "getxattr, lgetxattr, fgetxattr - retrieve an extended attribute value"
+    }, 
+    {
+        "name": "get_kernel_syms", 
+        "section": 2, 
+        "summary": "get_kernel_syms - retrieve exported kernel and module symbols"
+    }, 
+    {
+        "name": "get_mempolicy", 
+        "section": 2, 
+        "summary": "get_mempolicy - retrieve NUMA memory policy for a process"
+    }, 
+    {
+        "name": "get_robust_list", 
+        "section": 2, 
+        "summary": "get_robust_list, set_robust_list - get/set list of robust futexes"
+    }, 
+    {
+        "name": "get_thread_area", 
+        "section": 2, 
+        "summary": "get_thread_area - get a thread-local storage (TLS) area"
+    }, 
+    {
+        "name": "idle", 
+        "section": 2, 
+        "summary": "idle - make process 0 idle"
+    }, 
+    {
+        "name": "init_module", 
+        "section": 2, 
+        "summary": "init_module, finit_module - load a kernel module"
+    }, 
+    {
+        "name": "inotify_add_watch", 
+        "section": 2, 
+        "summary": "inotify_add_watch - add a watch to an initialized inotify instance"
+    }, 
+    {
+        "name": "inotify_init", 
+        "section": 2, 
+        "summary": "inotify_init, inotify_init1 - initialize an inotify instance"
+    }, 
+    {
+        "name": "inotify_rm_watch", 
+        "section": 2, 
+        "summary": "inotify_rm_watch - remove an existing watch from an inotify instance"
+    }, 
+    {
+        "name": "intro", 
+        "section": 2, 
+        "summary": "intro - introduction to system calls"
+    }, 
+    {
+        "name": "ioctl", 
+        "section": 2, 
+        "summary": "ioctl - control device"
+    }, 
+    {
+        "name": "ioctl_list", 
+        "section": 2, 
+        "summary": "ioctl_list - list of ioctl calls in Linux/i386 kernel"
+    }, 
+    {
+        "name": "ioperm", 
+        "section": 2, 
+        "summary": "ioperm - set port input/output permissions"
+    }, 
+    {
+        "name": "iopl", 
+        "section": 2, 
+        "summary": "iopl - change I/O privilege level"
+    }, 
+    {
+        "name": "ioprio_set", 
+        "section": 2, 
+        "summary": "ioprio_get, ioprio_set - get/set I/O scheduling class and priority"
+    }, 
+    {
+        "name": "io_cancel", 
+        "section": 2, 
+        "summary": "io_cancel - cancel an outstanding asynchronous I/O operation"
+    }, 
+    {
+        "name": "io_destroy", 
+        "section": 2, 
+        "summary": "io_destroy - destroy an asynchronous I/O context"
+    }, 
+    {
+        "name": "io_getevents", 
+        "section": 2, 
+        "summary": "io_getevents - read asynchronous I/O events from the completion queue"
+    }, 
+    {
+        "name": "io_setup", 
+        "section": 2, 
+        "summary": "io_setup - create an asynchronous I/O context"
+    }, 
+    {
+        "name": "io_submit", 
+        "section": 2, 
+        "summary": "io_submit - submit asynchronous I/O blocks for processing"
+    }, 
+    {
+        "name": "ipc", 
+        "section": 2, 
+        "summary": "ipc - System V IPC system calls"
+    }, 
+    {
+        "name": "kcmp", 
+        "section": 2, 
+        "summary": "kcmp - compare two processes to determine if they share a kernel resource"
+    }, 
+    {
+        "name": "kexec_load", 
+        "section": 2, 
+        "summary": "kexec_load - load a new kernel for later execution"
+    }, 
+    {
+        "name": "keyctl", 
+        "section": 2, 
+        "summary": "keyctl - manipulate the kernel's key management facility"
+    }, 
+    {
+        "name": "kill", 
+        "section": 2, 
+        "summary": "kill - send signal to a process"
+    }, 
+    {
+        "name": "killpg", 
+        "section": 2, 
+        "summary": "killpg - send signal to a process group"
+    }, 
+    {
+        "name": "link", 
+        "section": 2, 
+        "summary": "link, linkat - make a new name for a file"
+    }, 
+    {
+        "name": "listen", 
+        "section": 2, 
+        "summary": "listen - listen for connections on a socket"
+    }, 
+    {
+        "name": "listxattr", 
+        "section": 2, 
+        "summary": "listxattr, llistxattr, flistxattr - list extended attribute names"
+    }, 
+    {
+        "name": "llseek", 
+        "section": 2, 
+        "summary": "_llseek - reposition read/write file offset"
+    }, 
+    {
+        "name": "lookup_dcookie", 
+        "section": 2, 
+        "summary": "lookup_dcookie - return a directory entry's path"
+    }, 
+    {
+        "name": "lseek", 
+        "section": 2, 
+        "summary": "lseek - reposition read/write file offset"
+    }, 
+    {
+        "name": "madvise", 
+        "section": 2, 
+        "summary": "madvise - give advice about use of memory"
+    }, 
+    {
+        "name": "mbind", 
+        "section": 2, 
+        "summary": "mbind - set memory policy for a memory range"
+    }, 
+    {
+        "name": "migrate_pages", 
+        "section": 2, 
+        "summary": "migrate_pages - move all pages in a process to another set of nodes"
+    }, 
+    {
+        "name": "mincore", 
+        "section": 2, 
+        "summary": "mincore - determine whether pages are resident in memory"
+    }, 
+    {
+        "name": "mkdir", 
+        "section": 2, 
+        "summary": "mkdir, mkdirat - create a directory"
+    }, 
+    {
+        "name": "mknod", 
+        "section": 2, 
+        "summary": "mknod, mknodat - create a special or ordinary file"
+    }, 
+    {
+        "name": "mlock", 
+        "section": 2, 
+        "summary": "mlock, munlock, mlockall, munlockall - lock and unlock memory"
+    }, 
+    {
+        "name": "mmap", 
+        "section": 2, 
+        "summary": "mmap, munmap - map or unmap files or devices into memory"
+    }, 
+    {
+        "name": "mmap2", 
+        "section": 2, 
+        "summary": "mmap2 - map files or devices into memory"
+    }, 
+    {
+        "name": "modify_ldt", 
+        "section": 2, 
+        "summary": "modify_ldt - get or set ldt"
+    }, 
+    {
+        "name": "mount", 
+        "section": 2, 
+        "summary": "mount - mount filesystem"
+    }, 
+    {
+        "name": "move_pages", 
+        "section": 2, 
+        "summary": "move_pages - move individual pages of a process to another node"
+    }, 
+    {
+        "name": "mprotect", 
+        "section": 2, 
+        "summary": "mprotect - set protection on a region of memory"
+    }, 
+    {
+        "name": "mq_getsetattr", 
+        "section": 2, 
+        "summary": "mq_getsetattr - get/set message queue attributes"
+    }, 
+    {
+        "name": "mremap", 
+        "section": 2, 
+        "summary": "mremap - remap a virtual memory address"
+    }, 
+    {
+        "name": "msgctl", 
+        "section": 2, 
+        "summary": "msgctl - System V message control operations"
+    }, 
+    {
+        "name": "msgget", 
+        "section": 2, 
+        "summary": "msgget - get a System V message queue identifier"
+    }, 
+    {
+        "name": "msgop", 
+        "section": 2, 
+        "summary": "msgrcv, msgsnd - System V message queue operations"
+    }, 
+    {
+        "name": "msync", 
+        "section": 2, 
+        "summary": "msync - synchronize a file with a memory map"
+    }, 
+    {
+        "name": "nanosleep", 
+        "section": 2, 
+        "summary": "nanosleep - high-resolution sleep"
+    }, 
+    {
+        "name": "nfsservctl", 
+        "section": 2, 
+        "summary": "nfsservctl - syscall interface to kernel nfs daemon"
+    }, 
+    {
+        "name": "nice", 
+        "section": 2, 
+        "summary": "nice - change process priority"
+    }, 
+    {
+        "name": "open", 
+        "section": 2, 
+        "summary": "open, openat, creat - open and possibly create a file"
+    }, 
+    {
+        "name": "open_by_handle_at", 
+        "section": 2, 
+        "summary": "name_to_handle_at, open_by_handle_at - obtain handle\nfor a pathname and open file via a handle"
+    }, 
+    {
+        "name": "outb", 
+        "section": 2, 
+        "summary": "outb, outw, outl, outsb, outsw, outsl,\ninb, inw, inl, insb, insw, insl,\noutb_p, outw_p, outl_p, inb_p, inw_p, inl_p - port I/O"
+    }, 
+    {
+        "name": "pause", 
+        "section": 2, 
+        "summary": "pause - wait for signal"
+    }, 
+    {
+        "name": "pciconfig_read", 
+        "section": 2, 
+        "summary": "pciconfig_read, pciconfig_write, pciconfig_iobase - pci device information handling"
+    }, 
+    {
+        "name": "perfmonctl", 
+        "section": 2, 
+        "summary": "perfmonctl - interface to IA-64 performance monitoring unit"
+    }, 
+    {
+        "name": "perf_event_open", 
+        "section": 2, 
+        "summary": "perf_event_open - set up performance monitoring"
+    }, 
+    {
+        "name": "personality", 
+        "section": 2, 
+        "summary": "personality - set the process execution domain"
+    }, 
+    {
+        "name": "pipe", 
+        "section": 2, 
+        "summary": "pipe, pipe2 - create pipe"
+    }, 
+    {
+        "name": "pivot_root", 
+        "section": 2, 
+        "summary": "pivot_root - change the root filesystem"
+    }, 
+    {
+        "name": "poll", 
+        "section": 2, 
+        "summary": "poll, ppoll - wait for some event on a file descriptor"
+    }, 
+    {
+        "name": "posix_fadvise", 
+        "section": 2, 
+        "summary": "posix_fadvise - predeclare an access pattern for file data"
+    }, 
+    {
+        "name": "prctl", 
+        "section": 2, 
+        "summary": "prctl - operations on a process"
+    }, 
+    {
+        "name": "pread", 
+        "section": 2, 
+        "summary": "pread, pwrite - read from or write to a file descriptor at a given offset"
+    }, 
+    {
+        "name": "process_vm_readv", 
+        "section": 2, 
+        "summary": "process_vm_readv, process_vm_writev - transfer data between process address spaces"
+    }, 
+    {
+        "name": "ptrace", 
+        "section": 2, 
+        "summary": "ptrace - process trace"
+    }, 
+    {
+        "name": "query_module", 
+        "section": 2, 
+        "summary": "query_module - query the kernel for various bits pertaining to modules"
+    }, 
+    {
+        "name": "quotactl", 
+        "section": 2, 
+        "summary": "quotactl - manipulate disk quotas"
+    }, 
+    {
+        "name": "read", 
+        "section": 2, 
+        "summary": "read - read from a file descriptor"
+    }, 
+    {
+        "name": "readahead", 
+        "section": 2, 
+        "summary": "readahead - initiate file readahead into page cache"
+    }, 
+    {
+        "name": "readdir", 
+        "section": 2, 
+        "summary": "readdir - read directory entry"
+    }, 
+    {
+        "name": "readlink", 
+        "section": 2, 
+        "summary": "readlink, readlinkat - read value of a symbolic link"
+    }, 
+    {
+        "name": "readv", 
+        "section": 2, 
+        "summary": "readv, writev, preadv, pwritev - read or write data into multiple buffers"
+    }, 
+    {
+        "name": "reboot", 
+        "section": 2, 
+        "summary": "reboot - reboot or enable/disable Ctrl-Alt-Del"
+    }, 
+    {
+        "name": "recv", 
+        "section": 2, 
+        "summary": "recv, recvfrom, recvmsg - receive a message from a socket"
+    }, 
+    {
+        "name": "recvmmsg", 
+        "section": 2, 
+        "summary": "recvmmsg - receive multiple messages on a socket"
+    }, 
+    {
+        "name": "remap_file_pages", 
+        "section": 2, 
+        "summary": "remap_file_pages - create a nonlinear file mapping"
+    }, 
+    {
+        "name": "removexattr", 
+        "section": 2, 
+        "summary": "removexattr, lremovexattr, fremovexattr - remove an extended attribute"
+    }, 
+    {
+        "name": "rename", 
+        "section": 2, 
+        "summary": "rename, renameat, renameat2 - change the name or location of a file"
+    }, 
+    {
+        "name": "request_key", 
+        "section": 2, 
+        "summary": "request_key - request a key from the kernel's key management facility"
+    }, 
+    {
+        "name": "restart_syscall", 
+        "section": 2, 
+        "summary": "restart_syscall - restart a system call after interruption by a stop signal"
+    }, 
+    {
+        "name": "rmdir", 
+        "section": 2, 
+        "summary": "rmdir - delete a directory"
+    }, 
+    {
+        "name": "rt_sigqueueinfo", 
+        "section": 2, 
+        "summary": "rt_sigqueueinfo, rt_tgsigqueueinfo - queue a signal and data"
+    }, 
+    {
+        "name": "s390_runtime_instr", 
+        "section": 2, 
+        "summary": "s390_runtime_instr - enable/disable s390 CPU run-time instrumentation"
+    }, 
+    {
+        "name": "sched_get_priority_max", 
+        "section": 2, 
+        "summary": "sched_get_priority_max, sched_get_priority_min  - get static priority range"
+    }, 
+    {
+        "name": "sched_rr_get_interval", 
+        "section": 2, 
+        "summary": "sched_rr_get_interval - get the SCHED_RR interval for the named process"
+    }, 
+    {
+        "name": "sched_setaffinity", 
+        "section": 2, 
+        "summary": "sched_setaffinity, sched_getaffinity - set and get a thread's CPU affinity mask"
+    }, 
+    {
+        "name": "sched_setattr", 
+        "section": 2, 
+        "summary": "sched_setattr, sched_getattr -\nset and get scheduling policy and attributes"
+    }, 
+    {
+        "name": "sched_setparam", 
+        "section": 2, 
+        "summary": "sched_setparam, sched_getparam - set and get scheduling parameters"
+    }, 
+    {
+        "name": "sched_setscheduler", 
+        "section": 2, 
+        "summary": "sched_setscheduler, sched_getscheduler -\nset and get scheduling policy/parameters"
+    }, 
+    {
+        "name": "sched_yield", 
+        "section": 2, 
+        "summary": "sched_yield - yield the processor"
+    }, 
+    {
+        "name": "select", 
+        "section": 2, 
+        "summary": "select, pselect, FD_CLR, FD_ISSET, FD_SET, FD_ZERO -\nsynchronous I/O multiplexing"
+    }, 
+    {
+        "name": "select_tut", 
+        "section": 2, 
+        "summary": "select, pselect, FD_CLR, FD_ISSET, FD_SET, FD_ZERO -\nsynchronous I/O multiplexing"
+    }, 
+    {
+        "name": "semctl", 
+        "section": 2, 
+        "summary": "semctl - System V semaphore control operations"
+    }, 
+    {
+        "name": "semget", 
+        "section": 2, 
+        "summary": "semget - get a System V semaphore set identifier"
+    }, 
+    {
+        "name": "semop", 
+        "section": 2, 
+        "summary": "semop, semtimedop - System V semaphore operations"
+    }, 
+    {
+        "name": "send", 
+        "section": 2, 
+        "summary": "send, sendto, sendmsg - send a message on a socket"
+    }, 
+    {
+        "name": "sendfile", 
+        "section": 2, 
+        "summary": "sendfile - transfer data between file descriptors"
+    }, 
+    {
+        "name": "sendmmsg", 
+        "section": 2, 
+        "summary": "sendmmsg - send multiple messages on a socket"
+    }, 
+    {
+        "name": "seteuid", 
+        "section": 2, 
+        "summary": "seteuid, setegid - set effective user or group ID"
+    }, 
+    {
+        "name": "setfsgid", 
+        "section": 2, 
+        "summary": "setfsgid - set group identity used for filesystem checks"
+    }, 
+    {
+        "name": "setfsuid", 
+        "section": 2, 
+        "summary": "setfsuid - set user identity used for filesystem checks"
+    }, 
+    {
+        "name": "setgid", 
+        "section": 2, 
+        "summary": "setgid - set group identity"
+    }, 
+    {
+        "name": "setns", 
+        "section": 2, 
+        "summary": "setns - reassociate thread with a namespace"
+    }, 
+    {
+        "name": "setpgid", 
+        "section": 2, 
+        "summary": "setpgid, getpgid, setpgrp, getpgrp - set/get process group"
+    }, 
+    {
+        "name": "setresuid", 
+        "section": 2, 
+        "summary": "setresuid, setresgid - set real, effective and saved user or group ID"
+    }, 
+    {
+        "name": "setreuid", 
+        "section": 2, 
+        "summary": "setreuid, setregid - set real and/or effective user or group ID"
+    }, 
+    {
+        "name": "setsid", 
+        "section": 2, 
+        "summary": "setsid - creates a session and sets the process group ID"
+    }, 
+    {
+        "name": "setuid", 
+        "section": 2, 
+        "summary": "setuid - set user identity"
+    }, 
+    {
+        "name": "setup", 
+        "section": 2, 
+        "summary": "setup - setup devices and filesystems, mount root filesystem"
+    }, 
+    {
+        "name": "setxattr", 
+        "section": 2, 
+        "summary": "setxattr, lsetxattr, fsetxattr - set an extended attribute value"
+    }, 
+    {
+        "name": "set_mempolicy", 
+        "section": 2, 
+        "summary": "set_mempolicy - set default NUMA memory policy for a process and its children"
+    }, 
+    {
+        "name": "set_thread_area", 
+        "section": 2, 
+        "summary": "set_thread_area - set a thread local storage (TLS) area"
+    }, 
+    {
+        "name": "set_tid_address", 
+        "section": 2, 
+        "summary": "set_tid_address - set pointer to thread ID"
+    }, 
+    {
+        "name": "sgetmask", 
+        "section": 2, 
+        "summary": "sgetmask, ssetmask - manipulation of signal mask (obsolete)"
+    }, 
+    {
+        "name": "shmctl", 
+        "section": 2, 
+        "summary": "shmctl - System V shared memory control"
+    }, 
+    {
+        "name": "shmget", 
+        "section": 2, 
+        "summary": "shmget - allocates a System V shared memory segment"
+    }, 
+    {
+        "name": "shmop", 
+        "section": 2, 
+        "summary": "shmat, shmdt - System V shared memory operations"
+    }, 
+    {
+        "name": "shutdown", 
+        "section": 2, 
+        "summary": "shutdown - shut down part of a full-duplex connection"
+    }, 
+    {
+        "name": "sigaction", 
+        "section": 2, 
+        "summary": "sigaction - examine and change a signal action"
+    }, 
+    {
+        "name": "sigaltstack", 
+        "section": 2, 
+        "summary": "sigaltstack - set and/or get signal stack context"
+    }, 
+    {
+        "name": "signal", 
+        "section": 2, 
+        "summary": "signal - ANSI C signal handling"
+    }, 
+    {
+        "name": "signalfd", 
+        "section": 2, 
+        "summary": "signalfd - create a file descriptor for accepting signals"
+    }, 
+    {
+        "name": "sigpending", 
+        "section": 2, 
+        "summary": "sigpending - examine pending signals"
+    }, 
+    {
+        "name": "sigprocmask", 
+        "section": 2, 
+        "summary": "sigprocmask - examine and change blocked signals"
+    }, 
+    {
+        "name": "sigreturn", 
+        "section": 2, 
+        "summary": "sigreturn - return from signal handler and cleanup stack frame"
+    }, 
+    {
+        "name": "sigsuspend", 
+        "section": 2, 
+        "summary": "sigsuspend - wait for a signal"
+    }, 
+    {
+        "name": "sigwaitinfo", 
+        "section": 2, 
+        "summary": "sigwaitinfo, sigtimedwait - synchronously wait for queued signals"
+    }, 
+    {
+        "name": "socket", 
+        "section": 2, 
+        "summary": "socket - create an endpoint for communication"
+    }, 
+    {
+        "name": "socketcall", 
+        "section": 2, 
+        "summary": "socketcall - socket system calls"
+    }, 
+    {
+        "name": "socketpair", 
+        "section": 2, 
+        "summary": "socketpair - create a pair of connected sockets"
+    }, 
+    {
+        "name": "splice", 
+        "section": 2, 
+        "summary": "splice - splice data to/from a pipe"
+    }, 
+    {
+        "name": "spu_create", 
+        "section": 2, 
+        "summary": "spu_create - create a new spu context"
+    }, 
+    {
+        "name": "spu_run", 
+        "section": 2, 
+        "summary": "spu_run - execute an SPU context"
+    }, 
+    {
+        "name": "stat", 
+        "section": 2, 
+        "summary": "stat, fstat, lstat, fstatat - get file status"
+    }, 
+    {
+        "name": "statfs", 
+        "section": 2, 
+        "summary": "statfs, fstatfs - get filesystem statistics"
+    }, 
+    {
+        "name": "stime", 
+        "section": 2, 
+        "summary": "stime - set time"
+    }, 
+    {
+        "name": "subpage_prot", 
+        "section": 2, 
+        "summary": "subpage_prot - define a subpage protection for an address range"
+    }, 
+    {
+        "name": "swapon", 
+        "section": 2, 
+        "summary": "swapon, swapoff - start/stop swapping to file/device"
+    }, 
+    {
+        "name": "symlink", 
+        "section": 2, 
+        "summary": "symlink, symlinkat - make a new name for a file"
+    }, 
+    {
+        "name": "sync", 
+        "section": 2, 
+        "summary": "sync, syncfs - commit buffer cache to disk"
+    }, 
+    {
+        "name": "sync_file_range", 
+        "section": 2, 
+        "summary": "sync_file_range - sync a file segment with disk"
+    }, 
+    {
+        "name": "syscall", 
+        "section": 2, 
+        "summary": "syscall - indirect system call"
+    }, 
+    {
+        "name": "syscalls", 
+        "section": 2, 
+        "summary": "syscalls - Linux system calls"
+    }, 
+    {
+        "name": "sysctl", 
+        "section": 2, 
+        "summary": "sysctl - read/write system parameters"
+    }, 
+    {
+        "name": "sysfs", 
+        "section": 2, 
+        "summary": "sysfs - get filesystem type information"
+    }, 
+    {
+        "name": "sysinfo", 
+        "section": 2, 
+        "summary": "sysinfo - returns information on overall system statistics"
+    }, 
+    {
+        "name": "syslog", 
+        "section": 2, 
+        "summary": "syslog, klogctl - read and/or clear kernel message ring buffer;\nset console_loglevel"
+    }, 
+    {
+        "name": "tee", 
+        "section": 2, 
+        "summary": "tee - duplicating pipe content"
+    }, 
+    {
+        "name": "time", 
+        "section": 2, 
+        "summary": "time - get time in seconds"
+    }, 
+    {
+        "name": "timerfd_create", 
+        "section": 2, 
+        "summary": "timerfd_create, timerfd_settime, timerfd_gettime -\ntimers that notify via file descriptors"
+    }, 
+    {
+        "name": "timer_create", 
+        "section": 2, 
+        "summary": "timer_create - create a POSIX per-process timer"
+    }, 
+    {
+        "name": "timer_delete", 
+        "section": 2, 
+        "summary": "timer_delete - delete a POSIX per-process timer"
+    }, 
+    {
+        "name": "timer_getoverrun", 
+        "section": 2, 
+        "summary": "timer_getoverrun - get overrun count for a POSIX per-process timer"
+    }, 
+    {
+        "name": "timer_settime", 
+        "section": 2, 
+        "summary": "timer_settime, timer_gettime - arm/disarm and fetch\nstate of POSIX per-process timer"
+    }, 
+    {
+        "name": "times", 
+        "section": 2, 
+        "summary": "times - get process times"
+    }, 
+    {
+        "name": "tkill", 
+        "section": 2, 
+        "summary": "tkill, tgkill - send a signal to a thread"
+    }, 
+    {
+        "name": "truncate", 
+        "section": 2, 
+        "summary": "truncate, ftruncate - truncate a file to a specified length"
+    }, 
+    {
+        "name": "umask", 
+        "section": 2, 
+        "summary": "umask - set file mode creation mask"
+    }, 
+    {
+        "name": "umount", 
+        "section": 2, 
+        "summary": "umount, umount2 - unmount filesystem"
+    }, 
+    {
+        "name": "uname", 
+        "section": 2, 
+        "summary": "uname - get name and information about current kernel"
+    }, 
+    {
+        "name": "unimplemented", 
+        "section": 2, 
+        "summary": "afs_syscall, break, fattach, fdetach, ftime, getmsg, getpmsg, gtty, isastream,\nlock, madvise1, mpx, prof, profil, putmsg, putpmsg, security,\nstty, tuxcall, ulimit, vserver - unimplemented system calls"
+    }, 
+    {
+        "name": "unlink", 
+        "section": 2, 
+        "summary": "unlink, unlinkat - delete a name and possibly the file it refers to"
+    }, 
+    {
+        "name": "unshare", 
+        "section": 2, 
+        "summary": "unshare - disassociate parts of the process execution context"
+    }, 
+    {
+        "name": "uselib", 
+        "section": 2, 
+        "summary": "uselib - load shared library"
+    }, 
+    {
+        "name": "ustat", 
+        "section": 2, 
+        "summary": "ustat - get filesystem statistics"
+    }, 
+    {
+        "name": "utime", 
+        "section": 2, 
+        "summary": "utime, utimes - change file last access and modification times"
+    }, 
+    {
+        "name": "utimensat", 
+        "section": 2, 
+        "summary": "utimensat, futimens - change file timestamps with nanosecond precision"
+    }, 
+    {
+        "name": "vfork", 
+        "section": 2, 
+        "summary": "vfork - create a child process and block parent"
+    }, 
+    {
+        "name": "vhangup", 
+        "section": 2, 
+        "summary": "vhangup - virtually hangup the current terminal"
+    }, 
+    {
+        "name": "vm86", 
+        "section": 2, 
+        "summary": "vm86old, vm86 - enter virtual 8086 mode"
+    }, 
+    {
+        "name": "vmsplice", 
+        "section": 2, 
+        "summary": "vmsplice - splice user pages into a pipe"
+    }, 
+    {
+        "name": "wait", 
+        "section": 2, 
+        "summary": "wait, waitpid, waitid - wait for process to change state"
+    }, 
+    {
+        "name": "wait4", 
+        "section": 2, 
+        "summary": "wait3, wait4 - wait for process to change state, BSD style"
+    }, 
+    {
+        "name": "write", 
+        "section": 2, 
+        "summary": "write - write to a file descriptor"
+    }, 
+    {
+        "name": "_exit", 
+        "section": 2, 
+        "summary": "_exit, _Exit - terminate the calling process"
+    }, 
+    {
+        "name": "_syscall", 
+        "section": 2, 
+        "summary": "_syscall - invoking a system call without library support (OBSOLETE)"
+    }, 
+    {
+        "name": "a64l", 
+        "section": 3, 
+        "summary": "a64l, l64a - convert between long and base-64"
+    }, 
+    {
+        "name": "abort", 
+        "section": 3, 
+        "summary": "abort - cause abnormal process termination"
+    }, 
+    {
+        "name": "abs", 
+        "section": 3, 
+        "summary": "abs, labs, llabs, imaxabs - compute the absolute value of an integer"
+    }, 
+    {
+        "name": "acos", 
+        "section": 3, 
+        "summary": "acos, acosf, acosl - arc cosine function"
+    }, 
+    {
+        "name": "acosh", 
+        "section": 3, 
+        "summary": "acosh, acoshf, acoshl - inverse hyperbolic cosine function"
+    }, 
+    {
+        "name": "addseverity", 
+        "section": 3, 
+        "summary": "addseverity - introduce new severity classes"
+    }, 
+    {
+        "name": "adjtime", 
+        "section": 3, 
+        "summary": "adjtime - correct the time to synchronize the system clock"
+    }, 
+    {
+        "name": "aio_cancel", 
+        "section": 3, 
+        "summary": "aio_cancel - cancel an outstanding asynchronous I/O request"
+    }, 
+    {
+        "name": "aio_error", 
+        "section": 3, 
+        "summary": "aio_error - get error status of asynchronous I/O operation"
+    }, 
+    {
+        "name": "aio_fsync", 
+        "section": 3, 
+        "summary": "aio_fsync - asynchronous file synchronization"
+    }, 
+    {
+        "name": "aio_init", 
+        "section": 3, 
+        "summary": "aio_init - asynchronous I/O initialization"
+    }, 
+    {
+        "name": "aio_read", 
+        "section": 3, 
+        "summary": "aio_read - asynchronous read"
+    }, 
+    {
+        "name": "aio_return", 
+        "section": 3, 
+        "summary": "aio_return - get return status of asynchronous I/O operation"
+    }, 
+    {
+        "name": "aio_suspend", 
+        "section": 3, 
+        "summary": "aio_suspend - wait for asynchronous I/O operation or timeout"
+    }, 
+    {
+        "name": "aio_write", 
+        "section": 3, 
+        "summary": "aio_write - asynchronous write"
+    }, 
+    {
+        "name": "alloca", 
+        "section": 3, 
+        "summary": "alloca - allocate memory that is automatically freed"
+    }, 
+    {
+        "name": "argz_add", 
+        "section": 3, 
+        "summary": "argz_add, argz_add_sep, argz_append, argz_count, argz_create,\nargz_create_sep, argz_delete, argz_extract, argz_insert,\nargz_next, argz_replace, argz_stringify - functions to handle an argz list"
+    }, 
+    {
+        "name": "asin", 
+        "section": 3, 
+        "summary": "asin, asinf, asinl - arc sine function"
+    }, 
+    {
+        "name": "asinh", 
+        "section": 3, 
+        "summary": "asinh, asinhf, asinhl - inverse hyperbolic sine function"
+    }, 
+    {
+        "name": "asprintf", 
+        "section": 3, 
+        "summary": "asprintf, vasprintf - print to allocated string"
+    }, 
+    {
+        "name": "assert", 
+        "section": 3, 
+        "summary": "assert - abort the program if assertion is false"
+    }, 
+    {
+        "name": "assert_perror", 
+        "section": 3, 
+        "summary": "assert_perror - test errnum and abort"
+    }, 
+    {
+        "name": "atan", 
+        "section": 3, 
+        "summary": "atan, atanf, atanl - arc tangent function"
+    }, 
+    {
+        "name": "atan2", 
+        "section": 3, 
+        "summary": "atan2, atan2f, atan2l - arc tangent function of two variables"
+    }, 
+    {
+        "name": "atanh", 
+        "section": 3, 
+        "summary": "atanh, atanhf, atanhl - inverse hyperbolic tangent function"
+    }, 
+    {
+        "name": "atexit", 
+        "section": 3, 
+        "summary": "atexit - register a function to be called at normal process termination"
+    }, 
+    {
+        "name": "atof", 
+        "section": 3, 
+        "summary": "atof - convert a string to a double"
+    }, 
+    {
+        "name": "atoi", 
+        "section": 3, 
+        "summary": "atoi, atol, atoll - convert a string to an integer"
+    }, 
+    {
+        "name": "backtrace", 
+        "section": 3, 
+        "summary": "backtrace, backtrace_symbols, backtrace_symbols_fd - support\nfor application self-debugging"
+    }, 
+    {
+        "name": "basename", 
+        "section": 3, 
+        "summary": "basename, dirname - parse pathname components"
+    }, 
+    {
+        "name": "bcmp", 
+        "section": 3, 
+        "summary": "bcmp - compare byte sequences"
+    }, 
+    {
+        "name": "bcopy", 
+        "section": 3, 
+        "summary": "bcopy - copy byte sequence"
+    }, 
+    {
+        "name": "bindresvport", 
+        "section": 3, 
+        "summary": "bindresvport - bind a socket to a privileged IP port"
+    }, 
+    {
+        "name": "bsd_signal", 
+        "section": 3, 
+        "summary": "bsd_signal - signal handling with BSD semantics"
+    }, 
+    {
+        "name": "bsearch", 
+        "section": 3, 
+        "summary": "bsearch - binary search of a sorted array"
+    }, 
+    {
+        "name": "bstring", 
+        "section": 3, 
+        "summary": "bcmp, bcopy, bzero, memccpy, memchr, memcmp, memcpy, memfrob, memmem,\nmemmove, memset - byte string operations"
+    }, 
+    {
+        "name": "btowc", 
+        "section": 3, 
+        "summary": "btowc - convert single byte to wide character"
+    }, 
+    {
+        "name": "btree", 
+        "section": 3, 
+        "summary": "btree - btree database access method"
+    }, 
+    {
+        "name": "byteorder", 
+        "section": 3, 
+        "summary": "htonl, htons, ntohl, ntohs - convert values between host and network\nbyte order"
+    }, 
+    {
+        "name": "bzero", 
+        "section": 3, 
+        "summary": "bzero - write zero-valued bytes"
+    }, 
+    {
+        "name": "cabs", 
+        "section": 3, 
+        "summary": "cabs, cabsf, cabsl - absolute value of a complex number"
+    }, 
+    {
+        "name": "cacos", 
+        "section": 3, 
+        "summary": "cacos, cacosf, cacosl - complex arc cosine"
+    }, 
+    {
+        "name": "cacosh", 
+        "section": 3, 
+        "summary": "cacosh, cacoshf, cacoshl - complex arc hyperbolic cosine"
+    }, 
+    {
+        "name": "canonicalize_file_name", 
+        "section": 3, 
+        "summary": "canonicalize_file_name - return the canonicalized absolute pathname"
+    }, 
+    {
+        "name": "carg", 
+        "section": 3, 
+        "summary": "carg, cargf, cargl - calculate the complex argument"
+    }, 
+    {
+        "name": "casin", 
+        "section": 3, 
+        "summary": "casin, casinf, casinl - complex arc sine"
+    }, 
+    {
+        "name": "casinh", 
+        "section": 3, 
+        "summary": "casinh, casinhf, casinhl - complex arc sine hyperbolic"
+    }, 
+    {
+        "name": "catan", 
+        "section": 3, 
+        "summary": "catan, catanf, catanl - complex arc tangents"
+    }, 
+    {
+        "name": "catanh", 
+        "section": 3, 
+        "summary": "catanh, catanhf, catanhl - complex arc tangents hyperbolic"
+    }, 
+    {
+        "name": "catgets", 
+        "section": 3, 
+        "summary": "catgets - get message from a message catalog"
+    }, 
+    {
+        "name": "catopen", 
+        "section": 3, 
+        "summary": "catopen, catclose - open/close a message catalog"
+    }, 
+    {
+        "name": "cbrt", 
+        "section": 3, 
+        "summary": "cbrt, cbrtf, cbrtl - cube root function"
+    }, 
+    {
+        "name": "ccos", 
+        "section": 3, 
+        "summary": "ccos, ccosf, ccosl - complex cosine function"
+    }, 
+    {
+        "name": "ccosh", 
+        "section": 3, 
+        "summary": "ccosh, ccoshf, ccoshl - complex hyperbolic cosine"
+    }, 
+    {
+        "name": "ceil", 
+        "section": 3, 
+        "summary": "ceil, ceilf, ceill - ceiling function: smallest integral value not\nless than argument"
+    }, 
+    {
+        "name": "cerf", 
+        "section": 3, 
+        "summary": "cerf, cerff, cerfl, cerfc, cerfcf, cerfcl - complex error function"
+    }, 
+    {
+        "name": "cexp", 
+        "section": 3, 
+        "summary": "cexp, cexpf, cexpl - complex exponential function"
+    }, 
+    {
+        "name": "cexp2", 
+        "section": 3, 
+        "summary": "cexp2, cexp2f, cexp2l - base-2 exponent of a complex number"
+    }, 
+    {
+        "name": "cfree", 
+        "section": 3, 
+        "summary": "cfree - free allocated memory"
+    }, 
+    {
+        "name": "cimag", 
+        "section": 3, 
+        "summary": "cimag, cimagf, cimagl - get imaginary part of a complex number"
+    }, 
+    {
+        "name": "clearenv", 
+        "section": 3, 
+        "summary": "clearenv - clear the environment"
+    }, 
+    {
+        "name": "clock", 
+        "section": 3, 
+        "summary": "clock - determine processor time"
+    }, 
+    {
+        "name": "clock_getcpuclockid", 
+        "section": 3, 
+        "summary": "clock_getcpuclockid - obtain ID of a process CPU-time clock"
+    }, 
+    {
+        "name": "clog", 
+        "section": 3, 
+        "summary": "clog, clogf, clogl - natural logarithm of a complex number"
+    }, 
+    {
+        "name": "clog10", 
+        "section": 3, 
+        "summary": "clog10, clog10f, clog10l - base-10 logarithm of a complex number"
+    }, 
+    {
+        "name": "clog2", 
+        "section": 3, 
+        "summary": "clog2, clog2f, clog2l - base-2 logarithm of a complex number"
+    }, 
+    {
+        "name": "closedir", 
+        "section": 3, 
+        "summary": "closedir - close a directory"
+    }, 
+    {
+        "name": "cmsg", 
+        "section": 3, 
+        "summary": "CMSG_ALIGN, CMSG_SPACE, CMSG_NXTHDR, CMSG_FIRSTHDR - access ancillary data"
+    }, 
+    {
+        "name": "confstr", 
+        "section": 3, 
+        "summary": "confstr - get configuration dependent string variables"
+    }, 
+    {
+        "name": "conj", 
+        "section": 3, 
+        "summary": "conj, conjf, conjl - calculate the complex conjugate"
+    }, 
+    {
+        "name": "copysign", 
+        "section": 3, 
+        "summary": "copysign, copysignf, copysignl - copy sign of a number"
+    }, 
+    {
+        "name": "cos", 
+        "section": 3, 
+        "summary": "cos, cosf, cosl - cosine function"
+    }, 
+    {
+        "name": "cosh", 
+        "section": 3, 
+        "summary": "cosh, coshf, coshl - hyperbolic cosine function"
+    }, 
+    {
+        "name": "cpow", 
+        "section": 3, 
+        "summary": "cpow, cpowf, cpowl - complex power function"
+    }, 
+    {
+        "name": "cproj", 
+        "section": 3, 
+        "summary": "cproj, cprojf, cprojl - project into Riemann Sphere"
+    }, 
+    {
+        "name": "CPU_SET", 
+        "section": 3, 
+        "summary": "CPU_SET, CPU_CLR, CPU_ISSET, CPU_ZERO, CPU_COUNT,\nCPU_AND, CPU_OR, CPU_XOR, CPU_EQUAL,\nCPU_ALLOC, CPU_ALLOC_SIZE, CPU_FREE,\nCPU_SET_S, CPU_CLR_S, CPU_ISSET_S, CPU_ZERO_S,\nCPU_COUNT_S, CPU_AND_S, CPU_OR_S, CPU_XOR_S, CPU_EQUAL_S -\nmacros for manipulating CPU sets"
+    }, 
+    {
+        "name": "creal", 
+        "section": 3, 
+        "summary": "creal, crealf, creall - get real part of a complex number"
+    }, 
+    {
+        "name": "crypt", 
+        "section": 3, 
+        "summary": "crypt, crypt_r - password and data encryption"
+    }, 
+    {
+        "name": "csin", 
+        "section": 3, 
+        "summary": "csin, csinf, csinl - complex sine function"
+    }, 
+    {
+        "name": "csinh", 
+        "section": 3, 
+        "summary": "csinh, csinhf, csinhl - complex hyperbolic sine"
+    }, 
+    {
+        "name": "csqrt", 
+        "section": 3, 
+        "summary": "csqrt, csqrtf, csqrtl - complex square root"
+    }, 
+    {
+        "name": "ctan", 
+        "section": 3, 
+        "summary": "ctan, ctanf, ctanl - complex tangent function"
+    }, 
+    {
+        "name": "ctanh", 
+        "section": 3, 
+        "summary": "ctanh, ctanhf, ctanhl - complex hyperbolic tangent"
+    }, 
+    {
+        "name": "ctermid", 
+        "section": 3, 
+        "summary": "ctermid - get controlling terminal name"
+    }, 
+    {
+        "name": "ctime", 
+        "section": 3, 
+        "summary": "asctime, ctime, gmtime, localtime, mktime, asctime_r, ctime_r, gmtime_r,\nlocaltime_r - transform date and time to broken-down time or ASCII"
+    }, 
+    {
+        "name": "daemon", 
+        "section": 3, 
+        "summary": "daemon - run in the background"
+    }, 
+    {
+        "name": "dbopen", 
+        "section": 3, 
+        "summary": "dbopen - database access methods"
+    }, 
+    {
+        "name": "des_crypt", 
+        "section": 3, 
+        "summary": "des_crypt, ecb_crypt, cbc_crypt, des_setparity, DES_FAILED - fast\nDES encryption"
+    }, 
+    {
+        "name": "difftime", 
+        "section": 3, 
+        "summary": "difftime - calculate time difference"
+    }, 
+    {
+        "name": "dirfd", 
+        "section": 3, 
+        "summary": "dirfd - get directory stream file descriptor"
+    }, 
+    {
+        "name": "div", 
+        "section": 3, 
+        "summary": "div, ldiv, lldiv, imaxdiv - compute quotient and remainder of\nan integer division"
+    }, 
+    {
+        "name": "dlopen", 
+        "section": 3, 
+        "summary": "dladdr, dlclose, dlerror, dlopen, dlsym, dlvsym - programming interface to\ndynamic linking loader"
+    }, 
+    {
+        "name": "dl_iterate_phdr", 
+        "section": 3, 
+        "summary": "dl_iterate_phdr - walk through list of shared objects"
+    }, 
+    {
+        "name": "dprintf", 
+        "section": 3, 
+        "summary": "dprintf, vdprintf - print to a file descriptor"
+    }, 
+    {
+        "name": "drand48", 
+        "section": 3, 
+        "summary": "drand48, erand48, lrand48, nrand48, mrand48, jrand48, srand48, seed48,\nlcong48 - generate uniformly distributed pseudo-random numbers"
+    }, 
+    {
+        "name": "drand48_r", 
+        "section": 3, 
+        "summary": "drand48_r, erand48_r, lrand48_r, nrand48_r, mrand48_r, jrand48_r,\nsrand48_r, seed48_r, lcong48_r\n- generate uniformly distributed pseudo-random numbers reentrantly"
+    }, 
+    {
+        "name": "duplocale", 
+        "section": 3, 
+        "summary": "duplocale - duplicate a locale object"
+    }, 
+    {
+        "name": "dysize", 
+        "section": 3, 
+        "summary": "dysize - get number of days for a given year"
+    }, 
+    {
+        "name": "ecvt", 
+        "section": 3, 
+        "summary": "ecvt, fcvt - convert a floating-point number to a string"
+    }, 
+    {
+        "name": "ecvt_r", 
+        "section": 3, 
+        "summary": "ecvt_r, fcvt_r, qecvt_r, qfcvt_r - convert a floating-point number to a string"
+    }, 
+    {
+        "name": "encrypt", 
+        "section": 3, 
+        "summary": "encrypt, setkey, encrypt_r, setkey_r - encrypt 64-bit messages"
+    }, 
+    {
+        "name": "end", 
+        "section": 3, 
+        "summary": "etext, edata, end - end of program segments"
+    }, 
+    {
+        "name": "endian", 
+        "section": 3, 
+        "summary": "htobe16, htole16, be16toh, le16toh, htobe32, htole32, be32toh, le32toh,\nhtobe64, htole64, be64toh, le64toh -\nconvert values between host and big-/little-endian byte order"
+    }, 
+    {
+        "name": "envz_add", 
+        "section": 3, 
+        "summary": "envz_add, envz_entry, envz_get, envz_merge,\nenvz_remove, envz_strip - environment string support"
+    }, 
+    {
+        "name": "erf", 
+        "section": 3, 
+        "summary": "erf, erff, erfl, - error function"
+    }, 
+    {
+        "name": "erfc", 
+        "section": 3, 
+        "summary": "erfc, erfcf, erfcl - complementary error function"
+    }, 
+    {
+        "name": "err", 
+        "section": 3, 
+        "summary": "err, verr, errx, verrx, warn, vwarn, warnx, vwarnx - formatted error messages"
+    }, 
+    {
+        "name": "errno", 
+        "section": 3, 
+        "summary": "errno - number of last error"
+    }, 
+    {
+        "name": "error", 
+        "section": 3, 
+        "summary": "error, error_at_line, error_message_count, error_one_per_line,\nerror_print_progname - glibc error reporting functions"
+    }, 
+    {
+        "name": "ether_aton", 
+        "section": 3, 
+        "summary": "ether_aton, ether_ntoa, ether_ntohost, ether_hostton, ether_line,\nether_ntoa_r, ether_aton_r - Ethernet address manipulation routines"
+    }, 
+    {
+        "name": "euidaccess", 
+        "section": 3, 
+        "summary": "euidaccess, eaccess - check effective user's permissions for a file"
+    }, 
+    {
+        "name": "exec", 
+        "section": 3, 
+        "summary": "execl, execlp, execle, execv, execvp, execvpe - execute a file"
+    }, 
+    {
+        "name": "exit", 
+        "section": 3, 
+        "summary": "exit - cause normal process termination"
+    }, 
+    {
+        "name": "exp", 
+        "section": 3, 
+        "summary": "exp, expf, expl - base-e exponential function"
+    }, 
+    {
+        "name": "exp10", 
+        "section": 3, 
+        "summary": "exp10, exp10f, exp10l - base-10 exponential function"
+    }, 
+    {
+        "name": "exp2", 
+        "section": 3, 
+        "summary": "exp2, exp2f, exp2l - base-2 exponential function"
+    }, 
+    {
+        "name": "expm1", 
+        "section": 3, 
+        "summary": "expm1, expm1f, expm1l - exponential minus 1"
+    }, 
+    {
+        "name": "fabs", 
+        "section": 3, 
+        "summary": "fabs, fabsf, fabsl - absolute value of floating-point number"
+    }, 
+    {
+        "name": "fclose", 
+        "section": 3, 
+        "summary": "fclose - close a stream"
+    }, 
+    {
+        "name": "fcloseall", 
+        "section": 3, 
+        "summary": "fcloseall - close all open streams"
+    }, 
+    {
+        "name": "fdim", 
+        "section": 3, 
+        "summary": "fdim, fdimf, fdiml - positive difference"
+    }, 
+    {
+        "name": "fenv", 
+        "section": 3, 
+        "summary": "feclearexcept, fegetexceptflag, feraiseexcept, fesetexceptflag,\nfetestexcept, fegetenv, fegetround, feholdexcept, fesetround,\nfesetenv, feupdateenv, feenableexcept, fedisableexcept,\nfegetexcept - floating-point rounding and exception handling"
+    }, 
+    {
+        "name": "ferror", 
+        "section": 3, 
+        "summary": "clearerr, feof, ferror, fileno - check and reset stream status"
+    }, 
+    {
+        "name": "fexecve", 
+        "section": 3, 
+        "summary": "fexecve - execute program specified via file descriptor"
+    }, 
+    {
+        "name": "fflush", 
+        "section": 3, 
+        "summary": "fflush - flush a stream"
+    }, 
+    {
+        "name": "ffs", 
+        "section": 3, 
+        "summary": "ffs, ffsl, ffsll - find first bit set in a word"
+    }, 
+    {
+        "name": "fgetc", 
+        "section": 3, 
+        "summary": "fgetc, fgets, getc, getchar, ungetc - input of characters and strings"
+    }, 
+    {
+        "name": "fgetgrent", 
+        "section": 3, 
+        "summary": "fgetgrent - get group file entry"
+    }, 
+    {
+        "name": "fgetpwent", 
+        "section": 3, 
+        "summary": "fgetpwent - get password file entry"
+    }, 
+    {
+        "name": "fgetwc", 
+        "section": 3, 
+        "summary": "fgetwc, getwc - read a wide character from a FILE stream"
+    }, 
+    {
+        "name": "fgetws", 
+        "section": 3, 
+        "summary": "fgetws - read a wide-character string from a FILE stream"
+    }, 
+    {
+        "name": "finite", 
+        "section": 3, 
+        "summary": "finite, finitef, finitel, isinf, isinff, isinfl, isnan, isnanf, isnanl -\nBSD floating-point classification functions"
+    }, 
+    {
+        "name": "flockfile", 
+        "section": 3, 
+        "summary": "flockfile, ftrylockfile, funlockfile - lock FILE for stdio"
+    }, 
+    {
+        "name": "floor", 
+        "section": 3, 
+        "summary": "floor, floorf, floorl - largest integral value not greater than argument"
+    }, 
+    {
+        "name": "fma", 
+        "section": 3, 
+        "summary": "fma, fmaf, fmal - floating-point multiply and add"
+    }, 
+    {
+        "name": "fmax", 
+        "section": 3, 
+        "summary": "fmax, fmaxf, fmaxl - determine maximum of two floating-point numbers"
+    }, 
+    {
+        "name": "fmemopen", 
+        "section": 3, 
+        "summary": "fmemopen, open_memstream, open_wmemstream -  open memory as stream"
+    }, 
+    {
+        "name": "fmin", 
+        "section": 3, 
+        "summary": "fmin, fminf, fminl - determine minimum of two floating-point numbers"
+    }, 
+    {
+        "name": "fmod", 
+        "section": 3, 
+        "summary": "fmod, fmodf, fmodl - floating-point remainder function"
+    }, 
+    {
+        "name": "fmtmsg", 
+        "section": 3, 
+        "summary": "fmtmsg - print formatted error messages"
+    }, 
+    {
+        "name": "fnmatch", 
+        "section": 3, 
+        "summary": "fnmatch - match filename or pathname"
+    }, 
+    {
+        "name": "fopen", 
+        "section": 3, 
+        "summary": "fopen, fdopen, freopen - stream open functions"
+    }, 
+    {
+        "name": "fopencookie", 
+        "section": 3, 
+        "summary": "fopencookie - opening a custom stream"
+    }, 
+    {
+        "name": "fpathconf", 
+        "section": 3, 
+        "summary": "fpathconf, pathconf - get configuration values for files"
+    }, 
+    {
+        "name": "fpclassify", 
+        "section": 3, 
+        "summary": "fpclassify, isfinite, isnormal, isnan, isinf - floating-point\nclassification macros"
+    }, 
+    {
+        "name": "fpurge", 
+        "section": 3, 
+        "summary": "fpurge, __fpurge - purge a stream"
+    }, 
+    {
+        "name": "fputwc", 
+        "section": 3, 
+        "summary": "fputwc, putwc - write a wide character to a FILE stream"
+    }, 
+    {
+        "name": "fputws", 
+        "section": 3, 
+        "summary": "fputws - write a wide-character string to a FILE stream"
+    }, 
+    {
+        "name": "fread", 
+        "section": 3, 
+        "summary": "fread, fwrite - binary stream input/output"
+    }, 
+    {
+        "name": "frexp", 
+        "section": 3, 
+        "summary": "frexp, frexpf, frexpl - convert floating-point number to fractional\nand integral components"
+    }, 
+    {
+        "name": "fseek", 
+        "section": 3, 
+        "summary": "fgetpos, fseek, fsetpos, ftell, rewind - reposition a stream"
+    }, 
+    {
+        "name": "fseeko", 
+        "section": 3, 
+        "summary": "fseeko, ftello - seek to or report file position"
+    }, 
+    {
+        "name": "ftime", 
+        "section": 3, 
+        "summary": "ftime - return date and time"
+    }, 
+    {
+        "name": "ftok", 
+        "section": 3, 
+        "summary": "ftok - convert a pathname and a project identifier to a System V IPC key"
+    }, 
+    {
+        "name": "fts", 
+        "section": 3, 
+        "summary": "fts, fts_open, fts_read, fts_children, fts_set, fts_close - traverse a file hierarchy"
+    }, 
+    {
+        "name": "ftw", 
+        "section": 3, 
+        "summary": "ftw, nftw - file tree walk"
+    }, 
+    {
+        "name": "futimes", 
+        "section": 3, 
+        "summary": "futimes, lutimes - change file timestamps"
+    }, 
+    {
+        "name": "fwide", 
+        "section": 3, 
+        "summary": "fwide - set and determine the orientation of a FILE stream"
+    }, 
+    {
+        "name": "gamma", 
+        "section": 3, 
+        "summary": "gamma, gammaf, gammal - (logarithm of the) gamma function"
+    }, 
+    {
+        "name": "gcvt", 
+        "section": 3, 
+        "summary": "gcvt - convert a floating-point number to a string"
+    }, 
+    {
+        "name": "getaddrinfo", 
+        "section": 3, 
+        "summary": "getaddrinfo, freeaddrinfo, gai_strerror - network address and\nservice translation"
+    }, 
+    {
+        "name": "getaddrinfo_a", 
+        "section": 3, 
+        "summary": "getaddrinfo_a, gai_suspend, gai_error, gai_cancel - asynchronous\nnetwork address and service translation"
+    }, 
+    {
+        "name": "getauxval", 
+        "section": 3, 
+        "summary": "getauxval - retrieve a value from the auxiliary vector"
+    }, 
+    {
+        "name": "getcontext", 
+        "section": 3, 
+        "summary": "getcontext, setcontext - get or set the user context"
+    }, 
+    {
+        "name": "getcwd", 
+        "section": 3, 
+        "summary": "getcwd, getwd, get_current_dir_name - get current working directory"
+    }, 
+    {
+        "name": "getdate", 
+        "section": 3, 
+        "summary": "getdate, getdate_r - convert a date-plus-time string to broken-down time"
+    }, 
+    {
+        "name": "getdirentries", 
+        "section": 3, 
+        "summary": "getdirentries - get directory entries in a filesystem-independent format"
+    }, 
+    {
+        "name": "getdtablesize", 
+        "section": 3, 
+        "summary": "getdtablesize - get descriptor table size"
+    }, 
+    {
+        "name": "getenv", 
+        "section": 3, 
+        "summary": "getenv, secure_getenv - get an environment variable"
+    }, 
+    {
+        "name": "getfsent", 
+        "section": 3, 
+        "summary": "getfsent, getfsspec, getfsfile, setfsent, endfsent - handle fstab entries"
+    }, 
+    {
+        "name": "getgrent", 
+        "section": 3, 
+        "summary": "getgrent, setgrent, endgrent - get group file entry"
+    }, 
+    {
+        "name": "getgrent_r", 
+        "section": 3, 
+        "summary": "getgrent_r, fgetgrent_r - get group file entry reentrantly"
+    }, 
+    {
+        "name": "getgrnam", 
+        "section": 3, 
+        "summary": "getgrnam, getgrnam_r, getgrgid, getgrgid_r - get group file entry"
+    }, 
+    {
+        "name": "getgrouplist", 
+        "section": 3, 
+        "summary": "getgrouplist - get list of groups to which a user belongs"
+    }, 
+    {
+        "name": "gethostbyname", 
+        "section": 3, 
+        "summary": "gethostbyname, gethostbyaddr, sethostent, gethostent, endhostent,\nh_errno,\nherror, hstrerror,\ngethostbyaddr_r,\ngethostbyname2, gethostbyname2_r, gethostbyname_r,\ngethostent_r - get network host entry"
+    }, 
+    {
+        "name": "gethostid", 
+        "section": 3, 
+        "summary": "gethostid, sethostid - get or set the unique identifier of the current host"
+    }, 
+    {
+        "name": "getifaddrs", 
+        "section": 3, 
+        "summary": "getifaddrs, freeifaddrs - get interface addresses"
+    }, 
+    {
+        "name": "getipnodebyname", 
+        "section": 3, 
+        "summary": "getipnodebyname, getipnodebyaddr, freehostent - get network\nhostnames and addresses"
+    }, 
+    {
+        "name": "getline", 
+        "section": 3, 
+        "summary": "getline, getdelim - delimited string input"
+    }, 
+    {
+        "name": "getloadavg", 
+        "section": 3, 
+        "summary": "getloadavg - get system load averages"
+    }, 
+    {
+        "name": "getlogin", 
+        "section": 3, 
+        "summary": "getlogin, getlogin_r, cuserid - get username"
+    }, 
+    {
+        "name": "getmntent", 
+        "section": 3, 
+        "summary": "getmntent, setmntent, addmntent, endmntent, hasmntopt,\ngetmntent_r - get filesystem descriptor file entry"
+    }, 
+    {
+        "name": "getnameinfo", 
+        "section": 3, 
+        "summary": "getnameinfo - address-to-name translation in protocol-independent manner"
+    }, 
+    {
+        "name": "getnetent", 
+        "section": 3, 
+        "summary": "getnetent, getnetbyname, getnetbyaddr, setnetent, endnetent -\nget network entry"
+    }, 
+    {
+        "name": "getnetent_r", 
+        "section": 3, 
+        "summary": "getnetent_r, getnetbyname_r, getnetbyaddr_r - get\nnetwork entry (reentrant)"
+    }, 
+    {
+        "name": "getopt", 
+        "section": 3, 
+        "summary": "getopt, getopt_long, getopt_long_only,\noptarg, optind, opterr, optopt - Parse command-line options"
+    }, 
+    {
+        "name": "getpass", 
+        "section": 3, 
+        "summary": "getpass - get a password"
+    }, 
+    {
+        "name": "getprotoent", 
+        "section": 3, 
+        "summary": "getprotoent, getprotobyname, getprotobynumber, setprotoent,\nendprotoent - get protocol entry"
+    }, 
+    {
+        "name": "getprotoent_r", 
+        "section": 3, 
+        "summary": "getprotoent_r, getprotobyname_r, getprotobynumber_r - get\nprotocol entry (reentrant)"
+    }, 
+    {
+        "name": "getpt", 
+        "section": 3, 
+        "summary": "getpt - open the pseudoterminal master (PTM)"
+    }, 
+    {
+        "name": "getpw", 
+        "section": 3, 
+        "summary": "getpw - reconstruct password line entry"
+    }, 
+    {
+        "name": "getpwent", 
+        "section": 3, 
+        "summary": "getpwent, setpwent, endpwent - get password file entry"
+    }, 
+    {
+        "name": "getpwent_r", 
+        "section": 3, 
+        "summary": "getpwent_r, fgetpwent_r - get passwd file entry reentrantly"
+    }, 
+    {
+        "name": "getpwnam", 
+        "section": 3, 
+        "summary": "getpwnam, getpwnam_r, getpwuid, getpwuid_r - get password file entry"
+    }, 
+    {
+        "name": "getrpcent", 
+        "section": 3, 
+        "summary": "getrpcent, getrpcbyname, getrpcbynumber, setrpcent, endrpcent - get\nRPC entry"
+    }, 
+    {
+        "name": "getrpcent_r", 
+        "section": 3, 
+        "summary": "getrpcent_r, getrpcbyname_r, getrpcbynumber_r - get\nRPC entry (reentrant)"
+    }, 
+    {
+        "name": "getrpcport", 
+        "section": 3, 
+        "summary": "getrpcport - get RPC port number"
+    }, 
+    {
+        "name": "gets", 
+        "section": 3, 
+        "summary": "gets - get a string from standard input (DEPRECATED)"
+    }, 
+    {
+        "name": "getservent", 
+        "section": 3, 
+        "summary": "getservent, getservbyname, getservbyport, setservent, endservent -\nget service entry"
+    }, 
+    {
+        "name": "getservent_r", 
+        "section": 3, 
+        "summary": "getservent_r, getservbyname_r, getservbyport_r - get\nservice entry (reentrant)"
+    }, 
+    {
+        "name": "getspnam", 
+        "section": 3, 
+        "summary": "getspnam, getspnam_r, getspent, getspent_r, setspent, endspent,\nfgetspent, fgetspent_r, sgetspent, sgetspent_r, putspent,\nlckpwdf, ulckpwdf - get shadow password file entry"
+    }, 
+    {
+        "name": "getsubopt", 
+        "section": 3, 
+        "summary": "getsubopt - parse suboption arguments from a string"
+    }, 
+    {
+        "name": "getttyent", 
+        "section": 3, 
+        "summary": "getttyent, getttynam, setttyent, endttyent - get ttys file entry"
+    }, 
+    {
+        "name": "getumask", 
+        "section": 3, 
+        "summary": "getumask - get file creation mask"
+    }, 
+    {
+        "name": "getusershell", 
+        "section": 3, 
+        "summary": "getusershell, setusershell, endusershell - get permitted user shells"
+    }, 
+    {
+        "name": "getutent", 
+        "section": 3, 
+        "summary": "getutent, getutid, getutline, pututline, setutent, endutent,\nutmpname - access utmp file entries"
+    }, 
+    {
+        "name": "getutmp", 
+        "section": 3, 
+        "summary": "getutmp, getutmpx - copy utmp structure to utmpx, and vice versa"
+    }, 
+    {
+        "name": "getw", 
+        "section": 3, 
+        "summary": "getw, putw - input and output of words (ints)"
+    }, 
+    {
+        "name": "getwchar", 
+        "section": 3, 
+        "summary": "getwchar - read a wide character from standard input"
+    }, 
+    {
+        "name": "get_nprocs_conf", 
+        "section": 3, 
+        "summary": "get_nprocs, get_nprocs_conf - get number of processors"
+    }, 
+    {
+        "name": "glob", 
+        "section": 3, 
+        "summary": "glob, globfree - find pathnames matching a pattern, free memory from glob()"
+    }, 
+    {
+        "name": "gnu_get_libc_version", 
+        "section": 3, 
+        "summary": "gnu_get_libc_version, gnu_get_libc_release - get glibc version and release"
+    }, 
+    {
+        "name": "grantpt", 
+        "section": 3, 
+        "summary": "grantpt - grant access to the slave pseudoterminal"
+    }, 
+    {
+        "name": "group_member", 
+        "section": 3, 
+        "summary": "group_member - test whether a process is in a group"
+    }, 
+    {
+        "name": "gsignal", 
+        "section": 3, 
+        "summary": "gsignal, ssignal - software signal facility"
+    }, 
+    {
+        "name": "hash", 
+        "section": 3, 
+        "summary": "hash - hash database access method"
+    }, 
+    {
+        "name": "hsearch", 
+        "section": 3, 
+        "summary": "hcreate, hdestroy, hsearch, hcreate_r, hdestroy_r,\nhsearch_r - hash table management"
+    }, 
+    {
+        "name": "hypot", 
+        "section": 3, 
+        "summary": "hypot, hypotf, hypotl - Euclidean distance function"
+    }, 
+    {
+        "name": "iconv", 
+        "section": 3, 
+        "summary": "iconv - perform character set conversion"
+    }, 
+    {
+        "name": "iconv_close", 
+        "section": 3, 
+        "summary": "iconv_close - deallocate descriptor for character set conversion"
+    }, 
+    {
+        "name": "iconv_open", 
+        "section": 3, 
+        "summary": "iconv_open - allocate descriptor for character set conversion"
+    }, 
+    {
+        "name": "if_nameindex", 
+        "section": 3, 
+        "summary": "if_nameindex, if_freenameindex - get network interface names and indexes"
+    }, 
+    {
+        "name": "if_nametoindex", 
+        "section": 3, 
+        "summary": "if_nametoindex, if_indextoname - mappings between network interface\nnames and indexes"
+    }, 
+    {
+        "name": "ilogb", 
+        "section": 3, 
+        "summary": "ilogb, ilogbf, ilogbl - get integer exponent of a floating-point value"
+    }, 
+    {
+        "name": "index", 
+        "section": 3, 
+        "summary": "index, rindex - locate character in string"
+    }, 
+    {
+        "name": "inet", 
+        "section": 3, 
+        "summary": "inet_aton, inet_addr, inet_network, inet_ntoa, inet_makeaddr, inet_lnaof,\ninet_netof - Internet address manipulation routines"
+    }, 
+    {
+        "name": "inet_net_pton", 
+        "section": 3, 
+        "summary": "inet_net_pton, inet_net_ntop - Internet network number conversion"
+    }, 
+    {
+        "name": "inet_ntop", 
+        "section": 3, 
+        "summary": "inet_ntop - convert IPv4 and IPv6 addresses from binary to text form"
+    }, 
+    {
+        "name": "inet_pton", 
+        "section": 3, 
+        "summary": "inet_pton - convert IPv4 and IPv6 addresses from text to binary form"
+    }, 
+    {
+        "name": "INFINITY", 
+        "section": 3, 
+        "summary": "INFINITY, NAN, HUGE_VAL, HUGE_VALF, HUGE_VALL - floating-point constants"
+    }, 
+    {
+        "name": "infnan", 
+        "section": 3, 
+        "summary": "infnan - deal with infinite or not-a-number (NaN) result"
+    }, 
+    {
+        "name": "initgroups", 
+        "section": 3, 
+        "summary": "initgroups - initialize the supplementary group access list"
+    }, 
+    {
+        "name": "insque", 
+        "section": 3, 
+        "summary": "insque, remque - insert/remove an item from a queue"
+    }, 
+    {
+        "name": "intro", 
+        "section": 3, 
+        "summary": "intro - introduction to library functions"
+    }, 
+    {
+        "name": "isalpha", 
+        "section": 3, 
+        "summary": "isalnum, isalpha, isascii, isblank, iscntrl, isdigit, isgraph, islower,\nisprint, ispunct, isspace, isupper, isxdigit,\nisalnum_l, isalpha_l, isascii_l, isblank_l, iscntrl_l,\nisdigit_l, isgraph_l, islower_l,\nisprint_l, ispunct_l, isspace_l, isupper_l, isxdigit_l\n- character classification functions"
+    }, 
+    {
+        "name": "isatty", 
+        "section": 3, 
+        "summary": "isatty - test whether a file descriptor refers to a terminal"
+    }, 
+    {
+        "name": "isfdtype", 
+        "section": 3, 
+        "summary": "isfdtype - test file type of a file descriptor"
+    }, 
+    {
+        "name": "isgreater", 
+        "section": 3, 
+        "summary": "isgreater, isgreaterequal, isless, islessequal, islessgreater,\nisunordered - floating-point relational tests without exception for NaN"
+    }, 
+    {
+        "name": "iswalnum", 
+        "section": 3, 
+        "summary": "iswalnum - test for alphanumeric wide character"
+    }, 
+    {
+        "name": "iswalpha", 
+        "section": 3, 
+        "summary": "iswalpha - test for alphabetic wide character"
+    }, 
+    {
+        "name": "iswblank", 
+        "section": 3, 
+        "summary": "iswblank - test for whitespace wide character"
+    }, 
+    {
+        "name": "iswcntrl", 
+        "section": 3, 
+        "summary": "iswcntrl - test for control wide character"
+    }, 
+    {
+        "name": "iswctype", 
+        "section": 3, 
+        "summary": "iswctype - wide-character classification"
+    }, 
+    {
+        "name": "iswdigit", 
+        "section": 3, 
+        "summary": "iswdigit - test for decimal digit wide character"
+    }, 
+    {
+        "name": "iswgraph", 
+        "section": 3, 
+        "summary": "iswgraph - test for graphic wide character"
+    }, 
+    {
+        "name": "iswlower", 
+        "section": 3, 
+        "summary": "iswlower - test for lowercase wide character"
+    }, 
+    {
+        "name": "iswprint", 
+        "section": 3, 
+        "summary": "iswprint - test for printing wide character"
+    }, 
+    {
+        "name": "iswpunct", 
+        "section": 3, 
+        "summary": "iswpunct - test for punctuation or symbolic wide character"
+    }, 
+    {
+        "name": "iswspace", 
+        "section": 3, 
+        "summary": "iswspace - test for whitespace wide character"
+    }, 
+    {
+        "name": "iswupper", 
+        "section": 3, 
+        "summary": "iswupper - test for uppercase wide character"
+    }, 
+    {
+        "name": "iswxdigit", 
+        "section": 3, 
+        "summary": "iswxdigit - test for hexadecimal digit wide character"
+    }, 
+    {
+        "name": "j0", 
+        "section": 3, 
+        "summary": "j0, j0f, j0l, j1, j1f, j1l, jn, jnf, jnl -\nBessel functions of the first kind"
+    }, 
+    {
+        "name": "key_setsecret", 
+        "section": 3, 
+        "summary": "key_decryptsession, key_encryptsession, key_setsecret, key_gendes,\nkey_secretkey_is_set - interfaces to rpc keyserver daemon"
+    }, 
+    {
+        "name": "ldexp", 
+        "section": 3, 
+        "summary": "ldexp, ldexpf, ldexpl - multiply floating-point number by integral power of 2"
+    }, 
+    {
+        "name": "lgamma", 
+        "section": 3, 
+        "summary": "lgamma, lgammaf, lgammal, lgamma_r, lgammaf_r, lgammal_r, signgam -\nlog gamma function"
+    }, 
+    {
+        "name": "lio_listio", 
+        "section": 3, 
+        "summary": "lio_listio - initiate a list of I/O requests"
+    }, 
+    {
+        "name": "localeconv", 
+        "section": 3, 
+        "summary": "localeconv - get numeric formatting information"
+    }, 
+    {
+        "name": "lockf", 
+        "section": 3, 
+        "summary": "lockf - apply, test or remove a POSIX lock on an open file"
+    }, 
+    {
+        "name": "log", 
+        "section": 3, 
+        "summary": "log, logf, logl - natural logarithmic function"
+    }, 
+    {
+        "name": "log10", 
+        "section": 3, 
+        "summary": "log10, log10f, log10l -  base-10 logarithmic function"
+    }, 
+    {
+        "name": "log1p", 
+        "section": 3, 
+        "summary": "log1p, log1pf, log1pl -  logarithm of 1 plus argument"
+    }, 
+    {
+        "name": "log2", 
+        "section": 3, 
+        "summary": "log2, log2f, log2l - base-2 logarithmic function"
+    }, 
+    {
+        "name": "logb", 
+        "section": 3, 
+        "summary": "logb, logbf, logbl - get exponent of a floating-point value"
+    }, 
+    {
+        "name": "login", 
+        "section": 3, 
+        "summary": "login, logout - write utmp and wtmp entries"
+    }, 
+    {
+        "name": "longjmp", 
+        "section": 3, 
+        "summary": "longjmp, siglongjmp - nonlocal jump to a saved stack context"
+    }, 
+    {
+        "name": "lrint", 
+        "section": 3, 
+        "summary": "lrint, lrintf, lrintl, llrint, llrintf, llrintl - round to nearest integer"
+    }, 
+    {
+        "name": "lround", 
+        "section": 3, 
+        "summary": "lround, lroundf, lroundl, llround, llroundf, llroundl - round to\nnearest integer, away from zero"
+    }, 
+    {
+        "name": "lsearch", 
+        "section": 3, 
+        "summary": "lfind, lsearch - linear search of an array"
+    }, 
+    {
+        "name": "lseek64", 
+        "section": 3, 
+        "summary": "lseek64 - reposition 64-bit read/write file offset"
+    }, 
+    {
+        "name": "makecontext", 
+        "section": 3, 
+        "summary": "makecontext, swapcontext - manipulate user context"
+    }, 
+    {
+        "name": "makedev", 
+        "section": 3, 
+        "summary": "makedev, major, minor - manage a device number"
+    }, 
+    {
+        "name": "mallinfo", 
+        "section": 3, 
+        "summary": "mallinfo - obtain memory allocation information"
+    }, 
+    {
+        "name": "malloc", 
+        "section": 3, 
+        "summary": "malloc, free, calloc, realloc - allocate and free dynamic memory"
+    }, 
+    {
+        "name": "malloc_get_state", 
+        "section": 3, 
+        "summary": "malloc_get_state, malloc_set_state - record and restore state of malloc implementation"
+    }, 
+    {
+        "name": "malloc_hook", 
+        "section": 3, 
+        "summary": "__malloc_hook, __malloc_initialize_hook,\n__memalign_hook, __free_hook, __realloc_hook,\n__after_morecore_hook - malloc debugging variables"
+    }, 
+    {
+        "name": "malloc_info", 
+        "section": 3, 
+        "summary": "malloc_info - export malloc state to a stream"
+    }, 
+    {
+        "name": "malloc_stats", 
+        "section": 3, 
+        "summary": "malloc_stats - print memory allocation statistics"
+    }, 
+    {
+        "name": "malloc_trim", 
+        "section": 3, 
+        "summary": "malloc_trim - release free memory from the top of the heap"
+    }, 
+    {
+        "name": "malloc_usable_size", 
+        "section": 3, 
+        "summary": "malloc_usable_size - obtain size of block of memory allocated from heap"
+    }, 
+    {
+        "name": "mallopt", 
+        "section": 3, 
+        "summary": "mallopt - set memory allocation parameters"
+    }, 
+    {
+        "name": "matherr", 
+        "section": 3, 
+        "summary": "matherr - SVID math library exception handling"
+    }, 
+    {
+        "name": "mblen", 
+        "section": 3, 
+        "summary": "mblen - determine number of bytes in next multibyte character"
+    }, 
+    {
+        "name": "mbrlen", 
+        "section": 3, 
+        "summary": "mbrlen - determine number of bytes in next multibyte character"
+    }, 
+    {
+        "name": "mbrtowc", 
+        "section": 3, 
+        "summary": "mbrtowc - convert a multibyte sequence to a wide character"
+    }, 
+    {
+        "name": "mbsinit", 
+        "section": 3, 
+        "summary": "mbsinit - test for initial shift state"
+    }, 
+    {
+        "name": "mbsnrtowcs", 
+        "section": 3, 
+        "summary": "mbsnrtowcs - convert a multibyte string to a wide-character string"
+    }, 
+    {
+        "name": "mbsrtowcs", 
+        "section": 3, 
+        "summary": "mbsrtowcs - convert a multibyte string to a wide-character string"
+    }, 
+    {
+        "name": "mbstowcs", 
+        "section": 3, 
+        "summary": "mbstowcs - convert a multibyte string to a wide-character string"
+    }, 
+    {
+        "name": "mbtowc", 
+        "section": 3, 
+        "summary": "mbtowc - convert a multibyte sequence to a wide character"
+    }, 
+    {
+        "name": "MB_CUR_MAX", 
+        "section": 3, 
+        "summary": "MB_CUR_MAX - maximum length of a multibyte character in the current locale"
+    }, 
+    {
+        "name": "MB_LEN_MAX", 
+        "section": 3, 
+        "summary": "MB_LEN_MAX - maximum multibyte length of a character across all locales"
+    }, 
+    {
+        "name": "mcheck", 
+        "section": 3, 
+        "summary": "mcheck, mcheck_check_all, mcheck_pedantic, mprobe - heap consistency checking"
+    }, 
+    {
+        "name": "memccpy", 
+        "section": 3, 
+        "summary": "memccpy - copy memory area"
+    }, 
+    {
+        "name": "memchr", 
+        "section": 3, 
+        "summary": "memchr, memrchr, rawmemchr - scan memory for a character"
+    }, 
+    {
+        "name": "memcmp", 
+        "section": 3, 
+        "summary": "memcmp - compare memory areas"
+    }, 
+    {
+        "name": "memcpy", 
+        "section": 3, 
+        "summary": "memcpy - copy memory area"
+    }, 
+    {
+        "name": "memfrob", 
+        "section": 3, 
+        "summary": "memfrob - frobnicate (encrypt) a memory area"
+    }, 
+    {
+        "name": "memmem", 
+        "section": 3, 
+        "summary": "memmem - locate a substring"
+    }, 
+    {
+        "name": "memmove", 
+        "section": 3, 
+        "summary": "memmove - copy memory area"
+    }, 
+    {
+        "name": "mempcpy", 
+        "section": 3, 
+        "summary": "mempcpy, wmempcpy  - copy memory area"
+    }, 
+    {
+        "name": "memset", 
+        "section": 3, 
+        "summary": "memset - fill memory with a constant byte"
+    }, 
+    {
+        "name": "mkdtemp", 
+        "section": 3, 
+        "summary": "mkdtemp - create a unique temporary directory"
+    }, 
+    {
+        "name": "mkfifo", 
+        "section": 3, 
+        "summary": "mkfifo, mkfifoat - make a FIFO special file (a named pipe)"
+    }, 
+    {
+        "name": "mkstemp", 
+        "section": 3, 
+        "summary": "mkstemp, mkostemp, mkstemps, mkostemps - create a unique temporary file"
+    }, 
+    {
+        "name": "mktemp", 
+        "section": 3, 
+        "summary": "mktemp - make a unique temporary filename"
+    }, 
+    {
+        "name": "modf", 
+        "section": 3, 
+        "summary": "modf, modff, modfl - extract signed integral and fractional values from\nfloating-point number"
+    }, 
+    {
+        "name": "mpool", 
+        "section": 3, 
+        "summary": "mpool - shared memory buffer pool"
+    }, 
+    {
+        "name": "mq_close", 
+        "section": 3, 
+        "summary": "mq_close - close a message queue descriptor"
+    }, 
+    {
+        "name": "mq_getattr", 
+        "section": 3, 
+        "summary": "mq_getattr, mq_setattr - get/set message queue attributes"
+    }, 
+    {
+        "name": "mq_notify", 
+        "section": 3, 
+        "summary": "mq_notify - register for notification when a message is available"
+    }, 
+    {
+        "name": "mq_open", 
+        "section": 3, 
+        "summary": "mq_open - open a message queue"
+    }, 
+    {
+        "name": "mq_receive", 
+        "section": 3, 
+        "summary": "mq_receive, mq_timedreceive - receive a message from a message queue"
+    }, 
+    {
+        "name": "mq_send", 
+        "section": 3, 
+        "summary": "mq_send, mq_timedsend - send a message to a message queue"
+    }, 
+    {
+        "name": "mq_unlink", 
+        "section": 3, 
+        "summary": "mq_unlink - remove a message queue"
+    }, 
+    {
+        "name": "mtrace", 
+        "section": 3, 
+        "summary": "mtrace, muntrace - malloc tracing"
+    }, 
+    {
+        "name": "nan", 
+        "section": 3, 
+        "summary": "nan, nanf, nanl - return 'Not a Number'"
+    }, 
+    {
+        "name": "netlink", 
+        "section": 3, 
+        "summary": "netlink - Netlink macros"
+    }, 
+    {
+        "name": "newlocale", 
+        "section": 3, 
+        "summary": "newlocale, freelocale - create, modify, and free a locale object"
+    }, 
+    {
+        "name": "nextafter", 
+        "section": 3, 
+        "summary": "nextafter, nextafterf, nextafterl, nexttoward, nexttowardf, nexttowardl -\nfloating-point number manipulation"
+    }, 
+    {
+        "name": "nl_langinfo", 
+        "section": 3, 
+        "summary": "nl_langinfo - query language and locale information"
+    }, 
+    {
+        "name": "offsetof", 
+        "section": 3, 
+        "summary": "offsetof - offset of a structure member"
+    }, 
+    {
+        "name": "on_exit", 
+        "section": 3, 
+        "summary": "on_exit - register a function to be called at normal process termination"
+    }, 
+    {
+        "name": "opendir", 
+        "section": 3, 
+        "summary": "opendir, fdopendir - open a directory"
+    }, 
+    {
+        "name": "openpty", 
+        "section": 3, 
+        "summary": "openpty, login_tty, forkpty - terminal utility functions"
+    }, 
+    {
+        "name": "perror", 
+        "section": 3, 
+        "summary": "perror - print a system error message"
+    }, 
+    {
+        "name": "popen", 
+        "section": 3, 
+        "summary": "popen, pclose - pipe stream to or from a process"
+    }, 
+    {
+        "name": "posix_fallocate", 
+        "section": 3, 
+        "summary": "posix_fallocate - allocate file space"
+    }, 
+    {
+        "name": "posix_memalign", 
+        "section": 3, 
+        "summary": "posix_memalign, aligned_alloc, memalign, valloc, pvalloc - allocate aligned memory"
+    }, 
+    {
+        "name": "posix_openpt", 
+        "section": 3, 
+        "summary": "posix_openpt - open a pseudoterminal device"
+    }, 
+    {
+        "name": "pow", 
+        "section": 3, 
+        "summary": "pow, powf, powl - power functions"
+    }, 
+    {
+        "name": "pow10", 
+        "section": 3, 
+        "summary": "pow10, pow10f, pow10l - base-10 power functions"
+    }, 
+    {
+        "name": "printf", 
+        "section": 3, 
+        "summary": "printf, fprintf, sprintf, snprintf, vprintf, vfprintf, vsprintf,\nvsnprintf - formatted output conversion"
+    }, 
+    {
+        "name": "profil", 
+        "section": 3, 
+        "summary": "profil - execution time profile"
+    }, 
+    {
+        "name": "program_invocation_name", 
+        "section": 3, 
+        "summary": "program_invocation_name, program_invocation_short_name - obtain name used to invoke calling program"
+    }, 
+    {
+        "name": "psignal", 
+        "section": 3, 
+        "summary": "psignal, psiginfo - print signal message"
+    }, 
+    {
+        "name": "pthread_attr_init", 
+        "section": 3, 
+        "summary": "pthread_attr_init, pthread_attr_destroy - initialize and destroy\nthread attributes object"
+    }, 
+    {
+        "name": "pthread_attr_setaffinity_np", 
+        "section": 3, 
+        "summary": "pthread_attr_setaffinity_np, pthread_attr_getaffinity_np - set/get\nCPU affinity attribute in thread attributes object"
+    }, 
+    {
+        "name": "pthread_attr_setdetachstate", 
+        "section": 3, 
+        "summary": "pthread_attr_setdetachstate, pthread_attr_getdetachstate -\nset/get detach state attribute in thread attributes object"
+    }, 
+    {
+        "name": "pthread_attr_setguardsize", 
+        "section": 3, 
+        "summary": "pthread_attr_setguardsize, pthread_attr_getguardsize - set/get guard size\nattribute in thread attributes object"
+    }, 
+    {
+        "name": "pthread_attr_setinheritsched", 
+        "section": 3, 
+        "summary": "pthread_attr_setinheritsched, pthread_attr_getinheritsched - set/get\ninherit-scheduler attribute in thread attributes object"
+    }, 
+    {
+        "name": "pthread_attr_setschedparam", 
+        "section": 3, 
+        "summary": "pthread_attr_setschedparam, pthread_attr_getschedparam - set/get\nscheduling parameter attributes in thread attributes object"
+    }, 
+    {
+        "name": "pthread_attr_setschedpolicy", 
+        "section": 3, 
+        "summary": "pthread_attr_setschedpolicy, pthread_attr_getschedpolicy - set/get\nscheduling policy attribute in thread attributes object"
+    }, 
+    {
+        "name": "pthread_attr_setscope", 
+        "section": 3, 
+        "summary": "pthread_attr_setscope, pthread_attr_getscope - set/get contention scope\nattribute in thread attributes object"
+    }, 
+    {
+        "name": "pthread_attr_setstack", 
+        "section": 3, 
+        "summary": "pthread_attr_setstack, pthread_attr_getstack - set/get stack\nattributes in thread attributes object"
+    }, 
+    {
+        "name": "pthread_attr_setstackaddr", 
+        "section": 3, 
+        "summary": "pthread_attr_setstackaddr, pthread_attr_getstackaddr -\nset/get stack address attribute in thread attributes object"
+    }, 
+    {
+        "name": "pthread_attr_setstacksize", 
+        "section": 3, 
+        "summary": "pthread_attr_setstacksize, pthread_attr_getstacksize - set/get stack size\nattribute in thread attributes object"
+    }, 
+    {
+        "name": "pthread_cancel", 
+        "section": 3, 
+        "summary": "pthread_cancel - send a cancellation request to a thread"
+    }, 
+    {
+        "name": "pthread_cleanup_push", 
+        "section": 3, 
+        "summary": "pthread_cleanup_push, pthread_cleanup_pop - push and pop\nthread cancellation clean-up handlers"
+    }, 
+    {
+        "name": "pthread_cleanup_push_defer_np", 
+        "section": 3, 
+        "summary": "pthread_cleanup_push_defer_np, pthread_cleanup_pop_restore_np - push and pop\nthread cancellation clean-up handlers while saving cancelability type"
+    }, 
+    {
+        "name": "pthread_create", 
+        "section": 3, 
+        "summary": "pthread_create - create a new thread"
+    }, 
+    {
+        "name": "pthread_detach", 
+        "section": 3, 
+        "summary": "pthread_detach - detach a thread"
+    }, 
+    {
+        "name": "pthread_equal", 
+        "section": 3, 
+        "summary": "pthread_equal - compare thread IDs"
+    }, 
+    {
+        "name": "pthread_exit", 
+        "section": 3, 
+        "summary": "pthread_exit - terminate calling thread"
+    }, 
+    {
+        "name": "pthread_getattr_np", 
+        "section": 3, 
+        "summary": "pthread_getattr_np - get attributes of created thread"
+    }, 
+    {
+        "name": "pthread_getcpuclockid", 
+        "section": 3, 
+        "summary": "pthread_getcpuclockid - retrieve ID of a thread's CPU time clock"
+    }, 
+    {
+        "name": "pthread_join", 
+        "section": 3, 
+        "summary": "pthread_join - join with a terminated thread"
+    }, 
+    {
+        "name": "pthread_kill", 
+        "section": 3, 
+        "summary": "pthread_kill - send a signal to a thread"
+    }, 
+    {
+        "name": "pthread_kill_other_threads_np", 
+        "section": 3, 
+        "summary": "pthread_kill_other_threads_np - terminate all other threads in process"
+    }, 
+    {
+        "name": "pthread_self", 
+        "section": 3, 
+        "summary": "pthread_self - obtain ID of the calling thread"
+    }, 
+    {
+        "name": "pthread_setaffinity_np", 
+        "section": 3, 
+        "summary": "pthread_setaffinity_np, pthread_getaffinity_np - set/get\nCPU affinity of a thread"
+    }, 
+    {
+        "name": "pthread_setcancelstate", 
+        "section": 3, 
+        "summary": "pthread_setcancelstate, pthread_setcanceltype -\nset cancelability state and type"
+    }, 
+    {
+        "name": "pthread_setconcurrency", 
+        "section": 3, 
+        "summary": "pthread_setconcurrency, pthread_getconcurrency - set/get\nthe concurrency level"
+    }, 
+    {
+        "name": "pthread_setname_np", 
+        "section": 3, 
+        "summary": "pthread_setname_np, pthread_getname_np - set/get the name of a thread"
+    }, 
+    {
+        "name": "pthread_setschedparam", 
+        "section": 3, 
+        "summary": "pthread_setschedparam, pthread_getschedparam - set/get\nscheduling policy and parameters of a thread"
+    }, 
+    {
+        "name": "pthread_setschedprio", 
+        "section": 3, 
+        "summary": "pthread_setschedprio - set scheduling priority of a thread"
+    }, 
+    {
+        "name": "pthread_sigmask", 
+        "section": 3, 
+        "summary": "pthread_sigmask - examine and change mask of blocked signals"
+    }, 
+    {
+        "name": "pthread_sigqueue", 
+        "section": 3, 
+        "summary": "pthread_sigqueue - queue a signal and data to a thread"
+    }, 
+    {
+        "name": "pthread_testcancel", 
+        "section": 3, 
+        "summary": "pthread_testcancel - request delivery of any pending cancellation request"
+    }, 
+    {
+        "name": "pthread_tryjoin_np", 
+        "section": 3, 
+        "summary": "pthread_tryjoin_np, pthread_timedjoin_np - try to join with a\nterminated thread"
+    }, 
+    {
+        "name": "pthread_yield", 
+        "section": 3, 
+        "summary": "pthread_yield - yield the processor"
+    }, 
+    {
+        "name": "ptsname", 
+        "section": 3, 
+        "summary": "ptsname, ptsname_r - get the name of the slave pseudoterminal"
+    }, 
+    {
+        "name": "putenv", 
+        "section": 3, 
+        "summary": "putenv - change or add an environment variable"
+    }, 
+    {
+        "name": "putgrent", 
+        "section": 3, 
+        "summary": "putgrent - write a group database entry to a file"
+    }, 
+    {
+        "name": "putpwent", 
+        "section": 3, 
+        "summary": "putpwent - write a password file entry"
+    }, 
+    {
+        "name": "puts", 
+        "section": 3, 
+        "summary": "fputc, fputs, putc, putchar, puts - output of characters and strings"
+    }, 
+    {
+        "name": "putwchar", 
+        "section": 3, 
+        "summary": "putwchar - write a wide character to standard output"
+    }, 
+    {
+        "name": "qecvt", 
+        "section": 3, 
+        "summary": "qecvt, qfcvt, qgcvt - convert a floating-point number to a string"
+    }, 
+    {
+        "name": "qsort", 
+        "section": 3, 
+        "summary": "qsort, qsort_r - sort an array"
+    }, 
+    {
+        "name": "queue", 
+        "section": 3, 
+        "summary": "LIST_ENTRY, LIST_HEAD, LIST_INIT, LIST_INSERT_AFTER,\nLIST_INSERT_HEAD, LIST_REMOVE, TAILQ_ENTRY, TAILQ_HEAD,\nTAILQ_INIT, TAILQ_INSERT_AFTER, TAILQ_INSERT_HEAD, TAILQ_INSERT_TAIL,\nTAILQ_REMOVE, CIRCLEQ_ENTRY, CIRCLEQ_HEAD, CIRCLEQ_INIT,\nCIRCLEQ_INSERT_AFTER, CIRCLEQ_INSERT_BEFORE,\nCIRCLEQ_INSERT_HEAD, CIRCLEQ_INSERT_TAIL,\nCIRCLEQ_REMOVE - implementations of lists, tail queues, and circular queues"
+    }, 
+    {
+        "name": "raise", 
+        "section": 3, 
+        "summary": "raise - send a signal to the caller"
+    }, 
+    {
+        "name": "rand", 
+        "section": 3, 
+        "summary": "rand, rand_r, srand - pseudo-random number generator"
+    }, 
+    {
+        "name": "random", 
+        "section": 3, 
+        "summary": "random, srandom, initstate, setstate - random number generator"
+    }, 
+    {
+        "name": "random_r", 
+        "section": 3, 
+        "summary": "random_r, srandom_r, initstate_r, setstate_r - reentrant\nrandom number generator"
+    }, 
+    {
+        "name": "rcmd", 
+        "section": 3, 
+        "summary": "rcmd, rresvport, iruserok, ruserok, rcmd_af,\nrresvport_af, iruserok_af, ruserok_af - routines for returning a\nstream to a remote command"
+    }, 
+    {
+        "name": "readdir", 
+        "section": 3, 
+        "summary": "readdir, readdir_r - read a directory"
+    }, 
+    {
+        "name": "realpath", 
+        "section": 3, 
+        "summary": "realpath - return the canonicalized absolute pathname"
+    }, 
+    {
+        "name": "recno", 
+        "section": 3, 
+        "summary": "recno - record number database access method"
+    }, 
+    {
+        "name": "regex", 
+        "section": 3, 
+        "summary": "regcomp, regexec, regerror, regfree - POSIX regex functions"
+    }, 
+    {
+        "name": "remainder", 
+        "section": 3, 
+        "summary": "drem, dremf, dreml, remainder, remainderf, remainderl - floating-point remainder function"
+    }, 
+    {
+        "name": "remove", 
+        "section": 3, 
+        "summary": "remove - remove a file or directory"
+    }, 
+    {
+        "name": "remquo", 
+        "section": 3, 
+        "summary": "remquo, remquof, remquol - remainder and part of quotient"
+    }, 
+    {
+        "name": "resolver", 
+        "section": 3, 
+        "summary": "res_init, res_query, res_search, res_querydomain, res_mkquery, res_send,\ndn_comp, dn_expand - resolver routines"
+    }, 
+    {
+        "name": "rewinddir", 
+        "section": 3, 
+        "summary": "rewinddir - reset directory stream"
+    }, 
+    {
+        "name": "rexec", 
+        "section": 3, 
+        "summary": "rexec, rexec_af - return stream to a remote command"
+    }, 
+    {
+        "name": "re_comp", 
+        "section": 3, 
+        "summary": "re_comp, re_exec - BSD regex functions"
+    }, 
+    {
+        "name": "rint", 
+        "section": 3, 
+        "summary": "nearbyint, nearbyintf, nearbyintl, rint, rintf, rintl - round\nto nearest integer"
+    }, 
+    {
+        "name": "round", 
+        "section": 3, 
+        "summary": "round, roundf, roundl - round to nearest integer, away from zero"
+    }, 
+    {
+        "name": "rpc", 
+        "section": 3, 
+        "summary": "rpc - library routines for remote procedure calls"
+    }, 
+    {
+        "name": "rpmatch", 
+        "section": 3, 
+        "summary": "rpmatch - determine if the answer to a question is affirmative or negative"
+    }, 
+    {
+        "name": "rtime", 
+        "section": 3, 
+        "summary": "rtime - get time from a remote machine"
+    }, 
+    {
+        "name": "rtnetlink", 
+        "section": 3, 
+        "summary": "rtnetlink - macros to manipulate rtnetlink messages"
+    }, 
+    {
+        "name": "scalb", 
+        "section": 3, 
+        "summary": "scalb, scalbf, scalbl - multiply floating-point number\nby integral power of radix (OBSOLETE)"
+    }, 
+    {
+        "name": "scalbln", 
+        "section": 3, 
+        "summary": "scalbn, scalbnf, scalbnl, scalbln, scalblnf, scalblnl -\nmultiply floating-point number by integral power of radix"
+    }, 
+    {
+        "name": "scandir", 
+        "section": 3, 
+        "summary": "scandir, scandirat, alphasort, versionsort - scan\na directory for matching entries"
+    }, 
+    {
+        "name": "scanf", 
+        "section": 3, 
+        "summary": "scanf, fscanf, sscanf, vscanf, vsscanf, vfscanf - input format conversion"
+    }, 
+    {
+        "name": "sched_getcpu", 
+        "section": 3, 
+        "summary": "sched_getcpu - determine CPU on which the calling thread is running"
+    }, 
+    {
+        "name": "seekdir", 
+        "section": 3, 
+        "summary": "seekdir - set the position of the next readdir() call in the directory\nstream."
+    }, 
+    {
+        "name": "sem_close", 
+        "section": 3, 
+        "summary": "sem_close - close a named semaphore"
+    }, 
+    {
+        "name": "sem_destroy", 
+        "section": 3, 
+        "summary": "sem_destroy - destroy an unnamed semaphore"
+    }, 
+    {
+        "name": "sem_getvalue", 
+        "section": 3, 
+        "summary": "sem_getvalue - get the value of a semaphore"
+    }, 
+    {
+        "name": "sem_init", 
+        "section": 3, 
+        "summary": "sem_init - initialize an unnamed semaphore"
+    }, 
+    {
+        "name": "sem_open", 
+        "section": 3, 
+        "summary": "sem_open - initialize and open a named semaphore"
+    }, 
+    {
+        "name": "sem_post", 
+        "section": 3, 
+        "summary": "sem_post - unlock a semaphore"
+    }, 
+    {
+        "name": "sem_unlink", 
+        "section": 3, 
+        "summary": "sem_unlink - remove a named semaphore"
+    }, 
+    {
+        "name": "sem_wait", 
+        "section": 3, 
+        "summary": "sem_wait, sem_timedwait, sem_trywait - lock a semaphore"
+    }, 
+    {
+        "name": "setaliasent", 
+        "section": 3, 
+        "summary": "setaliasent, endaliasent, getaliasent, getaliasent_r,\ngetaliasbyname, getaliasbyname_r - read an alias entry"
+    }, 
+    {
+        "name": "setbuf", 
+        "section": 3, 
+        "summary": "setbuf, setbuffer, setlinebuf, setvbuf - stream buffering operations"
+    }, 
+    {
+        "name": "setenv", 
+        "section": 3, 
+        "summary": "setenv - change or add an environment variable"
+    }, 
+    {
+        "name": "setjmp", 
+        "section": 3, 
+        "summary": "setjmp, sigsetjmp - save stack context for nonlocal goto"
+    }, 
+    {
+        "name": "setlocale", 
+        "section": 3, 
+        "summary": "setlocale - set the current locale"
+    }, 
+    {
+        "name": "setlogmask", 
+        "section": 3, 
+        "summary": "setlogmask - set log priority mask"
+    }, 
+    {
+        "name": "setnetgrent", 
+        "section": 3, 
+        "summary": "setnetgrent, endnetgrent, getnetgrent, getnetgrent_r, innetgr -\nhandle network group entries"
+    }, 
+    {
+        "name": "shm_open", 
+        "section": 3, 
+        "summary": "shm_open, shm_unlink - create/open or unlink POSIX shared memory objects"
+    }, 
+    {
+        "name": "siginterrupt", 
+        "section": 3, 
+        "summary": "siginterrupt - allow signals to interrupt system calls"
+    }, 
+    {
+        "name": "signbit", 
+        "section": 3, 
+        "summary": "signbit - test sign of a real floating-point number"
+    }, 
+    {
+        "name": "significand", 
+        "section": 3, 
+        "summary": "significand, significandf, significandl -\nget mantissa of floating-point number"
+    }, 
+    {
+        "name": "sigpause", 
+        "section": 3, 
+        "summary": "sigpause - atomically release blocked signals and wait for interrupt"
+    }, 
+    {
+        "name": "sigqueue", 
+        "section": 3, 
+        "summary": "sigqueue - queue a signal and data to a process"
+    }, 
+    {
+        "name": "sigset", 
+        "section": 3, 
+        "summary": "sigset, sighold, sigrelse, sigignore - System V signal API"
+    }, 
+    {
+        "name": "sigsetops", 
+        "section": 3, 
+        "summary": "sigemptyset, sigfillset, sigaddset, sigdelset, sigismember - POSIX\nsignal set operations"
+    }, 
+    {
+        "name": "sigvec", 
+        "section": 3, 
+        "summary": "sigvec, sigblock, sigsetmask, siggetmask, sigmask - BSD signal API"
+    }, 
+    {
+        "name": "sigwait", 
+        "section": 3, 
+        "summary": "sigwait - wait for a signal"
+    }, 
+    {
+        "name": "sin", 
+        "section": 3, 
+        "summary": "sin, sinf, sinl - sine function"
+    }, 
+    {
+        "name": "sincos", 
+        "section": 3, 
+        "summary": "sincos, sincosf, sincosl - calculate sin and cos simultaneously"
+    }, 
+    {
+        "name": "sinh", 
+        "section": 3, 
+        "summary": "sinh, sinhf, sinhl - hyperbolic sine function"
+    }, 
+    {
+        "name": "sleep", 
+        "section": 3, 
+        "summary": "sleep - sleep for the specified number of seconds"
+    }, 
+    {
+        "name": "sockatmark", 
+        "section": 3, 
+        "summary": "sockatmark - determine whether socket is at out-of-band mark"
+    }, 
+    {
+        "name": "sqrt", 
+        "section": 3, 
+        "summary": "sqrt, sqrtf, sqrtl - square root function"
+    }, 
+    {
+        "name": "statvfs", 
+        "section": 3, 
+        "summary": "statvfs, fstatvfs - get filesystem statistics"
+    }, 
+    {
+        "name": "stdarg", 
+        "section": 3, 
+        "summary": "stdarg, va_start, va_arg, va_end, va_copy - variable argument lists"
+    }, 
+    {
+        "name": "stdin", 
+        "section": 3, 
+        "summary": "stdin, stdout, stderr - standard I/O streams"
+    }, 
+    {
+        "name": "stdio", 
+        "section": 3, 
+        "summary": "stdio - standard input/output library functions"
+    }, 
+    {
+        "name": "stdio_ext", 
+        "section": 3, 
+        "summary": "__fbufsize, __flbf, __fpending, __fpurge, __freadable,\n__freading, __fsetlocking, __fwritable, __fwriting, _flushlbf -\ninterfaces to stdio FILE structure"
+    }, 
+    {
+        "name": "stpcpy", 
+        "section": 3, 
+        "summary": "stpcpy - copy a string returning a pointer to its end"
+    }, 
+    {
+        "name": "stpncpy", 
+        "section": 3, 
+        "summary": "stpncpy - copy a fixed-size string, returning a pointer to its end"
+    }, 
+    {
+        "name": "strcasecmp", 
+        "section": 3, 
+        "summary": "strcasecmp, strncasecmp - compare two strings ignoring case"
+    }, 
+    {
+        "name": "strcat", 
+        "section": 3, 
+        "summary": "strcat, strncat - concatenate two strings"
+    }, 
+    {
+        "name": "strchr", 
+        "section": 3, 
+        "summary": "strchr, strrchr, strchrnul - locate character in string"
+    }, 
+    {
+        "name": "strcmp", 
+        "section": 3, 
+        "summary": "strcmp, strncmp - compare two strings"
+    }, 
+    {
+        "name": "strcoll", 
+        "section": 3, 
+        "summary": "strcoll - compare two strings using the current locale"
+    }, 
+    {
+        "name": "strcpy", 
+        "section": 3, 
+        "summary": "strcpy, strncpy - copy a string"
+    }, 
+    {
+        "name": "strdup", 
+        "section": 3, 
+        "summary": "strdup, strndup, strdupa, strndupa - duplicate a string"
+    }, 
+    {
+        "name": "strerror", 
+        "section": 3, 
+        "summary": "strerror, strerror_r, strerror_l - return string describing error number"
+    }, 
+    {
+        "name": "strfmon", 
+        "section": 3, 
+        "summary": "strfmon - convert monetary value to a string"
+    }, 
+    {
+        "name": "strfry", 
+        "section": 3, 
+        "summary": "strfry - randomize a string"
+    }, 
+    {
+        "name": "strftime", 
+        "section": 3, 
+        "summary": "strftime - format date and time"
+    }, 
+    {
+        "name": "string", 
+        "section": 3, 
+        "summary": "stpcpy, strcasecmp, strcat, strchr, strcmp, strcoll, strcpy, strcspn,\nstrdup, strfry, strlen, strncat, strncmp, strncpy, strncasecmp, strpbrk,\nstrrchr, strsep, strspn, strstr, strtok, strxfrm, index, rindex\n- string operations"
+    }, 
+    {
+        "name": "strlen", 
+        "section": 3, 
+        "summary": "strlen - calculate the length of a string"
+    }, 
+    {
+        "name": "strnlen", 
+        "section": 3, 
+        "summary": "strnlen - determine the length of a fixed-size string"
+    }, 
+    {
+        "name": "strpbrk", 
+        "section": 3, 
+        "summary": "strpbrk - search a string for any of a set of bytes"
+    }, 
+    {
+        "name": "strptime", 
+        "section": 3, 
+        "summary": "strptime - convert a string representation of time to a time tm structure"
+    }, 
+    {
+        "name": "strsep", 
+        "section": 3, 
+        "summary": "strsep - extract token from string"
+    }, 
+    {
+        "name": "strsignal", 
+        "section": 3, 
+        "summary": "strsignal - return string describing signal"
+    }, 
+    {
+        "name": "strspn", 
+        "section": 3, 
+        "summary": "strspn, strcspn - get length of a prefix substring"
+    }, 
+    {
+        "name": "strstr", 
+        "section": 3, 
+        "summary": "strstr, strcasestr - locate a substring"
+    }, 
+    {
+        "name": "strtod", 
+        "section": 3, 
+        "summary": "strtod, strtof, strtold - convert ASCII string to floating-point number"
+    }, 
+    {
+        "name": "strtoimax", 
+        "section": 3, 
+        "summary": "strtoimax, strtoumax - convert string to integer"
+    }, 
+    {
+        "name": "strtok", 
+        "section": 3, 
+        "summary": "strtok, strtok_r - extract tokens from strings"
+    }, 
+    {
+        "name": "strtol", 
+        "section": 3, 
+        "summary": "strtol, strtoll, strtoq - convert a string to a long integer"
+    }, 
+    {
+        "name": "strtoul", 
+        "section": 3, 
+        "summary": "strtoul, strtoull, strtouq - convert a string to an unsigned long integer"
+    }, 
+    {
+        "name": "strverscmp", 
+        "section": 3, 
+        "summary": "strverscmp - compare two version strings"
+    }, 
+    {
+        "name": "strxfrm", 
+        "section": 3, 
+        "summary": "strxfrm - string transformation"
+    }, 
+    {
+        "name": "swab", 
+        "section": 3, 
+        "summary": "swab - swap adjacent bytes"
+    }, 
+    {
+        "name": "sysconf", 
+        "section": 3, 
+        "summary": "sysconf - get configuration information at run time"
+    }, 
+    {
+        "name": "syslog", 
+        "section": 3, 
+        "summary": "closelog, openlog, syslog, vsyslog - send messages to the system logger"
+    }, 
+    {
+        "name": "system", 
+        "section": 3, 
+        "summary": "system - execute a shell command"
+    }, 
+    {
+        "name": "sysv_signal", 
+        "section": 3, 
+        "summary": "sysv_signal - signal handling with System V semantics"
+    }, 
+    {
+        "name": "tan", 
+        "section": 3, 
+        "summary": "tan, tanf, tanl - tangent function"
+    }, 
+    {
+        "name": "tanh", 
+        "section": 3, 
+        "summary": "tanh, tanhf, tanhl - hyperbolic tangent function"
+    }, 
+    {
+        "name": "tcgetpgrp", 
+        "section": 3, 
+        "summary": "tcgetpgrp, tcsetpgrp - get and set terminal foreground process group"
+    }, 
+    {
+        "name": "tcgetsid", 
+        "section": 3, 
+        "summary": "tcgetsid - get session ID"
+    }, 
+    {
+        "name": "telldir", 
+        "section": 3, 
+        "summary": "telldir - return current location in directory stream"
+    }, 
+    {
+        "name": "tempnam", 
+        "section": 3, 
+        "summary": "tempnam - create a name for a temporary file"
+    }, 
+    {
+        "name": "termios", 
+        "section": 3, 
+        "summary": "termios, tcgetattr, tcsetattr, tcsendbreak, tcdrain, tcflush, tcflow,\ncfmakeraw, cfgetospeed, cfgetispeed, cfsetispeed, cfsetospeed, cfsetspeed -\nget and set terminal attributes, line control, get and set baud rate"
+    }, 
+    {
+        "name": "tgamma", 
+        "section": 3, 
+        "summary": "tgamma, tgammaf, tgammal - true gamma function"
+    }, 
+    {
+        "name": "timegm", 
+        "section": 3, 
+        "summary": "timegm, timelocal - inverses of gmtime and localtime"
+    }, 
+    {
+        "name": "timeradd", 
+        "section": 3, 
+        "summary": "timeradd, timersub, timercmp, timerclear, timerisset - timeval operations"
+    }, 
+    {
+        "name": "tmpfile", 
+        "section": 3, 
+        "summary": "tmpfile - create a temporary file"
+    }, 
+    {
+        "name": "tmpnam", 
+        "section": 3, 
+        "summary": "tmpnam, tmpnam_r - create a name for a temporary file"
+    }, 
+    {
+        "name": "toascii", 
+        "section": 3, 
+        "summary": "toascii - convert character to ASCII"
+    }, 
+    {
+        "name": "toupper", 
+        "section": 3, 
+        "summary": "toupper, tolower, toupper_l, tolower_l - convert uppercase or lowercase"
+    }, 
+    {
+        "name": "towctrans", 
+        "section": 3, 
+        "summary": "towctrans - wide-character transliteration"
+    }, 
+    {
+        "name": "towlower", 
+        "section": 3, 
+        "summary": "towlower, towlower_l - convert a wide character to lowercase"
+    }, 
+    {
+        "name": "towupper", 
+        "section": 3, 
+        "summary": "towupper, towupper_l - convert a wide character to uppercase"
+    }, 
+    {
+        "name": "trunc", 
+        "section": 3, 
+        "summary": "trunc, truncf, truncl - round to integer, toward zero"
+    }, 
+    {
+        "name": "tsearch", 
+        "section": 3, 
+        "summary": "tsearch, tfind, tdelete, twalk, tdestroy - manage a binary tree"
+    }, 
+    {
+        "name": "ttyname", 
+        "section": 3, 
+        "summary": "ttyname, ttyname_r - return name of a terminal"
+    }, 
+    {
+        "name": "ttyslot", 
+        "section": 3, 
+        "summary": "ttyslot - find the slot of the current user's terminal in some file"
+    }, 
+    {
+        "name": "tzset", 
+        "section": 3, 
+        "summary": "tzset, tzname, timezone, daylight - initialize time conversion information"
+    }, 
+    {
+        "name": "ualarm", 
+        "section": 3, 
+        "summary": "ualarm - schedule signal after given number of microseconds"
+    }, 
+    {
+        "name": "ulimit", 
+        "section": 3, 
+        "summary": "ulimit - get and set user limits"
+    }, 
+    {
+        "name": "undocumented", 
+        "section": 3, 
+        "summary": "none - undocumented library functions"
+    }, 
+    {
+        "name": "ungetwc", 
+        "section": 3, 
+        "summary": "ungetwc - push back a wide character onto a FILE stream"
+    }, 
+    {
+        "name": "unlocked_stdio", 
+        "section": 3, 
+        "summary": "getc_unlocked, getchar_unlocked, putc_unlocked,\nputchar_unlocked - nonlocking stdio functions"
+    }, 
+    {
+        "name": "unlockpt", 
+        "section": 3, 
+        "summary": "unlockpt - unlock a pseudoterminal master/slave pair"
+    }, 
+    {
+        "name": "updwtmp", 
+        "section": 3, 
+        "summary": "updwtmp, logwtmp - append an entry to the wtmp file"
+    }, 
+    {
+        "name": "uselocale", 
+        "section": 3, 
+        "summary": "uselocale - set/get the locale for the calling thread"
+    }, 
+    {
+        "name": "usleep", 
+        "section": 3, 
+        "summary": "usleep - suspend execution for microsecond intervals"
+    }, 
+    {
+        "name": "wcpcpy", 
+        "section": 3, 
+        "summary": "wcpcpy - copy a wide-character string, returning a pointer to its end"
+    }, 
+    {
+        "name": "wcpncpy", 
+        "section": 3, 
+        "summary": "wcpncpy - copy a fixed-size string of wide characters,\nreturning a pointer to its end"
+    }, 
+    {
+        "name": "wcrtomb", 
+        "section": 3, 
+        "summary": "wcrtomb - convert a wide character to a multibyte sequence"
+    }, 
+    {
+        "name": "wcscasecmp", 
+        "section": 3, 
+        "summary": "wcscasecmp - compare two wide-character strings, ignoring case"
+    }, 
+    {
+        "name": "wcscat", 
+        "section": 3, 
+        "summary": "wcscat - concatenate two wide-character strings"
+    }, 
+    {
+        "name": "wcschr", 
+        "section": 3, 
+        "summary": "wcschr - search a wide character in a wide-character string"
+    }, 
+    {
+        "name": "wcscmp", 
+        "section": 3, 
+        "summary": "wcscmp - compare two wide-character strings"
+    }, 
+    {
+        "name": "wcscpy", 
+        "section": 3, 
+        "summary": "wcscpy - copy a wide-character string"
+    }, 
+    {
+        "name": "wcscspn", 
+        "section": 3, 
+        "summary": "wcscspn - search a wide-character string for any of a set of wide characters"
+    }, 
+    {
+        "name": "wcsdup", 
+        "section": 3, 
+        "summary": "wcsdup - duplicate a wide-character string"
+    }, 
+    {
+        "name": "wcslen", 
+        "section": 3, 
+        "summary": "wcslen - determine the length of a wide-character string"
+    }, 
+    {
+        "name": "wcsncasecmp", 
+        "section": 3, 
+        "summary": "wcsncasecmp - compare two fixed-size wide-character strings, ignoring case"
+    }, 
+    {
+        "name": "wcsncat", 
+        "section": 3, 
+        "summary": "wcsncat - concatenate two wide-character strings"
+    }, 
+    {
+        "name": "wcsncmp", 
+        "section": 3, 
+        "summary": "wcsncmp - compare two fixed-size wide-character strings"
+    }, 
+    {
+        "name": "wcsncpy", 
+        "section": 3, 
+        "summary": "wcsncpy - copy a fixed-size string of wide characters"
+    }, 
+    {
+        "name": "wcsnlen", 
+        "section": 3, 
+        "summary": "wcsnlen - determine the length of a fixed-size wide-character string"
+    }, 
+    {
+        "name": "wcsnrtombs", 
+        "section": 3, 
+        "summary": "wcsnrtombs - convert a wide-character string to a multibyte string"
+    }, 
+    {
+        "name": "wcspbrk", 
+        "section": 3, 
+        "summary": "wcspbrk - search a wide-character string for any of a set of wide characters"
+    }, 
+    {
+        "name": "wcsrchr", 
+        "section": 3, 
+        "summary": "wcsrchr - search a wide character in a wide-character string"
+    }, 
+    {
+        "name": "wcsrtombs", 
+        "section": 3, 
+        "summary": "wcsrtombs - convert a wide-character string to a multibyte string"
+    }, 
+    {
+        "name": "wcsspn", 
+        "section": 3, 
+        "summary": "wcsspn - advance in a wide-character string, skipping\nany of a set of wide characters"
+    }, 
+    {
+        "name": "wcsstr", 
+        "section": 3, 
+        "summary": "wcsstr - locate a substring in a wide-character string"
+    }, 
+    {
+        "name": "wcstoimax", 
+        "section": 3, 
+        "summary": "wcstoimax, wcstoumax - convert wide-character string to integer"
+    }, 
+    {
+        "name": "wcstok", 
+        "section": 3, 
+        "summary": "wcstok - split wide-character string into tokens"
+    }, 
+    {
+        "name": "wcstombs", 
+        "section": 3, 
+        "summary": "wcstombs - convert a wide-character string to a multibyte string"
+    }, 
+    {
+        "name": "wcswidth", 
+        "section": 3, 
+        "summary": "wcswidth - determine columns needed for a fixed-size wide-character string"
+    }, 
+    {
+        "name": "wctob", 
+        "section": 3, 
+        "summary": "wctob - try to represent a wide character as a single byte"
+    }, 
+    {
+        "name": "wctomb", 
+        "section": 3, 
+        "summary": "wctomb - convert a wide character to a multibyte sequence"
+    }, 
+    {
+        "name": "wctrans", 
+        "section": 3, 
+        "summary": "wctrans - wide-character translation mapping"
+    }, 
+    {
+        "name": "wctype", 
+        "section": 3, 
+        "summary": "wctype - wide-character classification"
+    }, 
+    {
+        "name": "wcwidth", 
+        "section": 3, 
+        "summary": "wcwidth - determine columns needed for a wide character"
+    }, 
+    {
+        "name": "wmemchr", 
+        "section": 3, 
+        "summary": "wmemchr - search a wide character in a wide-character array"
+    }, 
+    {
+        "name": "wmemcmp", 
+        "section": 3, 
+        "summary": "wmemcmp - compare two arrays of wide-characters"
+    }, 
+    {
+        "name": "wmemcpy", 
+        "section": 3, 
+        "summary": "wmemcpy - copy an array of wide-characters"
+    }, 
+    {
+        "name": "wmemmove", 
+        "section": 3, 
+        "summary": "wmemmove - copy an array of wide-characters"
+    }, 
+    {
+        "name": "wmemset", 
+        "section": 3, 
+        "summary": "wmemset - fill an array of wide-characters with a constant wide character"
+    }, 
+    {
+        "name": "wordexp", 
+        "section": 3, 
+        "summary": "wordexp, wordfree - perform word expansion like a posix-shell"
+    }, 
+    {
+        "name": "wprintf", 
+        "section": 3, 
+        "summary": "wprintf, fwprintf, swprintf, vwprintf, vfwprintf, vswprintf - formatted\nwide-character output conversion"
+    }, 
+    {
+        "name": "xcrypt", 
+        "section": 3, 
+        "summary": "xencrypt, xdecrypt, passwd2des - RFS password encryption"
+    }, 
+    {
+        "name": "xdr", 
+        "section": 3, 
+        "summary": "xdr - library routines for external data representation"
+    }, 
+    {
+        "name": "y0", 
+        "section": 3, 
+        "summary": "y0, y0f, y0l, y1, y1f, y1l, yn, ynf, ynl -\nBessel functions of the second kind"
+    }, 
+    {
+        "name": "__setfpucw", 
+        "section": 3, 
+        "summary": "__setfpucw - set FPU control word on i386 architecture (obsolete)"
+    }, 
+    {
+        "name": "cciss", 
+        "section": 4, 
+        "summary": "cciss - HP Smart Array block driver"
+    }, 
+    {
+        "name": "console", 
+        "section": 4, 
+        "summary": "console - console terminal and virtual consoles"
+    }, 
+    {
+        "name": "console_codes", 
+        "section": 4, 
+        "summary": "console_codes - Linux console escape and control sequences"
+    }, 
+    {
+        "name": "console_ioctl", 
+        "section": 4, 
+        "summary": "console_ioctl - ioctls for console terminal and virtual consoles"
+    }, 
+    {
+        "name": "cpuid", 
+        "section": 4, 
+        "summary": "cpuid - x86 CPUID access device"
+    }, 
+    {
+        "name": "dsp56k", 
+        "section": 4, 
+        "summary": "dsp56k - DSP56001 interface device"
+    }, 
+    {
+        "name": "fd", 
+        "section": 4, 
+        "summary": "fd - floppy disk device"
+    }, 
+    {
+        "name": "full", 
+        "section": 4, 
+        "summary": "full - always full device"
+    }, 
+    {
+        "name": "hd", 
+        "section": 4, 
+        "summary": "hd - MFM/IDE hard disk devices"
+    }, 
+    {
+        "name": "hpsa", 
+        "section": 4, 
+        "summary": "hpsa - HP Smart Array SCSI driver"
+    }, 
+    {
+        "name": "initrd", 
+        "section": 4, 
+        "summary": "initrd - boot loader initialized RAM disk"
+    }, 
+    {
+        "name": "intro", 
+        "section": 4, 
+        "summary": "intro - introduction to special files"
+    }, 
+    {
+        "name": "lp", 
+        "section": 4, 
+        "summary": "lp - line printer devices"
+    }, 
+    {
+        "name": "mem", 
+        "section": 4, 
+        "summary": "mem, kmem, port - system memory, kernel memory and system ports"
+    }, 
+    {
+        "name": "mouse", 
+        "section": 4, 
+        "summary": "mouse - serial mouse interface"
+    }, 
+    {
+        "name": "msr", 
+        "section": 4, 
+        "summary": "msr - x86 CPU MSR access device"
+    }, 
+    {
+        "name": "null", 
+        "section": 4, 
+        "summary": "null, zero - data sink"
+    }, 
+    {
+        "name": "pts", 
+        "section": 4, 
+        "summary": "ptmx, pts - pseudoterminal master and slave"
+    }, 
+    {
+        "name": "ram", 
+        "section": 4, 
+        "summary": "ram - ram disk device"
+    }, 
+    {
+        "name": "random", 
+        "section": 4, 
+        "summary": "random, urandom - kernel random number source devices"
+    }, 
+    {
+        "name": "rtc", 
+        "section": 4, 
+        "summary": "rtc - real-time clock"
+    }, 
+    {
+        "name": "sd", 
+        "section": 4, 
+        "summary": "sd - driver for SCSI disk drives"
+    }, 
+    {
+        "name": "sk98lin", 
+        "section": 4, 
+        "summary": "sk98lin - Marvell/SysKonnect Gigabit Ethernet driver v6.21"
+    }, 
+    {
+        "name": "st", 
+        "section": 4, 
+        "summary": "st - SCSI tape device"
+    }, 
+    {
+        "name": "tty", 
+        "section": 4, 
+        "summary": "tty - controlling terminal"
+    }, 
+    {
+        "name": "ttyS", 
+        "section": 4, 
+        "summary": "ttyS - serial terminal lines"
+    }, 
+    {
+        "name": "tty_ioctl", 
+        "section": 4, 
+        "summary": "tty_ioctl - ioctls for terminals and serial lines"
+    }, 
+    {
+        "name": "vcs", 
+        "section": 4, 
+        "summary": "vcs, vcsa - virtual console memory"
+    }, 
+    {
+        "name": "wavelan", 
+        "section": 4, 
+        "summary": "wavelan - AT&T GIS WaveLAN ISA device driver"
+    }, 
+    {
+        "name": "acct", 
+        "section": 5, 
+        "summary": "acct - process accounting file"
+    }, 
+    {
+        "name": "charmap", 
+        "section": 5, 
+        "summary": "charmap - character set description file"
+    }, 
+    {
+        "name": "core", 
+        "section": 5, 
+        "summary": "core - core dump file"
+    }, 
+    {
+        "name": "dir_colors", 
+        "section": 5, 
+        "summary": "dir_colors - configuration file for"
+    }, 
+    {
+        "name": "elf", 
+        "section": 5, 
+        "summary": "elf - format of Executable and Linking Format (ELF) files"
+    }, 
+    {
+        "name": "filesystems", 
+        "section": 5, 
+        "summary": "filesystems - Linux filesystem types: minix, ext, ext2, ext3, ext4, Reiserfs,\nXFS, JFS, xia, msdos,\numsdos, vfat, ntfs, proc, nfs, iso9660, hpfs, sysv, smb, ncpfs"
+    }, 
+    {
+        "name": "ftpusers", 
+        "section": 5, 
+        "summary": "ftpusers - list of users that may not log in via the FTP daemon"
+    }, 
+    {
+        "name": "gai", 
+        "section": 5, 
+        "summary": "gai.conf -"
+    }, 
+    {
+        "name": "group", 
+        "section": 5, 
+        "summary": "group - user group file"
+    }, 
+    {
+        "name": "host", 
+        "section": 5, 
+        "summary": "host.conf - resolver configuration file"
+    }, 
+    {
+        "name": "hosts", 
+        "section": 5, 
+        "summary": "hosts - static table lookup for hostnames"
+    }, 
+    {
+        "name": "hosts", 
+        "section": 5, 
+        "summary": "/etc/hosts.equiv - list of hosts and users that are granted \"trusted\""
+    }, 
+    {
+        "name": "intro", 
+        "section": 5, 
+        "summary": "intro - introduction to file formats"
+    }, 
+    {
+        "name": "issue", 
+        "section": 5, 
+        "summary": "issue - prelogin message and identification file"
+    }, 
+    {
+        "name": "locale", 
+        "section": 5, 
+        "summary": "locale - describes a locale definition file"
+    }, 
+    {
+        "name": "motd", 
+        "section": 5, 
+        "summary": "motd - message of the day"
+    }, 
+    {
+        "name": "networks", 
+        "section": 5, 
+        "summary": "networks - network name information"
+    }, 
+    {
+        "name": "nologin", 
+        "section": 5, 
+        "summary": "nologin - prevent unprivileged users from logging into the system"
+    }, 
+    {
+        "name": "nscd", 
+        "section": 5, 
+        "summary": "/etc/nscd.conf - name service cache daemon configuration file"
+    }, 
+    {
+        "name": "nss", 
+        "section": 5, 
+        "summary": "nss - Name Service Switch configuration file"
+    }, 
+    {
+        "name": "nsswitch", 
+        "section": 5, 
+        "summary": "nsswitch.conf - Name Service Switch configuration file"
+    }, 
+    {
+        "name": "passwd", 
+        "section": 5, 
+        "summary": "passwd - password file"
+    }, 
+    {
+        "name": "proc", 
+        "section": 5, 
+        "summary": "proc - process information pseudo-filesystem"
+    }, 
+    {
+        "name": "protocols", 
+        "section": 5, 
+        "summary": "protocols - protocols definition file"
+    }, 
+    {
+        "name": "repertoiremap", 
+        "section": 5, 
+        "summary": "repertoiremap - map symbolic character names to Unicode code points"
+    }, 
+    {
+        "name": "resolv", 
+        "section": 5, 
+        "summary": "resolv.conf - resolver configuration file"
+    }, 
+    {
+        "name": "rpc", 
+        "section": 5, 
+        "summary": "rpc - RPC program number data base"
+    }, 
+    {
+        "name": "securetty", 
+        "section": 5, 
+        "summary": "securetty - file which lists terminals from which root can log in"
+    }, 
+    {
+        "name": "services", 
+        "section": 5, 
+        "summary": "services - Internet network services list"
+    }, 
+    {
+        "name": "shells", 
+        "section": 5, 
+        "summary": "shells - pathnames of valid login shells"
+    }, 
+    {
+        "name": "slabinfo", 
+        "section": 5, 
+        "summary": "/proc/slabinfo - kernel slab allocator statistics"
+    }, 
+    {
+        "name": "termcap", 
+        "section": 5, 
+        "summary": "termcap - terminal capability database"
+    }, 
+    {
+        "name": "ttytype", 
+        "section": 5, 
+        "summary": "ttytype - terminal device to default terminal type mapping"
+    }, 
+    {
+        "name": "tzfile", 
+        "section": 5, 
+        "summary": "tzfile - timezone information"
+    }, 
+    {
+        "name": "utmp", 
+        "section": 5, 
+        "summary": "utmp, wtmp - login records"
+    }, 
+    {
+        "name": "intro", 
+        "section": 6, 
+        "summary": "intro - introduction to games"
+    }, 
+    {
+        "name": "aio", 
+        "section": 7, 
+        "summary": "aio - POSIX asynchronous I/O overview"
+    }, 
+    {
+        "name": "armscii-8", 
+        "section": 7, 
+        "summary": "armscii-8 - Armenian character set encoded in octal, decimal, and\nhexadecimal"
+    }, 
+    {
+        "name": "arp", 
+        "section": 7, 
+        "summary": "arp - Linux ARP kernel module."
+    }, 
+    {
+        "name": "ascii", 
+        "section": 7, 
+        "summary": "ascii - ASCII character set encoded in octal, decimal, and hexadecimal"
+    }, 
+    {
+        "name": "boot", 
+        "section": 7, 
+        "summary": "boot-scripts - general description of boot sequence"
+    }, 
+    {
+        "name": "bootparam", 
+        "section": 7, 
+        "summary": "bootparam - introduction to boot time parameters of the Linux kernel"
+    }, 
+    {
+        "name": "capabilities", 
+        "section": 7, 
+        "summary": "capabilities - overview of Linux capabilities"
+    }, 
+    {
+        "name": "charsets", 
+        "section": 7, 
+        "summary": "charsets - character set standards and internationalization"
+    }, 
+    {
+        "name": "complex", 
+        "section": 7, 
+        "summary": "complex - basics of complex mathematics"
+    }, 
+    {
+        "name": "cp1251", 
+        "section": 7, 
+        "summary": "cp1251 - CP\u00a01251 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "cpuset", 
+        "section": 7, 
+        "summary": "cpuset - confine processes to processor and memory node subsets"
+    }, 
+    {
+        "name": "credentials", 
+        "section": 7, 
+        "summary": "credentials - process identifiers"
+    }, 
+    {
+        "name": "ddp", 
+        "section": 7, 
+        "summary": "ddp - Linux AppleTalk protocol implementation"
+    }, 
+    {
+        "name": "environ", 
+        "section": 7, 
+        "summary": "environ - user environment"
+    }, 
+    {
+        "name": "epoll", 
+        "section": 7, 
+        "summary": "epoll - I/O event notification facility"
+    }, 
+    {
+        "name": "fanotify", 
+        "section": 7, 
+        "summary": "fanotify - monitoring filesystem events"
+    }, 
+    {
+        "name": "feature_test_macros", 
+        "section": 7, 
+        "summary": "feature_test_macros - feature test macros"
+    }, 
+    {
+        "name": "fifo", 
+        "section": 7, 
+        "summary": "fifo - first-in first-out special file, named pipe"
+    }, 
+    {
+        "name": "futex", 
+        "section": 7, 
+        "summary": "futex - fast user-space locking"
+    }, 
+    {
+        "name": "glob", 
+        "section": 7, 
+        "summary": "glob - globbing pathnames"
+    }, 
+    {
+        "name": "hier", 
+        "section": 7, 
+        "summary": "hier - description of the filesystem hierarchy"
+    }, 
+    {
+        "name": "hostname", 
+        "section": 7, 
+        "summary": "hostname - hostname resolution description"
+    }, 
+    {
+        "name": "icmp", 
+        "section": 7, 
+        "summary": "icmp - Linux IPv4 ICMP kernel module."
+    }, 
+    {
+        "name": "inotify", 
+        "section": 7, 
+        "summary": "inotify - monitoring filesystem events"
+    }, 
+    {
+        "name": "intro", 
+        "section": 7, 
+        "summary": "intro - introduction to overview, conventions, and miscellany section"
+    }, 
+    {
+        "name": "ip", 
+        "section": 7, 
+        "summary": "ip - Linux IPv4 protocol implementation"
+    }, 
+    {
+        "name": "ipv6", 
+        "section": 7, 
+        "summary": "ipv6 - Linux IPv6 protocol implementation"
+    }, 
+    {
+        "name": "iso_8859-1", 
+        "section": 7, 
+        "summary": "iso_8859-1 - ISO 8859-1 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-10", 
+        "section": 7, 
+        "summary": "iso_8859-10 - ISO 8859-10 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-11", 
+        "section": 7, 
+        "summary": "iso_8859-11 - ISO 8859-11 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-13", 
+        "section": 7, 
+        "summary": "iso_8859-13 - ISO 8859-13 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-14", 
+        "section": 7, 
+        "summary": "iso_8859-14 - ISO 8859-14 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-15", 
+        "section": 7, 
+        "summary": "iso_8859-15 - ISO 8859-15 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-16", 
+        "section": 7, 
+        "summary": "iso_8859-16 - ISO 8859-16 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-2", 
+        "section": 7, 
+        "summary": "iso_8859-2 - ISO 8859-2 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-3", 
+        "section": 7, 
+        "summary": "iso_8859-3 - ISO 8859-3 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-4", 
+        "section": 7, 
+        "summary": "iso_8859-4 - ISO 8859-4 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-5", 
+        "section": 7, 
+        "summary": "iso_8859-5 - ISO 8859-5 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-6", 
+        "section": 7, 
+        "summary": "iso_8859-6 - ISO 8859-6 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-7", 
+        "section": 7, 
+        "summary": "iso_8859-7 - ISO 8859-7 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-8", 
+        "section": 7, 
+        "summary": "iso_8859-8 - ISO 8859-8 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "iso_8859-9", 
+        "section": 7, 
+        "summary": "iso_8859-9 - ISO 8859-9 character set encoded in octal, decimal,\nand hexadecimal"
+    }, 
+    {
+        "name": "koi8-r", 
+        "section": 7, 
+        "summary": "koi8-r - Russian character set encoded in octal, decimal, and\nhexadecimal"
+    }, 
+    {
+        "name": "koi8-u", 
+        "section": 7, 
+        "summary": "koi8-u - Ukrainian character set encoded in octal, decimal, and\nhexadecimal"
+    }, 
+    {
+        "name": "libc", 
+        "section": 7, 
+        "summary": "libc - overview of standard C libraries on Linux"
+    }, 
+    {
+        "name": "locale", 
+        "section": 7, 
+        "summary": "locale - description of multilanguage support"
+    }, 
+    {
+        "name": "mailaddr", 
+        "section": 7, 
+        "summary": "mailaddr - mail addressing description"
+    }, 
+    {
+        "name": "man-pages", 
+        "section": 7, 
+        "summary": "man-pages - conventions for writing Linux man pages"
+    }, 
+    {
+        "name": "man", 
+        "section": 7, 
+        "summary": "man - macros to format man pages"
+    }, 
+    {
+        "name": "math_error", 
+        "section": 7, 
+        "summary": "math_error - detecting errors from mathematical functions"
+    }, 
+    {
+        "name": "mdoc", 
+        "section": 7, 
+        "summary": ""
+    }, 
+    {
+        "name": "mdoc", 
+        "section": 7, 
+        "summary": ""
+    }, 
+    {
+        "name": "mq_overview", 
+        "section": 7, 
+        "summary": "mq_overview - overview of POSIX message queues"
+    }, 
+    {
+        "name": "netdevice", 
+        "section": 7, 
+        "summary": "netdevice - low-level access to Linux network devices"
+    }, 
+    {
+        "name": "netlink", 
+        "section": 7, 
+        "summary": "netlink - communication between kernel and user space (AF_NETLINK)"
+    }, 
+    {
+        "name": "numa", 
+        "section": 7, 
+        "summary": "numa - overview of Non-Uniform Memory Architecture"
+    }, 
+    {
+        "name": "operator", 
+        "section": 7, 
+        "summary": "operator - C operator precedence and order of evaluation"
+    }, 
+    {
+        "name": "packet", 
+        "section": 7, 
+        "summary": "packet - packet interface on device level"
+    }, 
+    {
+        "name": "path_resolution", 
+        "section": 7, 
+        "summary": "path_resolution - how a pathname is resolved to a file"
+    }, 
+    {
+        "name": "pipe", 
+        "section": 7, 
+        "summary": "pipe - overview of pipes and FIFOs"
+    }, 
+    {
+        "name": "posixoptions", 
+        "section": 7, 
+        "summary": "posixoptions - optional parts of the POSIX standard"
+    }, 
+    {
+        "name": "pthreads", 
+        "section": 7, 
+        "summary": "pthreads - POSIX threads"
+    }, 
+    {
+        "name": "pty", 
+        "section": 7, 
+        "summary": "pty - pseudoterminal interfaces"
+    }, 
+    {
+        "name": "raw", 
+        "section": 7, 
+        "summary": "raw - Linux IPv4 raw sockets"
+    }, 
+    {
+        "name": "regex", 
+        "section": 7, 
+        "summary": "regex - POSIX.2 regular expressions"
+    }, 
+    {
+        "name": "rtld-audit", 
+        "section": 7, 
+        "summary": "rtld-audit - auditing API for the dynamic linker"
+    }, 
+    {
+        "name": "rtnetlink", 
+        "section": 7, 
+        "summary": "rtnetlink - Linux IPv4 routing socket"
+    }, 
+    {
+        "name": "sched", 
+        "section": 7, 
+        "summary": "sched - overview of scheduling APIs"
+    }, 
+    {
+        "name": "sem_overview", 
+        "section": 7, 
+        "summary": "sem_overview - overview of POSIX semaphores"
+    }, 
+    {
+        "name": "shm_overview", 
+        "section": 7, 
+        "summary": "shm_overview - overview of POSIX shared memory"
+    }, 
+    {
+        "name": "sigevent", 
+        "section": 7, 
+        "summary": "sigevent - structure for notification from asynchronous routines"
+    }, 
+    {
+        "name": "signal", 
+        "section": 7, 
+        "summary": "signal - overview of signals"
+    }, 
+    {
+        "name": "socket", 
+        "section": 7, 
+        "summary": "socket - Linux socket interface"
+    }, 
+    {
+        "name": "spufs", 
+        "section": 7, 
+        "summary": "spufs - SPU filesystem"
+    }, 
+    {
+        "name": "standards", 
+        "section": 7, 
+        "summary": "standards - C and UNIX Standards"
+    }, 
+    {
+        "name": "suffixes", 
+        "section": 7, 
+        "summary": "suffixes - list of file suffixes"
+    }, 
+    {
+        "name": "svipc", 
+        "section": 7, 
+        "summary": "svipc - System V interprocess communication mechanisms"
+    }, 
+    {
+        "name": "symlink", 
+        "section": 7, 
+        "summary": "symlink - symbolic link handling"
+    }, 
+    {
+        "name": "tcp", 
+        "section": 7, 
+        "summary": "tcp - TCP protocol"
+    }, 
+    {
+        "name": "termio", 
+        "section": 7, 
+        "summary": "termio - System V terminal driver interface"
+    }, 
+    {
+        "name": "time", 
+        "section": 7, 
+        "summary": "time - overview of time and timers"
+    }, 
+    {
+        "name": "udp", 
+        "section": 7, 
+        "summary": "udp - User Datagram Protocol for IPv4"
+    }, 
+    {
+        "name": "udplite", 
+        "section": 7, 
+        "summary": "udplite - Lightweight User Datagram Protocol"
+    }, 
+    {
+        "name": "unicode", 
+        "section": 7, 
+        "summary": "Unicode - universal character set"
+    }, 
+    {
+        "name": "units", 
+        "section": 7, 
+        "summary": "units, kilo, kibi, mega, mebi, giga, gibi - decimal and binary prefixes"
+    }, 
+    {
+        "name": "unix", 
+        "section": 7, 
+        "summary": "unix - sockets for local interprocess communication"
+    }, 
+    {
+        "name": "uri", 
+        "section": 7, 
+        "summary": "uri, url, urn - uniform resource identifier (URI), including a URL or URN"
+    }, 
+    {
+        "name": "utf-8", 
+        "section": 7, 
+        "summary": "UTF-8 - an ASCII compatible multibyte Unicode encoding"
+    }, 
+    {
+        "name": "vdso", 
+        "section": 7, 
+        "summary": "vDSO - overview of the virtual ELF dynamic shared object"
+    }, 
+    {
+        "name": "x25", 
+        "section": 7, 
+        "summary": "x25 - ITU-T X.25 / ISO-8208 protocol interface."
+    }, 
+    {
+        "name": "iconvconfig", 
+        "section": 8, 
+        "summary": "iconvconfig - create iconv module configuration cache"
+    }, 
+    {
+        "name": "intro", 
+        "section": 8, 
+        "summary": "intro - introduction to administration and privileged commands"
+    }, 
+    {
+        "name": "ld", 
+        "section": 8, 
+        "summary": "ld.so, ld-linux.so* - dynamic linker/loader"
+    }, 
+    {
+        "name": "ldconfig", 
+        "section": 8, 
+        "summary": "ldconfig - configure dynamic linker run-time bindings"
+    }, 
+    {
+        "name": "nscd", 
+        "section": 8, 
+        "summary": "nscd - name service cache daemon"
+    }, 
+    {
+        "name": "sln", 
+        "section": 8, 
+        "summary": "sln - create symbolic links"
+    }, 
+    {
+        "name": "tzselect", 
+        "section": 8, 
+        "summary": "tzselect - select a timezone"
+    }, 
+    {
+        "name": "zdump", 
+        "section": 8, 
+        "summary": "zdump - timezone dumper"
+    }, 
+    {
+        "name": "zic", 
+        "section": 8, 
+        "summary": "zic - timezone compiler"
+    }
+]

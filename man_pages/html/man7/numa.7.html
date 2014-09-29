@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of NUMA</TITLE>
+</HEAD><BODY>
+<H1>NUMA</H1>
+Section: Linux Programmer's Manual (7)<BR>Updated: 2012-08-05<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+numa - overview of Non-Uniform Memory Architecture
+<A NAME="lbAC">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+Non-Uniform Memory Access (NUMA) refers to multiprocessor systems
+whose memory is divided into multiple memory nodes.
+The access time of a memory node depends on
+the relative locations of the accessing CPU and the accessed node.
+(This contrasts with a symmetric multiprocessor system,
+where the access time for all of the memory is the same for all CPUs.)
+Normally, each CPU on a NUMA system has a local memory node whose
+contents can be accessed faster than the memory in
+the node local to another CPU
+or the memory on a bus shared by all CPUs.
+<A NAME="lbAD">&nbsp;</A>
+<H3>NUMA system calls</H3>
+
+The Linux kernel implements the following NUMA-related system calls:
+<B><A HREF="../man2/get_mempolicy.2.html">get_mempolicy</A></B>(2),
+
+<B><A HREF="../man2/mbind.2.html">mbind</A></B>(2),
+
+<B><A HREF="../man2/migrate_pages.2.html">migrate_pages</A></B>(2),
+
+<B><A HREF="../man2/move_pages.2.html">move_pages</A></B>(2),
+
+and
+<B><A HREF="../man2/set_mempolicy.2.html">set_mempolicy</A></B>(2).
+
+However, applications should normally use the interface provided by
+<I>libnuma</I>;
+
+see &quot;Library Support&quot; below.
+<A NAME="lbAE">&nbsp;</A>
+<H3>/proc/[number]/numa_maps  (since Linux 2.6.14)</H3>
+
+
+This file displays information about a process's
+NUMA memory policy and allocation.
+<P>
+Each line contains information about a memory range used by the process,
+displaying---among other information---the effective memory policy for
+that memory range and on which nodes the pages have been allocated.
+<P>
+<I>numa_maps</I>
+
+is a read-only file.
+When
+<I>/proc/&lt;pid&gt;/numa_maps</I>
+
+is read, the kernel will scan the virtual address space of the
+process and report how memory is used.
+One line is displayed for each unique memory range of the process.
+<P>
+The first field of each line shows the starting address of the memory range.
+This field allows a correlation with the contents of the
+<I>/proc/&lt;pid&gt;/maps</I>
+
+file,
+which contains the end address of the range and other information,
+such as the access permissions and sharing.
+<P>
+The second field shows the memory policy currently in effect for the
+memory range.
+Note that the effective policy is not necessarily the policy
+installed by the process for that memory range.
+Specifically, if the process installed a &quot;default&quot; policy for that range,
+the effective policy for that range will be the process policy,
+which may or may not be &quot;default&quot;.
+<P>
+The rest of the line contains information about the pages allocated in
+the memory range, as follows:
+<DL COMPACT>
+<DT><I>N&lt;node&gt;=&lt;nr_pages&gt;</I>
+
+<DD>
+The number of pages allocated on
+<I>&lt;node&gt;</I>.
+
+<I>&lt;nr_pages&gt;</I>
+
+includes only pages currently mapped by the process.
+Page migration and memory reclaim may have temporarily unmapped pages
+associated with this memory range.
+These pages may show up again only after the process has
+attempted to reference them.
+If the memory range represents a shared memory area or file mapping,
+other processes may currently have additional pages mapped in a
+corresponding memory range.
+<DT><I>file=&lt;filename&gt;</I>
+
+<DD>
+The file backing the memory range.
+If the file is mapped as private, write accesses may have generated
+COW (Copy-On-Write) pages in this memory range.
+These pages are displayed as anonymous pages.
+<DT><I>heap</I>
+
+<DD>
+Memory range is used for the heap.
+<DT><I>stack</I>
+
+<DD>
+Memory range is used for the stack.
+<DT><I>huge</I>
+
+<DD>
+Huge memory range.
+The page counts shown are huge pages and not regular sized pages.
+<DT><I>anon=&lt;pages&gt;</I>
+
+<DD>
+The number of anonymous page in the range.
+<DT><I>dirty=&lt;pages&gt;</I>
+
+<DD>
+Number of dirty pages.
+<DT><I>mapped=&lt;pages&gt;</I>
+
+<DD>
+Total number of mapped pages, if different from
+<I>dirty</I>
+
+and
+<I>anon</I>
+
+pages.
+<DT><I>mapmax=&lt;count&gt;</I>
+
+<DD>
+Maximum mapcount (number of processes mapping a single page) encountered
+during the scan.
+This may be used as an indicator of the degree of sharing occurring in a
+given memory range.
+<DT><I>swapcache=&lt;count&gt;</I>
+
+<DD>
+Number of pages that have an associated entry on a swap device.
+<DT><I>active=&lt;pages&gt;</I>
+
+<DD>
+The number of pages on the active list.
+This field is shown only if different from the number of pages in this range.
+This means that some inactive pages exist in the memory range that may be
+removed from memory by the swapper soon.
+<DT><I>writeback=&lt;pages&gt;</I>
+
+<DD>
+Number of pages that are currently being written out to disk.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+No standards govern NUMA interfaces.
+<A NAME="lbAG">&nbsp;</A>
+<H2>NOTES</H2>
+
+The Linux NUMA system calls and
+<I>/proc</I>
+
+interface are available only
+if the kernel was configured and built with the
+<B>CONFIG_NUMA</B>
+
+option.
+<A NAME="lbAH">&nbsp;</A>
+<H3>Library support</H3>
+
+Link with <I>-lnuma</I>
+to get the system call definitions.
+<I>libnuma</I>
+
+and the required
+<I>&lt;<A HREF="file:///usr/include/numaif.h">numaif.h</A>&gt;</I>
+
+header are available in the
+<I>numactl</I>
+
+package.
+<P>
+However, applications should not use these system calls directly.
+Instead, the higher level interface provided by the
+<B><A HREF="../man3/numa.3.html">numa</A></B>(3)
+
+functions in the
+<I>numactl</I>
+
+package is recommended.
+The
+<I>numactl</I>
+
+package is available at
+
+
+The package is also included in some Linux distributions.
+Some distributions include the development library and header
+in the separate
+<I>numactl-devel</I>
+
+package.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/get_mempolicy.2.html">get_mempolicy</A></B>(2),
+
+<B><A HREF="../man2/mbind.2.html">mbind</A></B>(2),
+
+<B><A HREF="../man2/move_pages.2.html">move_pages</A></B>(2),
+
+<B><A HREF="../man2/set_mempolicy.2.html">set_mempolicy</A></B>(2),
+
+<B><A HREF="../man3/numa.3.html">numa</A></B>(3),
+
+<B><A HREF="../man7/cpuset.7.html">cpuset</A></B>(7),
+
+<B><A HREF="../man8/numactl.8.html">numactl</A></B>(8)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAD">NUMA system calls</A><DD>
+<DT><A HREF="#lbAE">/proc/[number]/numa_maps  (since Linux 2.6.14)</A><DD>
+</DL>
+<DT><A HREF="#lbAF">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAG">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Library support</A><DD>
+</DL>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:22 GMT, September 18, 2014
+</BODY>
+</HTML>

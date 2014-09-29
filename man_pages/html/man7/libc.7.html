@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of LIBC</TITLE>
+</HEAD><BODY>
+<H1>LIBC</H1>
+Section: Linux Programmer's Manual (7)<BR>Updated: 2014-07-08<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+libc - overview of standard C libraries on Linux
+<A NAME="lbAC">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The term &quot;libc&quot; is commonly used as a shorthand for
+the &quot;standard C library&quot;,
+a library of standard functions that can be used by all C programs
+(and sometimes by programs in other languages).
+Because of some history (see below), use of the term &quot;libc&quot;
+to refer to the standard C library is somewhat ambiguous on Linux.
+<A NAME="lbAD">&nbsp;</A>
+<H3>glibc</H3>
+
+By far the most widely used C library on Linux is the GNU C Library
+
+
+often referred to as
+<I>glibc</I>.
+
+This is the C library that is nowadays used in all
+major Linux distributions.
+It is also the C library whose details are documented
+in the relevant pages of the
+<I>man-pages</I>
+
+project (primarily in Section 3 of the manual).
+Documentation of glibc is also available in the glibc manual,
+available via the command
+<I>info libc</I>.
+
+Release 1.0 of glibc was made in September 1992.
+(There were earlier 0.x releases.)
+The next major release of glibc was 2.0, at the beginning of 1997.
+<P>
+The pathname
+<I>/lib/libc.so.6</I>
+
+(or something similar) is normally a symbolic link that
+points to the location of the glibc library,
+and executing this pathname will cause glibc to display
+various information about the version installed on your system.
+<A NAME="lbAE">&nbsp;</A>
+<H3>Linux libc</H3>
+
+In the early to mid 1990s, there was for a while
+<I>Linux libc</I>,
+
+a fork of glibc 1.x created by Linux developers who felt that glibc
+development at the time was not sufficing for the needs of Linux.
+Often, this library was referred to (ambiguously) as just &quot;libc&quot;.
+Linux libc released major versions 2, 3, 4, and 5
+(as well as many minor versions of those releases).
+For a while,
+Linux libc was the standard C library in many Linux distributions.
+<P>
+However, notwithstanding the original motivations of the Linux libc effort,
+by the time glibc 2.0 was released (in 1997),
+it was clearly superior to Linux libc,
+and all major Linux distributions that had been using Linux libc
+soon switched back to glibc.
+Since this switch occurred long ago,
+<I>man-pages</I>
+
+no longer takes care to document Linux libc details.
+Nevertheless, the history is visible in vestiges of information
+about Linux libc that remain in some manual pages,
+in particular, references to
+<I>libc4</I>
+
+and
+<I>libc5</I>.
+
+<A NAME="lbAF">&nbsp;</A>
+<H3>Other C libraries</H3>
+
+There are various other less widely used C libraries for Linux.
+These libraries are generally smaller than glibc,
+both in terms of features and memory footprint,
+and often intended for building small binaries,
+perhaps targeted at development for embedded Linux systems.
+Among such libraries are
+
+<I>uClibc</I>
+
+
+
+<I>dietlibc</I>
+
+
+and
+
+<I>musl libc</I>
+
+
+Details of these libraries are covered by the
+<I>man-pages</I>
+
+project, where they are known.
+<A NAME="lbAG">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/syscalls.2.html">syscalls</A></B>(2),
+
+<B><A HREF="../man3/getauxval.3.html">getauxval</A></B>(3),
+
+<B><A HREF="../man5/proc.5.html">proc</A></B>(5),
+
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7),
+
+<B><A HREF="../man7/man-pages.7.html">man-pages</A></B>(7),
+
+<B><A HREF="../man7/standards.7.html">standards</A></B>(7),
+
+<B><A HREF="../man7/vdso.7.html">vdso</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAD">glibc</A><DD>
+<DT><A HREF="#lbAE">Linux libc</A><DD>
+<DT><A HREF="#lbAF">Other C libraries</A><DD>
+</DL>
+<DT><A HREF="#lbAG">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:22 GMT, September 18, 2014
+</BODY>
+</HTML>

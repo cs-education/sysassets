@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETGRENT</TITLE>
+</HEAD><BODY>
+<H1>GETGRENT</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getgrent, setgrent, endgrent - get group file entry
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/grp.h">grp.h</A>&gt;</B>
+
+<B>struct group *getgrent(void);</B>
+
+<B>void setgrent(void);</B>
+
+<B>void endgrent(void);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+
+<B>setgrent</B>():
+
+<DL COMPACT><DT><DD>
+_SVID_SOURCE || _BSD_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED ||
+<BR>
+
+/* Since glibc 2.12: */ _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+</DL>
+
+<P>
+<B>getgrent</B>(),
+
+<B>endgrent</B>():
+
+<DL COMPACT><DT><DD>
+_SVID_SOURCE || _BSD_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED
+</DL>
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>getgrent</B>()
+
+function returns a pointer to a structure containing
+the broken-out fields of a record in the group database
+(e.g., the local group file
+<I>/etc/group</I>,
+
+NIS, and LDAP).
+The first time
+<B>getgrent</B>()
+
+is called,
+it returns the first entry; thereafter, it returns successive entries.
+<P>
+
+The
+<B>setgrent</B>()
+
+function rewinds to the beginning
+of the group database, to allow repeated scans.
+<P>
+
+The
+<B>endgrent</B>()
+
+function is used to close the group database
+after all processing has been performed.
+<P>
+
+The <I>group</I> structure is defined in <I>&lt;<A HREF="file:///usr/include/grp.h">grp.h</A>&gt;</I> as follows:
+<P>
+
+<PRE>
+struct group {
+    char   *gr_name;        /* group name */
+    char   *gr_passwd;      /* group password */
+    gid_t   gr_gid;         /* group ID */
+    char  **gr_mem;         /* NULL-terminated array of pointers
+                               to names of group members */
+};
+</PRE>
+
+
+<P>
+
+For more information about the fields of this structure, see
+<B><A HREF="../man5/group.5.html">group</A></B>(5).
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>getgrent</B>()
+
+function returns a pointer to a
+<I>group</I>
+
+structure,
+or NULL if there are no more entries or an error occurs.
+<P>
+
+Upon error,
+<I>errno</I>
+
+may be set.
+If one wants to check
+<I>errno</I>
+
+after the call, it should be set to zero before the call.
+<P>
+The return value may point to a static area, and may be overwritten
+by subsequent calls to
+<B>getgrent</B>(),
+
+<B><A HREF="../man3/getgrgid.3.html">getgrgid</A></B>(3),
+
+or
+<B><A HREF="../man3/getgrnam.3.html">getgrnam</A></B>(3).
+
+(Do not pass the returned pointer to
+<B><A HREF="../man3/free.3.html">free</A></B>(3).)
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINTR</B>
+
+<DD>
+A signal was caught.
+<DT><B>EIO</B>
+
+<DD>
+I/O error.
+<DT><B>EMFILE</B>
+
+<DD>
+The calling process already has too many open files.
+<DT><B>ENFILE</B>
+
+<DD>
+Too many open files in the system.
+<DT><B>ENOMEM</B>
+
+<DD>
+
+Insufficient memory to allocate
+<I>group</I>
+
+structure.
+<DT><B>ERANGE</B>
+
+<DD>
+Insufficient buffer space supplied.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>FILES</H2>
+
+<DL COMPACT>
+<DT><I>/etc/group</I>
+
+<DD>
+local group database file
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>getgrent</B>()
+
+function is not thread-safe.
+<P>
+
+The
+<B>setgrent</B>()
+
+and
+<B>endgrent</B>()
+
+functions are thread-safe.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, 4.3BSD, POSIX.1-2001.
+<A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/fgetgrent.3.html">fgetgrent</A></B>(3),
+
+<B><A HREF="../man3/getgrent_r.3.html">getgrent_r</A></B>(3),
+
+<B><A HREF="../man3/getgrgid.3.html">getgrgid</A></B>(3),
+
+<B><A HREF="../man3/getgrnam.3.html">getgrnam</A></B>(3),
+
+<B><A HREF="../man3/getgrouplist.3.html">getgrouplist</A></B>(3),
+
+<B><A HREF="../man3/putgrent.3.html">putgrent</A></B>(3),
+
+<B><A HREF="../man5/group.5.html">group</A></B>(5)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">FILES</A><DD>
+<DT><A HREF="#lbAH">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:10 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,361 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SCANDIR</TITLE>
+</HEAD><BODY>
+<H1>SCANDIR</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-05-28<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+scandir, scandirat, alphasort, versionsort - scan
+a directory for matching entries
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/dirent.h">dirent.h</A>&gt;</B>
+
+<B>int scandir(const char *</B><I>dirp</I><B>, struct dirent ***</B><I>namelist</I><B>,</B>
+<DL COMPACT><DT><DD><B>int (*</B><I>filter</I><B>)(const struct dirent *),</B>
+<B>int (*</B><I>compar</I><B>)(const struct dirent **, const struct dirent **));</B>
+</DL>
+
+<B>int alphasort(const struct dirent **</B><I>a</I><B>, const struct dirent **</B><I>b</I><B>);</B>
+
+<B>int versionsort(const struct dirent **</B><I>a</I><B>, const struct dirent **</B><I>b</I><B>);</B>
+
+<B>#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;</B>          /* Definition of AT_* constants */
+<B>#include &lt;<A HREF="file:///usr/include/dirent.h">dirent.h</A>&gt;</B>
+
+</PRE>
+
+<B>int scandirat(int </B><I>dirfd</I><B>, const char *</B><I>dirp</I><B>,</B>
+
+<B>struct dirent ***</B><I>namelist</I><B>,</B>
+
+<PRE>
+<DL COMPACT><DT><DD><B>int (*</B><I>filter</I><B>)(const struct dirent *),</B>
+<B>int (*</B><I>compar</I><B>)(const struct dirent **, const struct dirent **));</B>
+</DL>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>scandir</B>(),
+
+<B>alphasort</B>():
+
+<BR>
+
+<DL COMPACT><DT><DD>
+
+
+_BSD_SOURCE || _SVID_SOURCE
+<BR>
+
+|| /* Since glibc 2.10: */
+<DL COMPACT><DT><DD>
+(_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;700)
+</DL>
+
+
+</DL>
+
+<P>
+<B>versionsort</B>():
+
+_GNU_SOURCE
+<P>
+<B>scandirat</B>():
+
+_GNU_SOURCE
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>scandir</B>()
+
+function scans the directory <I>dirp</I>, calling
+<I>filter</I>() on each directory entry.
+Entries for which
+<I>filter</I>() returns nonzero are stored in strings allocated via
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3),
+
+sorted using
+<B><A HREF="../man3/qsort.3.html">qsort</A></B>(3)
+
+with the comparison
+function <I>compar</I>(), and collected in array <I>namelist</I>
+which is allocated via
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3).
+
+If <I>filter</I> is NULL, all entries are selected.
+<P>
+
+The
+<B>alphasort</B>()
+
+and
+<B>versionsort</B>()
+
+functions can be used as the comparison function
+<I>compar</I>().
+
+The former sorts directory entries using
+<B><A HREF="../man3/strcoll.3.html">strcoll</A></B>(3),
+
+the latter using
+<B><A HREF="../man3/strverscmp.3.html">strverscmp</A></B>(3)
+
+on the strings <I>(*a)-&gt;d_name</I> and <I>(*b)-&gt;d_name</I>.
+<A NAME="lbAE">&nbsp;</A>
+<H3>scandirat()</H3>
+
+The
+<B>scandirat</B>()
+
+function operates in exactly the same way as
+<B>scandir</B>(),
+
+except for the differences described here.
+<P>
+If the pathname given in
+<I>dirp</I>
+
+is relative, then it is interpreted relative to the directory
+referred to by the file descriptor
+<I>dirfd</I>
+
+(rather than relative to the current working directory of
+the calling process, as is done by
+<B>scandir</B>()
+
+for a relative pathname).
+<P>
+If
+<I>dirp</I>
+
+is relative and
+<I>dirfd</I>
+
+is the special value
+<B>AT_FDCWD</B>,
+
+then
+<I>dirp</I>
+
+is interpreted relative to the current working
+directory of the calling process (like
+<B>scandir</B>()).
+
+<P>
+If
+<I>dirp</I>
+
+is absolute, then
+<I>dirfd</I>
+
+is ignored.
+<P>
+
+See
+<B><A HREF="../man2/openat.2.html">openat</A></B>(2)
+
+for an explanation of the need for
+<B>scandirat</B>().
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>scandir</B>()
+
+function returns the number of directory entries
+selected.
+On error, -1 is returned, with
+<I>errno</I>
+
+set to indicate the cause of the error.
+<P>
+
+The
+<B>alphasort</B>()
+
+and
+<B>versionsort</B>()
+
+functions return an integer less than, equal to,
+or greater than zero if the first argument is considered to be
+respectively less than, equal to, or greater than the second.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>ENOENT</B>
+
+<DD>
+The path in <I>dirp</I> does not exist.
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient memory to complete the operation.
+<DT><B>ENOTDIR</B>
+
+<DD>
+The path in <I>dirp</I> is not a directory.
+</DL>
+<P>
+
+The following additional errors can occur for
+<B>scandirat</B>():
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>dirfd</I>
+
+is not a valid file descriptor.
+<DT><B>ENOTDIR</B>
+
+<DD>
+<I>dirp</I>
+
+is a relative path and
+<I>dirfd</I>
+
+is a file descriptor referring to a file other than a directory.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>versionsort</B>()
+
+was added to glibc in version 2.1.
+<P>
+<B>scandirat</B>()
+
+was added to glibc in version 2.15.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>alphasort</B>(),
+
+<B>scandir</B>():
+
+4.3BSD, POSIX.1-2008.
+<P>
+<B>versionsort</B>()
+
+and
+<B>scandirat</B>()
+
+are GNU extensions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+Since glibc 2.1,
+<B>alphasort</B>()
+
+calls
+<B><A HREF="../man3/strcoll.3.html">strcoll</A></B>(3);
+
+earlier it used
+<B><A HREF="../man3/strcmp.3.html">strcmp</A></B>(3).
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+<PRE>
+#define _SVID_SOURCE
+/* print files in current directory in reverse order */
+#include &lt;<A HREF="file:///usr/include/dirent.h">dirent.h</A>&gt;
+
+int
+main(void)
+{
+    struct dirent **namelist;
+    int n;
+
+    n = scandir(&quot;.&quot;, &amp;namelist, NULL, alphasort);
+    if (n &lt; 0)
+        perror(&quot;scandir&quot;);
+    else {
+        while (n--) {
+            printf(&quot;%s\n&quot;, namelist[n]-&gt;d_name);
+            free(namelist[n]);
+        }
+        free(namelist);
+    }
+}
+</PRE>
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/closedir.3.html">closedir</A></B>(3),
+
+<B><A HREF="../man3/fnmatch.3.html">fnmatch</A></B>(3),
+
+<B><A HREF="../man3/opendir.3.html">opendir</A></B>(3),
+
+<B><A HREF="../man3/readdir.3.html">readdir</A></B>(3),
+
+<B><A HREF="../man3/rewinddir.3.html">rewinddir</A></B>(3),
+
+<B><A HREF="../man3/seekdir.3.html">seekdir</A></B>(3),
+
+<B><A HREF="../man3/strcmp.3.html">strcmp</A></B>(3),
+
+<B><A HREF="../man3/strcoll.3.html">strcoll</A></B>(3),
+
+<B><A HREF="../man3/strverscmp.3.html">strverscmp</A></B>(3),
+
+<B><A HREF="../man3/telldir.3.html">telldir</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">scandirat()</A><DD>
+</DL>
+<DT><A HREF="#lbAF">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">VERSIONS</A><DD>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DT><A HREF="#lbAK">EXAMPLE</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:58 GMT, September 18, 2014
+</BODY>
+</HTML>

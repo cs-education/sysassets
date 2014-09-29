@@ -1,0 +1,555 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of VDSO</TITLE>
+</HEAD><BODY>
+<H1>VDSO</H1>
+Section: Linux Programmer's Manual (7)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+vDSO - overview of the virtual ELF dynamic shared object
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/auxv.h">sys/auxv.h</A>&gt;</B>
+
+<P>
+<B>void *vdso = (uintptr_t) getauxval(AT_SYSINFO_EHDR);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The &quot;vDSO&quot; (virtual dynamic shared object) is a small shared library that
+the kernel automatically maps into the
+address space of all user-space applications.
+Applications usually do not need to concern themselves with these details
+as the vDSO is most commonly called by the C library.
+This way you can code in the normal way using standard functions
+and the C library will take care
+of using any functionality that is available via the vDSO.
+<P>
+Why does the vDSO exist at all?
+There are some system calls the kernel provides that
+user-space code ends up using frequently,
+to the point that such calls can dominate overall performance.
+This is due both to the frequency of the call as well as the
+context-switch overhead that results
+from exiting user space and entering the kernel.
+<P>
+The rest of this documentation is geared toward the curious and/or
+C library writers rather than general developers.
+If you're trying to call the vDSO in your own application rather than using
+the C library, you're most likely doing it wrong.
+<A NAME="lbAE">&nbsp;</A>
+<H3>Example background</H3>
+
+Making system calls can be slow.
+In x86 32-bit systems, you can trigger a software interrupt
+(<I>int $0x80</I>)
+
+to tell the kernel you wish to make a system call.
+However, this instruction is expensive: it goes through
+the full interrupt-handling paths
+in the processor's microcode as well as in the kernel.
+Newer processors have faster (but backward incompatible) instructions to
+initiate system calls.
+Rather than require the C library to figure out if this functionality is
+available at run time,
+the C library can use functions provided by the kernel in
+the vDSO.
+<P>
+Note that the terminology can be confusing.
+On x86 systems, the vDSO function
+used to determine the preferred method of making a system call is
+named &quot;__kernel_vsyscall&quot;, but on x86_64,
+the term &quot;vsyscall&quot; also refers to an obsolete way to ask the kernel
+what time it is or what CPU the caller is on.
+<P>
+One frequently used system call is
+<B><A HREF="../man2/gettimeofday.2.html">gettimeofday</A></B>(2).
+
+This system call is called both directly by user-space applications
+as well as indirectly by
+the C library.
+Think timestamps or timing loops or polling---all of these
+frequently need to know what time it is right now.
+This information is also not secret---any application in any
+privilege mode (root or any unprivileged user) will get the same answer.
+Thus the kernel arranges for the information required to answer
+this question to be placed in memory the process can access.
+Now a call to
+<B><A HREF="../man2/gettimeofday.2.html">gettimeofday</A></B>(2)
+
+changes from a system call to a normal function
+call and a few memory accesses.
+<A NAME="lbAF">&nbsp;</A>
+<H3>Finding the vDSO</H3>
+
+The base address of the vDSO (if one exists) is passed by the kernel to
+each program in the initial auxiliary vector (see
+<B><A HREF="../man3/getauxval.3.html">getauxval</A></B>(3)),
+
+via the
+<B>AT_SYSINFO_EHDR</B>
+
+tag.
+<P>
+You must not assume the vDSO is mapped at any particular location in the
+user's memory map.
+The base address will usually be randomized at run time every time a new
+process image is created (at
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2)
+
+time).
+This is done for security reasons,
+to prevent &quot;return-to-libc&quot; attacks.
+<P>
+For some architectures, there is also an
+<B>AT_SYSINFO</B>
+
+tag.
+This is used only for locating the vsyscall entry point and is frequently
+omitted or set to 0 (meaning it's not available).
+This tag is a throwback to the initial vDSO work (see
+<I>History</I>
+
+below) and its use should be avoided.
+<A NAME="lbAG">&nbsp;</A>
+<H3>File format</H3>
+
+Since the vDSO is a fully formed ELF image, you can do symbol lookups on it.
+This allows new symbols to be added with newer kernel releases,
+and allows the C library to detect available functionality at
+run time when running under different kernel versions.
+Oftentimes the C library will do detection with the first call and then
+cache the result for subsequent calls.
+<P>
+All symbols are also versioned (using the GNU version format).
+This allows the kernel to update the function signature without breaking
+backward compatibility.
+This means changing the arguments that the function accepts as well as the
+return value.
+Thus, when looking up a symbol in the vDSO,
+you must always include the version
+to match the ABI you expect.
+<P>
+Typically the vDSO follows the naming convention of prefixing
+all symbols with &quot;__vdso_&quot; or &quot;__kernel_&quot;
+so as to distinguish them from other standard symbols.
+For example, the &quot;gettimeofday&quot; function is named &quot;__vdso_gettimeofday&quot;.
+<P>
+You use the standard C calling conventions when calling
+any of these functions.
+No need to worry about weird register or stack behavior.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Source</H3>
+
+When you compile the kernel,
+it will automatically compile and link the vDSO code for you.
+You will frequently find it under the architecture-specific directory:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;find&nbsp;arch/$ARCH/&nbsp;-name&nbsp;'*vdso*.so*'&nbsp;-o&nbsp;-name&nbsp;'*gate*.so*'
+<P>
+<A NAME="lbAJ">&nbsp;</A>
+<H3>vDSO names</H3>
+
+The name of the vDSO varies across architectures.
+It will often show up in things like glibc's
+<B><A HREF="../man1/ldd.1.html">ldd</A></B>(1)
+
+output.
+The exact name should not matter to any code, so do not hardcode it.
+
+<TABLE>
+<TR VALIGN=top><TD>user ABI</TD><TD>vDSO name<BR></TD></TR>
+<TR VALIGN=top><TD COLSPAN=2><HR></TD></TR>
+<TR VALIGN=top><TD>aarch64</TD><TD>linux-vdso.so.1<BR></TD></TR>
+<TR VALIGN=top><TD>ia64</TD><TD>linux-gate.so.1<BR></TD></TR>
+<TR VALIGN=top><TD>ppc/32</TD><TD>linux-vdso32.so.1<BR></TD></TR>
+<TR VALIGN=top><TD>ppc/64</TD><TD>linux-vdso64.so.1<BR></TD></TR>
+<TR VALIGN=top><TD>s390</TD><TD>linux-vdso32.so.1<BR></TD></TR>
+<TR VALIGN=top><TD>s390x</TD><TD>linux-vdso64.so.1<BR></TD></TR>
+<TR VALIGN=top><TD>sh</TD><TD>linux-gate.so.1<BR></TD></TR>
+<TR VALIGN=top><TD>i386</TD><TD>linux-gate.so.1<BR></TD></TR>
+<TR VALIGN=top><TD>x86_64</TD><TD>linux-vdso.so.1<BR></TD></TR>
+<TR VALIGN=top><TD>x86/x32</TD><TD>linux-vdso.so.1<BR></TD></TR>
+</TABLE>
+
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>ARCHITECTURE-SPECIFIC NOTES</H2>
+
+The subsections below provide architecture-specific notes
+on the vDSO.
+<P>
+Note that the vDSO that is used is based on the ABI of your user-space code
+and not the ABI of the kernel.
+Thus, for example,
+when you run an i386 32-bit ELF binary,
+you'll get the same vDSO regardless of whether you run it under
+an i386 32-bit kernel or under an x86_64 64-bit kernel.
+Therefore, the name of the user-space ABI should be used to determine
+which of the sections below is relevant.
+<A NAME="lbAL">&nbsp;</A>
+<H3>ARM functions</H3>
+
+
+
+The ARM port has a code page full of utility functions.
+Since it's just a raw page of code, there is no ELF information for doing
+symbol lookups or versioning.
+It does provide support for different versions though.
+<P>
+For information on this code page,
+it's best to refer to the kernel documentation
+as it's extremely detailed and covers everything you need to know:
+<I>Documentation/arm/kernel_user_helpers.txt</I>.
+
+<A NAME="lbAM">&nbsp;</A>
+<H3>aarch64 functions</H3>
+
+
+The table below lists the symbols exported by the vDSO.
+
+<TABLE>
+<TR VALIGN=top><TD>symbol</TD><TD>version<BR></TD></TR>
+<TR VALIGN=top><TD COLSPAN=2><HR></TD></TR>
+<TR VALIGN=top><TD>__kernel_rt_sigreturn</TD><TD>LINUX_2.6.39<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_gettimeofday</TD><TD>LINUX_2.6.39<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_clock_gettime</TD><TD>LINUX_2.6.39<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_clock_getres</TD><TD>LINUX_2.6.39<BR></TD></TR>
+</TABLE>
+
+
+<A NAME="lbAN">&nbsp;</A>
+<H3>bfin (Blackfin) functions</H3>
+
+
+
+As this CPU lacks a memory management unit (MMU),
+it doesn't set up a vDSO in the normal sense.
+Instead, it maps at boot time a few raw functions into
+a fixed location in memory.
+User-space applications then call directly into that region.
+There is no provision for backward compatibility
+beyond sniffing raw opcodes,
+but as this is an embedded CPU, it can get away with things---some of the
+object formats it runs aren't even ELF based (they're bFLT/FLAT).
+<P>
+For information on this code page,
+it's best to refer to the public documentation:
+<BR>
+
+<A HREF="http://docs.blackfin.uclinux.org/doku.php?id=linux-kernel:fixed-code">http://docs.blackfin.uclinux.org/doku.php?id=linux-kernel:fixed-code</A>
+<A NAME="lbAO">&nbsp;</A>
+<H3>ia64 (Itanium) functions</H3>
+
+
+
+The table below lists the symbols exported by the vDSO.
+
+<TABLE>
+<TR VALIGN=top><TD>symbol</TD><TD>version<BR></TD></TR>
+<TR VALIGN=top><TD COLSPAN=2><HR></TD></TR>
+<TR VALIGN=top><TD>__kernel_sigtramp</TD><TD>LINUX_2.5<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_syscall_via_break</TD><TD>LINUX_2.5<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_syscall_via_epc</TD><TD>LINUX_2.5<BR></TD></TR>
+</TABLE>
+
+
+<P>
+The Itanium port is somewhat tricky.
+In addition to the vDSO above, it also has &quot;light-weight system calls&quot;
+(also known as &quot;fast syscalls&quot; or &quot;fsys&quot;).
+You can invoke these via the
+<I>__kernel_syscall_via_epc</I>
+
+vDSO helper.
+The system calls listed here have the same semantics as if you called them
+directly via
+<B><A HREF="../man2/syscall.2.html">syscall</A></B>(2),
+
+so refer to the relevant
+documentation for each.
+The table below lists the functions available via this mechanism.
+
+<TABLE>
+<TR VALIGN=top><TD>function<BR></TD></TR>
+<TR VALIGN=top><TD><HR></TD></TR>
+<TR VALIGN=top><TD>clock_gettime<BR></TD></TR>
+<TR VALIGN=top><TD>getcpu<BR></TD></TR>
+<TR VALIGN=top><TD>getpid<BR></TD></TR>
+<TR VALIGN=top><TD>getppid<BR></TD></TR>
+<TR VALIGN=top><TD>gettimeofday<BR></TD></TR>
+<TR VALIGN=top><TD>set_tid_address<BR></TD></TR>
+</TABLE>
+
+
+<A NAME="lbAP">&nbsp;</A>
+<H3>parisc (hppa) functions</H3>
+
+
+
+The parisc port has a code page full of utility functions
+called a gateway page.
+Rather than use the normal ELF auxiliary vector approach,
+it passes the address of
+the page to the process via the SR2 register.
+The permissions on the page are such that merely executing those addresses
+automatically executes with kernel privileges and not in user space.
+This is done to match the way HP-UX works.
+<P>
+Since it's just a raw page of code, there is no ELF information for doing
+symbol lookups or versioning.
+Simply call into the appropriate offset via the branch instruction,
+for example:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;ble&nbsp;&lt;offset&gt;(%sr2,&nbsp;%r0)
+
+<TABLE>
+<TR VALIGN=top><TD>offset</TD><TD>function<BR></TD></TR>
+<TR VALIGN=top><TD COLSPAN=2><HR></TD></TR>
+<TR VALIGN=top><TD>00b0</TD><TD>lws_entry<BR></TD></TR>
+<TR VALIGN=top><TD>00e0</TD><TD>set_thread_pointer<BR></TD></TR>
+<TR VALIGN=top><TD>0100</TD><TD>linux_gateway_entry (syscall)<BR></TD></TR>
+<TR VALIGN=top><TD>0268</TD><TD>syscall_nosys<BR></TD></TR>
+<TR VALIGN=top><TD>0274</TD><TD>tracesys<BR></TD></TR>
+<TR VALIGN=top><TD>0324</TD><TD>tracesys_next<BR></TD></TR>
+<TR VALIGN=top><TD>0368</TD><TD>tracesys_exit<BR></TD></TR>
+<TR VALIGN=top><TD>03a0</TD><TD>tracesys_sigexit<BR></TD></TR>
+<TR VALIGN=top><TD>03b8</TD><TD>lws_start<BR></TD></TR>
+<TR VALIGN=top><TD>03dc</TD><TD>lws_exit_nosys<BR></TD></TR>
+<TR VALIGN=top><TD>03e0</TD><TD>lws_exit<BR></TD></TR>
+<TR VALIGN=top><TD>03e4</TD><TD>lws_compare_and_swap64<BR></TD></TR>
+<TR VALIGN=top><TD>03e8</TD><TD>lws_compare_and_swap<BR></TD></TR>
+<TR VALIGN=top><TD>0404</TD><TD>cas_wouldblock<BR></TD></TR>
+<TR VALIGN=top><TD>0410</TD><TD>cas_action<BR></TD></TR>
+</TABLE>
+
+
+<A NAME="lbAQ">&nbsp;</A>
+<H3>ppc/32 functions</H3>
+
+
+The table below lists the symbols exported by the vDSO.
+The functions marked with a
+<I>*</I>
+
+are available only when the kernel is
+a PowerPC64 (64-bit) kernel.
+
+<TABLE>
+<TR VALIGN=top><TD>symbol</TD><TD>version<BR></TD></TR>
+<TR VALIGN=top><TD COLSPAN=2><HR></TD></TR>
+<TR VALIGN=top><TD>__kernel_clock_getres</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_clock_gettime</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_datapage_offset</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_get_syscall_map</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_get_tbfreq</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_getcpu <I>*</I></TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_gettimeofday</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_sigtramp_rt32</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_sigtramp32</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_sync_dicache</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_sync_dicache_p5</TD><TD>LINUX_2.6.15<BR></TD></TR>
+</TABLE>
+
+
+<A NAME="lbAR">&nbsp;</A>
+<H3>ppc/64 functions</H3>
+
+
+The table below lists the symbols exported by the vDSO.
+
+<TABLE>
+<TR VALIGN=top><TD>symbol</TD><TD>version<BR></TD></TR>
+<TR VALIGN=top><TD COLSPAN=2><HR></TD></TR>
+<TR VALIGN=top><TD>__kernel_clock_getres</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_clock_gettime</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_datapage_offset</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_get_syscall_map</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_get_tbfreq</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_getcpu</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_gettimeofday</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_sigtramp_rt64</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_sync_dicache</TD><TD>LINUX_2.6.15<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_sync_dicache_p5</TD><TD>LINUX_2.6.15<BR></TD></TR>
+</TABLE>
+
+
+<A NAME="lbAS">&nbsp;</A>
+<H3>s390 functions</H3>
+
+
+The table below lists the symbols exported by the vDSO.
+
+<TABLE>
+<TR VALIGN=top><TD>symbol</TD><TD>version<BR></TD></TR>
+<TR VALIGN=top><TD COLSPAN=2><HR></TD></TR>
+<TR VALIGN=top><TD>__kernel_clock_getres</TD><TD>LINUX_2.6.29<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_clock_gettime</TD><TD>LINUX_2.6.29<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_gettimeofday</TD><TD>LINUX_2.6.29<BR></TD></TR>
+</TABLE>
+
+
+<A NAME="lbAT">&nbsp;</A>
+<H3>s390x functions</H3>
+
+
+The table below lists the symbols exported by the vDSO.
+
+<TABLE>
+<TR VALIGN=top><TD>symbol</TD><TD>version<BR></TD></TR>
+<TR VALIGN=top><TD COLSPAN=2><HR></TD></TR>
+<TR VALIGN=top><TD>__kernel_clock_getres</TD><TD>LINUX_2.6.29<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_clock_gettime</TD><TD>LINUX_2.6.29<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_gettimeofday</TD><TD>LINUX_2.6.29<BR></TD></TR>
+</TABLE>
+
+
+<A NAME="lbAU">&nbsp;</A>
+<H3>sh (SuperH) functions</H3>
+
+
+The table below lists the symbols exported by the vDSO.
+
+<TABLE>
+<TR VALIGN=top><TD>symbol</TD><TD>version<BR></TD></TR>
+<TR VALIGN=top><TD COLSPAN=2><HR></TD></TR>
+<TR VALIGN=top><TD>__kernel_rt_sigreturn</TD><TD>LINUX_2.6<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_sigreturn</TD><TD>LINUX_2.6<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_vsyscall</TD><TD>LINUX_2.6<BR></TD></TR>
+</TABLE>
+
+
+<A NAME="lbAV">&nbsp;</A>
+<H3>i386 functions</H3>
+
+
+The table below lists the symbols exported by the vDSO.
+
+<TABLE>
+<TR VALIGN=top><TD>symbol</TD><TD>version<BR></TD></TR>
+<TR VALIGN=top><TD COLSPAN=2><HR></TD></TR>
+<TR VALIGN=top><TD>__kernel_sigreturn</TD><TD>LINUX_2.5<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_rt_sigreturn</TD><TD>LINUX_2.5<BR></TD></TR>
+<TR VALIGN=top><TD>__kernel_vsyscall</TD><TD>LINUX_2.5<BR></TD></TR>
+<TR VALIGN=top><TD>__vdso_clock_gettime</TD><TD>LINUX_2.6 (exported since Linux 3.15)<BR></TD></TR>
+<TR VALIGN=top><TD>__vdso_gettimeofday</TD><TD>LINUX_2.6 (exported since Linux 3.15)<BR></TD></TR>
+<TR VALIGN=top><TD>__vdso_time</TD><TD>LINUX_2.6 (exported since Linux 3.15)<BR></TD></TR>
+</TABLE>
+
+
+<A NAME="lbAW">&nbsp;</A>
+<H3>x86_64 functions</H3>
+
+
+The table below lists the symbols exported by the vDSO.
+All of these symbols are also available without the &quot;__vdso_&quot; prefix, but
+you should ignore those and stick to the names below.
+
+<TABLE>
+<TR VALIGN=top><TD>symbol</TD><TD>version<BR></TD></TR>
+<TR VALIGN=top><TD COLSPAN=2><HR></TD></TR>
+<TR VALIGN=top><TD>__vdso_clock_gettime</TD><TD>LINUX_2.6<BR></TD></TR>
+<TR VALIGN=top><TD>__vdso_getcpu</TD><TD>LINUX_2.6<BR></TD></TR>
+<TR VALIGN=top><TD>__vdso_gettimeofday</TD><TD>LINUX_2.6<BR></TD></TR>
+<TR VALIGN=top><TD>__vdso_time</TD><TD>LINUX_2.6<BR></TD></TR>
+</TABLE>
+
+
+<A NAME="lbAX">&nbsp;</A>
+<H3>x86/x32 functions</H3>
+
+
+The table below lists the symbols exported by the vDSO.
+
+<TABLE>
+<TR VALIGN=top><TD>symbol</TD><TD>version<BR></TD></TR>
+<TR VALIGN=top><TD COLSPAN=2><HR></TD></TR>
+<TR VALIGN=top><TD>__vdso_clock_gettime</TD><TD>LINUX_2.6<BR></TD></TR>
+<TR VALIGN=top><TD>__vdso_getcpu</TD><TD>LINUX_2.6<BR></TD></TR>
+<TR VALIGN=top><TD>__vdso_gettimeofday</TD><TD>LINUX_2.6<BR></TD></TR>
+<TR VALIGN=top><TD>__vdso_time</TD><TD>LINUX_2.6<BR></TD></TR>
+</TABLE>
+
+
+<A NAME="lbAY">&nbsp;</A>
+<H3>History</H3>
+
+The vDSO was originally just a single function---the vsyscall.
+In older kernels, you might see that name
+in a process's memory map rather than &quot;vdso&quot;.
+Over time, people realized that this mechanism
+was a great way to pass more functionality
+to user space, so it was reconceived as a vDSO in the current format.
+<A NAME="lbAZ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/syscalls.2.html">syscalls</A></B>(2),
+
+<B><A HREF="../man3/getauxval.3.html">getauxval</A></B>(3),
+
+<B><A HREF="../man5/proc.5.html">proc</A></B>(5)
+
+<P>
+The documents, examples, and source code in the Linux source code tree:
+
+<PRE>
+
+Documentation/ABI/stable/vdso
+Documentation/ia64/fsys.txt
+Documentation/vDSO/* (includes examples of using the vDSO)
+
+find arch/ -iname '*vdso*' -o -iname '*gate*'
+</PRE>
+
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">Example background</A><DD>
+<DT><A HREF="#lbAF">Finding the vDSO</A><DD>
+<DT><A HREF="#lbAG">File format</A><DD>
+</DL>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Source</A><DD>
+<DT><A HREF="#lbAJ">vDSO names</A><DD>
+</DL>
+<DT><A HREF="#lbAK">ARCHITECTURE-SPECIFIC NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAL">ARM functions</A><DD>
+<DT><A HREF="#lbAM">aarch64 functions</A><DD>
+<DT><A HREF="#lbAN">bfin (Blackfin) functions</A><DD>
+<DT><A HREF="#lbAO">ia64 (Itanium) functions</A><DD>
+<DT><A HREF="#lbAP">parisc (hppa) functions</A><DD>
+<DT><A HREF="#lbAQ">ppc/32 functions</A><DD>
+<DT><A HREF="#lbAR">ppc/64 functions</A><DD>
+<DT><A HREF="#lbAS">s390 functions</A><DD>
+<DT><A HREF="#lbAT">s390x functions</A><DD>
+<DT><A HREF="#lbAU">sh (SuperH) functions</A><DD>
+<DT><A HREF="#lbAV">i386 functions</A><DD>
+<DT><A HREF="#lbAW">x86_64 functions</A><DD>
+<DT><A HREF="#lbAX">x86/x32 functions</A><DD>
+<DT><A HREF="#lbAY">History</A><DD>
+</DL>
+<DT><A HREF="#lbAZ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:20 GMT, September 18, 2014
+</BODY>
+</HTML>

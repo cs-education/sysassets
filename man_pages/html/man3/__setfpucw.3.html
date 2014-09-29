@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of __SETFPUCW</TITLE>
+</HEAD><BODY>
+<H1>__SETFPUCW</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2012-12-31<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+__setfpucw - set FPU control word on i386 architecture (obsolete)
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/i386/fpu_control.h">i386/fpu_control.h</A>&gt;</B>
+
+<P>
+<B>void __setfpucw(unsigned short </B><I>control_word</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>__setfpucw</B>()
+
+transfers
+<I>control_word</I>
+
+to the registers of the FPU (floating-point unit) on the i386 architecture.
+This was used to control floating-point precision,
+rounding and floating-point exceptions.
+<A NAME="lbAE">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function was a nonstandard GNU extension.
+<A NAME="lbAF">&nbsp;</A>
+<H2>NOTES</H2>
+
+As of glibc 2.1 this function does not exist anymore.
+There are new functions from C99, with prototypes in
+<I>&lt;<A HREF="file:///usr/include/fenv.h">fenv.h</A>&gt;</I>,
+
+to control FPU rounding modes, like
+<B><A HREF="../man3/fegetround.3.html">fegetround</A></B>(3),
+
+<B><A HREF="../man3/fesetround.3.html">fesetround</A></B>(3),
+
+and the floating-point environment, like
+<B><A HREF="../man3/fegetenv.3.html">fegetenv</A></B>(3),
+
+<B><A HREF="../man3/feholdexcept.3.html">feholdexcept</A></B>(3),
+
+<B><A HREF="../man3/fesetenv.3.html">fesetenv</A></B>(3),
+
+<B><A HREF="../man3/feupdateenv.3.html">feupdateenv</A></B>(3),
+
+and FPU exception handling, like
+<B><A HREF="../man3/feclearexcept.3.html">feclearexcept</A></B>(3),
+
+<B><A HREF="../man3/fegetexceptflag.3.html">fegetexceptflag</A></B>(3),
+
+<B><A HREF="../man3/feraiseexcept.3.html">feraiseexcept</A></B>(3),
+
+<B><A HREF="../man3/fesetexceptflag.3.html">fesetexceptflag</A></B>(3),
+
+and
+<B><A HREF="../man3/fetestexcept.3.html">fetestexcept</A></B>(3).
+
+<P>
+
+If direct access to the FPU control word is still needed, the
+<B>_FPU_GETCW</B>
+
+and
+<B>_FPU_SETCW</B>
+
+macros from
+<I>&lt;<A HREF="file:///usr/include/fpu_control.h">fpu_control.h</A>&gt;</I>
+
+can be used.
+<A NAME="lbAG">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+<B>__setfpucw(0x1372)</B>
+
+<P>
+Set FPU control word on the i386 architecture to
+<BR>
+
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;extended&nbsp;precision
+<BR>
+
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;rounding&nbsp;to&nbsp;nearest
+<BR>
+
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;exceptions&nbsp;on&nbsp;overflow,&nbsp;zero&nbsp;divide&nbsp;and&nbsp;NaN
+<A NAME="lbAH">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/feclearexcept.3.html">feclearexcept</A></B>(3)
+
+<BR>
+
+<I>&lt;<A HREF="file:///usr/include/fpu_control.h">fpu_control.h</A>&gt;</I>
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAF">NOTES</A><DD>
+<DT><A HREF="#lbAG">EXAMPLE</A><DD>
+<DT><A HREF="#lbAH">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:53 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of OPENPTY</TITLE>
+</HEAD><BODY>
+<H1>OPENPTY</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+openpty, login_tty, forkpty - terminal utility functions
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/pty.h">pty.h</A>&gt;</B>
+
+<B>int openpty(int *</B><I>amaster</I><B>, int *</B><I>aslave</I><B>, char *</B><I>name</I><B>,</B>
+<B>            const struct termios *</B><I>termp</I><B>,</B>
+<B>            const struct winsize *</B><I>winp</I><B>);</B>
+
+<B>pid_t forkpty(int *</B><I>amaster</I><B>, char *</B><I>name</I><B>,</B>
+<B>              const struct termios *</B><I>termp</I><B>,</B>
+<B>              const struct winsize *</B><I>winp</I><B>);</B>
+
+<B>#include &lt;<A HREF="file:///usr/include/utmp.h">utmp.h</A>&gt;</B>
+
+<B>int login_tty(int </B><I>fd</I><B>);</B>
+
+Link with <I>-lutil</I>.
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>openpty</B>()
+
+function finds an available pseudoterminal and returns file descriptors
+for the master and slave in
+<I>amaster</I>
+
+and
+<I>aslave</I>.
+
+If
+<I>name</I>
+
+is not NULL, the filename of the slave is returned in
+<I>name</I>.
+
+If
+<I>termp</I>
+
+is not NULL, the terminal parameters of the slave will be set to the
+values in
+<I>termp</I>.
+
+If
+<I>winp</I>
+
+is not NULL, the window size of the slave will be set to the values in
+<I>winp</I>.
+
+<P>
+The
+<B>login_tty</B>()
+
+function prepares for a login on the terminal
+<I>fd</I>
+
+(which may be a real terminal device, or the slave of a pseudoterminal as
+returned by
+<B>openpty</B>())
+
+by creating a new session, making
+<I>fd</I>
+
+the controlling terminal for the calling process, setting
+<I>fd</I>
+
+to be the standard input, output, and error streams of the current
+process, and closing
+<I>fd</I>.
+
+<P>
+The
+<B>forkpty</B>()
+
+function combines
+<B>openpty</B>(),
+
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2),
+
+and
+<B>login_tty</B>()
+
+to create a new process operating in a pseudoterminal.
+The file
+descriptor of the master side of the pseudoterminal is returned in
+<I>amaster</I>,
+
+and the filename of the slave in
+<I>name</I>
+
+if it is not NULL.
+The
+<I>termp</I>
+
+and
+<I>winp</I>
+
+arguments, if not NULL,
+will determine the terminal attributes and window size of the slave
+side of the pseudoterminal.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+If a call to
+<B>openpty</B>(),
+
+<B>login_tty</B>(),
+
+or
+<B>forkpty</B>()
+
+is not successful, -1 is returned and
+<I>errno</I>
+
+is set to indicate the error.
+Otherwise,
+<B>openpty</B>(),
+
+<B>login_tty</B>(),
+
+and the child process of
+<B>forkpty</B>()
+
+return 0, and the parent process of
+<B>forkpty</B>()
+
+returns the process ID of the child process.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<B>openpty</B>()
+
+will fail if:
+<DL COMPACT>
+<DT><B>ENOENT</B>
+
+<DD>
+There are no available terminals.
+</DL>
+<P>
+
+<B>login_tty</B>()
+
+will fail if
+<B><A HREF="../man2/ioctl.2.html">ioctl</A></B>(2)
+
+fails to set
+<I>fd</I>
+
+to the controlling terminal of the calling process.
+<P>
+
+<B>forkpty</B>()
+
+will fail if either
+<B>openpty</B>()
+
+or
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+fails.
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+These are BSD functions, present in glibc.
+They are not standardized in POSIX.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+The
+<B>const</B>
+
+modifiers were added to the structure pointer arguments of
+<B>openpty</B>()
+
+and
+<B>forkpty</B>()
+
+in glibc 2.8.
+<P>
+In versions of glibc before 2.0.92,
+<B>openpty</B>()
+
+returns file descriptors for a BSD pseudoterminal pair;
+since glibc 2.0.92,
+it first attempts to open a UNIX 98 pseudoterminal pair,
+and falls back to opening a BSD pseudoterminal pair if that fails.
+<A NAME="lbAI">&nbsp;</A>
+<H2>BUGS</H2>
+
+Nobody knows how much space should be reserved for
+<I>name</I>.
+
+So, calling
+<B>openpty</B>()
+
+or
+<B>forkpty</B>()
+
+with non-NULL
+<I>name</I>
+
+may not be secure.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2),
+
+<B><A HREF="../man3/ttyname.3.html">ttyname</A></B>(3),
+
+<B><A HREF="../man7/pty.7.html">pty</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">BUGS</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:04 GMT, September 18, 2014
+</BODY>
+</HTML>

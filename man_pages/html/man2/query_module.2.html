@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of QUERY_MODULE</TITLE>
+</HEAD><BODY>
+<H1>QUERY_MODULE</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-05-10<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+query_module - query the kernel for various bits pertaining to modules
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/linux/module.h">linux/module.h</A>&gt;</B>
+
+<B>int query_module(const char *</B><I>name</I><B>, int </B><I>which</I><B>, void *</B><I>buf</I><B>,</B>
+<B>                 size_t </B><I>bufsize</I><B>, size_t *</B><I>ret</I><B>);</B>
+</PRE>
+
+<P>
+<I>Note</I>:
+
+No declaration of this function is provided in glibc headers; see NOTES.
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<I>Note</I>:
+
+This system call is present only in kernels before Linux 2.6.
+<P>
+<B>query_module</B>()
+
+requests information from the kernel about loadable modules.
+The returned information is placed in the buffer pointed to by
+<I>buf</I>.
+
+The caller must specify the size of
+<I>buf</I>
+
+in
+<I>bufsize</I>.
+
+The precise nature and format of the returned information
+depend on the operation specified by
+<I>which</I>.
+
+Some operations require
+<I>name</I>
+
+to identify a currently loaded module, some allow
+<I>name</I>
+
+to be NULL, indicating the kernel proper.
+<P>
+The following values can be specified for
+<I>which</I>:
+
+<DL COMPACT>
+<DT><B>0</B>
+
+<DD>
+Returns success, if the kernel supports
+<B>query_module</B>().
+
+Used to probe for availability of the system call.
+<DT><B>QM_MODULES</B>
+
+<DD>
+Returns the names of all loaded modules.
+The returned buffer consists of a sequence of null-terminated strings;
+<I>ret</I>
+
+is set to the number of
+modules.
+
+<DT><B>QM_DEPS</B>
+
+<DD>
+Returns the names of all modules used by the indicated module.
+The returned buffer consists of a sequence of null-terminated strings;
+<I>ret</I>
+
+is set to the number of modules.
+
+<DT><B>QM_REFS</B>
+
+<DD>
+Returns the names of all modules using the indicated module.
+This is the inverse of
+<B>QM_DEPS</B>.
+
+The returned buffer consists of a sequence of null-terminated strings;
+<I>ret</I>
+
+is set to the number of modules.
+
+<DT><B>QM_SYMBOLS</B>
+
+<DD>
+Returns the symbols and values exported by the kernel or the indicated
+module.
+The returned buffer is an array of structures of the following form
+
+
+<PRE>
+
+struct module_symbol {
+    unsigned long value;
+    unsigned long name;
+};
+</PRE>
+
+
+<DT><DD>
+followed by null-terminated strings.
+The value of
+<I>name</I>
+
+is the character offset of the string relative to the start of
+<I>buf</I>;
+
+<I>ret</I>
+
+is set to the number of symbols.
+<DT><B>QM_INFO</B>
+
+<DD>
+Returns miscellaneous information about the indicated module.
+The output buffer format is:
+
+<PRE>
+
+struct module_info {
+    unsigned long address;
+    unsigned long size;
+    unsigned long flags;
+};
+</PRE>
+
+
+<DT><DD>
+where
+<I>address</I>
+
+is the kernel address at which the module resides,
+<I>size</I>
+
+is the size of the module in bytes, and
+<I>flags</I>
+
+is a mask of
+<B>MOD_RUNNING</B>,
+
+<B>MOD_AUTOCLEAN</B>,
+
+and so on, that indicates the current status of the module
+(see the Linux kernel source file
+<I>include/linux/module.h</I>).
+
+<I>ret</I>
+
+is set to the size of the
+<I>module_info</I>
+
+structure.
+</DL>
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, zero is returned.
+On error, -1 is returned and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EFAULT</B>
+
+<DD>
+At least one of
+<I>name</I>,
+
+<I>buf</I>,
+
+or
+<I>ret</I>
+
+was outside the program's accessible address space.
+<DT><B>EINVAL</B>
+
+<DD>
+Invalid
+<I>which</I>;
+
+or
+<I>name</I>
+
+is NULL (indicating &quot;the kernel&quot;),
+but this is not permitted with the specified value of
+<I>which</I>.
+
+
+<DT><B>ENOENT</B>
+
+<DD>
+No module by that
+<I>name</I>
+
+exists.
+<DT><B>ENOSPC</B>
+
+<DD>
+The buffer size provided was too small.
+<I>ret</I>
+
+is set to the minimum size needed.
+<DT><B>ENOSYS</B>
+
+<DD>
+<B>query_module</B>()
+
+is not supported in this version of the kernel
+(e.g., the kernel is version 2.6 or later).
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+This system call is present on Linux only up until kernel 2.4;
+it was removed in Linux 2.6.
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>query_module</B>()
+
+is Linux-specific.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+Some of the information that was formerly available via
+<B>query_module</B>()
+
+can be obtained from
+<I>/proc/modules</I>,
+
+<I>/proc/kallsyms</I>,
+
+and the files under the directory
+<I>/sys/module</I>.
+
+<P>
+The
+<B>query_module</B>()
+
+system call is not supported by glibc.
+No declaration is provided in glibc headers, but,
+through a quirk of history, glibc does export an ABI for this system call.
+Therefore, in order to employ this system call,
+it is sufficient to manually declare the interface in your code;
+alternatively, you can invoke the system call using
+<B><A HREF="../man2/syscall.2.html">syscall</A></B>(2).
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/create_module.2.html">create_module</A></B>(2),
+
+<B><A HREF="../man2/delete_module.2.html">delete_module</A></B>(2),
+
+<B><A HREF="../man2/get_kernel_syms.2.html">get_kernel_syms</A></B>(2),
+
+<B><A HREF="../man2/init_module.2.html">init_module</A></B>(2),
+
+<B><A HREF="../man8/lsmod.8.html">lsmod</A></B>(8),
+
+<B><A HREF="../man8/modinfo.8.html">modinfo</A></B>(8)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,342 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of STRING</TITLE>
+</HEAD><BODY>
+<H1>STRING</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-01-04<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+stpcpy, strcasecmp, strcat, strchr, strcmp, strcoll, strcpy, strcspn,
+strdup, strfry, strlen, strncat, strncmp, strncpy, strncasecmp, strpbrk,
+strrchr, strsep, strspn, strstr, strtok, strxfrm, index, rindex
+- string operations
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/strings.h">strings.h</A>&gt;</B>
+
+<DL COMPACT>
+<DT><B>int strcasecmp(const char *</B><I>s1</I><B>, const char *</B><I>s2</I><B>);</B>
+
+<DD>
+Compare the strings
+<I>s1</I>
+
+and
+<I>s2</I>
+
+ignoring case.
+<DT><B>int strncasecmp(const char *</B><I>s1</I><B>, const char *</B><I>s2</I><B>, size_t </B><I>n</I><B>);</B>
+
+<DD>
+Compare the first
+<I>n</I>
+
+characters of the strings
+<I>s1</I>
+
+and
+<I>s2</I>
+
+ignoring case.
+<DT><B>char *index(const char *</B><I>s</I><B>, int </B><I>c</I><B>);</B>
+
+<DD>
+Return a pointer to the first occurrence of the character
+<I>c</I>
+
+in the string
+<I>s</I>.
+
+<DT><B>char *rindex(const char *</B><I>s</I><B>, int </B><I>c</I><B>);</B>
+
+<DD>
+Return a pointer to the last occurrence of the character
+<I>c</I>
+
+in the string
+<I>s</I>.
+
+<DT><B>#include &lt;<A HREF="file:///usr/include/string.h">string.h</A>&gt;</B>
+
+<DD>
+<DT><B>char *stpcpy(char *</B><I>dest</I><B>, const char *</B><I>src</I><B>);</B>
+
+<DD>
+Copy a string from
+<I>src</I>
+
+to
+<I>dest</I>,
+
+returning a pointer to the end of the resulting string at
+<I>dest</I>.
+
+<DT><B>char *strcat(char *</B><I>dest</I><B>, const char *</B><I>src</I><B>);</B>
+
+<DD>
+Append the string
+<I>src</I>
+
+to the string
+<I>dest</I>,
+
+returning a pointer
+<I>dest</I>.
+
+<DT><B>char *strchr(const char *</B><I>s</I><B>, int </B><I>c</I><B>);</B>
+
+<DD>
+Return a pointer to the first occurrence of the character
+<I>c</I>
+
+in the string
+<I>s</I>.
+
+<DT><B>int strcmp(const char *</B><I>s1</I><B>, const char *</B><I>s2</I><B>);</B>
+
+<DD>
+Compare the strings
+<I>s1</I>
+
+with
+<I>s2</I>.
+
+<DT><B>int strcoll(const char *</B><I>s1</I><B>, const char *</B><I>s2</I><B>);</B>
+
+<DD>
+Compare the strings
+<I>s1</I>
+
+with
+<I>s2</I>
+
+using the current locale.
+<DT><B>char *strcpy(char *</B><I>dest</I><B>, const char *</B><I>src</I><B>);</B>
+
+<DD>
+Copy the string
+<I>src</I>
+
+to
+<I>dest</I>,
+
+returning a pointer to the start of
+<I>dest</I>.
+
+<DT><B>size_t strcspn(const char *</B><I>s</I><B>, const char *</B><I>reject</I><B>);</B>
+
+<DD>
+Calculate the length of the initial segment of the string
+<I>s</I>
+
+which does not contain any of bytes in the string
+<I>reject</I>,
+
+<DT><B>char *strdup(const char *</B><I>s</I><B>);</B>
+
+<DD>
+Return a duplicate of the string
+<I>s</I>
+
+in memory allocated using
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3).
+
+<DT><B>char *strfry(char *</B><I>string</I><B>);</B>
+
+<DD>
+Randomly swap the characters in
+<I>string</I>.
+
+<DT><B>size_t strlen(const char *</B><I>s</I><B>);</B>
+
+<DD>
+Return the length of the string
+<I>s</I>.
+
+<DT><B>char *strncat(char *</B><I>dest</I><B>, const char *</B><I>src</I><B>, size_t </B><I>n</I><B>);</B>
+
+<DD>
+Append at most
+<I>n</I>
+
+characters from the string
+<I>src</I>
+
+to the string
+<I>dest</I>,
+
+returning a pointer to
+<I>dest</I>.
+
+<DT><B>int strncmp(const char *</B><I>s1</I><B>, const char *</B><I>s2</I><B>, size_t </B><I>n</I><B>);</B>
+
+<DD>
+Compare at most
+<I>n</I>
+
+bytes of the strings
+<I>s1</I>
+
+and
+<I>s2</I>.
+
+<DT><B>char *strncpy(char *</B><I>dest</I><B>, const char *</B><I>src</I><B>, size_t </B><I>n</I><B>);</B>
+
+<DD>
+Copy at most
+<I>n</I>
+
+bytes from string
+<I>src</I>
+
+to
+<I>dest</I>,
+
+returning a pointer to the start of
+<I>dest</I>.
+
+<DT><B>char *strpbrk(const char *</B><I>s</I><B>, const char *</B><I>accept</I><B>);</B>
+
+<DD>
+Return a pointer to the first occurrence in the string
+<I>s</I>
+
+of one of the bytes in the string
+<I>accept</I>.
+
+<DT><B>char *strrchr(const char *</B><I>s</I><B>, int </B><I>c</I><B>);</B>
+
+<DD>
+Return a pointer to the last occurrence of the character
+<I>c</I>
+
+in the string
+<I>s</I>.
+
+<DT><B>char *strsep(char **</B><I>stringp</I><B>, const char *</B><I>delim</I><B>);</B>
+
+<DD>
+Extract the initial token in
+<I>stringp</I>
+
+that is delimited by one of the bytes in
+<I>delim</I>.
+
+<DT><B>size_t strspn(const char *</B><I>s</I><B>, const char *</B><I>accept</I><B>);</B>
+
+<DD>
+Calculate the length of the starting segment in the string
+<I>s</I>
+
+that consists entirely of bytes in
+<I>accept</I>.
+
+<DT><B>char *strstr(const char *</B><I>haystack</I><B>, const char *</B><I>needle</I><B>);</B>
+
+<DD>
+Find the first occurrence of the substring
+<I>needle</I>
+
+in the string
+<I>haystack</I>,
+
+returning a pointer to the found substring.
+<DT><B>char *strtok(char *</B><I>s</I><B>, const char *</B><I>delim</I><B>);</B>
+
+<DD>
+Extract tokens from the string
+<I>s</I>
+
+that are delimited by one of the bytes in
+<I>delim</I>.
+
+<DT><B>size_t strxfrm(char *</B><I>dest</I><B>, const char *</B><I>src</I><B>, size_t </B><I>n</I><B>);</B>
+
+<DD>
+Transforms
+<I>src</I>
+
+to the current locale and copies the first
+<I>n</I>
+
+characters to
+<I>dest</I>.
+
+</DL>
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The string functions perform string operations on null-terminated
+strings.
+See the individual man pages for descriptions of each function.
+<A NAME="lbAE">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/index.3.html">index</A></B>(3),
+
+<B><A HREF="../man3/rindex.3.html">rindex</A></B>(3),
+
+<B><A HREF="../man3/stpcpy.3.html">stpcpy</A></B>(3),
+
+<B><A HREF="../man3/strcasecmp.3.html">strcasecmp</A></B>(3),
+
+<B><A HREF="../man3/strcat.3.html">strcat</A></B>(3),
+
+<B><A HREF="../man3/strchr.3.html">strchr</A></B>(3),
+
+<B><A HREF="../man3/strcmp.3.html">strcmp</A></B>(3),
+
+<B><A HREF="../man3/strcoll.3.html">strcoll</A></B>(3),
+
+<B><A HREF="../man3/strcpy.3.html">strcpy</A></B>(3),
+
+<B><A HREF="../man3/strcspn.3.html">strcspn</A></B>(3),
+
+<B><A HREF="../man3/strdup.3.html">strdup</A></B>(3),
+
+<B><A HREF="../man3/strfry.3.html">strfry</A></B>(3),
+
+<B><A HREF="../man3/strlen.3.html">strlen</A></B>(3),
+
+<B><A HREF="../man3/strncasecmp.3.html">strncasecmp</A></B>(3),
+
+<B><A HREF="../man3/strncat.3.html">strncat</A></B>(3),
+
+<B><A HREF="../man3/strncmp.3.html">strncmp</A></B>(3),
+
+<B><A HREF="../man3/strncpy.3.html">strncpy</A></B>(3),
+
+<B><A HREF="../man3/strpbrk.3.html">strpbrk</A></B>(3),
+
+<B><A HREF="../man3/strrchr.3.html">strrchr</A></B>(3),
+
+<B><A HREF="../man3/strsep.3.html">strsep</A></B>(3),
+
+<B><A HREF="../man3/strspn.3.html">strspn</A></B>(3),
+
+<B><A HREF="../man3/strstr.3.html">strstr</A></B>(3),
+
+<B><A HREF="../man3/strtok.3.html">strtok</A></B>(3),
+
+<B><A HREF="../man3/strxfrm.3.html">strxfrm</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:56 GMT, September 18, 2014
+</BODY>
+</HTML>

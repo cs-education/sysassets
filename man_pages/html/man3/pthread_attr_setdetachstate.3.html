@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of PTHREAD_ATTR_SETDETACHSTATE</TITLE>
+</HEAD><BODY>
+<H1>PTHREAD_ATTR_SETDETACHSTATE</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-05-28<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+pthread_attr_setdetachstate, pthread_attr_getdetachstate -
+set/get detach state attribute in thread attributes object
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/pthread.h">pthread.h</A>&gt;</B>
+
+<B>int pthread_attr_setdetachstate(pthread_attr_t *</B><I>attr</I><B>, int </B><I>detachstate</I><B>);</B>
+<B>int pthread_attr_getdetachstate(const pthread_attr_t *</B><I>attr</I><B>, int *</B><I>detachstate</I><B>);</B>
+
+Compile and link with <I>-pthread</I>.
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>pthread_attr_setdetachstate</B>()
+
+function sets the detach state attribute of the
+thread attributes object referred to by
+<I>attr</I>
+
+to the value specified in
+<I>detachstate</I>.
+
+The detach state attribute determines whether a thread created using
+the thread attributes object
+<I>attr</I>
+
+will be created in a joinable or a detached state.
+<P>
+The following values may be specified in
+<I>detachstate</I>:
+
+<DL COMPACT>
+<DT><B>PTHREAD_CREATE_DETACHED</B>
+
+<DD>
+Threads that are created using
+<I>attr</I>
+
+will be created in a detached state.
+<DT><B>PTHREAD_CREATE_JOINABLE</B>
+
+<DD>
+Threads that are created using
+<I>attr</I>
+
+will be created in a joinable state.
+</DL>
+<P>
+
+The default setting of the detach state attribute in a newly initialized
+thread attributes object is
+<B>PTHREAD_CREATE_JOINABLE</B>.
+
+<P>
+The
+<B>pthread_attr_getdetachstate</B>()
+
+returns the detach state attribute of the thread attributes object
+<I>attr</I>
+
+in the buffer pointed to by
+<I>detachstate</I>.
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these functions return 0;
+on error, they return a nonzero error number.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<B>pthread_attr_setdetachstate</B>()
+
+can fail with the following error:
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+An invalid value was specified in
+<I>detachstate</I>.
+
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>pthread_attr_setdetachstate</B>()
+
+and
+<B>pthread_attr_getdetachstate</B>()
+
+functions are thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+See
+<B><A HREF="../man3/pthread_create.3.html">pthread_create</A></B>(3)
+
+for more details on detached and joinable threads.
+<P>
+A thread that is created in a joinable state should
+eventually either be joined using
+<B><A HREF="../man3/pthread_join.3.html">pthread_join</A></B>(3)
+
+or detached using
+<B><A HREF="../man3/pthread_detach.3.html">pthread_detach</A></B>(3);
+
+see
+<B><A HREF="../man3/pthread_create.3.html">pthread_create</A></B>(3).
+
+<P>
+It is an error to specify the thread ID of
+a thread that was created in a detached state
+in a later call to
+<B><A HREF="../man3/pthread_detach.3.html">pthread_detach</A></B>(3)
+
+or
+<B><A HREF="../man3/pthread_join.3.html">pthread_join</A></B>(3).
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+See
+<B><A HREF="../man3/pthread_attr_init.3.html">pthread_attr_init</A></B>(3).
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/pthread_attr_init.3.html">pthread_attr_init</A></B>(3),
+
+<B><A HREF="../man3/pthread_create.3.html">pthread_create</A></B>(3),
+
+<B><A HREF="../man3/pthread_detach.3.html">pthread_detach</A></B>(3),
+
+<B><A HREF="../man3/pthread_join.3.html">pthread_join</A></B>(3),
+
+<B><A HREF="../man7/pthreads.7.html">pthreads</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DT><A HREF="#lbAK">EXAMPLE</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:01 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SIGWAIT</TITLE>
+</HEAD><BODY>
+<H1>SIGWAIT</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-12-16<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+sigwait - wait for a signal
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/signal.h">signal.h</A>&gt;</B>
+
+<B> int sigwait(const sigset_t *</B><I>set</I><B>, int *</B><I>sig</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>sigwait</B>():
+
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;1 || _XOPEN_SOURCE || _POSIX_SOURCE
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>sigwait</B>()
+
+function suspends execution of the calling thread until
+one of the signals specified in the signal set
+<I>set</I>
+
+becomes pending.
+The function accepts the signal
+(removes it from the pending list of signals),
+and returns the signal number in
+<I>sig</I>.
+
+<P>
+The operation of
+<B>sigwait</B>()
+
+is the same as
+<B><A HREF="../man2/sigwaitinfo.2.html">sigwaitinfo</A></B>(2),
+
+except that:
+<DL COMPACT>
+<DT>*<DD>
+<B>sigwait</B>()
+
+returns only the signal number, rather than a
+<I>siginfo_t</I>
+
+structure describing the signal.
+<DT>*<DD>
+The return values of the two functions are different.
+</DL>
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>sigwait</B>()
+
+returns 0.
+On error, it returns a positive error number (listed in ERRORS).
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+
+<I>set</I>
+
+contains an invalid signal number.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>sigwait</B>()
+
+function is thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+<B>sigwait</B>()
+
+is implemented using
+<B><A HREF="../man2/sigtimedwait.2.html">sigtimedwait</A></B>(2).
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+See
+<B><A HREF="../man3/pthread_sigmask.3.html">pthread_sigmask</A></B>(3).
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man2/signalfd.2.html">signalfd</A></B>(2),
+
+<B><A HREF="../man2/sigpending.2.html">sigpending</A></B>(2),
+
+<B><A HREF="../man2/sigsuspend.2.html">sigsuspend</A></B>(2),
+
+<B><A HREF="../man2/sigwaitinfo.2.html">sigwaitinfo</A></B>(2),
+
+<B><A HREF="../man3/sigsetops.3.html">sigsetops</A></B>(3),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DT><A HREF="#lbAK">EXAMPLE</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:56 GMT, September 18, 2014
+</BODY>
+</HTML>

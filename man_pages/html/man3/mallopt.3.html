@@ -1,0 +1,740 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MALLOPT</TITLE>
+</HEAD><BODY>
+<H1>MALLOPT</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-07-08<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+mallopt - set memory allocation parameters
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/malloc.h">malloc.h</A>&gt;</B>
+
+<P>
+<B>int mallopt(int </B><I>param</I><B>, int </B><I>value</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>mallopt</B>()
+
+function adjusts parameters that control the behavior of the
+memory-allocation functions (see
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3)).
+
+The
+<I>param</I>
+
+argument specifies the parameter to be modified, and
+<I>value</I>
+
+specifies the new value for that parameter.
+<P>
+The following values can be specified for
+<I>param</I>:
+
+<DL COMPACT>
+<DT><B>M_CHECK_ACTION</B>
+
+<DD>
+Setting this parameter controls how glibc responds when various kinds
+of programming errors are detected (e.g., freeing the same pointer twice).
+The 3 least significant bits (2, 1, and 0) of the value assigned
+to this parameter determine the glibc behavior, as follows:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Bit 0<DD>
+If this bit is set, then print a one-line message on
+<I>stderr</I>
+
+that provides details about the error.
+The message starts with the string &quot;***&nbsp;glibc detected&nbsp;***&quot;,
+followed by the program name,
+the name of the memory-allocation function in which the error was detected,
+a brief description of the error,
+and the memory address where the error was detected.
+<DT>Bit 1<DD>
+If this bit is set, then,
+after printing any error message specified by bit 0,
+the program is terminated by calling
+<B><A HREF="../man3/abort.3.html">abort</A></B>(3).
+
+In glibc versions since 2.4,
+if bit 0 is also set,
+then, between printing the error message and aborting,
+the program also prints a stack trace in the manner of
+<B><A HREF="../man3/backtrace.3.html">backtrace</A></B>(3),
+
+and prints the process's memory mapping in the style of
+<I>/proc/[pid]/maps</I>
+
+(see
+<B><A HREF="../man5/proc.5.html">proc</A></B>(5)).
+
+<DT>Bit 2 (since glibc 2.4)<DD>
+This bit has an effect only if bit 0 is also set.
+If this bit is set,
+then the one-line message describing the error is simplified
+to contain just the name of the function where the error
+was detected and the brief description of the error.
+</DL>
+</DL>
+
+<DT><DD>
+The remaining bits in
+<I>value</I>
+
+are ignored.
+<DT><DD>
+Combining the above details,
+the following numeric values are meaningful for
+<B>M_CHECK_ACTION</B>:
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>0<DD>
+Ignore error conditions; continue execution (with undefined results).
+<DT>1<DD>
+Print a detailed error message and continue execution.
+<DT>2<DD>
+Abort the program.
+<DT>3<DD>
+Print detailed error message, stack trace, and memory mappings,
+and abort the program.
+<DT>5<DD>
+Print a simple error message and continue execution.
+<DT>7<DD>
+Print simple error message, stack trace, and memory mappings,
+and abort the program.
+</DL>
+</DL>
+
+<DT><DD>
+Since glibc 2.3.4, the default value for the
+<B>M_CHECK_ACTION</B>
+
+parameter is 3.
+In glibc version 2.3.3 and earlier, the default value is 1.
+<DT><DD>
+Using a nonzero
+<B>M_CHECK_ACTION</B>
+
+value can be useful because otherwise a crash may happen much later,
+and the true cause of the problem is then very hard to track down.
+<DT><B>M_MMAP_MAX</B>
+
+<DD>
+
+This parameter specifies the maximum number of allocation requests that
+may be simultaneously serviced using
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2).
+
+This parameter exists because some systems have a limited number
+of internal tables for use by
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2),
+
+and using more than a few of them may degrade performance.
+<DT><DD>
+The default value is 65,536,
+a value which has no special significance and
+which servers only as a safeguard.
+Setting this parameter to 0 disables the use of
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)
+
+for servicing large allocation requests.
+<DT><B>M_MMAP_THRESHOLD</B>
+
+<DD>
+For allocations greater than or equal to the limit specified (in bytes) by
+<B>M_MMAP_THRESHOLD</B>
+
+that can't be satisfied from the free list,
+the memory-allocation functions employ
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)
+
+instead of increasing the program break using
+<B><A HREF="../man2/sbrk.2.html">sbrk</A></B>(2).
+
+<DT><DD>
+Allocating memory using
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)
+
+has the significant advantage that the allocated memory blocks
+can always be independently released back to the system.
+(By contrast,
+the heap can be trimmed only if memory is freed at the top end.)
+On the other hand, there are some disadvantages to the use of
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2):
+
+deallocated space is not placed on the free list
+for reuse by later allocations;
+memory may be wasted because
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)
+
+allocations must be page-aligned;
+and the kernel must perform the expensive task of zeroing out
+memory allocated via
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2).
+
+Balancing these factors leads to a default setting of 128*1024 for the
+<B>M_MMAP_THRESHOLD</B>
+
+parameter.
+<DT><DD>
+The lower limit for this parameter is 0.
+The upper limit is
+<B>DEFAULT_MMAP_THRESHOLD_MAX</B>:
+
+512*1024 on 32-bit systems or
+<I>4*1024*1024*sizeof(long)</I>
+
+on 64-bit systems.
+<DT><DD>
+<I>Note:</I>
+
+Nowadays, glibc uses a dynamic mmap threshold by default.
+The initial value of the threshold is 128*1024,
+but when blocks larger than the current threshold and less than or equal to
+<B>DEFAULT_MMAP_THRESHOLD_MAX</B>
+
+are freed,
+the threshold is adjusted upward to the size of the freed block.
+When dynamic mmap thresholding is in effect,
+the threshold for trimming the heap is also dynamically adjusted
+to be twice the dynamic mmap threshold.
+Dynamic adjustment of the mmap threshold is disabled if any of the
+<B>M_TRIM_THRESHOLD</B>,
+
+<B>M_TOP_PAD</B>,
+
+<B>M_MMAP_THRESHOLD</B>,
+
+or
+<B>M_MMAP_MAX</B>
+
+parameters is set.
+<DT><B>M_MXFAST</B> (since glibc 2.3)
+
+<DD>
+
+Set the upper limit for memory allocation requests that are satisfied
+using &quot;fastbins&quot;.
+(The measurement unit for this parameter is bytes.)
+Fastbins are storage areas that hold deallocated blocks of memory
+of the same size without merging adjacent free blocks.
+Subsequent reallocation of blocks of the same size can be handled
+very quickly by allocating from the fastbin,
+although memory fragmentation and the overall memory footprint
+of the program can increase.
+The default value for this parameter is
+<I>64*sizeof(size_t)/4</I>
+
+(i.e., 64 on 32-bit architectures).
+The range for this parameter is 0 to
+<I>80*sizeof(size_t)/4</I>.
+
+Setting
+<B>M_MXFAST</B>
+
+to 0 disables the use of fastbins.
+<DT><B>M_PERTURB</B> (since glibc 2.4)
+
+<DD>
+If this parameter is set to a nonzero value,
+then bytes of allocated memory (other than allocations via
+<B><A HREF="../man3/calloc.3.html">calloc</A></B>(3))
+
+are initialized to the complement of the value
+in the least significant byte of
+<I>value</I>,
+
+and when allocated memory is released using
+<B><A HREF="../man3/free.3.html">free</A></B>(3),
+
+the freed bytes are set to the least significant byte of
+<I>value</I>.
+
+This can be useful for detecting errors where programs
+incorrectly rely on allocated memory being initialized to zero,
+or reuse values in memory that has already been freed.
+<DT><B>M_TOP_PAD</B>
+
+<DD>
+This parameter defines the amount of padding to employ when calling
+<B><A HREF="../man2/sbrk.2.html">sbrk</A></B>(2)
+
+to modify the program break.
+(The measurement unit for this parameter is bytes.)
+This parameter has an effect in the following circumstances:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>*<DD>
+When the program break is increased, then
+<B>M_TOP_PAD</B>
+
+bytes are added to the
+<B><A HREF="../man2/sbrk.2.html">sbrk</A></B>(2)
+
+request.
+<DT>*<DD>
+When the heap is trimmed as a consequence of calling
+<B><A HREF="../man3/free.3.html">free</A></B>(3)
+
+(see the discussion of
+<B>M_TRIM_THRESHOLD</B>)
+
+this much free space is preserved at the top of the heap.
+</DL>
+</DL>
+
+<DT><DD>
+In either case,
+the amount of padding is always rounded to a system page boundary.
+<DT><DD>
+Modifying
+<B>M_TOP_PAD</B>
+
+is a trade-off between increasing the number of system calls
+(when the parameter is set low)
+and wasting unused memory at the top of the heap
+(when the parameter is set high).
+<DT><DD>
+The default value for this parameter is 128*1024.
+
+<DT><B>M_TRIM_THRESHOLD</B>
+
+<DD>
+When the amount of contiguous free memory at the top of the heap
+grows sufficiently large,
+<B><A HREF="../man3/free.3.html">free</A></B>(3)
+
+employs
+<B><A HREF="../man2/sbrk.2.html">sbrk</A></B>(2)
+
+to release this memory back to the system.
+(This can be useful in programs that continue to execute for
+a long period after freeing a significant amount of memory.)
+The
+<B>M_TRIM_THRESHOLD</B>
+
+parameter specifies the minimum size (in bytes) that
+this block of memory must reach before
+<B><A HREF="../man2/sbrk.2.html">sbrk</A></B>(2)
+
+is used to trim the heap.
+<DT><DD>
+The default value for this parameter is 128*1024.
+Setting
+<B>M_TRIM_THRESHOLD</B>
+
+to -1 disables trimming completely.
+<DT><DD>
+Modifying
+<B>M_TRIM_THRESHOLD</B>
+
+is a trade-off between increasing the number of system calls
+(when the parameter is set low)
+and wasting unused memory at the top of the heap
+(when the parameter is set high).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</DL>
+<A NAME="lbAE">&nbsp;</A>
+<H3>Environment variables</H3>
+
+A number of environment variables can be defined
+to modify some of the same parameters as are controlled by
+<B>mallopt</B>().
+
+Using these variables has the advantage that the source code
+of the program need not be changed.
+To be effective, these variables must be defined before the
+first call to a memory-allocation function.
+(If the same parameters are adjusted via
+<B>mallopt</B>(),
+
+then the
+<B>mallopt</B>()
+
+settings take precedence.)
+For security reasons,
+these variables are ignored in set-user-ID and set-group-ID programs.
+<P>
+The environment variables are as follows
+(note the trailing underscore at the end of the name of each variable):
+<DL COMPACT>
+<DT><B>MALLOC_CHECK_</B>
+
+<DD>
+This environment variable controls the same parameter as
+<B>mallopt</B>()
+
+<B>M_CHECK_ACTION</B>.
+
+If this variable is set to a nonzero value,
+then a special implementation of the memory-allocation functions is used.
+(This is accomplished using the
+<B><A HREF="../man3/malloc_hook.3.html">malloc_hook</A></B>(3)
+
+feature.)
+This implementation performs additional error checking,
+but is slower
+
+
+than the standard set of memory-allocation functions.
+(This implementation does not detect all possible errors;
+memory leaks can still occur.)
+<DT><DD>
+The value assigned to this environment variable should be a single digit,
+whose meaning is as described for
+<B>M_CHECK_ACTION</B>.
+
+Any characters beyond the initial digit are ignored.
+<DT><DD>
+For security reasons, the effect of
+<B>MALLOC_CHECK_</B>
+
+is disabled by default for set-user-ID and set-group-ID programs.
+However, if the file
+<I>/etc/suid-debug</I>
+
+exists (the content of the file is irrelevant), then
+<B>MALLOC_CHECK_</B>
+
+also has an effect for set-user-ID and set-group-ID programs.
+<DT><B>MALLOC_MMAP_MAX_</B>
+
+<DD>
+Controls the same parameter as
+<B>mallopt</B>()
+
+<B>M_MMAP_MAX</B>.
+
+<DT><B>MALLOC_MMAP_THRESHOLD_</B>
+
+<DD>
+Controls the same parameter as
+<B>mallopt</B>()
+
+<B>M_MMAP_THRESHOLD</B>.
+
+<DT><B>MALLOC_PERTURB_</B>
+
+<DD>
+Controls the same parameter as
+<B>mallopt</B>()
+
+<B>M_PERTURB</B>.
+
+<DT><B>MALLOC_TRIM_THRESHOLD_</B>
+
+<DD>
+Controls the same parameter as
+<B>mallopt</B>()
+
+<B>M_TRIM_THRESHOLD</B>.
+
+<DT><B>MALLOC_TOP_PAD_</B>
+
+<DD>
+Controls the same parameter as
+<B>mallopt</B>()
+
+<B>M_TOP_PAD</B>.
+
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>mallopt</B>()
+
+returns 1.
+On error, it returns 0.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+On error,
+<I>errno</I>
+
+is
+<I>not</I>
+
+set.
+
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function is not specified by POSIX or the C standards.
+A similar function exists on many System V derivatives,
+but the range of values for
+<I>param</I>
+
+varies across systems.
+The SVID defined options
+<B>M_MXFAST</B>,
+
+<B>M_NLBLKS</B>,
+
+<B>M_GRAIN</B>,
+
+and
+<B>M_KEEP</B>,
+
+but only the first of these is implemented in glibc.
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>BUGS</H2>
+
+Specifying an invalid value for
+<I>param</I>
+
+does not generate an error.
+<P>
+A calculation error within the glibc implementation means that
+a call of the form:
+
+
+
+
+
+<PRE>
+
+    mallopt(M_MXFAST, n)
+
+</PRE>
+
+does not result in fastbins being employed for all allocations of size up to
+<I>n</I>.
+
+To ensure desired results,
+<I>n</I>
+
+should be rounded up to the next multiple greater than or equal to
+<I>(2k+1)*sizeof(size_t)</I>,
+
+where
+<I>k</I>
+
+is an integer.
+
+<P>
+If
+<B>mallopt</B>()
+
+is used to set
+<B>M_PERTURB</B>,
+
+then, as expected, the bytes of allocated memory are initialized
+to the complement of the byte in
+<I>value</I>,
+
+and when that memory is freed,
+the bytes of the region are initialized to the byte specified in
+<I>value</I>.
+
+However, there is an
+off-by-<I>sizeof(size_t)</I>
+
+error in the implementation:
+
+instead of initializing precisely the block of memory
+being freed by the call
+<I>free(p)</I>,
+
+the block starting at
+<I>p+sizeof(size_t)</I>
+
+is initialized.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The program below demonstrates the use of
+<B>M_CHECK_ACTION</B>.
+
+If the program is supplied with an (integer) command-line argument,
+then that argument is used to set the
+<B>M_CHECK_ACTION</B>
+
+parameter.
+The program then allocates a block of memory,
+and frees it twice (an error).
+<P>
+The following shell session shows what happens when we run this program
+under glibc, with the default value for
+<B>M_CHECK_ACTION</B>:
+
+
+<PRE>
+
+$ <B>./a.out</B>
+main(): returned from first free() call
+*** glibc detected *** ./a.out: double free or corruption (top): 0x09d30008 ***
+======= Backtrace: =========
+/lib/libc.so.6(+0x6c501)[0x523501]
+/lib/libc.so.6(+0x6dd70)[0x524d70]
+/lib/libc.so.6(cfree+0x6d)[0x527e5d]
+./a.out[0x80485db]
+/lib/libc.so.6(__libc_start_main+0xe7)[0x4cdce7]
+./a.out[0x8048471]
+======= Memory map: ========
+001e4000-001fe000 r-xp 00000000 08:06 1083555    /lib/libgcc_s.so.1
+001fe000-001ff000 r--p 00019000 08:06 1083555    /lib/libgcc_s.so.1
+[some lines omitted]
+b7814000-b7817000 rw-p 00000000 00:00 0
+bff53000-bff74000 rw-p 00000000 00:00 0          [stack]
+Aborted (core dumped)
+</PRE>
+
+
+<P>
+
+The following runs show the results when employing other values for
+<B>M_CHECK_ACTION</B>:
+
+<P>
+
+
+<PRE>
+$ <B>./a.out 1</B>             # Diagnose error and continue
+main(): returned from first free() call
+*** glibc detected *** ./a.out: double free or corruption (top): 0x09cbe008 ***
+main(): returned from second free() call
+$ <B>./a.out 2</B>             # Abort without error message
+main(): returned from first free() call
+Aborted (core dumped)
+$ <B>./a.out 0</B>             # Ignore error and continue
+main(): returned from first free() call
+main(): returned from second free() call
+</PRE>
+
+
+<P>
+
+The next run shows how to set the same parameter using the
+<B>MALLOC_CHECK_</B>
+
+environment variable:
+<P>
+
+
+<PRE>
+$ <B>MALLOC_CHECK_=1 ./a.out</B>
+main(): returned from first free() call
+*** glibc detected *** ./a.out: free(): invalid pointer: 0x092c2008 ***
+main(): returned from second free() call
+</PRE>
+
+
+<A NAME="lbAK">&nbsp;</A>
+<H3>Program source</H3>
+
+
+<PRE>
+#include &lt;<A HREF="file:///usr/include/malloc.h">malloc.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+
+int
+main(int argc, char *argv[])
+{
+    char *p;
+
+    if (argc &gt; 1) {
+        if (mallopt(M_CHECK_ACTION, atoi(argv[1])) != 1) {
+            fprintf(stderr, &quot;mallopt() failed&quot;);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    p = malloc(1000);
+    if (p == NULL) {
+        fprintf(stderr, &quot;malloc() failed&quot;);
+        exit(EXIT_FAILURE);
+    }
+
+    free(p);
+    printf(&quot;main(): returned from first free() call\n&quot;);
+
+    free(p);
+    printf(&quot;main(): returned from second free() call\n&quot;);
+
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+
+
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2),
+
+<B><A HREF="../man2/sbrk.2.html">sbrk</A></B>(2),
+
+<B><A HREF="../man3/mallinfo.3.html">mallinfo</A></B>(3),
+
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3),
+
+<B><A HREF="../man3/malloc_hook.3.html">malloc_hook</A></B>(3),
+
+<B><A HREF="../man3/malloc_info.3.html">malloc_info</A></B>(3),
+
+<B><A HREF="../man3/malloc_stats.3.html">malloc_stats</A></B>(3),
+
+<B><A HREF="../man3/malloc_trim.3.html">malloc_trim</A></B>(3),
+
+<B><A HREF="../man3/mcheck.3.html">mcheck</A></B>(3),
+
+<B><A HREF="../man3/mtrace.3.html">mtrace</A></B>(3),
+
+<B><A HREF="../man3/posix_memalign.3.html">posix_memalign</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">Environment variables</A><DD>
+</DL>
+<DT><A HREF="#lbAF">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">BUGS</A><DD>
+<DT><A HREF="#lbAJ">EXAMPLE</A><DD>
+<DL>
+<DT><A HREF="#lbAK">Program source</A><DD>
+</DL>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:03 GMT, September 18, 2014
+</BODY>
+</HTML>

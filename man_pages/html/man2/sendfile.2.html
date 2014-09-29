@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SENDFILE</TITLE>
+</HEAD><BODY>
+<H1>SENDFILE</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2011-09-14<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+sendfile - transfer data between file descriptors
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/sendfile.h">sys/sendfile.h</A>&gt;</B>
+
+<P>
+<B>ssize_t sendfile(int</B><I> out_fd</I><B>, int</B><I> in_fd</I><B>, off_t *</B><I></I><B>offset</B><I>, size_t</I><B> count</B><I>);</I>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>sendfile</B>()
+
+copies data between one file descriptor and another.
+Because this copying is done within the kernel,
+<B>sendfile</B>()
+
+is more efficient than the combination of
+<B><A HREF="../man2/read.2.html">read</A></B>(2)
+
+and
+<B><A HREF="../man2/write.2.html">write</A></B>(2),
+
+which would require transferring data to and from user space.
+<P>
+<I>in_fd</I>
+
+should be a file descriptor opened for reading and
+<I>out_fd</I>
+
+should be a descriptor opened for writing.
+<P>
+If
+<I>offset</I>
+
+is not NULL, then it points
+to a variable holding the file offset from which
+<B>sendfile</B>()
+
+will start reading data from
+<I>in_fd</I>.
+
+When
+<B>sendfile</B>()
+
+returns, this variable
+will be set to the offset of the byte following the last byte that was read.
+If
+<I>offset</I>
+
+is not NULL, then
+<B>sendfile</B>()
+
+does not modify the current file offset of
+<I>in_fd</I>;
+
+otherwise the current file offset is adjusted to reflect
+the number of bytes read from
+<I>in_fd</I>.
+
+<P>
+If
+<I>offset</I>
+
+is NULL, then data will be read from
+<I>in_fd</I>
+
+starting at the current file offset,
+and the file offset will be updated by the call.
+<P>
+<I>count</I>
+
+is the number of bytes to copy between the file descriptors.
+<P>
+The
+<I>in_fd</I>
+
+argument must correspond to a file which supports
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)-like
+
+operations
+(i.e., it cannot be a socket).
+<P>
+In Linux kernels before 2.6.33,
+<I>out_fd</I>
+
+must refer to a socket.
+Since Linux 2.6.33 it can be any file.
+If it is a regular file, then
+<B>sendfile</B>()
+
+changes the file offset appropriately.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+If the transfer was successful, the number of bytes written to
+<I>out_fd</I>
+
+is returned.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EAGAIN</B>
+
+<DD>
+Nonblocking I/O has been selected using
+<B>O_NONBLOCK</B>
+
+and the write would block.
+<DT><B>EBADF</B>
+
+<DD>
+The input file was not opened for reading or the output file
+was not opened for writing.
+<DT><B>EFAULT</B>
+
+<DD>
+Bad address.
+<DT><B>EINVAL</B>
+
+<DD>
+Descriptor is not valid or locked, or an
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)-like
+
+operation is not available for
+<I>in_fd</I>.
+
+<DT><B>EIO</B>
+
+<DD>
+Unspecified error while reading from
+<I>in_fd</I>.
+
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient memory to read from
+<I>in_fd</I>.
+
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>sendfile</B>()
+
+is a new feature in Linux 2.2.
+The include file
+<I>&lt;<A HREF="file:///usr/include/sys/sendfile.h">sys/sendfile.h</A>&gt;</I>
+
+is present since glibc 2.1.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+Not specified in POSIX.1-2001, or other standards.
+<P>
+Other UNIX systems implement
+<B>sendfile</B>()
+
+with different semantics and prototypes.
+It should not be used in portable programs.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+If you plan to use
+<B>sendfile</B>()
+
+for sending files to a TCP socket, but need
+to send some header data in front of the file contents, you will find
+it useful to employ the
+<B>TCP_CORK</B>
+
+option, described in
+<B><A HREF="../man7/tcp.7.html">tcp</A></B>(7),
+
+to minimize the number of packets and to tune performance.
+<P>
+In Linux 2.4 and earlier,
+<I>out_fd</I>
+
+could also refer to a regular file, and
+<B>sendfile</B>()
+
+changed the current offset of that file.
+<P>
+The original Linux
+<B>sendfile</B>()
+
+system call was not designed to handle large file offsets.
+Consequently, Linux 2.4 added
+<B>sendfile64</B>(),
+
+with a wider type for the
+<I>offset</I>
+
+argument.
+The glibc
+<B>sendfile</B>()
+
+wrapper function transparently deals with the kernel differences.
+<P>
+Applications may wish to fall back to
+<B><A HREF="../man2/read.2.html">read</A></B>(2)/<B><A HREF="../man2/write.2.html">write</A></B>(2)
+
+in the case where
+<B>sendfile</B>()
+
+fails with
+<B>EINVAL</B>
+
+or
+<B>ENOSYS</B>.
+
+<P>
+The Linux-specific
+<B><A HREF="../man2/splice.2.html">splice</A></B>(2)
+
+call supports transferring data between arbitrary files
+(e.g., a pair of sockets).
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2),
+
+<B><A HREF="../man2/open.2.html">open</A></B>(2),
+
+<B><A HREF="../man2/socket.2.html">socket</A></B>(2),
+
+<B><A HREF="../man2/splice.2.html">splice</A></B>(2)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

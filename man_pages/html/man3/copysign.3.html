@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of COPYSIGN</TITLE>
+</HEAD><BODY>
+<H1>COPYSIGN</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-10-14<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+copysign, copysignf, copysignl - copy sign of a number
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/math.h">math.h</A>&gt;</B>
+
+<B>double copysign(double </B><I>x</I><B>, double </B><I>y</I><B>);</B>
+<BR>
+<B>float copysignf(float </B><I>x</I><B>, float </B><I>y</I><B>);</B>
+<BR>
+<B>long double copysignl(long double </B><I>x</I><B>, long double </B><I>y</I><B>);</B>
+</PRE>
+
+<P>
+Link with <I>-lm</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>copysign</B>(),
+
+<B>copysignf</B>(),
+
+<B>copysignl</B>():
+
+<DL COMPACT><DT><DD>
+_SVID_SOURCE || _BSD_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600 || _ISOC99_SOURCE ||
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>copysign</B>(),
+
+<B>copysignf</B>(),
+
+and
+<B>copysignl</B>()
+
+functions return a value whose absolute value matches
+that of
+<I>x</I>,
+
+but whose sign bit matches that of
+<I>y</I>.
+
+<P>
+For example,
+<I>copysign(42.0,&nbsp;-1.0)</I>
+
+and
+<I>copysign(-42.0, -1.0)</I>
+
+both return -42.0.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these functions return a value whose magnitude is taken from
+<I>x</I>
+
+and whose sign is taken from
+<I>y</I>.
+
+<P>
+If
+<I>x</I>
+
+is a NaN,
+a NaN with the sign bit of
+<I>y</I>
+
+is returned.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+No errors occur.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>copysign</B>(),
+
+<B>copysignf</B>(),
+
+and
+<B>copysignl</B>()
+
+functions are thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+C99, POSIX.1-2001.
+
+This function is defined in IEC 559 (and the appendix with
+recommended functions in IEEE 754/IEEE 854).
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+On architectures where the floating-point formats are not IEEE 754 compliant,
+these
+functions may treat a negative zero as positive.
+<A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/signbit.3.html">signbit</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:17 GMT, September 18, 2014
+</BODY>
+</HTML>

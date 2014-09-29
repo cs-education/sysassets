@@ -1,0 +1,593 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of LINK</TITLE>
+</HEAD><BODY>
+<H1>LINK</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+link, linkat - make a new name for a file
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<B>int link(const char *</B><I>oldpath</I><B>, const char *</B><I>newpath</I><B>);</B>
+
+<B>#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;           </B>/* Definition of AT_* constants */
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<B>int linkat(int </B><I>olddirfd</I><B>, const char *</B><I>oldpath</I><B>,</B>
+<B>           int </B><I>newdirfd</I><B>, const char *</B><I>newpath</I><B>, int </B><I>flags</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>linkat</B>():
+
+
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Since glibc 2.10:<DD>
+_XOPEN_SOURCE&nbsp;&gt;=&nbsp;700 || _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+<DT>Before glibc 2.10:<DD>
+_ATFILE_SOURCE
+</DL>
+</DL>
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>link</B>()
+
+creates a new link (also known as a hard link) to an existing file.
+<P>
+If
+<I>newpath</I>
+
+exists, it will
+<I>not</I>
+
+be overwritten.
+<P>
+This new name may be used exactly as the old one for any operation;
+both names refer to the same file (and so have the same permissions
+and ownership) and it is impossible to tell which name was the
+&quot;original&quot;.
+<A NAME="lbAE">&nbsp;</A>
+<H3>linkat()</H3>
+
+The
+<B>linkat</B>()
+
+system call operates in exactly the same way as
+<B>link</B>(),
+
+except for the differences described here.
+<P>
+If the pathname given in
+<I>oldpath</I>
+
+is relative, then it is interpreted relative to the directory
+referred to by the file descriptor
+<I>olddirfd</I>
+
+(rather than relative to the current working directory of
+the calling process, as is done by
+<B>link</B>()
+
+for a relative pathname).
+<P>
+If
+<I>oldpath</I>
+
+is relative and
+<I>olddirfd</I>
+
+is the special value
+<B>AT_FDCWD</B>,
+
+then
+<I>oldpath</I>
+
+is interpreted relative to the current working
+directory of the calling process (like
+<B>link</B>()).
+
+<P>
+If
+<I>oldpath</I>
+
+is absolute, then
+<I>olddirfd</I>
+
+is ignored.
+<P>
+The interpretation of
+<I>newpath</I>
+
+is as for
+<I>oldpath</I>,
+
+except that a relative pathname is interpreted relative
+to the directory referred to by the file descriptor
+<I>newdirfd</I>.
+
+<P>
+The following values can be bitwise ORed in
+<I>flags</I>:
+
+<DL COMPACT>
+<DT><B>AT_EMPTY_PATH</B> (since Linux 2.6.39)
+
+<DD>
+
+If
+<I>oldpath</I>
+
+is an empty string, create a link to the file referenced by
+<I>olddirfd</I>
+
+(which may have been obtained using the
+<B><A HREF="../man2/open.2.html">open</A></B>(2)
+
+<B>O_PATH</B>
+
+flag).
+In this case,
+<I>olddirfd</I>
+
+can refer to any type of file, not just a directory.
+This will generally not work if the file has a link count of zero (files
+created with
+<B>O_TMPFILE</B>
+
+and without
+<B>O_EXCL</B>
+
+are an exception).
+The caller must have the
+<B>CAP_DAC_READ_SEARCH</B>
+
+capability in order to use this flag.
+This flag is Linux-specific; define
+<B>_GNU_SOURCE</B>
+
+
+to obtain its definition.
+<DT><B>AT_SYMLINK_FOLLOW</B> (since Linux 2.6.18)
+
+<DD>
+By default,
+<B>linkat</B>(),
+
+does not dereference
+<I>oldpath</I>
+
+if it is a symbolic link (like
+<B>link</B>()).
+
+The flag
+<B>AT_SYMLINK_FOLLOW</B>
+
+can be specified in
+<I>flags</I>
+
+to cause
+<I>oldpath</I>
+
+to be dereferenced if it is a symbolic link.
+If procfs is mounted,
+this can be used as an alternative to
+<B>AT_EMPTY_PATH</B>,
+
+like this:
+<P>
+<PRE>
+linkat(AT_FDCWD, &quot;/proc/self/fd/&lt;fd&gt;&quot;, newdirfd,
+       newname, AT_SYMLINK_FOLLOW);
+</PRE>
+
+</DL>
+<P>
+
+Before kernel 2.6.18, the
+<I>flags</I>
+
+argument was unused, and had to be specified as 0.
+<P>
+
+See
+<B><A HREF="../man2/openat.2.html">openat</A></B>(2)
+
+for an explanation of the need for
+<B>linkat</B>().
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, zero is returned.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EACCES</B>
+
+<DD>
+Write access to the directory containing
+<I>newpath</I>
+
+is denied, or search permission is denied for one of the directories
+in the path prefix of
+<I>oldpath</I>
+
+or
+<I>newpath</I>.
+
+(See also
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7).)
+
+<DT><B>EDQUOT</B>
+
+<DD>
+The user's quota of disk blocks on the filesystem has been exhausted.
+<DT><B>EEXIST</B>
+
+<DD>
+<I>newpath</I>
+
+already exists.
+<DT><B>EFAULT</B>
+
+<DD>
+<I>oldpath</I> or <I>newpath</I> points outside your accessible address space.
+
+<DT><B>EIO</B>
+
+<DD>
+An I/O error occurred.
+<DT><B>ELOOP</B>
+
+<DD>
+Too many symbolic links were encountered in resolving
+<I>oldpath</I> or <I>newpath</I>.
+
+<DT><B>EMLINK</B>
+
+<DD>
+The file referred to by
+<I>oldpath</I>
+
+already has the maximum number of links to it.
+<DT><B>ENAMETOOLONG</B>
+
+<DD>
+<I>oldpath</I> or <I>newpath</I> was too long.
+
+<DT><B>ENOENT</B>
+
+<DD>
+A directory component in
+<I>oldpath</I> or <I>newpath</I>
+
+does not exist or is a dangling symbolic link.
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient kernel memory was available.
+<DT><B>ENOSPC</B>
+
+<DD>
+The device containing the file has no room for the new directory
+entry.
+<DT><B>ENOTDIR</B>
+
+<DD>
+A component used as a directory in
+<I>oldpath</I> or <I>newpath</I>
+
+is not, in fact, a directory.
+<DT><B>EPERM</B>
+
+<DD>
+<I>oldpath</I>
+
+is a directory.
+<DT><B>EPERM</B>
+
+<DD>
+The filesystem containing
+<I>oldpath</I> and <I>newpath</I>
+
+does not support the creation of hard links.
+<DT><B>EPERM</B> (since Linux 3.6)
+
+<DD>
+The caller does not have permission to create a hard link to this file
+(see the description of
+<I>/proc/sys/fs/protected_hardlinks</I>
+
+in
+<B><A HREF="../man5/proc.5.html">proc</A></B>(5)).
+
+<DT><B>EROFS</B>
+
+<DD>
+The file is on a read-only filesystem.
+<DT><B>EXDEV</B>
+
+<DD>
+<I>oldpath</I> and <I>newpath</I>
+
+are not on the same mounted filesystem.
+(Linux permits a filesystem to be mounted at multiple points, but
+<B>link</B>()
+
+does not work across different mount points,
+even if the same filesystem is mounted on both.)
+</DL>
+<P>
+
+The following additional errors can occur for
+<B>linkat</B>():
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>olddirfd</I>
+
+or
+<I>newdirfd</I>
+
+is not a valid file descriptor.
+<DT><B>EINVAL</B>
+
+<DD>
+An invalid flag value was specified in
+<I>flags</I>.
+
+<DT><B>ENOENT</B>
+
+<DD>
+<B>AT_EMPTY_PATH</B>
+
+was specified in
+<I>flags</I>,
+
+but the caller did not have the
+<B>CAP_DAC_READ_SEARCH</B>
+
+capability.
+<DT><B>ENOENT</B>
+
+<DD>
+An attempt was made to link to the
+<I>/proc/self/fd/NN</I>
+
+file corresponding to a file descriptor created with
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;open(path,&nbsp;O_TMPFILE&nbsp;|&nbsp;O_EXCL,&nbsp;mode);
+<P>
+See
+<B><A HREF="../man2/open.2.html">open</A></B>(2).
+
+<DT><B>ENOENT</B>
+
+<DD>
+<I>oldpath</I>
+
+is a relative pathname and
+<I>olddirfd</I>
+
+refers to a directory that has been deleted,
+or
+<I>newpath</I>
+
+is a relative pathname and
+<I>newdirfd</I>
+
+refers to a directory that has been deleted.
+<DT><B>ENOTDIR</B>
+
+<DD>
+<I>oldpath</I>
+
+is relative and
+<I>olddirfd</I>
+
+is a file descriptor referring to a file other than a directory;
+or similar for
+<I>newpath</I>
+
+and
+<I>newdirfd</I>
+
+<DT><B>EPERM</B>
+
+<DD>
+<B>AT_EMPTY_PATH</B>
+
+was specified in
+<I>flags</I>,
+
+<I>oldpath</I>
+
+is an empty string, and
+<I>olddirfd</I>
+
+refers to a directory.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>linkat</B>()
+
+was added to Linux in kernel 2.6.16;
+library support was added to glibc in version 2.4.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>link</B>():
+
+SVr4, 4.3BSD, POSIX.1-2001 (but see NOTES), POSIX.1-2008.
+
+
+
+<P>
+<B>linkat</B>():
+
+POSIX.1-2008.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+Hard links, as created by
+<B>link</B>(),
+
+cannot span filesystems.
+Use
+<B><A HREF="../man2/symlink.2.html">symlink</A></B>(2)
+
+if this is required.
+<P>
+POSIX.1-2001 says that
+<B>link</B>()
+
+should dereference
+<I>oldpath</I>
+
+if it is a symbolic link.
+However, since kernel 2.0,
+
+Linux does not do so: if
+<I>oldpath</I>
+
+is a symbolic link, then
+<I>newpath</I>
+
+is created as a (hard) link to the same symbolic link file
+(i.e.,
+<I>newpath</I>
+
+becomes a symbolic link to the same file that
+<I>oldpath</I>
+
+refers to).
+Some other implementations behave in the same manner as Linux.
+
+
+
+
+POSIX.1-2008 changes the specification of
+<B>link</B>(),
+
+making it implementation-dependent whether or not
+<I>oldpath</I>
+
+is dereferenced if it is a symbolic link.
+For precise control over the treatment of symbolic links when
+creating a link, use
+<B><A HREF="../man2/linkat.2.html">linkat</A></B>(2).
+
+<A NAME="lbAK">&nbsp;</A>
+<H3>Glibc notes</H3>
+
+On older kernels where
+<B>linkat</B>()
+
+is unavailable, the glibc wrapper function falls back to the use of
+<B>link</B>(),
+
+unless the
+<B>AT_SYMLINK_FOLLOW</B>
+
+is specified.
+When
+<I>oldpath</I>
+
+and
+<I>newpath</I>
+
+are relative pathnames,
+glibc constructs pathnames based on the symbolic links in
+<I>/proc/self/fd</I>
+
+that correspond to the
+<I>olddirfd</I>
+
+and
+<I>newdirfd</I>
+
+arguments.
+<A NAME="lbAL">&nbsp;</A>
+<H2>BUGS</H2>
+
+On NFS filesystems, the return code may be wrong in case the NFS server
+performs the link creation and dies before it can say so.
+Use
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2)
+
+to find out if the link got created.
+<A NAME="lbAM">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/ln.1.html">ln</A></B>(1),
+
+<B><A HREF="../man2/open.2.html">open</A></B>(2),
+
+<B><A HREF="../man2/rename.2.html">rename</A></B>(2),
+
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2),
+
+<B><A HREF="../man2/symlink.2.html">symlink</A></B>(2),
+
+<B><A HREF="../man2/unlink.2.html">unlink</A></B>(2),
+
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7),
+
+<B><A HREF="../man7/symlink.7.html">symlink</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">linkat()</A><DD>
+</DL>
+<DT><A HREF="#lbAF">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">VERSIONS</A><DD>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAK">Glibc notes</A><DD>
+</DL>
+<DT><A HREF="#lbAL">BUGS</A><DD>
+<DT><A HREF="#lbAM">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:49 GMT, September 18, 2014
+</BODY>
+</HTML>

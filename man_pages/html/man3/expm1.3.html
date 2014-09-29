@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of EXPM1</TITLE>
+</HEAD><BODY>
+<H1>EXPM1</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-10-14<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+expm1, expm1f, expm1l - exponential minus 1
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/math.h">math.h</A>&gt;</B>
+
+<B>double expm1(double </B><I>x</I><B>);</B>
+<BR>
+<B>float expm1f(float </B><I>x</I><B>);</B>
+<BR>
+<B>long double expm1l(long double </B><I>x</I><B>);</B>
+
+</PRE>
+
+Link with <I>-lm</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>expm1</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED || _ISOC99_SOURCE ||
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+<BR>
+
+<B>expm1f</B>(),
+
+<B>expm1l</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600 || _ISOC99_SOURCE ||
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<I>expm1(x)</I>
+
+returns a value equivalent to
+<PRE>
+
+    exp(x) - 1
+
+</PRE>
+
+It is
+computed in a way that is accurate even if the value of
+<I>x</I>
+
+is near
+zero---a case where
+<I>exp(x) - 1</I>
+
+would be inaccurate due to
+subtraction of two numbers that are nearly equal.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these functions return
+<I>exp(x)&nbsp;-&nbsp;1</I>.
+
+<P>
+If
+<I>x</I>
+
+is a NaN,
+a NaN is returned.
+<P>
+If
+<I>x</I>
+
+is +0 (-0),
++0 (-0) is returned.
+<P>
+If
+<I>x</I>
+
+is positive infinity, positive infinity is returned.
+<P>
+If
+<I>x</I>
+
+is negative infinity, -1 is returned.
+<P>
+If the result overflows, a range error occurs,
+and the functions return
+-<B>HUGE_VAL</B>,
+
+-<B>HUGE_VALF</B>,
+
+or
+-<B>HUGE_VALL</B>,
+
+respectively.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+See
+<B><A HREF="../man7/math_error.7.html">math_error</A></B>(7)
+
+for information on how to determine whether an error has occurred
+when calling these functions.
+<P>
+
+The following errors can occur:
+<DL COMPACT>
+<DT>Range error, overflow<DD>
+<I>errno</I>
+
+is set to
+<B>ERANGE</B>
+
+(but see BUGS).
+An overflow floating-point exception
+(<B>FE_OVERFLOW</B>)
+
+is raised.
+
+
+
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>expm1</B>(),
+
+<B>expm1f</B>(),
+
+and
+<B>expm1l</B>()
+
+functions are thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+C99, POSIX.1-2001.
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>BUGS</H2>
+
+For some large negative
+<I>x</I>
+
+values (where the function result approaches -1),
+<B>expm1</B>()
+
+raises a bogus underflow floating-point exception.
+
+
+<P>
+For some large positive
+<I>x</I>
+
+values,
+<B>expm1</B>()
+
+raises a bogus invalid floating-point exception in addition to the expected
+overflow exception, and returns a NaN instead of positive infinity.
+
+
+
+
+<P>
+Before version 2.11,
+
+
+
+
+the glibc implementation did not set
+
+<I>errno</I>
+
+to
+<B>ERANGE</B>
+
+when a range error occurred.
+<A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/exp.3.html">exp</A></B>(3),
+
+<B><A HREF="../man3/log.3.html">log</A></B>(3),
+
+<B><A HREF="../man3/log1p.3.html">log1p</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">BUGS</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:11 GMT, September 18, 2014
+</BODY>
+</HTML>

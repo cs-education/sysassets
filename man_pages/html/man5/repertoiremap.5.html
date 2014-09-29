@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of REPERTOIREMAP</TITLE>
+</HEAD><BODY>
+<H1>REPERTOIREMAP</H1>
+Section: Linux User Manual (5)<BR>Updated: 2014-06-02<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+repertoiremap - map symbolic character names to Unicode code points
+<A NAME="lbAC">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+A repertoire map defines mappings between symbolic character names and
+Unicode code points when compiling a locale with
+<B><A HREF="../man1/localedef.1.html">localedef</A></B>(1).
+
+Using a repertoire map is optional, it is only needed when symbolic
+names are used instead of now preferred Unicode code points.
+<A NAME="lbAD">&nbsp;</A>
+<H3>Syntax</H3>
+
+The repertoiremap file starts with a header that may consist of the
+following keywords:
+<DL COMPACT>
+<DT><I>&lt;comment_char&gt;</I>
+
+<DD>
+is followed by a character that will be used as the
+comment character for the rest of the file.
+It defaults to the number sign (#).
+<DT><I>&lt;escape_char&gt;</I>
+
+<DD>
+is followed by a character that should be used as the escape character
+for the rest of the file to mark characters that should be interpreted
+in a special way.
+It defaults to the backslash (\).
+</DL>
+<P>
+
+The mapping section starts with the keyword
+<B>CHARIDS</B>
+
+in the first column.
+<P>
+The mapping lines have the following form:
+<DL COMPACT>
+<DT><I>&lt;symbolic-name&gt; &lt;code-point&gt; &lt;comment&gt;</I>
+
+<DD>
+This defines exactly one mapping,
+<I>&lt;comment&gt;</I>
+
+being optional.
+</DL>
+<P>
+
+The mapping section ends with the string
+<I>END CHARIDS</I>.
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>FILES</H2>
+
+<DL COMPACT>
+<DT><I>/usr/share/i18n/repertoiremaps</I>
+
+<DD>
+Usual default repertoire map path.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.2.
+<A NAME="lbAG">&nbsp;</A>
+<H2>NOTES</H2>
+
+Repertoire maps are deprecated in favor of Unicode code points.
+<A NAME="lbAH">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/locale.1.html">locale</A></B>(1),
+
+<B><A HREF="../man1/localedef.1.html">localedef</A></B>(1),
+
+<B><A HREF="../man5/charmap.5.html">charmap</A></B>(5),
+
+<B><A HREF="../man5/locale.5.html">locale</A></B>(5)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAD">Syntax</A><DD>
+</DL>
+<DT><A HREF="#lbAE">FILES</A><DD>
+<DT><A HREF="#lbAF">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAG">NOTES</A><DD>
+<DT><A HREF="#lbAH">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:20 GMT, September 18, 2014
+</BODY>
+</HTML>

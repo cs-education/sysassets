@@ -1,0 +1,296 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of HPSA</TITLE>
+</HEAD><BODY>
+<H1>HPSA</H1>
+Section: Linux Programmer's Manual (4)<BR>Updated: 2012-08-05<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+hpsa - HP Smart Array SCSI driver
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+modprobe hpsa [ hpsa_allow_any=1 ]
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>hpsa</B>
+
+is a SCSI driver for HP Smart Array RAID controllers.
+<A NAME="lbAE">&nbsp;</A>
+<H3>Options</H3>
+
+<I>hpsa_allow_any=1</I>:
+
+This option allows the driver to attempt to operate on
+any HP Smart Array hardware RAID controller,
+even if it is not explicitly known to the driver.
+This allows newer hardware to work with older drivers.
+Typically this is used to allow installation of
+operating systems from media that predates the
+RAID controller, though it may also be used to enable
+<B>hpsa</B>
+
+to drive older controllers that would normally be handled by the
+<B><A HREF="../man4/cciss.4.html">cciss</A></B>(4)
+
+driver.
+These older boards have not been tested and are
+not supported with
+<B>hpsa</B>,
+
+and
+<B><A HREF="../man4/cciss.4.html">cciss</A></B>(4)
+
+should still be used for these.
+<A NAME="lbAF">&nbsp;</A>
+<H3>Supported hardware</H3>
+
+The
+<B>hpsa</B>
+
+driver supports the following Smart Array boards:
+<PRE>
+
+    Smart Array P700M
+    Smart Array P212
+    Smart Array P410
+    Smart Array P410i
+    Smart Array P411
+    Smart Array P812
+    Smart Array P712m
+    Smart Array P711m
+    StorageWorks P1210m
+</PRE>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Configuration details</H3>
+
+To configure HP Smart Array controllers,
+use the HP Array Configuration Utility (either
+<B><A HREF="../man8/hpacuxe.8.html">hpacuxe</A></B>(8)
+
+or
+<B><A HREF="../man8/hpacucli.8.html">hpacucli</A></B>(8))
+
+or the Offline ROM-based Configuration Utility (ORCA)
+run from the Smart Array's option ROM at boot time.
+<A NAME="lbAH">&nbsp;</A>
+<H2>FILES</H2>
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Device nodes</H3>
+
+Logical drives are accessed via the SCSI disk driver
+(<B><A HREF="../man4/sd.4.html">sd</A></B>(4)),
+
+tape drives via the SCSI tape driver
+(<B><A HREF="../man4/st.4.html">st</A></B>(4)),
+
+and
+the RAID controller via the SCSI generic driver
+(<B><A HREF="../man4/sg.4.html">sg</A></B>(4)),
+
+with device nodes named
+<I>/dev/sd*</I>,
+
+<I>/dev/st*</I>,
+
+and
+<I>/dev/sg*</I>,
+
+respectively.
+<A NAME="lbAJ">&nbsp;</A>
+<H3>HPSA-specific host attribute files in /sys</H3>
+
+<DL COMPACT>
+<DT><I>/sys/class/scsi_host/host*/rescan</I>
+
+<DD>
+This is a write-only attribute.
+Writing to this attribute will cause the driver to scan for
+new, changed, or removed devices (e.g,. hot-plugged tape drives,
+or newly configured or deleted logical drives, etc.)
+and notify the SCSI midlayer of any changes detected.
+Normally a rescan is triggered automatically
+by HP's Array Configuration Utility (either the GUI or the
+command-line variety);
+thus, for logical drive changes, the user should not
+normally have to use this attribute.
+This attribute may be useful when hot plugging devices like tape drives,
+or entire storage boxes containing preconfigured logical drives.
+<DT><I>/sys/class/scsi_host/host*/firmware_revision</I>
+
+<DD>
+This attribute contains the firmware version of the Smart Array.
+<P>
+For example:
+<P>
+<PRE>
+    # <B>cd /sys/class/scsi_host/host4</B>
+    # <B>cat firmware_revision</B>
+    7.14
+</PRE>
+
+</DL>
+<A NAME="lbAK">&nbsp;</A>
+<H3>HPSA-specific disk attribute files in /sys</H3>
+
+<DL COMPACT>
+<DT><I>/sys/class/scsi_disk/c:b:t:l/device/unique_id</I>
+
+<DD>
+This attribute contains a 32 hex-digit unique ID for each logical drive.
+<PRE>
+
+For example:
+
+    # <B>cd /sys/class/scsi_disk/4:0:0:0/device</B>
+    # <B>cat unique_id</B>
+    600508B1001044395355323037570F77
+</PRE>
+
+<DT><I>/sys/class/scsi_disk/c:b:t:l/device/raid_level</I>
+
+<DD>
+This attribute contains the RAID level of each logical drive.
+<PRE>
+
+For example:
+
+    # <B>cd /sys/class/scsi_disk/4:0:0:0/device</B>
+    # <B>cat raid_level</B>
+    RAID 0
+</PRE>
+
+<DT><I>/sys/class/scsi_disk/c:b:t:l/device/lunid</I>
+
+<DD>
+This attribute contains the 16 hex-digit (8 byte) LUN ID
+by which a logical drive or physical device can be addressed.
+<I>c</I>:<I>b</I>:<I>t</I>:<I>l</I>
+
+are the controller, bus, target, and lun of the device.
+<PRE>
+
+For example:
+
+    # <B>cd /sys/class/scsi_disk/4:0:0:0/device</B>
+    # <B>cat lunid</B>
+    0x0000004000000000
+</PRE>
+
+</DL>
+<A NAME="lbAL">&nbsp;</A>
+<H3>Supported ioctl() operations</H3>
+
+For compatibility with applications written for the
+<B><A HREF="../man4/cciss.4.html">cciss</A></B>(4)
+
+driver, many, but
+not all of the ioctls supported by the
+<B><A HREF="../man4/cciss.4.html">cciss</A></B>(4)
+
+driver are also supported by the
+<B>hpsa</B>
+
+driver.
+The data structures used by these ioctls are described in
+the Linux kernel source file
+<I>include/linux/cciss_ioctl.h</I>.
+
+<DL COMPACT>
+<DT><B>CCISS_DEREGDISK</B>, <B>CCISS_REGNEWDISK</B>, <B>CCISS_REGNEWD</B>
+
+<DD>
+These three ioctls all do exactly the same thing,
+which is to cause the driver to rescan for new devices.
+This does exactly the same thing as writing to the
+hpsa-specific host &quot;rescan&quot; attribute.
+<DT><B>CCISS_GETPCIINFO</B>
+
+<DD>
+Returns PCI domain, bus, device and function and &quot;board ID&quot; (PCI subsystem ID).
+<DT><B>CCISS_GETDRIVVER</B>
+
+<DD>
+Returns driver version in three bytes encoded as:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;(major_version&nbsp;&lt;&lt;&nbsp;16)&nbsp;|&nbsp;(minor_version&nbsp;&lt;&lt;&nbsp;8)&nbsp;|
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(subminor_version)
+<DT><B>CCISS_PASSTHRU</B>, <B>CCISS_BIG_PASSTHRU</B>
+
+<DD>
+Allows &quot;BMIC&quot; and &quot;CISS&quot; commands to be passed through to the Smart Array.
+These are used extensively by the HP Array Configuration Utility,
+SNMP storage agents, and so on.
+See
+<I>cciss_vol_status</I>
+
+at
+
+
+for some examples.
+</DL>
+<A NAME="lbAM">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man4/cciss.4.html">cciss</A></B>(4),
+
+<B><A HREF="../man4/sd.4.html">sd</A></B>(4),
+
+<B><A HREF="../man4/st.4.html">st</A></B>(4),
+
+<B><A HREF="../man8/cciss_vol_status.8.html">cciss_vol_status</A></B>(8),
+
+<B><A HREF="../man8/hpacucli.8.html">hpacucli</A></B>(8),
+
+<B><A HREF="../man8/hpacuxe.8.html">hpacuxe</A></B>(8),
+
+<P>
+
+
+and
+<I>Documentation/scsi/hpsa.txt</I>
+
+and
+<I>Documentation/ABI/testing/sysfs-bus-pci-devices-cciss</I>
+
+in the Linux kernel source tree
+
+
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">Options</A><DD>
+<DT><A HREF="#lbAF">Supported hardware</A><DD>
+<DT><A HREF="#lbAG">Configuration details</A><DD>
+</DL>
+<DT><A HREF="#lbAH">FILES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Device nodes</A><DD>
+<DT><A HREF="#lbAJ">HPSA-specific host attribute files in /sys</A><DD>
+<DT><A HREF="#lbAK">HPSA-specific disk attribute files in /sys</A><DD>
+<DT><A HREF="#lbAL">Supported ioctl() operations</A><DD>
+</DL>
+<DT><A HREF="#lbAM">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:19 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of PTHREAD_KILL</TITLE>
+</HEAD><BODY>
+<H1>PTHREAD_KILL</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-05-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+pthread_kill - send a signal to a thread
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/signal.h">signal.h</A>&gt;</B>
+
+<B>int pthread_kill(pthread_t </B><I>thread</I><B>, int </B><I>sig</I><B>);</B>
+</PRE>
+
+<P>
+Compile and link with <I>-pthread</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>pthread_kill</B>():
+
+<DL COMPACT><DT><DD>
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;199506L || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>pthread_kill</B>()
+
+function sends the signal
+<I>sig</I>
+
+to
+<I>thread</I>,
+
+a thread in the same process as the caller.
+The signal is asynchronously directed to
+<I>thread</I>.
+
+<P>
+If
+<I>sig</I>
+
+is 0, then no signal is sent, but error checking is still performed.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>pthread_kill</B>()
+
+returns 0;
+on error, it returns an error number, and no signal is sent.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+An invalid signal was specified.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>pthread_kill</B>()
+
+function is thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2008.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+Signal dispositions are process-wide:
+if a signal handler is installed,
+the handler will be invoked in the thread
+<I>thread</I>,
+
+but if the disposition of the signal is &quot;stop&quot;, &quot;continue&quot;, or &quot;terminate&quot;,
+this action will affect the whole process.
+<P>
+POSIX.1-2008 recommends that if an implementation detects the use
+of a thread ID after the end of its lifetime,
+<B>pthread_kill</B>()
+
+should return the error
+<B>ESRCH</B>.
+
+The glibc implementation returns this error in the cases where
+an invalid thread ID can be detected.
+But note also that POSIX says that an attempt to use a thread ID whose
+lifetime has ended produces undefined behavior,
+and an attempt to use an invalid thread ID in a call to
+<B>pthread_kill</B>()
+
+can, for example, cause a segmentation fault.
+<A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/kill.2.html">kill</A></B>(2),
+
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man2/sigpending.2.html">sigpending</A></B>(2),
+
+<B><A HREF="../man3/pthread_self.3.html">pthread_self</A></B>(3),
+
+<B><A HREF="../man3/pthread_sigmask.3.html">pthread_sigmask</A></B>(3),
+
+<B><A HREF="../man3/raise.3.html">raise</A></B>(3),
+
+<B><A HREF="../man7/pthreads.7.html">pthreads</A></B>(7),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:01 GMT, September 18, 2014
+</BODY>
+</HTML>

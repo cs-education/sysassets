@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MEMCHR</TITLE>
+</HEAD><BODY>
+<H1>MEMCHR</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-03-10<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+memchr, memrchr, rawmemchr - scan memory for a character
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/string.h">string.h</A>&gt;</B>
+
+<B>void *memchr(const void *</B><I>s</I><B>, int </B><I>c</I><B>, size_t </B><I>n</I><B>);</B>
+
+<B>void *memrchr(const void *</B><I>s</I><B>, int </B><I>c</I><B>, size_t </B><I>n</I><B>);</B>
+
+<B>void *rawmemchr(const void *</B><I>s</I><B>, int </B><I>c</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>memrchr</B>(),
+
+<B>rawmemchr</B>():
+
+_GNU_SOURCE
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>memchr</B>()
+
+function scans the initial
+<I>n</I>
+
+bytes of the memory
+area pointed to by
+<I>s</I>
+
+for the first instance of
+<I>c</I>.
+
+Both
+<I>c</I>
+
+and the bytes of the memory area pointed to by
+<I>s</I>
+
+are interpreted as
+<I>unsigned char</I>.
+
+<P>
+
+The
+<B>memrchr</B>()
+
+function is like the
+<B>memchr</B>()
+
+function,
+except that it searches backward from the end of the
+<I>n</I>
+
+bytes pointed to by
+<I>s</I>
+
+instead of forward from the beginning.
+<P>
+The
+<B>rawmemchr</B>()
+
+function is similar to
+<B>memchr</B>():
+
+it assumes (i.e., the programmer knows for certain)
+that an instance of
+<I>c</I>
+
+lies somewhere in the memory area starting at the location pointed to by
+<I>s</I>,
+
+and so performs an optimized search for
+<I>c</I>
+
+(i.e., no use of a count argument to limit the range of the search).
+If an instance of
+<I>c</I>
+
+is not found, the results are unpredictable.
+The following call is a fast means of locating a string's
+terminating null byte:
+
+<PRE>
+
+char *p = rawmemchr(s,&nbsp;'\0');
+</PRE>
+
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>memchr</B>()
+
+and
+<B>memrchr</B>()
+
+functions return a pointer
+to the matching byte or NULL if the character does not occur in
+the given memory area.
+<P>
+The
+<B>rawmemchr</B>()
+
+function returns a pointer to the matching byte, if one is found.
+If no matching byte is found, the result is unspecified.
+<A NAME="lbAF">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>rawmemchr</B>()
+
+first appeared in glibc in version 2.1.
+<P>
+<B>memrchr</B>()
+
+first appeared in glibc in version 2.2.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>memchr</B>(),
+
+<B>memrchr</B>(),
+
+and
+<B>rawmemchr</B>()
+
+functions are thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+The
+<B>memchr</B>()
+
+function conforms to SVr4, 4.3BSD, C89, C99, POSIX.1-2001.
+<P>
+The
+<B>memrchr</B>()
+
+function is a GNU extension, available since glibc 2.1.91.
+<P>
+The
+<B>rawmemchr</B>()
+
+function is a GNU extension, available since glibc 2.1.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/ffs.3.html">ffs</A></B>(3),
+
+<B><A HREF="../man3/index.3.html">index</A></B>(3),
+
+<B><A HREF="../man3/rindex.3.html">rindex</A></B>(3),
+
+<B><A HREF="../man3/strchr.3.html">strchr</A></B>(3),
+
+<B><A HREF="../man3/strpbrk.3.html">strpbrk</A></B>(3),
+
+<B><A HREF="../man3/strrchr.3.html">strrchr</A></B>(3),
+
+<B><A HREF="../man3/strsep.3.html">strsep</A></B>(3),
+
+<B><A HREF="../man3/strspn.3.html">strspn</A></B>(3),
+
+<B><A HREF="../man3/strstr.3.html">strstr</A></B>(3),
+
+<B><A HREF="../man3/wmemchr.3.html">wmemchr</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">VERSIONS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:03 GMT, September 18, 2014
+</BODY>
+</HTML>

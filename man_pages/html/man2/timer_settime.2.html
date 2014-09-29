@@ -1,0 +1,297 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of TIMER_SETTIME</TITLE>
+</HEAD><BODY>
+<H1>TIMER_SETTIME</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2012-10-15<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+timer_settime, timer_gettime - arm/disarm and fetch
+state of POSIX per-process timer
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/time.h">time.h</A>&gt;</B>
+
+<B>int timer_settime(timer_t </B><I>timerid</I><B>, int </B><I>flags</I><B>,</B>
+<B>                  const struct itimerspec *</B><I>new_value</I><B>,</B>
+<B>                  struct itimerspec * </B><I>old_value</I><B>);</B>
+<B>int timer_gettime(timer_t </B><I>timerid</I><B>, struct itimerspec *</B><I>curr_value</I><B>);</B>
+</PRE>
+
+<P>
+Link with <I>-lrt</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>timer_settime</B>(),
+
+<B>timer_gettime</B>():
+
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;199309L
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>timer_settime</B>()
+
+arms or disarms the timer identified by
+<I>timerid</I>.
+
+The
+<I>new_value</I>
+
+argument is pointer to an
+<I>itimerspec</I>
+
+structure that specifies the new initial value and
+the new interval for the timer.
+The
+<I>itimerspec</I>
+
+structure is defined as follows:
+<P>
+
+<PRE>
+struct timespec {
+    time_t tv_sec;                /* Seconds */
+    long   tv_nsec;               /* Nanoseconds */
+};
+
+struct itimerspec {
+    struct timespec it_interval;  /* Timer interval */
+    struct timespec it_value;     /* Initial expiration */
+};
+</PRE>
+
+
+<P>
+Each of the substructures of the
+<I>itimerspec</I>
+
+structure is a
+<I>timespec</I>
+
+structure that allows a time value to be specified
+in seconds and nanoseconds.
+These time values are measured according to the clock
+that was specified when the timer was created by
+<B><A HREF="../man2/timer_create.2.html">timer_create</A></B>(2).
+
+<P>
+If
+<I>new_value-&gt;it_value</I>
+
+specifies a nonzero value (i.e., either subfield is nonzero), then
+<B>timer_settime</B>()
+
+arms (starts) the timer,
+setting it to initially expire at the given time.
+(If the timer was already armed,
+then the previous settings are overwritten.)
+If
+<I>new_value-&gt;it_value</I>
+
+specifies a zero value
+(i.e., both subfields are zero),
+then the timer is disarmed.
+<P>
+The
+<I>new_value-&gt;it_interval</I>
+
+field specifies the period of the timer, in seconds and nanoseconds.
+If this field is nonzero, then each time that an armed timer expires,
+the timer is reloaded from the value specified in
+<I>new_value-&gt;it_interval</I>.
+
+If
+<I>new_value-&gt;it_interval</I>
+
+specifies a zero value,
+then the timer expires just once, at the time specified by
+<I>it_value</I>.
+
+<P>
+By default, the initial expiration time specified in
+<I>new_value-&gt;it_value</I>
+
+is interpreted relative to the current time on the timer's
+clock at the time of the call.
+This can be modified by specifying
+<B>TIMER_ABSTIME</B>
+
+in
+<I>flags</I>,
+
+in which case
+<I>new_value-&gt;it_value</I>
+
+is interpreted as an absolute value as measured on the timer's clock;
+that is, the timer will expire when the clock value reaches the
+value specified by
+<I>new_value-&gt;it_value</I>.
+
+If the specified absolute time has already passed,
+then the timer expires immediately,
+and the overrun count (see
+<B><A HREF="../man2/timer_getoverrun.2.html">timer_getoverrun</A></B>(2))
+
+will be set correctly.
+
+<P>
+If the value of the
+<B>CLOCK_REALTIME</B>
+
+clock is adjusted while an absolute timer based on that clock is armed,
+then the expiration of the timer will be appropriately adjusted.
+Adjustments to the
+<B>CLOCK_REALTIME</B>
+
+clock have no effect on relative timers based on that clock.
+
+
+<P>
+If
+<I>old_value</I>
+
+is not NULL, then it points to a buffer
+that is used to return the previous interval of the timer (in
+<I>old_value-&gt;it_interval</I>)
+
+and the amount of time until the timer
+would previously have next expired (in
+<I>old_value-&gt;it_value</I>).
+
+<P>
+<B>timer_gettime</B>()
+
+returns the time until next expiration, and the interval,
+for the timer specified by
+<I>timerid</I>,
+
+in the buffer pointed to by
+<I>curr_value</I>.
+
+The time remaining until the next timer expiration is returned in
+<I>curr_value-&gt;it_value</I>;
+
+this is always a relative value, regardless of whether the
+<B>TIMER_ABSTIME</B>
+
+flag was used when arming the timer.
+If the value returned in
+<I>curr_value-&gt;it_value</I>
+
+is zero, then the timer is currently disarmed.
+The timer interval is returned in
+<I>curr_value-&gt;it_interval</I>.
+
+If the value returned in
+<I>curr_value-&gt;it_interval</I>
+
+is zero, then this is a &quot;one-shot&quot; timer.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>timer_settime</B>()
+
+and
+<B>timer_gettime</B>()
+
+return 0.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+These functions may fail with the following errors:
+<DL COMPACT>
+<DT><B>EFAULT</B>
+
+<DD>
+<I>new_value</I>,
+
+<I>old_value</I>,
+
+or
+<I>curr_value</I>
+
+is not a valid pointer.
+<DT><B>EINVAL</B>
+
+<DD>
+<I>timerid</I>
+
+is invalid.
+
+</DL>
+<P>
+
+<B>timer_settime</B>()
+
+may fail with the following errors:
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+<I>new_value.it_value</I>
+
+is negative; or
+<I>new_value.it_value.tv_nsec</I>
+
+is negative or greater than 999,999,999.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+These system calls are available since Linux 2.6.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001.
+<A NAME="lbAI">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+See
+<B><A HREF="../man2/timer_create.2.html">timer_create</A></B>(2).
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/timer_create.2.html">timer_create</A></B>(2),
+
+<B><A HREF="../man2/timer_getoverrun.2.html">timer_getoverrun</A></B>(2),
+
+<B><A HREF="../man7/time.7.html">time</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">EXAMPLE</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:45 GMT, September 18, 2014
+</BODY>
+</HTML>

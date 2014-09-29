@@ -1,0 +1,547 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of TIMER_CREATE</TITLE>
+</HEAD><BODY>
+<H1>TIMER_CREATE</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+timer_create - create a POSIX per-process timer
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/signal.h">signal.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/time.h">time.h</A>&gt;</B>
+
+<B>int timer_create(clockid_t </B><I>clockid</I><B>, struct sigevent *</B><I>sevp</I><B>,</B>
+<B>                 timer_t *</B><I>timerid</I><B>);</B>
+</PRE>
+
+<P>
+Link with <I>-lrt</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>timer_create</B>():
+
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;199309L
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>timer_create</B>()
+
+creates a new per-process interval timer.
+The ID of the new timer is returned in the buffer pointed to by
+<I>timerid</I>,
+
+which must be a non-null pointer.
+This ID is unique within the process, until the timer is deleted.
+The new timer is initially disarmed.
+<P>
+The
+<I>clockid</I>
+
+argument specifies the clock that the new timer uses to measure time.
+It can be specified as one of the following values:
+<DL COMPACT>
+<DT><B>CLOCK_REALTIME</B>
+
+<DD>
+A settable system-wide real-time clock.
+<DT><B>CLOCK_MONOTONIC</B>
+
+<DD>
+A nonsettable monotonically increasing clock that measures time
+from some unspecified point in the past that does not change
+after system startup.
+
+
+<DT><B>CLOCK_PROCESS_CPUTIME_ID</B> (since Linux 2.6.12)
+
+<DD>
+A clock that measures (user and system) CPU time consumed by
+(all of the threads in) the calling process.
+<DT><B>CLOCK_THREAD_CPUTIME_ID</B> (since Linux 2.6.12)
+
+<DD>
+A clock that measures (user and system) CPU time consumed by
+the calling thread.
+
+
+</DL>
+<P>
+
+As well as the above values,
+<I>clockid</I>
+
+can be specified as the
+<I>clockid</I>
+
+returned by a call to
+<B><A HREF="../man3/clock_getcpuclockid.3.html">clock_getcpuclockid</A></B>(3)
+
+or
+<B><A HREF="../man3/pthread_getcpuclockid.3.html">pthread_getcpuclockid</A></B>(3).
+
+<P>
+The
+<I>sevp</I>
+
+argument points to a
+<I>sigevent</I>
+
+structure that specifies how the caller
+should be notified when the timer expires.
+For the definition and general details of this structure, see
+<B><A HREF="../man7/sigevent.7.html">sigevent</A></B>(7).
+
+<P>
+The
+<I>sevp.sigev_notify</I>
+
+field can have the following values:
+<DL COMPACT>
+<DT><B>SIGEV_NONE</B>
+
+<DD>
+Don't asynchronously notify when the timer expires.
+Progress of the timer can be monitored using
+<B><A HREF="../man2/timer_gettime.2.html">timer_gettime</A></B>(2).
+
+<DT><B>SIGEV_SIGNAL</B>
+
+<DD>
+Upon timer expiration, generate the signal
+<I>sigev_signo</I>
+
+for the process.
+See
+<B><A HREF="../man7/sigevent.7.html">sigevent</A></B>(7)
+
+for general details.
+The
+<I>si_code</I>
+
+field of the
+<I>siginfo_t</I>
+
+structure will be set to
+<B>SI_TIMER</B>.
+
+At any point in time,
+at most one signal is queued to the process for a given timer; see
+<B><A HREF="../man2/timer_getoverrun.2.html">timer_getoverrun</A></B>(2)
+
+for more details.
+<DT><B>SIGEV_THREAD</B>
+
+<DD>
+Upon timer expiration, invoke
+<I>sigev_notify_function</I>
+
+as if it were the start function of a new thread.
+See
+<B><A HREF="../man7/sigevent.7.html">sigevent</A></B>(7)
+
+for details.
+<DT><B>SIGEV_THREAD_ID</B> (Linux-specific)
+
+<DD>
+As for
+<B>SIGEV_SIGNAL</B>,
+
+but the signal is targeted at the thread whose ID is given in
+<I>sigev_notify_thread_id</I>,
+
+which must be a thread in the same process as the caller.
+The
+<I>sigev_notify_thread_id</I>
+
+field specifies a kernel thread ID, that is, the value returned by
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)
+
+or
+<B><A HREF="../man2/gettid.2.html">gettid</A></B>(2).
+
+This flag is intended only for use by threading libraries.
+</DL>
+<P>
+
+Specifying
+<I>sevp</I>
+
+as NULL is equivalent to specifying a pointer to a
+<I>sigevent</I>
+
+structure in which
+<I>sigev_notify</I>
+
+is
+<B>SIGEV_SIGNAL</B>,
+
+<I>sigev_signo</I>
+
+is
+<B>SIGALRM</B>,
+
+and
+<I>sigev_value.sival_int</I>
+
+is the timer ID.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>timer_create</B>()
+
+returns 0, and the ID of the new timer is placed in
+<I>*timerid</I>.
+
+On failure, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EAGAIN</B>
+
+<DD>
+Temporary error during kernel allocation of timer structures.
+<DT><B>EINVAL</B>
+
+<DD>
+Clock ID,
+<I>sigev_notify</I>,
+
+<I>sigev_signo</I>,
+
+or
+<I>sigev_notify_thread_id</I>
+
+is invalid.
+<DT><B>ENOMEM</B>
+
+<DD>
+
+Could not allocate memory.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+This system call is available since Linux 2.6.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+A program may create multiple interval timers using
+<B>timer_create</B>().
+
+<P>
+Timers are not inherited by the child of a
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2),
+
+and are disarmed and deleted during an
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2).
+
+<P>
+The kernel preallocates a &quot;queued real-time signal&quot;
+for each timer created using
+<B>timer_create</B>().
+
+Consequently, the number of timers is limited by the
+<B>RLIMIT_SIGPENDING</B>
+
+resource limit (see
+<B><A HREF="../man2/setrlimit.2.html">setrlimit</A></B>(2)).
+
+<P>
+The timers created by
+<B>timer_create</B>()
+
+are commonly known as &quot;POSIX (interval) timers&quot;.
+The POSIX timers API consists of the following interfaces:
+<DL COMPACT>
+<DT>*<DD>
+<B>timer_create</B>():
+
+Create a timer.
+<DT>*<DD>
+<B><A HREF="../man2/timer_settime.2.html">timer_settime</A></B>(2):
+
+Arm (start) or disarm (stop) a timer.
+<DT>*<DD>
+<B><A HREF="../man2/timer_gettime.2.html">timer_gettime</A></B>(2):
+
+Fetch the time remaining until the next expiration of a timer,
+along with the interval setting of the timer.
+<DT>*<DD>
+<B><A HREF="../man2/timer_getoverrun.2.html">timer_getoverrun</A></B>(2):
+
+Return the overrun count for the last timer expiration.
+<DT>*<DD>
+<B><A HREF="../man2/timer_delete.2.html">timer_delete</A></B>(2):
+
+Disarm and delete a timer.
+<P>
+Since Linux 3.10, the
+<I>/proc/[pid]/timers</I>
+
+file can be used to list the POSIX timers for the process with PID
+<I>pid</I>.
+
+See
+<B><A HREF="../man5/proc.5.html">proc</A></B>(5)
+
+for further information.
+
+</DL>
+<A NAME="lbAJ">&nbsp;</A>
+<H3>C library/kernel ABI differences</H3>
+
+Part of the implementation of the POSIX timers API is provided by glibc.
+In particular:
+<DL COMPACT>
+<DT>*<DD>
+The functionality for
+<B>SIGEV_THREAD</B>
+
+is implemented within glibc, rather than the kernel.
+<DT>*<DD>
+The timer IDs presented at user level are maintained by glibc,
+which maps these IDs to the timer IDs employed by the kernel.
+
+
+
+</DL>
+<P>
+
+The POSIX timers system calls first appeared in Linux 2.6.
+Prior to this,
+glibc provided an incomplete user-space implementation
+(<B>CLOCK_REALTIME</B>
+
+timers only) using POSIX threads,
+and current glibc falls back to this implementation on systems
+running pre-2.6 Linux kernels.
+<A NAME="lbAK">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The program below takes two arguments: a sleep period in seconds,
+and a timer frequency in nanoseconds.
+The program establishes a handler for the signal it uses for the timer,
+blocks that signal,
+creates and arms a timer that expires with the given frequency,
+sleeps for the specified number of seconds,
+and then unblocks the timer signal.
+Assuming that the timer expired at least once while the program slept,
+the signal handler will be invoked,
+and the handler displays some information about the timer notification.
+The program terminates after one invocation of the signal handler.
+<P>
+In the following example run, the program sleeps for 1 second,
+after creating a timer that has a frequency of 100 nanoseconds.
+By the time the signal is unblocked and delivered,
+there have been around ten million overruns.
+
+<PRE>
+
+$ <B>./a.out 1 100</B>
+Establishing handler for signal 34
+Blocking signal 34
+timer ID is 0x804c008
+Sleeping for 1 seconds
+Unblocking signal 34
+Caught signal 34
+    sival_ptr = 0xbfb174f4;     *sival_ptr = 0x804c008
+    overrun count = 10004886
+</PRE>
+
+
+<A NAME="lbAL">&nbsp;</A>
+<H3>Program source</H3>
+
+
+<PRE>
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/signal.h">signal.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/time.h">time.h</A>&gt;
+
+#define CLOCKID CLOCK_REALTIME
+#define SIG SIGRTMIN
+
+#define errExit(msg)    do { perror(msg); exit(EXIT_FAILURE); \
+                        } while (0)
+
+static void
+print_siginfo(siginfo_t *si)
+{
+    timer_t *tidp;
+    int or;
+
+    tidp = si-&gt;si_value.sival_ptr;
+
+    printf(&quot;    sival_ptr = %p; &quot;, si-&gt;si_value.sival_ptr);
+    printf(&quot;    *sival_ptr = 0x%lx\n&quot;, (long) *tidp);
+
+    or = timer_getoverrun(*tidp);
+    if (or == -1)
+        errExit(&quot;timer_getoverrun&quot;);
+    else
+        printf(&quot;    overrun count = %d\n&quot;, or);
+}
+
+static void
+handler(int sig, siginfo_t *si, void *uc)
+{
+    /* Note: calling printf() from a signal handler is not
+       strictly correct, since printf() is not async-signal-safe;
+       see <A HREF="../man7/signal.7.html">signal</A>(7) */
+
+    printf(&quot;Caught signal %d\n&quot;, sig);
+    print_siginfo(si);
+    signal(sig, SIG_IGN);
+}
+
+int
+main(int argc, char *argv[])
+{
+    timer_t timerid;
+    struct sigevent sev;
+    struct itimerspec its;
+    long long freq_nanosecs;
+    sigset_t mask;
+    struct sigaction sa;
+
+    if (argc != 3) {
+        fprintf(stderr, &quot;Usage: %s &lt;sleep-secs&gt; &lt;freq-nanosecs&gt;\n&quot;,
+                argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    /* Establish handler for timer signal */
+
+    printf(&quot;Establishing handler for signal %d\n&quot;, SIG);
+    sa.sa_flags = SA_SIGINFO;
+    sa.sa_sigaction = handler;
+    sigemptyset(&amp;sa.sa_mask);
+    if (sigaction(SIG, &amp;sa, NULL) == -1)
+        errExit(&quot;sigaction&quot;);
+
+    /* Block timer signal temporarily */
+
+    printf(&quot;Blocking signal %d\n&quot;, SIG);
+    sigemptyset(&amp;mask);
+    sigaddset(&amp;mask, SIG);
+    if (sigprocmask(SIG_SETMASK, &amp;mask, NULL) == -1)
+        errExit(&quot;sigprocmask&quot;);
+
+    /* Create the timer */
+
+    sev.sigev_notify = SIGEV_SIGNAL;
+    sev.sigev_signo = SIG;
+    sev.sigev_value.sival_ptr = &amp;timerid;
+    if (timer_create(CLOCKID, &amp;sev, &amp;timerid) == -1)
+        errExit(&quot;timer_create&quot;);
+
+    printf(&quot;timer ID is 0x%lx\n&quot;, (long) timerid);
+
+    /* Start the timer */
+
+    freq_nanosecs = atoll(argv[2]);
+    its.it_value.tv_sec = freq_nanosecs / 1000000000;
+    its.it_value.tv_nsec = freq_nanosecs % 1000000000;
+    its.it_interval.tv_sec = its.it_value.tv_sec;
+    its.it_interval.tv_nsec = its.it_value.tv_nsec;
+
+    if (timer_settime(timerid, 0, &amp;its, NULL) == -1)
+         errExit(&quot;timer_settime&quot;);
+
+    /* Sleep for a while; meanwhile, the timer may expire
+       multiple times */
+
+    printf(&quot;Sleeping for %d seconds\n&quot;, atoi(argv[1]));
+    sleep(atoi(argv[1]));
+
+    /* Unlock the timer signal, so that timer notification
+       can be delivered */
+
+    printf(&quot;Unblocking signal %d\n&quot;, SIG);
+    if (sigprocmask(SIG_UNBLOCK, &amp;mask, NULL) == -1)
+        errExit(&quot;sigprocmask&quot;);
+
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+<A NAME="lbAM">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+
+
+<B><A HREF="../man2/clock_gettime.2.html">clock_gettime</A></B>(2),
+
+<B><A HREF="../man2/setitimer.2.html">setitimer</A></B>(2),
+
+<B><A HREF="../man2/timer_delete.2.html">timer_delete</A></B>(2),
+
+<B><A HREF="../man2/timer_getoverrun.2.html">timer_getoverrun</A></B>(2),
+
+<B><A HREF="../man2/timer_settime.2.html">timer_settime</A></B>(2),
+
+<B><A HREF="../man2/timerfd_create.2.html">timerfd_create</A></B>(2),
+
+<B><A HREF="../man3/clock_getcpuclockid.3.html">clock_getcpuclockid</A></B>(3),
+
+<B><A HREF="../man3/pthread_getcpuclockid.3.html">pthread_getcpuclockid</A></B>(3),
+
+<B><A HREF="../man7/pthreads.7.html">pthreads</A></B>(7),
+
+<B><A HREF="../man7/sigevent.7.html">sigevent</A></B>(7),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7),
+
+<B><A HREF="../man7/time.7.html">time</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAJ">C library/kernel ABI differences</A><DD>
+</DL>
+<DT><A HREF="#lbAK">EXAMPLE</A><DD>
+<DL>
+<DT><A HREF="#lbAL">Program source</A><DD>
+</DL>
+<DT><A HREF="#lbAM">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:45 GMT, September 18, 2014
+</BODY>
+</HTML>

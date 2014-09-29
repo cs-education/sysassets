@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of PTHREAD_SIGQUEUE</TITLE>
+</HEAD><BODY>
+<H1>PTHREAD_SIGQUEUE</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-05-28<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+pthread_sigqueue - queue a signal and data to a thread
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/signal.h">signal.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/pthread.h">pthread.h</A>&gt;</B>
+
+<B>int pthread_sigqueue(pthread_t </B><I>thread</I><B>, int </B><I>sig</I><B>,</B>
+<B>                     const union sigval </B><I>value</I><B>);</B>
+</PRE>
+
+<P>
+Compile and link with <I>-pthread</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>pthread_sigqueue</B>():
+
+_GNU_SOURCE
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>pthread_sigqueue</B>()
+
+function performs a similar task to
+<B><A HREF="../man3/sigqueue.3.html">sigqueue</A></B>(3),
+
+but, rather than sending a signal to a process,
+it sends a signal to a thread in the same process as the
+calling thread.
+<P>
+The
+<I>thread</I>
+
+argument is the ID of a thread in the same process as the caller.
+The
+<I>sig</I>
+
+argument specifies the signal to be sent.
+The
+<I>value</I>
+
+argument specifies data to accompany the signal; see
+<B><A HREF="../man3/sigqueue.3.html">sigqueue</A></B>(3)
+
+for details.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>pthread_sigqueue</B>()
+
+returns 0;
+on error, it returns an error number.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EAGAIN</B>
+
+<DD>
+The limit of signals which may be queued has been reached.
+(See
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+for further information.)
+<DT><B>EINVAL</B>
+
+<DD>
+<I>sig</I>
+
+was invalid.
+<DT><B>ENOSYS</B>
+
+<DD>
+<B>pthread_sigqueue</B>()
+
+is not supported on this system.
+<DT><B>ESRCH</B>
+
+<DD>
+<I>thread</I>
+
+is not valid.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>pthread_sigqueue</B>()
+
+function first appeared in glibc 2.11.
+<A NAME="lbAH">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>pthread_sigqueue</B>()
+
+function is thread-safe.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function is a GNU extension.
+<A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/rt_tgsigqueueinfo.2.html">rt_tgsigqueueinfo</A></B>(2),
+
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man3/pthread_sigmask.3.html">pthread_sigmask</A></B>(3),
+
+<B><A HREF="../man3/sigqueue.3.html">sigqueue</A></B>(3),
+
+<B><A HREF="../man3/sigwait.3.html">sigwait</A></B>(3),
+
+<B><A HREF="../man7/pthreads.7.html">pthreads</A></B>(7),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:01 GMT, September 18, 2014
+</BODY>
+</HTML>

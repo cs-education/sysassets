@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of TERMIO</TITLE>
+</HEAD><BODY>
+<H1>TERMIO</H1>
+Section: Linux Programmer's Manual (7)<BR>Updated: 2013-02-12<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+termio - System V terminal driver interface
+<A NAME="lbAC">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>termio</B>
+
+is the name of the old System V terminal driver interface.
+This interface defined a
+<I>termio</I>
+
+structure used to store terminal settings, and a range of
+<B><A HREF="../man2/ioctl.2.html">ioctl</A></B>(2)
+
+operations to get and set terminal attributes.
+<P>
+The
+<B>termio</B>
+
+interface is now obsolete: POSIX.1-1990 standardized a modified
+version of this interface, under the name
+<B>termios</B>.
+
+The POSIX.1 data structure differs slightly from the
+System V version, and POSIX.1 defined a suite of functions
+to replace the various
+<B><A HREF="../man2/ioctl.2.html">ioctl</A></B>(2)
+
+operations that existed in System V.
+(This was done because
+<B><A HREF="../man2/ioctl.2.html">ioctl</A></B>(2)
+
+was unstandardized, and its variadic third argument
+does not allow argument type checking.)
+<P>
+If you're looking for page called &quot;termio&quot;, then you can probably
+find most of the information that you seek in either
+<B><A HREF="../man3/termios.3.html">termios</A></B>(3)
+
+or
+<B><A HREF="../man4/tty_ioctl.4.html">tty_ioctl</A></B>(4).
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/reset.1.html">reset</A></B>(1),
+
+<B><A HREF="../man1/setterm.1.html">setterm</A></B>(1),
+
+<B><A HREF="../man1/stty.1.html">stty</A></B>(1),
+
+<B><A HREF="../man3/termios.3.html">termios</A></B>(3),
+
+<B><A HREF="../man4/tty.4.html">tty</A></B>(4),
+
+<B><A HREF="../man4/tty_ioctl.4.html">tty_ioctl</A></B>(4)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAD">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:20 GMT, September 18, 2014
+</BODY>
+</HTML>

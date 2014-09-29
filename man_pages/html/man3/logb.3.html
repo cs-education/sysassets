@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of LOGB</TITLE>
+</HEAD><BODY>
+<H1>LOGB</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-02-28<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+logb, logbf, logbl - get exponent of a floating-point value
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/math.h">math.h</A>&gt;</B>
+
+<P>
+<B>double logb(double </B><I>x</I><B>);</B>
+
+<BR>
+
+<B>float logbf(float </B><I>x</I><B>);</B>
+
+<BR>
+
+<B>long double logbl(long double </B><I>x</I><B>);</B>
+
+<P>
+Link with <I>-lm</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>logb</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED || _ISOC99_SOURCE ||
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+<BR>
+
+<B>logbf</B>(),
+
+<B>logbl</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600 || _ISOC99_SOURCE ||
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+These functions extract the exponent from the
+internal floating-point representation of
+<I>x</I>
+
+and return it as a floating-point value.
+The integer constant
+<B>FLT_RADIX</B>,
+
+defined in
+<I>&lt;<A HREF="file:///usr/include/float.h">float.h</A>&gt;</I>,
+
+indicates the radix used for the system's floating-point representation.
+If
+<B>FLT_RADIX</B>
+
+is 2,
+<B>logb(</B><I>x</I><B>)</B>
+
+is equal to
+<B>floor(log2(</B><I>x</I><B>))</B>,
+
+except that it is probably faster.
+<P>
+
+If
+<I>x</I>
+
+is subnormal,
+<B>logb</B>()
+
+returns the exponent
+<I>x</I>
+
+would have if it were normalized.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these functions return the exponent of
+<I>x</I>.
+
+<P>
+If
+<I>x</I>
+
+is a NaN,
+a NaN is returned.
+<P>
+If
+<I>x</I>
+
+is zero, then a pole error occurs, and the functions return
+-<B>HUGE_VAL</B>,
+
+-<B>HUGE_VALF</B>,
+
+or
+-<B>HUGE_VALL</B>,
+
+respectively.
+<P>
+If
+<I>x</I>
+
+is negative infinity or positive infinity, then
+positive infinity is returned.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+See
+<B><A HREF="../man7/math_error.7.html">math_error</A></B>(7)
+
+for information on how to determine whether an error has occurred
+when calling these functions.
+<P>
+
+The following errors can occur:
+<DL COMPACT>
+<DT>Pole error: <I>x</I> is 0<DD>
+
+
+
+A divide-by-zero floating-point exception
+(<B>FE_DIVBYZERO</B>)
+
+is raised.
+</DL>
+<P>
+
+These functions do not set
+<I>errno</I>.
+
+
+
+
+
+
+
+
+
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>logb</B>(),
+
+<B>logbf</B>(),
+
+and
+<B>logbl</B>()
+
+functions are thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+C99, POSIX.1-2001.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/ilogb.3.html">ilogb</A></B>(3),
+
+<B><A HREF="../man3/log.3.html">log</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:06 GMT, September 18, 2014
+</BODY>
+</HTML>

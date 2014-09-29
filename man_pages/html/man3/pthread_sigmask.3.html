@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of PTHREAD_SIGMASK</TITLE>
+</HEAD><BODY>
+<H1>PTHREAD_SIGMASK</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-05-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+pthread_sigmask - examine and change mask of blocked signals
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/signal.h">signal.h</A>&gt;</B>
+
+<B>int pthread_sigmask(int </B><I>how</I><B>, const sigset_t *</B><I>set</I><B>, sigset_t *</B><I>oldset</I><B>);</B>
+</PRE>
+
+<P>
+Compile and link with <I>-pthread</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>pthread_sigmask</B>():
+
+<DL COMPACT><DT><DD>
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;199506L || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>pthread_sigmask</B>()
+
+function is just like
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2),
+
+with the difference that its use in multithreaded programs
+is explicitly specified by POSIX.1-2001.
+Other differences are noted in this page.
+<P>
+For a description of the arguments and operation of this function, see
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2).
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>pthread_sigmask</B>()
+
+returns 0;
+on error, it returns an error number.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+See
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2).
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>pthread_sigmask</B>()
+
+function is thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+A new thread inherits a copy of its creator's signal mask.
+<A NAME="lbAK">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The program below blocks some signals in the main thread,
+and then creates a dedicated thread to fetch those signals via
+<B><A HREF="../man3/sigwait.3.html">sigwait</A></B>(3).
+
+The following shell session demonstrates its use:
+<P>
+
+<PRE>
+$<B> ./a.out &amp;</B>
+[1] 5423
+$<B> kill -QUIT %1</B>
+Signal handling thread got signal 3
+$<B> kill -USR1 %1</B>
+Signal handling thread got signal 10
+$<B> kill -TERM %1</B>
+[1]+  Terminated              ./a.out
+</PRE>
+
+
+<A NAME="lbAL">&nbsp;</A>
+<H3>Program source</H3>
+
+
+<PRE>
+#include &lt;<A HREF="file:///usr/include/pthread.h">pthread.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/signal.h">signal.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/errno.h">errno.h</A>&gt;
+
+/* Simple error handling functions */
+
+#define handle_error_en(en, msg) \
+        do { errno = en; perror(msg); exit(EXIT_FAILURE); } while (0)
+
+static void *
+sig_thread(void *arg)
+{
+    sigset_t *set = arg;
+    int s, sig;
+
+    for (;;) {
+        s = sigwait(set, &amp;sig);
+        if (s != 0)
+            handle_error_en(s, &quot;sigwait&quot;);
+        printf(&quot;Signal handling thread got signal %d\n&quot;, sig);
+    }
+}
+
+int
+main(int argc, char *argv[])
+{
+    pthread_t thread;
+    sigset_t set;
+    int s;
+
+    /* Block SIGQUIT and SIGUSR1; other threads created by main()
+       will inherit a copy of the signal mask. */
+
+    sigemptyset(&amp;set);
+    sigaddset(&amp;set, SIGQUIT);
+    sigaddset(&amp;set, SIGUSR1);
+    s = pthread_sigmask(SIG_BLOCK, &amp;set, NULL);
+    if (s != 0)
+        handle_error_en(s, &quot;pthread_sigmask&quot;);
+
+    s = pthread_create(&amp;thread, NULL, &amp;sig_thread, (void *) &amp;set);
+    if (s != 0)
+        handle_error_en(s, &quot;pthread_create&quot;);
+
+    /* Main thread carries on to create other threads and/or do
+       other work */
+
+    pause();            /* Dummy pause so we can test program */
+}
+</PRE>
+
+<A NAME="lbAM">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man2/sigpending.2.html">sigpending</A></B>(2),
+
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2),
+
+<B><A HREF="../man3/pthread_create.3.html">pthread_create</A></B>(3),
+
+<B><A HREF="../man3/pthread_kill.3.html">pthread_kill</A></B>(3),
+
+<B><A HREF="../man3/sigsetops.3.html">sigsetops</A></B>(3),
+
+<B><A HREF="../man7/pthreads.7.html">pthreads</A></B>(7),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DT><A HREF="#lbAK">EXAMPLE</A><DD>
+<DL>
+<DT><A HREF="#lbAL">Program source</A><DD>
+</DL>
+<DT><A HREF="#lbAM">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:01 GMT, September 18, 2014
+</BODY>
+</HTML>

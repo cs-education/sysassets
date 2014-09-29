@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of ABORT</TITLE>
+</HEAD><BODY>
+<H1>ABORT</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-03-25<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+abort - cause abnormal process termination
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;</B>
+
+<B>void abort(void);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>abort</B>()
+
+first unblocks the
+<B>SIGABRT</B>
+
+signal, and then raises that signal for the calling process.
+This results in the abnormal termination of the process unless the
+<B>SIGABRT</B>
+
+signal is caught and the signal handler does not return
+(see
+<B><A HREF="../man3/longjmp.3.html">longjmp</A></B>(3)).
+
+<P>
+
+If the
+<B>abort</B>()
+
+function causes process termination,
+all open streams are closed and flushed.
+<P>
+
+If the
+<B>SIGABRT</B>
+
+signal is ignored, or caught by a handler that returns, the
+<B>abort</B>()
+
+function will still terminate the process.
+It does this by restoring the default disposition for
+<B>SIGABRT</B>
+
+and then raising the signal for a second time.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>abort</B>()
+
+function never returns.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>abort</B>()
+
+function is thread-safe.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, POSIX.1-2001, 4.3BSD, C89, C99.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/gdb.1.html">gdb</A></B>(1),
+
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man3/exit.3.html">exit</A></B>(3),
+
+<B><A HREF="../man3/longjmp.3.html">longjmp</A></B>(3),
+
+<B><A HREF="../man3/raise.3.html">raise</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAG">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:17 GMT, September 18, 2014
+</BODY>
+</HTML>

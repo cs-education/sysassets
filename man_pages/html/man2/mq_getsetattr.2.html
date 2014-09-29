@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MQ_GETSETATTR</TITLE>
+</HEAD><BODY>
+<H1>MQ_GETSETATTR</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2012-07-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+mq_getsetattr - get/set message queue attributes
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/mqueue.h">mqueue.h</A>&gt;</B>
+
+<B>int mq_getsetattr(mqd_t </B><I>mqdes</I><B>, struct mq_attr *</B><I>newattr</I><B>,</B>
+<B>                 struct mq_attr *</B><I>oldattr</I><B>);</B>
+</PRE>
+
+<P>
+<I>Note</I>:
+
+There is no glibc wrapper for this system call; see NOTES.
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+Do not use this system call.
+<P>
+This is the low-level system call used to implement
+<B><A HREF="../man3/mq_getattr.3.html">mq_getattr</A></B>(3)
+
+and
+<B><A HREF="../man3/mq_setattr.3.html">mq_setattr</A></B>(3).
+
+For an explanation of how this system call operates,
+see the description of
+<B><A HREF="../man3/mq_setattr.3.html">mq_setattr</A></B>(3).
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This interface is nonstandard; avoid its use.
+<A NAME="lbAF">&nbsp;</A>
+<H2>NOTES</H2>
+
+Glibc does not provide a wrapper for this system call; call it using
+<B><A HREF="../man2/syscall.2.html">syscall</A></B>(2).
+
+(Actually, never call it unless you are writing a C library!)
+<A NAME="lbAG">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/mq_getattr.3.html">mq_getattr</A></B>(3),
+
+<B><A HREF="../man7/mq_overview.7.html">mq_overview</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAF">NOTES</A><DD>
+<DT><A HREF="#lbAG">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:49 GMT, September 18, 2014
+</BODY>
+</HTML>

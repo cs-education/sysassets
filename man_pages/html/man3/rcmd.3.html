@@ -1,0 +1,384 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of RCMD</TITLE>
+</HEAD><BODY>
+<H1>RCMD</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-05-28<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+rcmd, rresvport, iruserok, ruserok, rcmd_af,
+rresvport_af, iruserok_af, ruserok_af - routines for returning a
+stream to a remote command
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/netdb.h">netdb.h</A>&gt; &nbsp;&nbsp;</B>/* Or &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt; on some systems */
+
+<B>int rcmd(char **</B><I>ahost</I><B>, unsigned short </B><I>inport</I><B>, const char *</B><I>locuser</I><B>, </B>
+<B>         const char *</B><I>remuser</I><B>, const char *</B><I>cmd</I><B>, int *</B><I>fd2p</I><B>);</B>
+
+<B>int rresvport(int *</B><I>port</I><B>);</B>
+
+<B>int iruserok(uint32_t </B><I>raddr</I><B>, int </B><I>superuser</I><B>, </B>
+<B>             const char *</B><I>ruser</I><B>, const char *</B><I>luser</I><B>);</B>
+
+<B>int ruserok(const char *</B><I>rhost</I><B>, int </B><I>superuser</I><B>, </B>
+<B>            const char *</B><I>ruser</I><B>, const char *</B><I>luser</I><B>);</B>
+
+<B>int rcmd_af(char **</B><I>ahost</I><B>, unsigned short </B><I>inport</I><B>, const char *</B><I>locuser</I><B>, </B>
+<B>            const char *</B><I>remuser</I><B>, const char *</B><I>cmd</I><B>, int *</B><I>fd2p</I><B>,</B>
+<B>            sa_family_t </B><I>af</I><B>);</B>
+
+<B>int rresvport_af(int *</B><I>port</I><B>, sa_family_t </B><I>af</I><B>);</B>
+
+<B>int iruserok_af(const void *</B><I>raddr</I><B>, int </B><I>superuser</I><B>, </B>
+<B>                const char *</B><I>ruser</I><B>, const char *</B><I>luser</I><B>, sa_family_t </B><I>af</I><B>);</B>
+
+<B>int ruserok_af(const char *</B><I>rhost</I><B>, int </B><I>superuser</I><B>, </B>
+<B>               const char *</B><I>ruser</I><B>, const char *</B><I>luser</I><B>, sa_family_t </B><I>af</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>rcmd</B>(),
+
+<B>rcmd_af</B>(),
+
+<B>rresvport</B>(),
+
+<B>rresvport_af</B>(),
+
+<B>iruserok</B>(),
+
+<B>iruserok_af</B>(),
+
+<B>ruserok</B>(),
+
+<B>ruserok_af</B>():
+
+_BSD_SOURCE
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>rcmd</B>()
+
+function is used by the superuser to execute a command on
+a remote machine using an authentication scheme based
+on privileged port numbers.
+The
+<B>rresvport</B>()
+
+function
+returns a descriptor to a socket
+with an address in the privileged port space.
+The
+<B>iruserok</B>()
+
+and
+<B>ruserok</B>()
+
+functions are used by servers
+to authenticate clients requesting service with
+<B>rcmd</B>().
+
+All four functions are used by the
+<B><A HREF="../man8/rshd.8.html">rshd</A></B>(8)
+
+server (among others).
+<A NAME="lbAE">&nbsp;</A>
+<H3>rcmd()</H3>
+
+<P>
+
+The
+<B>rcmd</B>()
+
+function
+looks up the host
+<I>*ahost</I>
+
+using
+<B><A HREF="../man3/gethostbyname.3.html">gethostbyname</A></B>(3),
+
+returning -1 if the host does not exist.
+Otherwise,
+<I>*ahost</I>
+
+is set to the standard name of the host
+and a connection is established to a server
+residing at the well-known Internet port
+<I>inport</I>.
+
+<P>
+
+If the connection succeeds,
+a socket in the Internet domain of type
+<B>SOCK_STREAM</B>
+
+is returned to the caller, and given to the remote
+command as
+<I>stdin</I>
+
+and
+<I>stdout</I>.
+
+If
+<I>fd2p</I>
+
+is nonzero, then an auxiliary channel to a control
+process will be set up, and a descriptor for it will be placed
+in
+<I>*fd2p</I>.
+
+The control process will return diagnostic
+output from the command (unit 2) on this channel, and will also
+accept bytes on this channel as being UNIX signal numbers, to be
+forwarded to the process group of the command.
+If
+<I>fd2p</I>
+
+is 0, then the
+<I>stderr</I>
+
+(unit 2 of the remote
+command) will be made the same as the
+<I>stdout</I>
+
+and no
+provision is made for sending arbitrary signals to the remote process,
+although you may be able to get its attention by using out-of-band data.
+<P>
+
+The protocol is described in detail in
+<B><A HREF="../man8/rshd.8.html">rshd</A></B>(8).
+
+<A NAME="lbAF">&nbsp;</A>
+<H3>rresvport()</H3>
+
+<P>
+
+The
+<B>rresvport</B>()
+
+function is used to obtain a socket with a privileged
+port bound to it.
+This socket is suitable for use by
+<B>rcmd</B>()
+
+and several other functions.
+Privileged ports are those in the range 0 to 1023.
+Only a privileged process
+(<B>CAP_NET_BIND_SERVICE</B>)
+
+is allowed to bind to a privileged port.
+In the glibc implementation,
+this function restricts its search to the ports from 512 to 1023.
+The
+<I>port</I>
+
+argument is value-result:
+the value it supplies to the call is used as the starting point
+for a circular search of the port range;
+on (successful) return, it contains the port number that was bound to.
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>iruserok() and ruserok()</H3>
+
+<P>
+
+The
+<B>iruserok</B>()
+
+and
+<B>ruserok</B>()
+
+functions take a remote host's IP address or name, respectively,
+two usernames and a flag indicating whether the local user's
+name is that of the superuser.
+Then, if the user is
+<I>not</I>
+
+the superuser, it checks the
+<I>/etc/hosts.equiv</I>
+
+file.
+If that lookup is not done, or is unsuccessful, the
+<I>.rhosts</I>
+
+in the local user's home directory is checked to see if the request for
+service is allowed.
+<P>
+
+If this file does not exist, is not a regular file, is owned by anyone
+other than the user or the superuser, or is writable by anyone other
+than the owner, the check automatically fails.
+Zero is returned if the machine name is listed in the
+<I>hosts.equiv</I>
+
+file, or the host and remote username are found in the
+<I>.rhosts</I>
+
+file; otherwise
+<B>iruserok</B>()
+
+and
+<B>ruserok</B>()
+
+return -1.
+If the local domain (as obtained from
+<B><A HREF="../man2/gethostname.2.html">gethostname</A></B>(2))
+
+is the same as the remote domain, only the machine name need be specified.
+<P>
+
+If the IP address of the remote host is known,
+<B>iruserok</B>()
+
+should be used in preference to
+<B>ruserok</B>(),
+
+as it does not require trusting the DNS server for the remote host's domain.
+<A NAME="lbAH">&nbsp;</A>
+<H3>*_af() variants</H3>
+
+All of the functions described above work with IPv4
+(<B>AF_INET</B>)
+
+sockets.
+The &quot;_af&quot; variants take an extra argument that allows the
+socket address family to be specified.
+For these functions, the
+<I>af</I>
+
+argument can be specified as
+<B>AF_INET</B>
+
+or
+<B>AF_INET6</B>.
+
+In addition,
+<B>rcmd_af</B>()
+
+supports the use of
+<B>AF_UNSPEC</B>.
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>rcmd</B>()
+
+function
+returns a valid socket descriptor on success.
+It returns -1 on error and prints a diagnostic message on the standard error.
+<P>
+
+The
+<B>rresvport</B>()
+
+function
+returns a valid, bound socket descriptor on success.
+It returns -1 on error with the global value
+<I>errno</I>
+
+set according to the reason for failure.
+The error code
+<B>EAGAIN</B>
+
+is overloaded to mean &quot;All network ports in use.&quot;
+<P>
+For information on the return from
+<B>ruserok</B>()
+
+and
+<B>iruserok</B>(),
+
+see above.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The functions
+<B>iruserok_af</B>(),
+
+<B>rcmd_af</B>(),
+
+<B>rresvport_af</B>(),
+
+and
+<B>ruserok_af</B>()
+
+functions are provide in glibc since version 2.2.
+<A NAME="lbAK">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+Not in POSIX.1-2001.
+Present on the BSDs, Solaris, and many other systems.
+These
+functions appeared in
+4.2BSD.
+The &quot;_af&quot; variants are more recent additions,
+and are not present on as wide a range of systems.
+<A NAME="lbAL">&nbsp;</A>
+<H2>BUGS</H2>
+
+<B>iruserok</B>()
+
+and
+<B>iruserok_af</B>()
+
+are declared in glibc headers only since version 2.12.
+
+
+<A NAME="lbAM">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/rlogin.1.html">rlogin</A></B>(1),
+
+<B><A HREF="../man1/rsh.1.html">rsh</A></B>(1),
+
+<B><A HREF="../man2/intro.2.html">intro</A></B>(2),
+
+<B><A HREF="../man3/rexec.3.html">rexec</A></B>(3),
+
+<B><A HREF="../man8/rexecd.8.html">rexecd</A></B>(8),
+
+<B><A HREF="../man8/rlogind.8.html">rlogind</A></B>(8),
+
+<B><A HREF="../man8/rshd.8.html">rshd</A></B>(8)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">rcmd()</A><DD>
+<DT><A HREF="#lbAF">rresvport()</A><DD>
+<DT><A HREF="#lbAG">iruserok() and ruserok()</A><DD>
+<DT><A HREF="#lbAH">*_af() variants</A><DD>
+</DL>
+<DT><A HREF="#lbAI">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAJ">VERSIONS</A><DD>
+<DT><A HREF="#lbAK">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAL">BUGS</A><DD>
+<DT><A HREF="#lbAM">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:02 GMT, September 18, 2014
+</BODY>
+</HTML>

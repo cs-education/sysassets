@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GCVT</TITLE>
+</HEAD><BODY>
+<H1>GCVT</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-05-28<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+gcvt - convert a floating-point number to a string
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;</B>
+
+<B>char *gcvt(double </B><I>number</I><B>, int </B><I>ndigit</I><B>, char *</B><I>buf</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>gcvt</B>():
+
+
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Since glibc 2.12:<DD>
+<PRE>
+_SVID_SOURCE ||
+    (_XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+        _XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED) &amp;&amp;
+    !(_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600)
+</PRE>
+
+<DT>Before glibc 2.12:<DD>
+_SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE &amp;&amp; _XOPEN_SOURCE_EXTENDED
+</DL>
+</DL>
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>gcvt</B>()
+
+function converts <I>number</I> to a minimal length null-terminated
+ASCII string and stores the result in <I>buf</I>.
+It produces <I>ndigit</I> significant digits in either
+<B><A HREF="../man3/printf.3.html">printf</A></B>(3)
+
+F format or E format.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>gcvt</B>()
+
+function returns the address of the string pointed to
+by <I>buf</I>.
+<A NAME="lbAF">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+Marked as LEGACY in POSIX.1-2001.
+POSIX.1-2008 removes the specification of
+<B>gcvt</B>(),
+
+recommending the use of
+<B><A HREF="../man3/sprintf.3.html">sprintf</A></B>(3)
+
+instead (though
+<B><A HREF="../man3/snprintf.3.html">snprintf</A></B>(3)
+
+may be preferable).
+<A NAME="lbAG">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/ecvt.3.html">ecvt</A></B>(3),
+
+<B><A HREF="../man3/fcvt.3.html">fcvt</A></B>(3),
+
+<B><A HREF="../man3/sprintf.3.html">sprintf</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAG">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:10 GMT, September 18, 2014
+</BODY>
+</HTML>

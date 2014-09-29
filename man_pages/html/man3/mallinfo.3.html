@@ -1,0 +1,343 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MALLINFO</TITLE>
+</HEAD><BODY>
+<H1>MALLINFO</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2012-05-06<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+mallinfo - obtain memory allocation information
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/malloc.h">malloc.h</A>&gt;</B>
+
+<P>
+<B>struct mallinfo mallinfo(void);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>mallinfo</B>()
+
+function returns a copy of a structure containing information about
+memory allocations performed by
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3)
+
+and related functions.
+This structure is defined as follows:
+<P>
+
+
+<PRE>
+struct mallinfo {
+    int arena;     /* Non-mmapped space allocated (bytes) */
+    int ordblks;   /* Number of free chunks */
+    int smblks;    /* Number of free fastbin blocks */
+    int hblks;     /* Number of mmapped regions */
+    int hblkhd;    /* Space allocated in mmapped regions (bytes) */
+    int usmblks;   /* Maximum total allocated space (bytes) */
+    int fsmblks;   /* Space in freed fastbin blocks (bytes) */
+    int uordblks;  /* Total allocated space (bytes) */
+    int fordblks;  /* Total free space (bytes) */
+    int keepcost;  /* Top-most, releasable space (bytes) */
+};
+</PRE>
+
+
+<P>
+
+The fields of the
+<I>mallinfo</I>
+
+structure contain the following information:
+<DL COMPACT>
+<DT><I>arena</I>
+
+<DD>
+The total amount of memory allocated by means other than
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)
+
+(i.e., memory allocated on the heap).
+This figure includes both in-use blocks and blocks on the free list.
+<DT><I>ordblks</I>
+
+<DD>
+The number of ordinary (i.e., non-fastbin) free blocks.
+<DT><I>smblks</I>
+
+<DD>
+The number of fastbin free blocks (see
+<B><A HREF="../man3/mallopt.3.html">mallopt</A></B>(3)).
+
+<DT><I>hblks</I>
+
+<DD>
+The number of blocks currently allocated using
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2).
+
+(See the discussion of
+<B>M_MMAP_THRESHOLD</B>
+
+in
+<B><A HREF="../man3/mallopt.3.html">mallopt</A></B>(3).)
+
+<DT><I>hblkhd</I>
+
+<DD>
+The number of bytes in blocks currently allocated using
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2).
+
+<DT><I>usmblks</I>
+
+<DD>
+The &quot;highwater mark&quot; for allocated space---that is,
+the maximum amount of space that was ever allocated.
+This field is maintained only in nonthreading environments.
+<DT><I>fsmblks</I>
+
+<DD>
+The total number of bytes in fastbin free blocks.
+<DT><I>uordblks</I>
+
+<DD>
+The total number of bytes used by in-use allocations.
+<DT><I>fordblks</I>
+
+<DD>
+The total number of bytes in free blocks.
+<DT><I>keepcost</I>
+
+<DD>
+The total amount of releasable free space at the top
+of the heap.
+This is the maximum number of bytes that could ideally
+(i.e., ignoring page alignment restrictions, and so on) be released by
+<B><A HREF="../man3/malloc_trim.3.html">malloc_trim</A></B>(3).
+
+
+
+</DL>
+<A NAME="lbAE">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function is not specified by POSIX or the C standards.
+A similar function exists on many System V derivatives,
+and was specified in the SVID.
+<A NAME="lbAF">&nbsp;</A>
+<H2>BUGS</H2>
+
+
+
+
+
+<B>Information is returned for only the main memory allocation area.</B>
+
+Allocations in other arenas are excluded.
+See
+<B><A HREF="../man3/malloc_stats.3.html">malloc_stats</A></B>(3)
+
+and
+<B><A HREF="../man3/malloc_info.3.html">malloc_info</A></B>(3)
+
+for alternatives that include information about other arenas.
+<P>
+The fields of the
+<I>mallinfo</I>
+
+structure are typed as
+<I>int</I>.
+
+However, because some internal bookkeeping values may be of type
+<I>long</I>,
+
+the reported values may wrap around zero and thus be inaccurate.
+<A NAME="lbAG">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The program below employs
+<B>mallinfo</B>()
+
+to retrieve memory allocation statistics before and after
+allocating and freeing some blocks of memory.
+The statistics are displayed on standard output.
+<P>
+The first two command-line arguments specify the number and size of
+blocks to be allocated with
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3).
+
+<P>
+The remaining three arguments specify which of the allocated blocks
+should be freed with
+<B><A HREF="../man3/free.3.html">free</A></B>(3).
+
+These three arguments are optional, and specify (in order):
+the step size to be used in the loop that frees blocks
+(the default is 1, meaning free all blocks in the range);
+the ordinal position of the first block to be freed
+(default 0, meaning the first allocated block);
+and a number one greater than the ordinal position
+of the last block to be freed
+(default is one greater than the maximum block number).
+If these three arguments are omitted,
+then the defaults cause all allocated blocks to be freed.
+<P>
+In the following example run of the program,
+1000 allocations of 100 bytes are performed,
+and then every second allocated block is freed:
+<P>
+
+
+<PRE>
+$ <B>./a.out 1000 100 2</B>
+============== Before allocating blocks ==============
+Total non-mmapped bytes (arena):       0
+# of free chunks (ordblks):            1
+# of free fastbin blocks (smblks):     0
+# of mapped regions (hblks):           0
+Bytes in mapped regions (hblkhd):      0
+Max. total allocated space (usmblks):  0
+Free bytes held in fastbins (fsmblks): 0
+Total allocated space (uordblks):      0
+Total free space (fordblks):           0
+Topmost releasable block (keepcost):   0
+
+============== After allocating blocks ==============
+Total non-mmapped bytes (arena):       135168
+# of free chunks (ordblks):            1
+# of free fastbin blocks (smblks):     0
+# of mapped regions (hblks):           0
+Bytes in mapped regions (hblkhd):      0
+Max. total allocated space (usmblks):  0
+Free bytes held in fastbins (fsmblks): 0
+Total allocated space (uordblks):      104000
+Total free space (fordblks):           31168
+Topmost releasable block (keepcost):   31168
+
+============== After freeing blocks ==============
+Total non-mmapped bytes (arena):       135168
+# of free chunks (ordblks):            501
+# of free fastbin blocks (smblks):     0
+# of mapped regions (hblks):           0
+Bytes in mapped regions (hblkhd):      0
+Max. total allocated space (usmblks):  0
+Free bytes held in fastbins (fsmblks): 0
+Total allocated space (uordblks):      52000
+Total free space (fordblks):           83168
+Topmost releasable block (keepcost):   31168
+</PRE>
+
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Program source</H3>
+
+
+<PRE>
+#include &lt;<A HREF="file:///usr/include/malloc.h">malloc.h</A>&gt;
+#include &quot;tlpi_hdr.h&quot;
+
+static void
+display_mallinfo(void)
+{
+    struct mallinfo mi;
+
+    mi = mallinfo();
+
+    printf(&quot;Total non-mmapped bytes (arena):       %d\n&quot;, mi.arena);
+    printf(&quot;# of free chunks (ordblks):            %d\n&quot;, mi.ordblks);
+    printf(&quot;# of free fastbin blocks (smblks):     %d\n&quot;, mi.smblks);
+    printf(&quot;# of mapped regions (hblks):           %d\n&quot;, mi.hblks);
+    printf(&quot;Bytes in mapped regions (hblkhd):      %d\n&quot;, mi.hblkhd);
+    printf(&quot;Max. total allocated space (usmblks):  %d\n&quot;, mi.usmblks);
+    printf(&quot;Free bytes held in fastbins (fsmblks): %d\n&quot;, mi.fsmblks);
+    printf(&quot;Total allocated space (uordblks):      %d\n&quot;, mi.uordblks);
+    printf(&quot;Total free space (fordblks):           %d\n&quot;, mi.fordblks);
+    printf(&quot;Topmost releasable block (keepcost):   %d\n&quot;, mi.keepcost);
+}
+
+int
+main(int argc, char *argv[])
+{
+#define MAX_ALLOCS 2000000
+    char *alloc[MAX_ALLOCS];
+    int numBlocks, j, freeBegin, freeEnd, freeStep;
+    size_t blockSize;
+
+    if (argc &lt; 3 || strcmp(argv[1], &quot;--help&quot;) == 0)
+        usageErr(&quot;%s num-blocks block-size [free-step [start-free &quot;
+                &quot;[end-free]]]\n&quot;, argv[0]);
+
+    numBlocks = atoi(argv[1]);
+    blockSize = atoi(argv[2]);
+    freeStep = (argc &gt; 3) ? atoi(argv[3]) : 1;
+    freeBegin = (argc &gt; 4) ? atoi(argv[4]) : 0;
+    freeEnd = (argc &gt; 5) ? atoi(argv[5]) : numBlocks;
+
+    printf(&quot;============== Before allocating blocks ==============\n&quot;);
+    display_mallinfo();
+
+    for (j = 0; j &lt; numBlocks; j++) {
+        if (numBlocks &gt;= MAX_ALLOCS)
+            fatal(&quot;Too many allocations&quot;);
+
+        alloc[j] = malloc(blockSize);
+        if (alloc[j] == NULL)
+            errExit(&quot;malloc&quot;);
+    }
+
+    printf(&quot;\n============== After allocating blocks ==============\n&quot;);
+    display_mallinfo();
+
+    for (j = freeBegin; j &lt; freeEnd; j += freeStep)
+        free(alloc[j]);
+
+    printf(&quot;\n============== After freeing blocks ==============\n&quot;);
+    display_mallinfo();
+
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+
+
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2),
+
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3),
+
+<B><A HREF="../man3/malloc_info.3.html">malloc_info</A></B>(3),
+
+<B><A HREF="../man3/malloc_stats.3.html">malloc_stats</A></B>(3),
+
+<B><A HREF="../man3/malloc_trim.3.html">malloc_trim</A></B>(3),
+
+<B><A HREF="../man3/mallopt.3.html">mallopt</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAF">BUGS</A><DD>
+<DT><A HREF="#lbAG">EXAMPLE</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Program source</A><DD>
+</DL>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:03 GMT, September 18, 2014
+</BODY>
+</HTML>

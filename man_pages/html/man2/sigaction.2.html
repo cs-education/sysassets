@@ -1,0 +1,1129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SIGACTION</TITLE>
+</HEAD><BODY>
+<H1>SIGACTION</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-04-27<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+sigaction - examine and change a signal action
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/signal.h">signal.h</A>&gt;</B>
+
+<B>int sigaction(int </B><I>signum</I><B>, const struct sigaction *</B><I>act</I><B>,</B>
+<B>              struct sigaction *</B><I>oldact</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>sigaction</B>():
+
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;1 || _XOPEN_SOURCE || _POSIX_SOURCE
+<P>
+<I>siginfo_t</I>:
+
+_POSIX_C_SOURCE &gt;= 199309L
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>sigaction</B>()
+
+system call is used to change the action taken by a process on
+receipt of a specific signal.
+(See
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+for an overview of signals.)
+<P>
+
+<I>signum</I>
+
+specifies the signal and can be any valid signal except
+<B>SIGKILL</B>
+
+and
+<B>SIGSTOP</B>.
+
+<P>
+
+If
+<I>act</I>
+
+is non-NULL, the new action for signal
+<I>signum</I>
+
+is installed from
+<I>act</I>.
+
+If
+<I>oldact</I>
+
+is non-NULL, the previous action is saved in
+<I>oldact</I>.
+
+<P>
+
+The
+<I>sigaction</I>
+
+structure is defined as something like:
+<P>
+
+<PRE>
+struct sigaction {
+    void     (*sa_handler)(int);
+    void     (*sa_sigaction)(int, siginfo_t *, void *);
+    sigset_t   sa_mask;
+    int        sa_flags;
+    void     (*sa_restorer)(void);
+};
+</PRE>
+
+
+<P>
+
+On some architectures a union is involved: do not assign to both
+<I>sa_handler</I>
+
+and
+<I>sa_sigaction</I>.
+
+<P>
+
+The
+<I>sa_restorer</I>
+
+element is obsolete and should not be used.
+POSIX does not specify a
+<I>sa_restorer</I>
+
+element.
+<P>
+
+<I>sa_handler</I>
+
+specifies the action to be associated with
+<I>signum</I>
+
+and may be
+<B>SIG_DFL</B>
+
+for the default action,
+<B>SIG_IGN</B>
+
+to ignore this signal, or a pointer to a signal handling function.
+This function receives the signal number as its only argument.
+<P>
+
+If
+<B>SA_SIGINFO</B>
+
+is specified in
+<I>sa_flags</I>,
+
+then
+<I>sa_sigaction</I>
+
+(instead of
+<I>sa_handler</I>)
+
+specifies the signal-handling function for
+<I>signum</I>.
+
+This function receives the signal number as its first argument, a
+pointer to a
+<I>siginfo_t</I>
+
+as its second argument and a pointer to a
+<I>ucontext_t</I>
+
+(cast to <I>void&nbsp;*</I>) as its third argument.
+(Commonly, the handler function doesn't make any use of the third argument.
+See
+<B><A HREF="../man3/getcontext.3.html">getcontext</A></B>(3)
+
+for further information about
+<I>ucontext_t</I>.)
+
+<P>
+
+<I>sa_mask</I>
+
+specifies a mask of signals which should be blocked
+(i.e., added to the signal mask of the thread in which
+the signal handler is invoked)
+during execution of the signal handler.
+In addition, the signal which triggered the handler
+will be blocked, unless the
+<B>SA_NODEFER</B>
+
+flag is used.
+<P>
+
+<I>sa_flags</I>
+
+specifies a set of flags which modify the behavior of the signal.
+It is formed by the bitwise OR of zero or more of the following:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>SA_NOCLDSTOP</B>
+
+<DD>
+If
+<I>signum</I>
+
+is
+<B>SIGCHLD</B>,
+
+do not receive notification when child processes stop (i.e., when they
+receive one of
+<B>SIGSTOP</B>, <B>SIGTSTP</B>, <B>SIGTTIN</B>, 
+
+or
+<B>SIGTTOU</B>)
+
+or resume (i.e., they receive
+<B>SIGCONT</B>)
+
+(see
+<B><A HREF="../man2/wait.2.html">wait</A></B>(2)).
+
+This flag is meaningful only when establishing a handler for
+<B>SIGCHLD</B>.
+
+<DT><B>SA_NOCLDWAIT</B> (since Linux 2.6)
+
+<DD>
+
+If
+<I>signum</I>
+
+is
+<B>SIGCHLD</B>,
+
+do not transform children into zombies when they terminate.
+See also
+<B><A HREF="../man2/waitpid.2.html">waitpid</A></B>(2).
+
+This flag is meaningful only when establishing a handler for
+<B>SIGCHLD</B>,
+
+or when setting that signal's disposition to
+<B>SIG_DFL</B>.
+
+<P>
+If the
+<B>SA_NOCLDWAIT</B>
+
+flag is set when establishing a handler for
+<B>SIGCHLD</B>,
+
+POSIX.1 leaves it unspecified whether a
+<B>SIGCHLD</B>
+
+signal is generated when a child process terminates.
+On Linux, a
+<B>SIGCHLD</B>
+
+signal is generated in this case;
+on some other implementations, it is not.
+<DT><B>SA_NODEFER</B>
+
+<DD>
+Do not prevent the signal from being received from within its own signal
+handler.
+This flag is meaningful only when establishing a signal handler.
+<B>SA_NOMASK</B>
+
+is an obsolete, nonstandard synonym for this flag.
+<DT><B>SA_ONSTACK</B>
+
+<DD>
+Call the signal handler on an alternate signal stack provided by
+<B><A HREF="../man2/sigaltstack.2.html">sigaltstack</A></B>(2).
+
+If an alternate stack is not available, the default stack will be used.
+This flag is meaningful only when establishing a signal handler.
+<DT><B>SA_RESETHAND</B>
+
+<DD>
+Restore the signal action to the default upon entry to the signal handler.
+This flag is meaningful only when establishing a signal handler.
+<B>SA_ONESHOT</B>
+
+is an obsolete, nonstandard synonym for this flag.
+<DT><B>SA_RESTART</B>
+
+<DD>
+Provide behavior compatible with BSD signal semantics by making certain
+system calls restartable across signals.
+This flag is meaningful only when establishing a signal handler.
+See
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+for a discussion of system call restarting.
+<DT><B>SA_SIGINFO</B> (since Linux 2.2)
+
+<DD>
+The signal handler takes three arguments, not one.
+In this case,
+<I>sa_sigaction</I>
+
+should be set instead of
+<I>sa_handler</I>.
+
+This flag is meaningful only when establishing a signal handler.
+
+
+
+</DL>
+</DL>
+
+<P>
+
+The
+<I>siginfo_t</I>
+
+argument to
+<I>sa_sigaction</I>
+
+is a struct with the following elements:
+<P>
+
+<PRE>
+siginfo_t {
+    int      si_signo;    /* Signal number */
+    int      si_errno;    /* An errno value */
+    int      si_code;     /* Signal code */
+    int      si_trapno;   /* Trap number that caused
+                             hardware-generated signal
+                             (unused on most architectures) */
+    pid_t    si_pid;      /* Sending process ID */
+    uid_t    si_uid;      /* Real user ID of sending process */
+    int      si_status;   /* Exit value or signal */
+    clock_t  si_utime;    /* User time consumed */
+    clock_t  si_stime;    /* System time consumed */
+    sigval_t si_value;    /* Signal value */
+    int      si_int;      /* POSIX.1b signal */
+    void    *si_ptr;      /* POSIX.1b signal */
+    int      si_overrun;  /* Timer overrun count; POSIX.1b timers */
+    int      si_timerid;  /* Timer ID; POSIX.1b timers */
+    void    *si_addr;     /* Memory location which caused fault */
+    long     si_band;     /* Band event (was <I>int</I> in
+                             glibc 2.3.2 and earlier) */
+    int      si_fd;       /* File descriptor */
+    short    si_addr_lsb; /* Least significant bit of address
+                             (since Linux 2.6.32) */
+}
+</PRE>
+
+
+<P>
+<I>si_signo</I>, <I>si_errno</I> and <I>si_code</I>
+
+are defined for all signals.
+(<I>si_errno</I>
+
+is generally unused on Linux.)
+The rest of the struct may be a union, so that one should
+read only the fields that are meaningful for the given signal:
+<DL COMPACT>
+<DT>*<DD>
+Signals sent with
+<B><A HREF="../man2/kill.2.html">kill</A></B>(2)
+
+and
+<B><A HREF="../man3/sigqueue.3.html">sigqueue</A></B>(3)
+
+fill in
+<I>si_pid</I> and <I>si_uid</I>.
+
+In addition, signals sent with
+<B><A HREF="../man3/sigqueue.3.html">sigqueue</A></B>(3)
+
+fill in
+<I>si_int</I> and <I>si_ptr</I>
+
+with the values specified by the sender of the signal;
+see
+<B><A HREF="../man3/sigqueue.3.html">sigqueue</A></B>(3)
+
+for more details.
+<DT>*<DD>
+Signals sent by POSIX.1b timers (since Linux 2.6) fill in
+<I>si_overrun</I>
+
+and
+<I>si_timerid</I>.
+
+The
+<I>si_timerid</I>
+
+field is an internal ID used by the kernel to identify
+the timer; it is not the same as the timer ID returned by
+<B><A HREF="../man2/timer_create.2.html">timer_create</A></B>(2).
+
+The
+<I>si_overrun</I>
+
+field is the timer overrun count;
+this is the same information as is obtained by a call to
+<B><A HREF="../man2/timer_getoverrun.2.html">timer_getoverrun</A></B>(2).
+
+These fields are nonstandard Linux extensions.
+<DT>*<DD>
+Signals sent for message queue notification (see the description of
+<B>SIGEV_SIGNAL</B>
+
+in
+<B><A HREF="../man3/mq_notify.3.html">mq_notify</A></B>(3))
+
+fill in
+<I>si_int</I>/<I>si_ptr</I>,
+
+with the
+<I>sigev_value</I>
+
+supplied to
+<B><A HREF="../man3/mq_notify.3.html">mq_notify</A></B>(3);
+
+<I>si_pid</I>,
+
+with the process ID of the message sender; and
+<I>si_uid</I>,
+
+with the real user ID of the message sender.
+<DT>*<DD>
+<B>SIGCHLD</B>
+
+fills in
+<I>si_pid</I>, <I>si_uid</I>, <I>si_status</I>, <I>si_utime</I>, and <I>si_stime</I>,
+
+providing information about the child.
+The
+<I>si_pid</I>
+
+field is the process ID of the child;
+<I>si_uid</I>
+
+is the child's real user ID.
+The
+<I>si_status</I>
+
+field contains the exit status of the child (if
+<I>si_code</I>
+
+is
+<B>CLD_EXITED</B>),
+
+or the signal number that caused the process to change state.
+The
+<I>si_utime</I>
+
+and
+<I>si_stime</I>
+
+contain the user and system CPU time used by the child process;
+these fields do not include the times used by waited-for children (unlike
+<B><A HREF="../man2/getrusage.2.html">getrusage</A></B>(2)
+
+and
+<B><A HREF="../man2/times.2.html">times</A></B>(2)).
+
+In kernels up to 2.6, and since 2.6.27, these fields report
+CPU time in units of
+<I>sysconf(_SC_CLK_TCK)</I>.
+
+In 2.6 kernels before 2.6.27,
+a bug meant that these fields reported time in units
+of the (configurable) system jiffy (see
+<B><A HREF="../man7/time.7.html">time</A></B>(7)).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<DT>*<DD>
+<B>SIGILL</B>,
+
+<B>SIGFPE</B>,
+
+<B>SIGSEGV</B>,
+
+<B>SIGBUS</B>,
+
+and
+<B>SIGTRAP</B>
+
+fill in
+<I>si_addr</I>
+
+with the address of the fault.
+
+
+
+
+On some architectures,
+these signals also fill in the
+<I>si_trapno</I>
+
+field.
+Some suberrors of
+<B>SIGBUS</B>,
+
+in particular
+<B>BUS_MCEERR_AO</B>
+
+and
+<B>BUS_MCEERR_AR</B>,
+
+also fill in
+<I>si_addr_lsb</I>.
+
+This field indicates the least significant bit of the reported address
+and therefore the extent of the corruption.
+For example, if a full page was corrupted,
+<I>si_addr_lsb</I>
+
+contains
+<I>log2(sysconf(_SC_PAGESIZE))</I>.
+
+<B>BUS_MCERR_*</B>
+
+and
+<I>si_addr_lsb</I>
+
+are Linux-specific extensions.
+<DT>*<DD>
+<B>SIGIO</B>/<B>SIGPOLL</B>
+
+(the two names are synonyms on Linux)
+fills in
+<I>si_band</I> and <I>si_fd</I>.
+
+The
+<I>si_band</I>
+
+event is a bit mask containing the same values as are filled in the
+<I>revents</I>
+
+field by
+<B><A HREF="../man2/poll.2.html">poll</A></B>(2).
+
+The
+<I>si_fd</I>
+
+field indicates the file descriptor for which the I/O event occurred.
+</DL>
+<P>
+
+<I>si_code</I>
+
+is a value (not a bit mask)
+indicating why this signal was sent.
+The following list shows the values which can be placed in
+<I>si_code</I>
+
+for any signal, along with reason that the signal was generated.
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>SI_USER</B>
+
+<DD>
+<B><A HREF="../man2/kill.2.html">kill</A></B>(2)
+
+<DT><B>SI_KERNEL</B>
+
+<DD>
+Sent by the kernel.
+<DT><B>SI_QUEUE</B>
+
+<DD>
+<B><A HREF="../man3/sigqueue.3.html">sigqueue</A></B>(3)
+
+<DT><B>SI_TIMER</B>
+
+<DD>
+POSIX timer expired
+<DT><B>SI_MESGQ</B>
+
+<DD>
+POSIX message queue state changed (since Linux 2.6.6); see
+<B><A HREF="../man3/mq_notify.3.html">mq_notify</A></B>(3)
+
+<DT><B>SI_ASYNCIO</B>
+
+<DD>
+AIO completed
+<DT><B>SI_SIGIO</B>
+
+<DD>
+Queued
+<B>SIGIO</B>
+
+(only in kernels up to Linux 2.2; from Linux 2.4 onward
+<B>SIGIO</B>/<B>SIGPOLL</B>
+
+fills in
+<I>si_code</I>
+
+as described below).
+<DT><B>SI_TKILL</B>
+
+<DD>
+<B><A HREF="../man2/tkill.2.html">tkill</A></B>(2)
+
+or
+<B><A HREF="../man2/tgkill.2.html">tgkill</A></B>(2)
+
+(since Linux 2.4.19)
+
+
+
+</DL>
+</DL>
+
+<P>
+
+The following values can be placed in
+<I>si_code</I>
+
+for a
+<B>SIGILL</B>
+
+signal:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>ILL_ILLOPC</B>
+
+<DD>
+illegal opcode
+<DT><B>ILL_ILLOPN</B>
+
+<DD>
+illegal operand
+<DT><B>ILL_ILLADR</B>
+
+<DD>
+illegal addressing mode
+<DT><B>ILL_ILLTRP</B>
+
+<DD>
+illegal trap
+<DT><B>ILL_PRVOPC</B>
+
+<DD>
+privileged opcode
+<DT><B>ILL_PRVREG</B>
+
+<DD>
+privileged register
+<DT><B>ILL_COPROC</B>
+
+<DD>
+coprocessor error
+<DT><B>ILL_BADSTK</B>
+
+<DD>
+internal stack error
+</DL>
+</DL>
+
+<P>
+
+The following values can be placed in
+<I>si_code</I>
+
+for a
+<B>SIGFPE</B>
+
+signal:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>FPE_INTDIV</B>
+
+<DD>
+integer divide by zero
+<DT><B>FPE_INTOVF</B>
+
+<DD>
+integer overflow
+<DT><B>FPE_FLTDIV</B>
+
+<DD>
+floating-point divide by zero
+<DT><B>FPE_FLTOVF</B>
+
+<DD>
+floating-point overflow
+<DT><B>FPE_FLTUND</B>
+
+<DD>
+floating-point underflow
+<DT><B>FPE_FLTRES</B>
+
+<DD>
+floating-point inexact result
+<DT><B>FPE_FLTINV</B>
+
+<DD>
+floating-point invalid operation
+<DT><B>FPE_FLTSUB</B>
+
+<DD>
+subscript out of range
+</DL>
+</DL>
+
+<P>
+
+The following values can be placed in
+<I>si_code</I>
+
+for a
+<B>SIGSEGV</B>
+
+signal:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>SEGV_MAPERR</B>
+
+<DD>
+address not mapped to object
+<DT><B>SEGV_ACCERR</B>
+
+<DD>
+invalid permissions for mapped object
+</DL>
+</DL>
+
+<P>
+
+The following values can be placed in
+<I>si_code</I>
+
+for a
+<B>SIGBUS</B>
+
+signal:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>BUS_ADRALN</B>
+
+<DD>
+invalid address alignment
+<DT><B>BUS_ADRERR</B>
+
+<DD>
+nonexistent physical address
+<DT><B>BUS_OBJERR</B>
+
+<DD>
+object-specific hardware error
+<DT><B>BUS_MCEERR_AR</B> (since Linux 2.6.32)
+
+<DD>
+Hardware memory error consumed on a machine check; action required.
+<DT><B>BUS_MCEERR_AO</B> (since Linux 2.6.32)
+
+<DD>
+Hardware memory error detected in process but not consumed; action optional.
+</DL>
+</DL>
+
+<P>
+
+The following values can be placed in
+<I>si_code</I>
+
+for a
+<B>SIGTRAP</B>
+
+signal:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>TRAP_BRKPT</B>
+
+<DD>
+process breakpoint
+<DT><B>TRAP_TRACE</B>
+
+<DD>
+process trace trap
+<DT><B>TRAP_BRANCH</B> (since Linux 2.4)
+
+<DD>
+process taken branch trap
+<DT><B>TRAP_HWBKPT</B> (since Linux 2.4)
+
+<DD>
+hardware breakpoint/watchpoint
+</DL>
+</DL>
+
+<P>
+
+The following values can be placed in
+<I>si_code</I>
+
+for a
+<B>SIGCHLD</B>
+
+signal:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>CLD_EXITED</B>
+
+<DD>
+child has exited
+<DT><B>CLD_KILLED</B>
+
+<DD>
+child was killed
+<DT><B>CLD_DUMPED</B>
+
+<DD>
+child terminated abnormally
+<DT><B>CLD_TRAPPED</B>
+
+<DD>
+traced child has trapped
+<DT><B>CLD_STOPPED</B>
+
+<DD>
+child has stopped
+<DT><B>CLD_CONTINUED</B>
+
+<DD>
+stopped child has continued (since Linux 2.6.9)
+</DL>
+</DL>
+
+<P>
+
+The following values can be placed in
+<I>si_code</I>
+
+for a
+<B>SIGIO</B>/<B>SIGPOLL</B>
+
+signal:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>POLL_IN</B>
+
+<DD>
+data input available
+<DT><B>POLL_OUT</B>
+
+<DD>
+output buffers available
+<DT><B>POLL_MSG</B>
+
+<DD>
+input message available
+<DT><B>POLL_ERR</B>
+
+<DD>
+I/O error
+<DT><B>POLL_PRI</B>
+
+<DD>
+high priority input available
+<DT><B>POLL_HUP</B>
+
+<DD>
+device disconnected
+</DL>
+</DL>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+<B>sigaction</B>()
+
+returns 0 on success; on error, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EFAULT</B>
+
+<DD>
+<I>act</I> or <I>oldact</I>
+
+points to memory which is not a valid part of the process address space.
+<DT><B>EINVAL</B>
+
+<DD>
+An invalid signal was specified.
+This will also be generated if an attempt
+is made to change the action for
+<B>SIGKILL</B> or <B>SIGSTOP</B>, 
+
+which cannot be caught or ignored.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001, SVr4.
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+A child created via
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+inherits a copy of its parent's signal dispositions.
+During an
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2),
+
+the dispositions of handled signals are reset to the default;
+the dispositions of ignored signals are left unchanged.
+<P>
+According to POSIX, the behavior of a process is undefined after it
+ignores a
+<B>SIGFPE</B>,
+
+<B>SIGILL</B>,
+
+or
+<B>SIGSEGV</B>
+
+signal that was not generated by
+<B><A HREF="../man2/kill.2.html">kill</A></B>(2)
+
+or
+<B><A HREF="../man3/raise.3.html">raise</A></B>(3).
+
+Integer division by zero has undefined result.
+On some architectures it will generate a
+<B>SIGFPE</B>
+
+signal.
+(Also dividing the most negative integer by -1 may generate
+<B>SIGFPE</B>.)
+
+Ignoring this signal might lead to an endless loop.
+<P>
+
+POSIX.1-1990 disallowed setting the action for
+<B>SIGCHLD</B>
+
+to
+<B>SIG_IGN</B>.
+
+POSIX.1-2001 allows this possibility, so that ignoring
+<B>SIGCHLD</B>
+
+can be used to prevent the creation of zombies (see
+<B><A HREF="../man2/wait.2.html">wait</A></B>(2)).
+
+Nevertheless, the historical BSD and System&nbsp;V behaviors for ignoring
+<B>SIGCHLD</B>
+
+differ, so that the only completely portable method of ensuring that
+terminated children do not become zombies is to catch the
+<B>SIGCHLD</B>
+
+signal and perform a
+<B><A HREF="../man2/wait.2.html">wait</A></B>(2)
+
+or similar.
+<P>
+
+POSIX.1-1990 specified only
+<B>SA_NOCLDSTOP</B>.
+
+POSIX.1-2001 added
+<B>SA_NOCLDWAIT</B>,
+
+<B>SA_RESETHAND</B>,
+
+<B>SA_NODEFER</B>,
+
+and
+<B>SA_SIGINFO</B>.
+
+Use of these latter values in
+<I>sa_flags</I>
+
+may be less portable in applications intended for older
+UNIX implementations.
+<P>
+
+The
+<B>SA_RESETHAND</B>
+
+flag is compatible with the SVr4 flag of the same name.
+<P>
+
+The
+<B>SA_NODEFER</B>
+
+flag is compatible with the SVr4 flag of the same name under kernels
+1.3.9 and newer.
+On older kernels the Linux implementation
+allowed the receipt of any signal, not just the one we are installing
+(effectively overriding any
+<I>sa_mask</I>
+
+settings).
+<P>
+
+<B>sigaction</B>()
+
+can be called with a NULL second argument to query the current signal
+handler.
+It can also be used to check whether a given signal is valid for
+the current machine by calling it with NULL second and third arguments.
+<P>
+
+It is not possible to block
+<B>SIGKILL</B> or <B>SIGSTOP</B>
+
+(by specifying them in
+<I>sa_mask</I>).
+
+Attempts to do so are silently ignored.
+<P>
+
+See
+<B><A HREF="../man3/sigsetops.3.html">sigsetops</A></B>(3)
+
+for details on manipulating signal sets.
+<P>
+
+See
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+for a list of the async-signal-safe functions that can be
+safely called inside from inside a signal handler.
+<A NAME="lbAI">&nbsp;</A>
+<H3>Undocumented</H3>
+
+Before the introduction of
+<B>SA_SIGINFO</B>
+
+it was also possible to get some additional information,
+namely by using a
+<I>sa_handler</I>
+
+with second argument of type
+<I>struct sigcontext.</I>
+
+See the relevant Linux kernel sources for details.
+This use is obsolete now.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>BUGS</H2>
+
+In kernels up to and including 2.6.13, specifying
+<B>SA_NODEFER</B>
+
+in
+<I>sa_flags</I>
+
+prevents not only the delivered signal from being masked during
+execution of the handler, but also the signals specified in
+<I>sa_mask</I>.
+
+This bug was fixed in kernel 2.6.14.
+<A NAME="lbAK">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+See
+<B><A HREF="../man2/mprotect.2.html">mprotect</A></B>(2).
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/kill.1.html">kill</A></B>(1),
+
+<B><A HREF="../man2/kill.2.html">kill</A></B>(2),
+
+<B><A HREF="../man2/killpg.2.html">killpg</A></B>(2),
+
+<B><A HREF="../man2/pause.2.html">pause</A></B>(2),
+
+<B><A HREF="../man2/restart_syscall.2.html">restart_syscall</A></B>(2),
+
+<B><A HREF="../man2/sigaltstack.2.html">sigaltstack</A></B>(2),
+
+<B><A HREF="../man2/signal.2.html">signal</A></B>(2),
+
+<B><A HREF="../man2/signalfd.2.html">signalfd</A></B>(2),
+
+<B><A HREF="../man2/sigpending.2.html">sigpending</A></B>(2),
+
+<B><A HREF="../man2/sigprocmask.2.html">sigprocmask</A></B>(2),
+
+<B><A HREF="../man2/sigsuspend.2.html">sigsuspend</A></B>(2),
+
+<B><A HREF="../man2/wait.2.html">wait</A></B>(2),
+
+<B><A HREF="../man3/raise.3.html">raise</A></B>(3),
+
+<B><A HREF="../man3/siginterrupt.3.html">siginterrupt</A></B>(3),
+
+<B><A HREF="../man3/sigqueue.3.html">sigqueue</A></B>(3),
+
+<B><A HREF="../man3/sigsetops.3.html">sigsetops</A></B>(3),
+
+<B><A HREF="../man3/sigvec.3.html">sigvec</A></B>(3),
+
+<B><A HREF="../man5/core.5.html">core</A></B>(5),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Undocumented</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">BUGS</A><DD>
+<DT><A HREF="#lbAK">EXAMPLE</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:45 GMT, September 18, 2014
+</BODY>
+</HTML>

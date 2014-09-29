@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of WCTOMB</TITLE>
+</HEAD><BODY>
+<H1>WCTOMB</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-03-18<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+wctomb - convert a wide character to a multibyte sequence
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;</B>
+
+<B>int wctomb(char *</B><I>s</I><B>, wchar_t </B><I>wc</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+If
+<I>s</I>
+
+is not NULL,
+the
+<B>wctomb</B>()
+
+function converts the wide character
+<I>wc</I>
+
+to its multibyte representation and stores it at the beginning of
+the character array pointed to by
+<I>s</I>.
+
+It updates the shift state, which
+is stored in a static anonymous variable
+known only to the
+<B>wctomb</B>()
+
+function,
+and returns the length of said multibyte representation,
+that is, the number of
+bytes written at
+<I>s</I>.
+
+<P>
+
+The programmer must ensure that there is
+room for at least
+<B>MB_CUR_MAX</B>
+
+bytes at
+<I>s</I>.
+
+<P>
+
+If
+<I>s</I>
+
+is NULL, the
+<B>wctomb</B>()
+
+function
+
+
+resets the shift state, known only to this function,
+to the initial state, and
+returns nonzero if the encoding has nontrivial shift state,
+or zero if the encoding is stateless.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+If
+<I>s</I>
+
+is not NULL, the
+<B>wctomb</B>()
+
+function
+returns the number of bytes
+that have been written to the byte array at
+<I>s</I>.
+
+If
+<I>wc</I>
+
+can not be
+represented as a multibyte sequence (according
+to the current locale), -1 is returned.
+<P>
+
+If
+<I>s</I>
+
+is NULL, the
+<B>wctomb</B>()
+
+function returns nonzero if the
+encoding has nontrivial shift state, or zero if the encoding is stateless.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>wctomb</B>()
+
+function is not thread-safe.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+C99.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+The behavior of
+<B>wctomb</B>()
+
+depends on the
+<B>LC_CTYPE</B>
+
+category of the
+current locale.
+<P>
+
+The function
+<B><A HREF="../man3/wcrtomb.3.html">wcrtomb</A></B>(3)
+
+provides
+a better interface to the same functionality.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/MB_CUR_MAX.3.html">MB_CUR_MAX</A></B>(3),
+
+<B><A HREF="../man3/mblen.3.html">mblen</A></B>(3),
+
+<B><A HREF="../man3/mbstowcs.3.html">mbstowcs</A></B>(3),
+
+<B><A HREF="../man3/mbtowc.3.html">mbtowc</A></B>(3),
+
+<B><A HREF="../man3/wcrtomb.3.html">wcrtomb</A></B>(3),
+
+<B><A HREF="../man3/wcstombs.3.html">wcstombs</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAG">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:52 GMT, September 18, 2014
+</BODY>
+</HTML>

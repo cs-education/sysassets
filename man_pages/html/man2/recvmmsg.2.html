@@ -1,0 +1,368 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of RECVMMSG</TITLE>
+</HEAD><BODY>
+<H1>RECVMMSG</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-06-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+recvmmsg - receive multiple messages on a socket
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#define _GNU_SOURCE          /* See <A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A>(7) */</B>
+<B>#include &lt;<A HREF="file:///usr/include/sys/socket.h">sys/socket.h</A>&gt;</B>
+
+<B>int recvmmsg(int </B><I>sockfd</I><B>, struct mmsghdr *</B><I>msgvec</I><B>, unsigned int </B><I>vlen</I><B>,</B>
+<BR>
+<B>             unsigned int </B><I>flags</I><B>, struct timespec *</B><I>timeout</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>recvmmsg</B>()
+
+system call is an extension of
+<B><A HREF="../man2/recvmsg.2.html">recvmsg</A></B>(2)
+
+that allows the caller to receive multiple messages from a socket
+using a single system call.
+(This has performance benefits for some applications.)
+A further extension over
+<B><A HREF="../man2/recvmsg.2.html">recvmsg</A></B>(2)
+
+is support for a timeout on the receive operation.
+<P>
+The
+<I>sockfd</I>
+
+argument is the file descriptor of the socket to receive data from.
+<P>
+The
+<I>msgvec</I>
+
+argument is a pointer to an array of
+<I>mmsghdr</I>
+
+structures.
+The size of this array is specified in
+<I>vlen</I>.
+
+<P>
+The
+<I>mmsghdr</I>
+
+structure is defined in
+<I>&lt;<A HREF="file:///usr/include/sys/socket.h">sys/socket.h</A>&gt;</I>
+
+as:
+<P>
+
+<PRE>
+struct mmsghdr {
+    struct msghdr msg_hdr;  /* Message header */
+    unsigned int  msg_len;  /* Number of received bytes for header */
+};
+</PRE>
+
+
+<P>
+
+The
+<I>msg_hdr</I>
+
+field is a
+<I>msghdr</I>
+
+structure, as described in
+<B><A HREF="../man2/recvmsg.2.html">recvmsg</A></B>(2).
+
+The
+<I>msg_len</I>
+
+field is the number of bytes returned for the message in the entry.
+This field has the same value as the return value of a single
+<B><A HREF="../man2/recvmsg.2.html">recvmsg</A></B>(2)
+
+on the header.
+<P>
+The
+<I>flags</I>
+
+argument contains flags ORed together.
+The flags are the same as documented for
+<B><A HREF="../man2/recvmsg.2.html">recvmsg</A></B>(2),
+
+with the following addition:
+<DL COMPACT>
+<DT><B>MSG_WAITFORONE</B> (since Linux 2.6.34)
+
+<DD>
+Turns on
+<B>MSG_DONTWAIT</B>
+
+after the first message has been received.
+</DL>
+<P>
+
+The
+<I>timeout</I>
+
+argument points to a
+<I>struct timespec</I>
+
+(see
+<B><A HREF="../man2/clock_gettime.2.html">clock_gettime</A></B>(2))
+
+defining a timeout (seconds plus nanoseconds) for the receive operation
+(<I>but see BUGS!</I>).
+
+(This interval will be rounded up to the system clock granularity,
+and kernel scheduling delays mean that the blocking interval
+may overrun by a small amount.)
+If
+<I>timeout</I>
+
+is NULL, then the operation blocks indefinitely.
+<P>
+A blocking
+<B>recvmmsg</B>()
+
+call blocks until
+<I>vlen</I>
+
+messages have been received
+or until the timeout expires.
+A nonblocking call reads as many messages as are available
+(up to the limit specified by
+<I>vlen</I>)
+
+and returns immediately.
+<P>
+On return from
+<B>recvmmsg</B>(),
+
+successive elements of
+<I>msgvec</I>
+
+are updated to contain information about each received message:
+<I>msg_len</I>
+
+contains the size of the received message;
+the subfields of
+<I>msg_hdr</I>
+
+are updated as described in
+<B><A HREF="../man2/recvmsg.2.html">recvmsg</A></B>(2).
+
+The return value of the call indicates the number of elements of
+<I>msgvec</I>
+
+that have been updated.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>recvmmsg</B>()
+
+returns the number of messages received in
+<I>msgvec</I>;
+
+on error, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+Errors are as for
+<B><A HREF="../man2/recvmsg.2.html">recvmsg</A></B>(2).
+
+In addition, the following error can occur:
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+<I>timeout</I>
+
+is invalid.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>recvmmsg</B>()
+
+system call was added in Linux 2.6.33.
+Support in glibc was added in version 2.12.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>recvmmsg</B>()
+
+is Linux-specific.
+<A NAME="lbAI">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+<P>
+
+The following program uses
+<B>recvmmsg</B>()
+
+to receive multiple messages on a socket and stores
+them in multiple buffers.
+The call returns if all buffers are filled or if the
+timeout specified has expired.
+<P>
+The following snippet periodically generates UDP datagrams
+containing a random number:
+
+<PRE>
+
+$<B> while true; do echo $RANDOM &gt; /dev/udp/127.0.0.1/1234; </B>
+<B>      sleep 0.25; done</B>
+</PRE>
+
+
+<P>
+These datagrams are read by the example application, which
+can give the following output:
+
+<PRE>
+
+$<B> ./a.out</B>
+5 messages received
+1 11782
+2 11345
+3 304
+4 13514
+5 28421
+</PRE>
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H3>Program source</H3>
+
+
+<PRE>
+#define _GNU_SOURCE
+#include &lt;<A HREF="file:///usr/include/netinet/ip.h">netinet/ip.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/string.h">string.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/sys/socket.h">sys/socket.h</A>&gt;
+
+int
+main(void)
+{
+#define VLEN 10
+#define BUFSIZE 200
+#define TIMEOUT 1
+    int sockfd, retval, i;
+    struct sockaddr_in sa;
+    struct mmsghdr msgs[VLEN];
+    struct iovec iovecs[VLEN];
+    char bufs[VLEN][BUFSIZE+1];
+    struct timespec timeout;
+
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sockfd == -1) {
+        perror(&quot;socket()&quot;);
+        exit(EXIT_FAILURE);
+    }
+
+    sa.sin_family = AF_INET;
+    sa.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+    sa.sin_port = htons(1234);
+    if (bind(sockfd, (struct sockaddr *) &amp;sa, sizeof(sa)) == -1) {
+        perror(&quot;bind()&quot;);
+        exit(EXIT_FAILURE);
+    }
+
+    memset(msgs, 0, sizeof(msgs));
+    for (i = 0; i &lt; VLEN; i++) {
+        iovecs[i].iov_base         = bufs[i];
+        iovecs[i].iov_len          = BUFSIZE;
+        msgs[i].msg_hdr.msg_iov    = &amp;iovecs[i];
+        msgs[i].msg_hdr.msg_iovlen = 1;
+    }
+
+    timeout.tv_sec = TIMEOUT;
+    timeout.tv_nsec = 0;
+
+    retval = recvmmsg(sockfd, msgs, VLEN, 0, &amp;timeout);
+    if (retval == -1) {
+        perror(&quot;recvmmsg()&quot;);
+        exit(EXIT_FAILURE);
+    }
+
+    printf(&quot;%d messages received\n&quot;, retval);
+    for (i = 0; i &lt; retval; i++) {
+        bufs[i][msgs[i].msg_len] = 0;
+        printf(&quot;%d %s&quot;, i+1, bufs[i]);
+    }
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>BUGS</H2>
+
+The
+<I>timeout</I>
+
+argument does not work as intended.
+
+
+The timeout is checked only after the receipt of each datagram,
+so that if up to
+<I>vlen-1</I>
+
+datagrams are received before the timeout expires,
+but then no further datagrams are received, the call will block forever.
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/clock_gettime.2.html">clock_gettime</A></B>(2),
+
+<B><A HREF="../man2/recvmsg.2.html">recvmsg</A></B>(2),
+
+<B><A HREF="../man2/sendmmsg.2.html">sendmmsg</A></B>(2),
+
+<B><A HREF="../man2/sendmsg.2.html">sendmsg</A></B>(2),
+
+<B><A HREF="../man2/socket.2.html">socket</A></B>(2),
+
+<B><A HREF="../man7/socket.7.html">socket</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">EXAMPLE</A><DD>
+<DL>
+<DT><A HREF="#lbAJ">Program source</A><DD>
+</DL>
+<DT><A HREF="#lbAK">BUGS</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

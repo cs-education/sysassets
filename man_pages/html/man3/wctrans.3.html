@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of WCTRANS</TITLE>
+</HEAD><BODY>
+<H1>WCTRANS</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-01-22<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+wctrans - wide-character translation mapping
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/wctype.h">wctype.h</A>&gt;</B>
+
+<B>wctrans_t wctrans(const char *</B><I>name</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<I>wctrans_t</I>
+
+type represents a mapping
+which can map a wide character to
+another wide character.
+Its nature is implementation-dependent, but the special
+value
+<I>(wctrans_t)&nbsp;0</I>
+
+denotes an invalid mapping.
+Nonzero
+<I>wctrans_t</I>
+
+values can be passed to the
+<B><A HREF="../man3/towctrans.3.html">towctrans</A></B>(3)
+
+function to actually perform
+the wide-character mapping.
+<P>
+
+The
+<B>wctrans</B>()
+
+function returns a mapping, given by its name.
+The set of
+valid names depends on the
+<B>LC_CTYPE</B>
+
+category of the current locale, but the
+following names are valid in all locales.
+<PRE>
+  &quot;tolower&quot; - realizes the <B><A HREF="../man3/tolower.3.html">tolower</A></B>(3) mapping
+  &quot;toupper&quot; - realizes the <B><A HREF="../man3/toupper.3.html">toupper</A></B>(3) mapping
+</PRE>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>wctrans</B>()
+
+function returns a mapping descriptor if the
+<I>name</I>
+
+is valid.
+Otherwise, it returns
+<I>(wctrans_t)&nbsp;0</I>.
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>wctrans</B>()
+
+function is thread-safe with exceptions.
+It can be safely used in multithreaded applications, as long as
+<B><A HREF="../man3/setlocale.3.html">setlocale</A></B>(3)
+
+is not called to change the locale during its execution.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+C99.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+The behavior of
+<B>wctrans</B>()
+
+depends on the
+<B>LC_CTYPE</B>
+
+category of the
+current locale.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/towctrans.3.html">towctrans</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAG">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:52 GMT, September 18, 2014
+</BODY>
+</HTML>

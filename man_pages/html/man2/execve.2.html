@@ -1,0 +1,981 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of EXECVE</TITLE>
+</HEAD><BODY>
+<H1>EXECVE</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+execve - execute program
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<P>
+<B>int execve(const char *</B><I>filename</I><B>, char *const </B><I>argv</I><B>[], </B>
+
+<BR>
+
+<B>           char *const </B><I>envp</I><B>[]);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>execve</B>()
+
+executes the program pointed to by <I>filename</I>.
+<I>filename</I> must be either a binary executable, or a script
+starting with a line of the form:
+<P>
+
+<PRE>
+<B>#!</B> <I>interpreter </I>[optional-arg]
+</PRE>
+
+
+<P>
+For details of the latter case, see &quot;Interpreter scripts&quot; below.
+<P>
+<I>argv</I> is an array of argument strings passed to the new program.
+By convention, the first of these strings should contain the filename
+associated with the file being executed.
+<I>envp</I> is an array of strings, conventionally of the form
+<B>key=value</B>, which are passed as environment to the new program.
+Both <I>argv</I> and <I>envp</I> must be terminated by a null pointer.
+The argument vector and environment can be accessed by the
+called program's main function, when it is defined as:
+<P>
+
+<PRE>
+int main(int argc, char *argv[], char *envp[])
+</PRE>
+
+
+<P>
+<B>execve</B>()
+
+does not return on success, and the text, data, bss, and
+stack of the calling process are overwritten by that of the program
+loaded.
+<P>
+If the current program is being ptraced, a <B>SIGTRAP</B> is sent to it
+after a successful
+<B>execve</B>().
+
+<P>
+If the set-user-ID bit is set on the program file pointed to by
+<I>filename</I>,
+and the underlying filesystem is not mounted
+<I>nosuid</I>
+
+(the
+<B>MS_NOSUID</B>
+
+flag for
+<B><A HREF="../man2/mount.2.html">mount</A></B>(2)),
+
+and the calling process is not being ptraced,
+then the effective user ID of the calling process is changed
+to that of the owner of the program file.
+Similarly, when the set-group-ID
+bit of the program file is set the effective group ID of the calling
+process is set to the group of the program file.
+<P>
+The effective user ID of the process is copied to the saved set-user-ID;
+similarly, the effective group ID is copied to the saved set-group-ID.
+This copying takes place after any effective ID changes that occur
+because of the set-user-ID and set-group-ID permission bits.
+<P>
+If the executable is an a.out dynamically linked
+binary executable containing
+shared-library stubs, the Linux dynamic linker
+<B><A HREF="../man8/ld.so.8.html">ld.so</A></B>(8)
+
+is called at the start of execution to bring
+needed shared libraries into memory
+and link the executable with them.
+<P>
+If the executable is a dynamically linked ELF executable, the
+interpreter named in the PT_INTERP segment is used to load the needed
+shared libraries.
+This interpreter is typically
+<I>/lib/ld-linux.so.2</I>
+
+for binaries linked with glibc.
+<P>
+All process attributes are preserved during an
+<B>execve</B>(),
+
+except the following:
+<DL COMPACT>
+<DT>*<DD>
+The dispositions of any signals that are being caught are
+reset to the default
+(<B><A HREF="../man7/signal.7.html">signal</A></B>(7)).
+
+<DT>*<DD>
+Any alternate signal stack is not preserved
+(<B><A HREF="../man2/sigaltstack.2.html">sigaltstack</A></B>(2)).
+
+<DT>*<DD>
+Memory mappings are not preserved
+(<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2)).
+
+<DT>*<DD>
+Attached System&nbsp;V shared memory segments are detached
+(<B><A HREF="../man2/shmat.2.html">shmat</A></B>(2)).
+
+<DT>*<DD>
+POSIX shared memory regions are unmapped
+(<B><A HREF="../man3/shm_open.3.html">shm_open</A></B>(3)).
+
+<DT>*<DD>
+Open POSIX message queue descriptors are closed
+(<B><A HREF="../man7/mq_overview.7.html">mq_overview</A></B>(7)).
+
+<DT>*<DD>
+Any open POSIX named semaphores are closed
+(<B><A HREF="../man7/sem_overview.7.html">sem_overview</A></B>(7)).
+
+<DT>*<DD>
+POSIX timers are not preserved
+(<B><A HREF="../man2/timer_create.2.html">timer_create</A></B>(2)).
+
+<DT>*<DD>
+Any open directory streams are closed
+(<B><A HREF="../man3/opendir.3.html">opendir</A></B>(3)).
+
+<DT>*<DD>
+Memory locks are not preserved
+(<B><A HREF="../man2/mlock.2.html">mlock</A></B>(2),
+
+<B><A HREF="../man2/mlockall.2.html">mlockall</A></B>(2)).
+
+<DT>*<DD>
+Exit handlers are not preserved
+(<B><A HREF="../man3/atexit.3.html">atexit</A></B>(3),
+
+<B><A HREF="../man3/on_exit.3.html">on_exit</A></B>(3)).
+
+<DT>*<DD>
+The floating-point environment is reset to the default (see
+<B><A HREF="../man3/fenv.3.html">fenv</A></B>(3)).
+
+</DL>
+<P>
+
+The process attributes in the preceding list are all specified
+in POSIX.1-2001.
+The following Linux-specific process attributes are also
+not preserved during an
+<B>execve</B>():
+
+<DL COMPACT>
+<DT>*<DD>
+The
+<B><A HREF="../man2/prctl.2.html">prctl</A></B>(2)
+
+<B>PR_SET_DUMPABLE</B>
+
+flag is set,
+unless a set-user-ID or set-group ID program is being executed,
+in which case it is cleared.
+<DT>*<DD>
+The
+<B><A HREF="../man2/prctl.2.html">prctl</A></B>(2)
+
+<B>PR_SET_KEEPCAPS</B>
+
+flag is cleared.
+<DT>*<DD>
+(Since Linux 2.4.36 / 2.6.23)
+If a set-user-ID or set-group-ID program is being executed,
+then the parent death signal set by
+<B><A HREF="../man2/prctl.2.html">prctl</A></B>(2)
+
+<B>PR_SET_PDEATHSIG</B>
+
+flag is cleared.
+<DT>*<DD>
+The process name, as set by
+<B><A HREF="../man2/prctl.2.html">prctl</A></B>(2)
+
+<B>PR_SET_NAME</B>
+
+(and displayed by
+<I>ps&nbsp;-o comm</I>),
+
+is reset to the name of the new executable file.
+<DT>*<DD>
+The
+<B>SECBIT_KEEP_CAPS</B>
+
+<I>securebits</I>
+
+flag is cleared.
+See
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7).
+
+<DT>*<DD>
+The termination signal is reset to
+<B>SIGCHLD</B>
+
+(see
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)).
+
+</DL>
+<P>
+
+Note the following further points:
+<DL COMPACT>
+<DT>*<DD>
+All threads other than the calling thread are destroyed during an
+<B>execve</B>().
+
+Mutexes, condition variables, and other pthreads objects are not preserved.
+<DT>*<DD>
+The equivalent of <I>setlocale(LC_ALL, &quot;C&quot;)</I>
+is executed at program start-up.
+<DT>*<DD>
+POSIX.1-2001 specifies that the dispositions of any signals that
+are ignored or set to the default are left unchanged.
+POSIX.1-2001 specifies one exception: if
+<B>SIGCHLD</B>
+
+is being ignored,
+then an implementation may leave the disposition unchanged or
+reset it to the default; Linux does the former.
+<DT>*<DD>
+Any outstanding asynchronous I/O operations are canceled
+(<B><A HREF="../man3/aio_read.3.html">aio_read</A></B>(3),
+
+<B><A HREF="../man3/aio_write.3.html">aio_write</A></B>(3)).
+
+<DT>*<DD>
+For the handling of capabilities during
+<B>execve</B>(),
+
+see
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7).
+
+<DT>*<DD>
+By default, file descriptors remain open across an
+<B>execve</B>().
+
+File descriptors that are marked close-on-exec are closed;
+see the description of
+<B>FD_CLOEXEC</B>
+
+in
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2).
+
+(If a file descriptor is closed, this will cause the release
+of all record locks obtained on the underlying file by this process.
+See
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+for details.)
+POSIX.1-2001 says that if file descriptors 0, 1, and 2 would
+otherwise be closed after a successful
+<B>execve</B>(),
+
+and the process would gain privilege because the set-user_ID or
+set-group_ID permission bit was set on the executed file,
+then the system may open an unspecified file for each of these
+file descriptors.
+As a general principle, no portable program, whether privileged or not,
+can assume that these three file descriptors will remain
+closed across an
+<B>execve</B>().
+
+
+
+
+</DL>
+<A NAME="lbAE">&nbsp;</A>
+<H3>Interpreter scripts</H3>
+
+An interpreter script is a text file that has execute
+permission enabled and whose first line is of the form:
+<P>
+
+<PRE>
+<B>#!</B> <I>interpreter </I>[optional-arg]
+</PRE>
+
+
+<P>
+The
+<I>interpreter</I>
+
+must be a valid pathname for an
+executable which is not itself a script.
+If the
+<I>filename</I>
+
+argument of
+<B>execve</B>()
+
+specifies an interpreter script, then
+<I>interpreter</I>
+
+will be invoked with the following arguments:
+<P>
+
+<PRE>
+<I>interpreter</I> [optional-arg] <I>filename</I> arg...
+</PRE>
+
+
+<P>
+where
+<I>arg...</I>
+
+is the series of words pointed to by the
+<I>argv</I>
+
+argument of
+<B>execve</B>(),
+
+starting at
+<I>argv</I>[1].
+
+<P>
+For portable use,
+<I>optional-arg</I>
+
+should either be absent, or be specified as a single word (i.e., it
+should not contain white space); see NOTES below.
+<A NAME="lbAF">&nbsp;</A>
+<H3>Limits on size of arguments and environment</H3>
+
+Most UNIX implementations impose some limit on the total size
+of the command-line argument
+(<I>argv</I>)
+
+and environment
+(<I>envp</I>)
+
+strings that may be passed to a new program.
+POSIX.1 allows an implementation to advertise this limit using the
+<B>ARG_MAX</B>
+
+constant (either defined in
+<I>&lt;<A HREF="file:///usr/include/limits.h">limits.h</A>&gt;</I>
+
+or available at run time using the call
+<I>sysconf(_SC_ARG_MAX)</I>).
+
+<P>
+On Linux prior to kernel 2.6.23, the memory used to store the
+environment and argument strings was limited to 32 pages
+(defined by the kernel constant
+<B>MAX_ARG_PAGES</B>).
+
+On architectures with a 4-kB page size,
+this yields a maximum size of 128 kB.
+<P>
+On kernel 2.6.23 and later, most architectures support a size limit
+derived from the soft
+<B>RLIMIT_STACK</B>
+
+resource limit (see
+<B><A HREF="../man2/getrlimit.2.html">getrlimit</A></B>(2))
+
+that is in force at the time of the
+<B>execve</B>()
+
+call.
+(Architectures with no memory management unit are excepted:
+they maintain the limit that was in effect before kernel 2.6.23.)
+This change allows programs to have a much larger
+argument and/or environment list.
+
+
+
+
+
+
+For these architectures, the total size is limited to 1/4 of the allowed
+stack size.
+(Imposing the 1/4-limit
+ensures that the new program always has some stack space.)
+
+
+Since Linux 2.6.25,
+the kernel places a floor of 32 pages on this size limit,
+so that, even when
+<B>RLIMIT_STACK</B>
+
+is set very low,
+applications are guaranteed to have at least as much argument and
+environment space as was provided by Linux 2.6.23 and earlier.
+(This guarantee was not provided in Linux 2.6.23 and 2.6.24.)
+Additionally, the limit per string is 32 pages (the kernel constant
+<B>MAX_ARG_STRLEN</B>),
+
+and the maximum number of strings is 0x7FFFFFFF.
+<A NAME="lbAG">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>execve</B>()
+
+does not return, on error -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAH">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>E2BIG</B>
+
+<DD>
+The total number of bytes in the environment
+(<I>envp</I>)
+
+and argument list
+(<I>argv</I>)
+
+is too large.
+<DT><B>EACCES</B>
+
+<DD>
+Search permission is denied on a component of the path prefix of
+<I>filename</I>
+
+or the name of a script interpreter.
+(See also
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7).)
+
+<DT><B>EACCES</B>
+
+<DD>
+The file or a script interpreter is not a regular file.
+<DT><B>EACCES</B>
+
+<DD>
+Execute permission is denied for the file or a script or ELF interpreter.
+<DT><B>EACCES</B>
+
+<DD>
+The filesystem is mounted
+<I>noexec</I>.
+
+<DT><B>EAGAIN</B> (since Linux 3.1)
+
+<DD>
+
+Having changed its real UID using one of the
+<B>set*uid</B>()
+
+calls, the caller was---and is now still---above its
+<B>RLIMIT_NPROC</B>
+
+resource limit (see
+<B><A HREF="../man2/setrlimit.2.html">setrlimit</A></B>(2)).
+
+For a more detailed explanation of this error, see NOTES.
+<DT><B>EFAULT</B>
+
+<DD>
+<I>filename</I>
+
+or one of the pointers in the vectors
+<I>argv</I>
+
+or
+<I>envp</I>
+
+points outside your accessible address space.
+<DT><B>EINVAL</B>
+
+<DD>
+An ELF executable had more than one PT_INTERP segment (i.e., tried to
+name more than one interpreter).
+<DT><B>EIO</B>
+
+<DD>
+An I/O error occurred.
+<DT><B>EISDIR</B>
+
+<DD>
+An ELF interpreter was a directory.
+<DT><B>ELIBBAD</B>
+
+<DD>
+An ELF interpreter was not in a recognized format.
+<DT><B>ELOOP</B>
+
+<DD>
+Too many symbolic links were encountered in resolving
+<I>filename</I>
+
+or the name of a script or ELF interpreter.
+<DT><B>EMFILE</B>
+
+<DD>
+The process has the maximum number of files open.
+<DT><B>ENAMETOOLONG</B>
+
+<DD>
+<I>filename</I>
+
+is too long.
+<DT><B>ENFILE</B>
+
+<DD>
+The system limit on the total number of open files has been reached.
+<DT><B>ENOENT</B>
+
+<DD>
+The file
+<I>filename</I>
+
+or a script or ELF interpreter does not exist, or a shared library
+needed for file or interpreter cannot be found.
+<DT><B>ENOEXEC</B>
+
+<DD>
+An executable is not in a recognized format, is for the wrong
+architecture, or has some other format error that means it cannot be
+executed.
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient kernel memory was available.
+<DT><B>ENOTDIR</B>
+
+<DD>
+A component of the path prefix of
+<I>filename</I>
+
+or a script or ELF interpreter is not a directory.
+<DT><B>EPERM</B>
+
+<DD>
+The filesystem is mounted
+<I>nosuid</I>,
+
+the user is not the superuser,
+and the file has the set-user-ID or set-group-ID bit set.
+<DT><B>EPERM</B>
+
+<DD>
+The process is being traced, the user is not the superuser and the
+file has the set-user-ID or set-group-ID bit set.
+<DT><B>ETXTBSY</B>
+
+<DD>
+Executable was open for writing by one or more processes.
+</DL>
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, 4.3BSD, POSIX.1-2001.
+POSIX.1-2001 does not document the #!  behavior
+but is otherwise compatible.
+
+
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+Set-user-ID and set-group-ID processes can not be
+<B><A HREF="../man2/ptrace.2.html">ptrace</A></B>(2)d.
+
+<P>
+The result of mounting a filesystem
+<I>nosuid</I>
+
+varies across Linux kernel versions:
+some will refuse execution of set-user-ID and set-group-ID
+executables when this would
+give the user powers she did not have already (and return
+<B>EPERM</B>),
+
+some will just ignore the set-user-ID and set-group-ID bits and
+<B>exec</B>()
+
+successfully.
+On Linux,
+<I>argv</I>
+
+and
+<I>envp</I>
+
+can be specified as NULL.
+In both cases, this has the same effect as specifying the argument
+as a pointer to a list containing a single null pointer.
+<B>Do not take advantage of this misfeature!</B>
+
+It is nonstandard and nonportable:
+on most other UNIX systems doing this will result in an error
+(<B>EFAULT</B>).
+
+
+
+
+
+
+<P>
+POSIX.1-2001 says that values returned by
+<B><A HREF="../man3/sysconf.3.html">sysconf</A></B>(3)
+
+should be invariant over the lifetime of a process.
+However, since Linux 2.6.23, if the
+<B>RLIMIT_STACK</B>
+
+resource limit changes, then the value reported by
+<B>_SC_ARG_MAX</B>
+
+will also change,
+to reflect the fact that the limit on space for holding
+command-line arguments and environment variables has changed.
+<P>
+In most cases where
+<B>execve</B>()
+
+fails, control returns to the original executable image,
+and the caller of
+<B>execve</B>()
+
+can then handle the error.
+However, in (rare) cases (typically caused by resource exhaustion),
+failure may occur past the point of no return:
+the original executable image has been torn down,
+but the new image could not be completely built.
+In such cases, the kernel kills the process with a
+<B>SIGKILL</B>
+
+signal.
+
+<A NAME="lbAK">&nbsp;</A>
+<H3>Interpreter scripts</H3>
+
+A maximum line length of 127 characters is allowed for the first line in
+an interpreter scripts.
+<P>
+The semantics of the
+<I>optional-arg</I>
+
+argument of an interpreter script vary across implementations.
+On Linux, the entire string following the
+<I>interpreter</I>
+
+name is passed as a single argument to the interpreter,
+and this string can include white space.
+However, behavior differs on some other systems.
+Some systems
+
+use the first white space to terminate
+<I>optional-arg</I>.
+
+On some systems,
+
+an interpreter script can have multiple arguments,
+and white spaces in
+<I>optional-arg</I>
+
+are used to delimit the arguments.
+<P>
+Linux ignores the set-user-ID and set-group-ID bits on scripts.
+
+
+
+
+
+
+
+
+
+<A NAME="lbAL">&nbsp;</A>
+<H3>execve() and EAGAIN</H3>
+
+A more detailed explanation of the
+<B>EAGAIN</B>
+
+error that can occur (since Linux 3.1) when calling
+<B>execve</B>()
+
+is as follows.
+<P>
+The
+<B>EAGAIN</B>
+
+error can occur when a
+<I>preceding</I>
+
+call to
+<B><A HREF="../man2/setuid.2.html">setuid</A></B>(2),
+
+<B><A HREF="../man2/setreuid.2.html">setreuid</A></B>(2),
+
+or
+<B><A HREF="../man2/setresuid.2.html">setresuid</A></B>(2)
+
+caused the real user ID of the process to change,
+and that change caused the process to exceed its
+<B>RLIMIT_NPROC</B>
+
+resource limit (i.e., the number of processes belonging
+to the new real UID exceeds the resource limit).
+From Linux 2.6.0 to 3.0, this caused the
+<B>set*uid</B>()
+
+call to fail.
+(Prior to 2.6,
+
+the resource limit was not imposed on processes that
+changed their user IDs.)
+<P>
+Since Linux 3.1, the scenario just described no longer causes the
+<B>set*uid</B>()
+
+call to fail,
+because it too often led to security holes where buggy applications
+didn't check the return status and assumed
+that---if the caller had root privileges---the call would always succeed.
+Instead, the
+<B>set*uid</B>()
+
+calls now successfully change the real UID,
+but the kernel sets an internal flag, named
+<B>PF_NPROC_EXCEEDED</B>,
+
+to note that the
+<B>RLIMIT_NPROC</B>
+
+resource limit has been exceeded.
+If the
+<B>PF_NPROC_EXCEEDED</B>
+
+flag is set and the resource limit is still
+exceeded at the time of a subsequent
+<B>execve</B>()
+
+call, that call fails with the error
+<B>EAGAIN</B>.
+
+This kernel logic ensures that the
+<B>RLIMIT_NPROC</B>
+
+resource limit is still enforced for the
+common privileged daemon workflow---namely,
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
++
+<B>set*uid</B>()
+
++
+<B>execve</B>().
+
+<P>
+If the resource limit was not still exceeded at the time of the
+<B>execve</B>()
+
+call
+(because other processes belonging to this real UID terminated between the
+<B>set*uid()</B>
+
+call and the
+<B>execve</B>()
+
+call), then the
+<B>execve</B>()
+
+call succeeds and the kernel clears the
+<B>PF_NPROC_EXCEEDED</B>
+
+process flag.
+The flag is also cleared if a subsequent call to
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+by this process succeeds.
+<A NAME="lbAM">&nbsp;</A>
+<H3>Historical</H3>
+
+With UNIX&nbsp;V6, the argument list of an
+<B>exec</B>()
+
+call was ended by 0,
+while the argument list of
+<I>main</I>
+
+was ended by -1.
+Thus, this argument list was not directly usable in a further
+<B>exec</B>()
+
+call.
+Since UNIX&nbsp;V7, both are NULL.
+
+
+
+
+
+
+
+
+
+<A NAME="lbAN">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The following program is designed to be execed by the second program below.
+It just echoes its command-line arguments, one per line.
+<P>
+
+<PRE>
+/* myecho.c */
+
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+
+int
+main(int argc, char *argv[])
+{
+    int j;
+
+    for (j = 0; j &lt; argc; j++)
+        printf(&quot;argv[%d]: %s\n&quot;, j, argv[j]);
+
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+
+<P>
+This program can be used to exec the program named in its command-line
+argument:
+
+<PRE>
+
+/* execve.c */
+
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;
+
+int
+main(int argc, char *argv[])
+{
+    char *newargv[] = { NULL, &quot;hello&quot;, &quot;world&quot;, NULL };
+    char *newenviron[] = { NULL };
+
+    if (argc != 2) {
+        fprintf(stderr, &quot;Usage: %s &lt;file-to-exec&gt;\n&quot;, argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    newargv[0] = argv[1];
+
+    execve(argv[1], newargv, newenviron);
+    perror(&quot;execve&quot;);   /* execve() only returns on error */
+    exit(EXIT_FAILURE);
+}
+</PRE>
+
+
+<P>
+We can use the second program to exec the first as follows:
+<P>
+
+<PRE>
+$<B> cc myecho.c -o myecho</B>
+$<B> cc execve.c -o execve</B>
+$<B> ./execve ./myecho</B>
+argv[0]: ./myecho
+argv[1]: hello
+argv[2]: world
+</PRE>
+
+
+<P>
+We can also use these programs to demonstrate the use of a script
+interpreter.
+To do this we create a script whose &quot;interpreter&quot; is our
+<I>myecho</I>
+
+program:
+<P>
+
+<PRE>
+$<B> cat &gt; script.sh</B>
+<B>#! ./myecho script-arg</B>
+<B>^D</B>
+$<B> chmod +x script.sh</B>
+</PRE>
+
+
+<P>
+We can then use our program to exec the script:
+<P>
+
+<PRE>
+$<B> ./execve ./script.sh</B>
+argv[0]: ./myecho
+argv[1]: script-arg
+argv[2]: ./script.sh
+argv[3]: hello
+argv[4]: world
+</PRE>
+
+
+<A NAME="lbAO">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/chmod.2.html">chmod</A></B>(2),
+
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2),
+
+<B><A HREF="../man2/ptrace.2.html">ptrace</A></B>(2),
+
+<B><A HREF="../man3/execl.3.html">execl</A></B>(3),
+
+<B><A HREF="../man3/fexecve.3.html">fexecve</A></B>(3),
+
+<B><A HREF="../man3/getopt.3.html">getopt</A></B>(3),
+
+<B><A HREF="../man7/credentials.7.html">credentials</A></B>(7),
+
+<B><A HREF="../man7/environ.7.html">environ</A></B>(7),
+
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7),
+
+<B><A HREF="../man8/ld.so.8.html">ld.so</A></B>(8)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">Interpreter scripts</A><DD>
+<DT><A HREF="#lbAF">Limits on size of arguments and environment</A><DD>
+</DL>
+<DT><A HREF="#lbAG">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAH">ERRORS</A><DD>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAK">Interpreter scripts</A><DD>
+<DT><A HREF="#lbAL">execve() and EAGAIN</A><DD>
+<DT><A HREF="#lbAM">Historical</A><DD>
+</DL>
+<DT><A HREF="#lbAN">EXAMPLE</A><DD>
+<DT><A HREF="#lbAO">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:50 GMT, September 18, 2014
+</BODY>
+</HTML>

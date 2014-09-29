@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of GETGROUPS</TITLE>
+</HEAD><BODY>
+<H1>GETGROUPS</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+getgroups, setgroups - get/set list of supplementary group IDs
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+
+<BR>
+
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<P>
+<B>int getgroups(int </B><I>size</I><B>, gid_t </B><I>list</I><B>[]);</B>
+
+<P>
+<B>#include &lt;<A HREF="file:///usr/include/grp.h">grp.h</A>&gt;</B>
+
+<P>
+<B>int setgroups(size_t </B><I>size</I><B>, const gid_t *</B><I>list</I><B>);</B>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>setgroups</B>():
+
+_BSD_SOURCE
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<P>
+
+<B>getgroups</B>()
+
+returns the supplementary group IDs of the calling process in
+<I>list</I>.
+
+The argument
+<I>size</I>
+
+should be set to the maximum number of items that can be stored in the
+buffer pointed to by
+<I>list</I>.
+
+If the calling process is a member of more than
+<I>size</I>
+
+supplementary groups, then an error results.
+It is unspecified whether the effective group ID of the calling process
+is included in the returned list.
+(Thus, an application should also call
+<B><A HREF="../man2/getegid.2.html">getegid</A></B>(2)
+
+and add or remove the resulting value.)
+<P>
+If
+<I>size</I>
+
+is zero,
+<I>list</I>
+
+is not modified, but the total number of supplementary group IDs for the
+process is returned.
+This allows the caller to determine the size of a dynamically allocated
+<I>list</I>
+
+to be used in a further call to
+<B>getgroups</B>().
+
+<P>
+
+<B>setgroups</B>()
+
+sets the supplementary group IDs for the calling process.
+Appropriate privileges (Linux: the
+<B>CAP_SETGID</B>
+
+capability) are required.
+The
+<I>size</I>
+
+argument specifies the number of supplementary group IDs
+in the buffer pointed to by
+<I>list</I>.
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>getgroups</B>()
+
+returns the number of supplementary group IDs.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<P>
+On success,
+<B>setgroups</B>()
+
+returns 0.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EFAULT</B>
+
+<DD>
+<I>list</I>
+
+has an invalid address.
+</DL>
+<P>
+
+<B>getgroups</B>()
+
+can additionally fail with the following error:
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+<I>size</I>
+
+is less than the number of supplementary group IDs, but is not zero.
+</DL>
+<P>
+
+<B>setgroups</B>()
+
+can additionally fail with the following errors:
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+<I>size</I>
+
+is greater than
+<B>NGROUPS_MAX</B>
+
+(32 before Linux 2.6.4; 65536 since Linux 2.6.4).
+<DT><B>ENOMEM</B>
+
+<DD>
+Out of memory.
+<DT><B>EPERM</B>
+
+<DD>
+The calling process has insufficient privilege.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, 4.3BSD.
+The
+<B>getgroups</B>()
+
+function is in POSIX.1-2001.
+Since
+<B>setgroups</B>()
+
+requires privilege, it is not covered by POSIX.1-2001.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+A process can have up to
+<B>NGROUPS_MAX</B>
+
+supplementary group IDs
+in addition to the effective group ID.
+The constant
+<B>NGROUPS_MAX</B>
+
+is defined in
+<I>&lt;<A HREF="file:///usr/include/limits.h">limits.h</A>&gt;</I>.
+
+The set of supplementary group IDs
+is inherited from the parent process, and preserved across an
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2).
+
+<P>
+The maximum number of supplementary group IDs can be found at run time using
+<B><A HREF="../man3/sysconf.3.html">sysconf</A></B>(3):
+
+<PRE>
+
+    long ngroups_max;
+    ngroups_max = sysconf(_SC_NGROUPS_MAX);
+
+</PRE>
+
+The maximum return value of
+<B>getgroups</B>()
+
+cannot be larger than one more than this value.
+Since Linux 2.6.4, the maximum number of supplementary group IDs is also
+exposed via the Linux-specific read-only file,
+<I>/proc/sys/kernel/ngroups_max</I>.
+
+<P>
+The original Linux
+<B>getgroups</B>()
+
+system call supported only 16-bit group IDs.
+Subsequently, Linux 2.4 added
+<B>getgroups32</B>(),
+
+supporting 32-bit IDs.
+The glibc
+<B>getgroups</B>()
+
+wrapper function transparently deals with the variation across kernel versions.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/getgid.2.html">getgid</A></B>(2),
+
+<B><A HREF="../man2/setgid.2.html">setgid</A></B>(2),
+
+<B><A HREF="../man3/getgrouplist.3.html">getgrouplist</A></B>(3),
+
+<B><A HREF="../man3/group_member.3.html">group_member</A></B>(3),
+
+<B><A HREF="../man3/initgroups.3.html">initgroups</A></B>(3),
+
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7),
+
+<B><A HREF="../man7/credentials.7.html">credentials</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:51 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of ATOF</TITLE>
+</HEAD><BODY>
+<H1>ATOF</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-01-22<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+atof - convert a string to a double
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;</B>
+
+<B>double atof(const char *</B><I>nptr</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>atof</B>()
+
+function converts the initial portion of the string
+pointed to by <I>nptr</I> to
+<I>double</I>.
+
+The behavior is the same as
+<P>
+
+strtod(nptr, NULL);
+
+<P>
+except that
+<B>atof</B>()
+
+does not detect errors.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The converted value.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAG">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>atof</B>()
+
+function is thread-safe with exceptions.
+It can be safely used in multithreaded applications, as long as
+<B><A HREF="../man3/setlocale.3.html">setlocale</A></B>(3)
+
+is not called to change the locale during its execution.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, POSIX.1-2001, 4.3BSD, C89, C99.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/atoi.3.html">atoi</A></B>(3),
+
+<B><A HREF="../man3/atol.3.html">atol</A></B>(3),
+
+<B><A HREF="../man3/strtod.3.html">strtod</A></B>(3),
+
+<B><A HREF="../man3/strtol.3.html">strtol</A></B>(3),
+
+<B><A HREF="../man3/strtoul.3.html">strtoul</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAG">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:18 GMT, September 18, 2014
+</BODY>
+</HTML>

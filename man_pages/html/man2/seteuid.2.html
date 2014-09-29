@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SETEUID</TITLE>
+</HEAD><BODY>
+<H1>SETEUID</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+seteuid, setegid - set effective user or group ID
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+
+<BR>
+
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<P>
+<B>int seteuid(uid_t </B><I>euid</I><B>);</B>
+
+<BR>
+
+<B>int setegid(gid_t </B><I>egid</I><B>);</B>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>seteuid</B>(),
+
+<B>setegid</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>seteuid</B>()
+
+sets the effective user ID of the calling process.
+Unprivileged user processes may only set the effective user ID to the
+real user ID, the effective user ID or the saved set-user-ID.
+<P>
+Precisely the same holds for
+<B>setegid</B>()
+
+with &quot;group&quot; instead of &quot;user&quot;.
+
+
+
+
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, zero is returned.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<P>
+<I>Note</I>:
+
+there are cases where
+<B>seteuid</B>()
+
+can fail even when the caller is UID 0;
+it is a grave security error to omit checking for a failure return from
+<B>seteuid</B>().
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+
+
+<DL COMPACT>
+<DT><B>EPERM</B>
+
+<DD>
+The calling process is not privileged (Linux: does not have the
+<B>CAP_SETUID</B>
+
+capability in the case of
+<B>seteuid</B>(),
+
+or the
+<B>CAP_SETGID</B>
+
+capability in the case of
+<B>setegid</B>())
+
+and
+<I>euid</I>
+
+(respectively,
+<I>egid</I>)
+
+is not the real user (group) ID, the effective user (group) ID,
+or the saved set-user-ID (saved set-group-ID).
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+4.3BSD, POSIX.1-2001.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+Setting the effective user (group) ID to the
+saved set-user-ID (saved set-group-ID) is
+possible since Linux 1.1.37 (1.1.38).
+On an arbitrary system one should check
+<B>_POSIX_SAVED_IDS</B>.
+
+<P>
+
+Under glibc 2.0
+<B>seteuid(</B><I>euid</I><B>)</B>
+
+is equivalent to
+<B>setreuid(-1,</B><I> euid</I><B>)</B>
+
+and hence may change the saved set-user-ID.
+Under glibc 2.1 and later it is equivalent to
+<B>setresuid(-1,</B><I> euid</I><B>, -1)</B>
+
+and hence does not change the saved set-user-ID.
+Analogous remarks hold for
+<B>setegid</B>(),
+
+with the difference that the change in implementation from
+<B>setregid(-1,</B><I> egid</I><B>)</B>
+
+to
+<B>setresgid(-1,</B><I> egid</I><B>, -1)</B>
+
+occurred in glibc 2.2 or 2.3 (depending on the hardware architecture).
+<P>
+According to POSIX.1,
+<B>seteuid</B>()
+
+(<B>setegid</B>())
+
+need not permit
+<I>euid</I>
+
+(<I>egid</I>)
+
+to be the same value as the current effective user (group) ID,
+and some implementations do not permit this.
+<A NAME="lbAI">&nbsp;</A>
+<H3>C library/kernel ABI differences</H3>
+
+On Linux,
+<B>seteuid</B>()
+
+and
+<B>setegid</B>()
+
+are implemented as library functions that call, respectively,
+<B><A HREF="../man2/setreuid.2.html">setreuid</A></B>(2)
+
+and
+<B><A HREF="../man2/setresgid.2.html">setresgid</A></B>(2).
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/geteuid.2.html">geteuid</A></B>(2),
+
+<B><A HREF="../man2/setresuid.2.html">setresuid</A></B>(2),
+
+<B><A HREF="../man2/setreuid.2.html">setreuid</A></B>(2),
+
+<B><A HREF="../man2/setuid.2.html">setuid</A></B>(2),
+
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7),
+
+<B><A HREF="../man7/credentials.7.html">credentials</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">C library/kernel ABI differences</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

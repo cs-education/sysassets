@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of RESTART_SYSCALL</TITLE>
+</HEAD><BODY>
+<H1>RESTART_SYSCALL</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-02-11<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+restart_syscall - restart a system call after interruption by a stop signal
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>int restart_syscall(void);</B>
+
+<P>
+<I>Note</I>:
+
+There is no glibc wrapper for this system call; see NOTES.
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>restart_syscall</B>()
+
+system call is used to restart certain system calls
+after a process that was stopped by a signal (e.g.,
+<B>SIGSTOP</B>
+
+or
+<B>SIGTSTP</B>)
+
+is later resumed after receiving a
+<B>SIGCONT</B>
+
+signal.
+This system call is designed only for internal use by the kernel.
+<P>
+<B>restart_syscall</B>()
+
+is used for restarting only those system calls that,
+when restarted, should adjust their time-related parameters---namely
+<B><A HREF="../man2/poll.2.html">poll</A></B>(2)
+
+(since Linux 2.6.24),
+<B><A HREF="../man2/nanosleep.2.html">nanosleep</A></B>(2)
+
+(since Linux 2.6),
+<B><A HREF="../man2/clock_nanosleep.2.html">clock_nanosleep</A></B>(2)
+
+(since Linux 2.6),
+and
+<B><A HREF="../man2/futex.2.html">futex</A></B>(2),
+
+when employed with the
+<B>FUTEX_WAIT</B>
+
+(since Linux 2.6.22)
+and
+<B>FUTEX_WAIT_BITSET</B>
+
+(since Linux 2.6.31)
+operations.
+
+
+
+<B>restart_syscall</B>()
+
+restarts the interrupted system call with a
+time argument that is suitably adjusted to account for the
+time that has already elapsed (including the time where the process
+was stopped by a signal).
+Without the
+<B>restart_syscall</B>()
+
+mechanism, restarting these system calls would not correctly deduce the
+already elapsed time when the process continued execution.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The return value of
+<B>restart_syscall</B>()
+
+is the return value of whatever system call is being restarted.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<I>errno</I>
+
+is set as per the errors for whatever system call is being restarted by
+<B>restart_syscall</B>().
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>restart_syscall</B>()
+
+system call is present since Linux 2.6.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This system call is Linux-specific.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+There is no glibc wrapper for this system call,
+because it is intended for use only by the kernel and
+should never be called by applications.
+<P>
+From user space, the operation of
+<B><A HREF="../man2/restart_syscall.2.html">restart_syscall</A></B>(2)
+
+is largely invisible:
+to the process that made the system call that is restarted,
+it appears as though that system call executed and
+returned in the usual fashion.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/sigaction.2.html">sigaction</A></B>(2),
+
+<B><A HREF="../man2/sigreturn.2.html">sigreturn</A></B>(2),
+
+<B><A HREF="../man7/signal.7.html">signal</A></B>(7)
+
+
+
+
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

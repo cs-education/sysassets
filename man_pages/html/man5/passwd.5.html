@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of PASSWD</TITLE>
+</HEAD><BODY>
+<H1>PASSWD</H1>
+Section: Linux Programmer's Manual (5)<BR>Updated: 2014-02-11<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+passwd - password file
+<A NAME="lbAC">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<I>/etc/passwd</I>
+
+file is a text file that describes user login accounts for the system.
+It should have read permission allowed for all users (many utilities, like
+<B><A HREF="../man1/ls.1.html">ls</A></B>(1)
+
+use it to map user IDs to usernames), but write access only for the
+superuser.
+<P>
+
+In the good old days there was no great problem with this general
+read permission.
+Everybody could read the encrypted passwords, but the
+hardware was too slow to crack a well-chosen password, and moreover the
+basic assumption used to be that of a friendly user-community.
+These days many people run some version of the shadow password suite, where
+<I>/etc/passwd</I>
+
+has an 'x' character in the password field,
+and the encrypted passwords are in
+<I>/etc/shadow</I>,
+
+which is readable by the superuser only.
+<P>
+
+If the encrypted password, whether in
+<I>/etc/passwd</I>
+
+or in
+<I>/etc/shadow</I>,
+
+is an empty string, login is allowed without even asking for a password.
+Note that this functionality may be intentionally disabled in applications,
+or configurable (for example using the &quot;nullok&quot; or &quot;nonull&quot; arguments to
+pam_unix.so).
+<P>
+
+If the encrypted password in
+<I>/etc/passwd</I>
+
+is &quot;<I>*NP*</I>&quot; (without the quotes),
+the shadow record should be obtained from an NIS+ server.
+<P>
+
+Regardless of whether shadow passwords are used, many system administrators
+use an asterisk (*) in the encrypted password field to make sure
+that this user can not authenticate him- or herself using a
+password.
+(But see NOTES below.)
+<P>
+
+If you create a new login, first put an asterisk (*) in the password field,
+then use
+<B><A HREF="../man1/passwd.1.html">passwd</A></B>(1)
+
+to set it.
+<P>
+
+Each line of the file describes a single user,
+and contains seven colon-separated fields:
+<P>
+<DL COMPACT><DT><DD>
+name:password:UID:GID:GECOS:directory:shell
+</DL>
+
+<P>
+The field are as follows:
+<DL COMPACT>
+<DT><I>name</I>
+
+<DD>
+This is the user's login name.
+It should not contain capital letters.
+<DT><I>password</I>
+
+<DD>
+This is either the encrypted user password,
+an asterisk (*), or the letter 'x'.
+(See
+<B><A HREF="../man8/pwconv.8.html">pwconv</A></B>(8)
+
+for an explanation of 'x'.)
+<DT><I>UID</I>
+
+<DD>
+The privileged
+<I>root</I>
+
+login account (superuser) has the user ID 0.
+<DT><I>GID</I>
+
+<DD>
+This is the numeric primary group ID for this user.
+(Additional groups for the user are defined in the system group file; see
+<B><A HREF="../man5/group.5.html">group</A></B>(5)).
+
+<DT><I>GECOS</I>
+
+<DD>
+This field (sometimes called the &quot;comment field&quot;)
+is optional and used only for informational purposes.
+Usually, it contains the full username.
+Some programs (for example,
+<B><A HREF="../man1/finger.1.html">finger</A></B>(1))
+
+display information from this field.
+<DT><DD>
+GECOS stands for &quot;General Electric Comprehensive Operating System&quot;,
+which was renamed to GCOS when
+GE's large systems division was sold to Honeywell.
+Dennis Ritchie has reported: &quot;Sometimes we sent printer output or
+batch jobs to the GCOS machine.
+The gcos field in the password file was a place to stash the
+information for the $IDENTcard.
+Not elegant.&quot;
+<DT><I>directory</I>
+
+<DD>
+This is the user's home directory:
+the initial directory where the user is placed after logging in.
+The value in this field is used to set the
+<B>HOME</B>
+
+environment variable.
+<DT><I>shell</I>
+
+<DD>
+This is the program to run at login (if empty, use
+<I>/bin/sh</I>).
+
+If set to a nonexistent executable, the user will be unable to login
+through
+<B><A HREF="../man1/login.1.html">login</A></B>(1).
+
+The value in this field is used to set the
+<B>SHELL</B>
+
+environment variable.
+</DL>
+<A NAME="lbAD">&nbsp;</A>
+<H2>FILES</H2>
+
+<I>/etc/passwd</I>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>NOTES</H2>
+
+If you want to create user groups, there must be an entry in
+<I>/etc/group</I>,
+
+or no group will exist.
+<P>
+
+If the encrypted password is set to an asterisk (*), the user will be unable
+to login using
+<B><A HREF="../man1/login.1.html">login</A></B>(1),
+
+but may still login using
+<B><A HREF="../man1/rlogin.1.html">rlogin</A></B>(1),
+
+run existing processes and initiate new ones through
+<B><A HREF="../man1/rsh.1.html">rsh</A></B>(1),
+
+<B><A HREF="../man8/cron.8.html">cron</A></B>(8),
+
+<B><A HREF="../man1/at.1.html">at</A></B>(1),
+
+or mail filters, etc.
+Trying to lock an account by simply changing the
+shell field yields the same result and additionally allows the use of
+<B><A HREF="../man1/su.1.html">su</A></B>(1).
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/login.1.html">login</A></B>(1),
+
+<B><A HREF="../man1/passwd.1.html">passwd</A></B>(1),
+
+<B><A HREF="../man1/su.1.html">su</A></B>(1),
+
+<B><A HREF="../man3/crypt.3.html">crypt</A></B>(3),
+
+<B><A HREF="../man3/getpwent.3.html">getpwent</A></B>(3),
+
+<B><A HREF="../man3/getpwnam.3.html">getpwnam</A></B>(3),
+
+<B><A HREF="../man5/group.5.html">group</A></B>(5),
+
+<B><A HREF="../man5/shadow.5.html">shadow</A></B>(5)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAD">FILES</A><DD>
+<DT><A HREF="#lbAE">NOTES</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:20 GMT, September 18, 2014
+</BODY>
+</HTML>

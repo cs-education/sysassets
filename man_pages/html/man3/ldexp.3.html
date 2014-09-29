@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of LDEXP</TITLE>
+</HEAD><BODY>
+<H1>LDEXP</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+ldexp, ldexpf, ldexpl - multiply floating-point number by integral power of 2
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/math.h">math.h</A>&gt;</B>
+
+<B>double ldexp(double </B><I>x</I><B>, int </B><I>exp</I><B>);</B>
+<BR>
+<B>float ldexpf(float </B><I>x</I><B>, int </B><I>exp</I><B>);</B>
+<BR>
+<B>long double ldexpl(long double </B><I>x</I><B>, int </B><I>exp</I><B>);</B>
+</PRE>
+
+<P>
+Link with <I>-lm</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>ldexpf</B>(),
+
+<B>ldexpl</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600 || _ISOC99_SOURCE ||
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>ldexp</B>()
+
+function returns the result of multiplying the floating-point number
+<I>x</I>
+
+by 2 raised to the power
+<I>exp</I>.
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these functions return
+<I>x * (2^exp)</I>.
+
+<P>
+If
+<I>exp</I>
+
+is zero, then
+<I>x</I>
+
+is returned.
+<P>
+If
+<I>x</I>
+
+is a NaN,
+a NaN is returned.
+<P>
+If
+<I>x</I>
+
+is positive infinity (negative infinity),
+positive infinity (negative infinity) is returned.
+<P>
+If the result underflows,
+a range error occurs,
+and zero is returned.
+<P>
+If the result overflows,
+a range error occurs,
+and the functions return
+<B>HUGE_VAL</B>,
+
+<B>HUGE_VALF</B>,
+
+or
+<B>HUGE_VALL</B>,
+
+respectively, with a sign the same as
+<I>x</I>.
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+See
+<B><A HREF="../man7/math_error.7.html">math_error</A></B>(7)
+
+for information on how to determine whether an error has occurred
+when calling these functions.
+<P>
+
+The following errors can occur:
+<DL COMPACT>
+<DT>Range error, overflow<DD>
+<I>errno</I>
+
+is set to
+<B>ERANGE</B>.
+
+An overflow floating-point exception
+(<B>FE_OVERFLOW</B>)
+
+is raised.
+<DT>Range error, underflow<DD>
+<I>errno</I>
+
+is set to
+<B>ERANGE</B>.
+
+An underflow floating-point exception
+(<B>FE_UNDERFLOW</B>)
+
+is raised.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>ldexp</B>(),
+
+<B>ldexpf</B>(),
+
+and
+<B>ldexpl</B>()
+
+functions are thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+C99, POSIX.1-2001.
+The variant returning
+<I>double</I>
+
+also conforms to
+SVr4, 4.3BSD, C89.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/frexp.3.html">frexp</A></B>(3),
+
+<B><A HREF="../man3/modf.3.html">modf</A></B>(3),
+
+<B><A HREF="../man3/scalbln.3.html">scalbln</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:05 GMT, September 18, 2014
+</BODY>
+</HTML>

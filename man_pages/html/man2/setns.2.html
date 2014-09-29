@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SETNS</TITLE>
+</HEAD><BODY>
+<H1>SETNS</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2013-01-01<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+setns - reassociate thread with a namespace
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#define _GNU_SOURCE</B>             /* See <A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A>(7) */
+<B>#include &lt;<A HREF="file:///usr/include/sched.h">sched.h</A>&gt;</B>
+
+<B>int setns(int </B><I>fd</I><B>, int </B><I>nstype</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+Given a file descriptor referring to a namespace,
+reassociate the calling thread with that namespace.
+<P>
+The
+<I>fd</I>
+
+argument is a file descriptor referring to one of the namespace entries in a
+<I>/proc/[pid]/ns/</I>
+
+directory; see
+<B><A HREF="../man5/proc.5.html">proc</A></B>(5)
+
+for further information on
+<I>/proc/[pid]/ns/</I>.
+
+The calling thread will be reassociated with the corresponding namespace,
+subject to any constraints imposed by the
+<I>nstype</I>
+
+argument.
+<P>
+The
+<I>nstype</I>
+
+argument specifies which type of namespace
+the calling thread may be reassociated with.
+This argument can have one of the following values:
+<DL COMPACT>
+<DT><B>0</B>
+
+<DD>
+Allow any type of namespace to be joined.
+<DT><B>CLONE_NEWIPC</B>
+
+<DD>
+<I>fd</I>
+
+must refer to an IPC namespace.
+<DT><B>CLONE_NEWNET</B>
+
+<DD>
+<I>fd</I>
+
+must refer to a network namespace.
+<DT><B>CLONE_NEWUTS</B>
+
+<DD>
+<I>fd</I>
+
+must refer to a UTS namespace.
+</DL>
+<P>
+
+Specifying
+<I>nstype</I>
+
+as 0 suffices if the caller knows (or does not care)
+what type of namespace is referred to by
+<I>fd</I>.
+
+Specifying a nonzero value for
+<I>nstype</I>
+
+is useful if the caller does not know what type of namespace is referred to by
+<I>fd</I>
+
+and wants to ensure that the namespace is of a particular type.
+(The caller might not know the type of the namespace referred to by
+<I>fd</I>
+
+if the file descriptor was opened by another process and, for example,
+passed to the caller via a UNIX domain socket.)
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<I>setns</I>()
+
+returns 0.
+On failure, -1 is returned and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>fd</I>
+
+is not a valid file descriptor.
+<DT><B>EINVAL</B>
+
+<DD>
+<I>fd</I>
+
+refers to a namespace whose type does not match that specified in
+<I>nstype</I>,
+
+or there is problem with reassociating the
+the thread with the specified namespace.
+<DT><B>ENOMEM</B>
+
+<DD>
+Cannot allocate sufficient memory to change the specified namespace.
+<DT><B>EPERM</B>
+
+<DD>
+The calling thread did not have the required privilege
+(<B>CAP_SYS_ADMIN</B>)
+
+for this operation.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>setns</B>()
+
+system call first appeared in Linux in kernel 3.0;
+library support was added to glibc in version 2.14.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+The
+<B>setns</B>()
+
+system call is Linux-specific.
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+Not all of the attributes that can be shared when
+a new thread is created using
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)
+
+can be changed using
+<B>setns</B>().
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The program below takes two or more arguments.
+The first argument specifies the pathname of a namespace file in an existing
+<I>/proc/[pid]/ns/</I>
+
+directory.
+The remaining arguments specify a command and its arguments.
+The program opens the namespace file, joins that namespace using
+<B>setns</B>(),
+
+and executes the specified command inside that namespace.
+<P>
+The following shell session demonstrates the use of this program
+(compiled as a binary named
+<I>ns_exec</I>)
+
+in conjunction with the
+<B>CLONE_NEWUTS</B>
+
+example program in the
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)
+
+man page (complied as a binary named
+<I>newuts</I>).
+
+<P>
+We begin by executing the example program in
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2)
+
+in the background.
+That program creates a child in a separate UTS namespace.
+The child changes the hostname in its namespace,
+and then both processes display the hostnames in their UTS namespaces,
+so that we can see that they are different.
+<P>
+<PRE>
+$ <B>su</B>                   # Need privilege for namespace operations
+Password:
+# <B>./newuts bizarro &amp;</B>
+[1] 3549
+clone() returned 3550
+uts.nodename in child:  bizarro
+uts.nodename in parent: antero
+# <B>uname -n</B>             # Verify hostname in the shell
+antero
+</PRE>
+
+<P>
+We then run the program shown below,
+using it to execute a shell.
+Inside that shell, we verify that the hostname is the one
+set by the child created by the first program:
+<P>
+<PRE>
+# <B>./ns_exec /proc/3550/ns/uts /bin/bash</B>
+# <B>uname -n</B>             # Executed in shell started by ns_exec
+bizarro
+</PRE>
+
+<A NAME="lbAK">&nbsp;</A>
+<H3>Program source</H3>
+
+<PRE>
+#define _GNU_SOURCE
+#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/sched.h">sched.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+
+#define errExit(msg)    do { perror(msg); exit(EXIT_FAILURE); \
+                        } while (0)
+
+int
+main(int argc, char *argv[])
+{
+    int fd;
+
+    if (argc &lt; 3) {
+        fprintf(stderr, &quot;%s /proc/PID/ns/FILE cmd args...\n&quot;, argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    fd = open(argv[1], O_RDONLY);   /* Get descriptor for namespace */
+    if (fd == -1)
+        errExit(&quot;open&quot;);
+
+    if (setns(fd, 0) == -1)         /* Join that namespace */
+        errExit(&quot;setns&quot;);
+
+    execvp(argv[2], &amp;argv[2]);      /* Execute a command in namespace */
+    errExit(&quot;execvp&quot;);
+}
+</PRE>
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/clone.2.html">clone</A></B>(2),
+
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2),
+
+<B><A HREF="../man2/vfork.2.html">vfork</A></B>(2),
+
+<B><A HREF="../man5/proc.5.html">proc</A></B>(5),
+
+<B><A HREF="../man7/unix.7.html">unix</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">EXAMPLE</A><DD>
+<DL>
+<DT><A HREF="#lbAK">Program source</A><DD>
+</DL>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:48 GMT, September 18, 2014
+</BODY>
+</HTML>

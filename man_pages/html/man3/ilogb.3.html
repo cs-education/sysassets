@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of ILOGB</TITLE>
+</HEAD><BODY>
+<H1>ILOGB</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-08-06<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+ilogb, ilogbf, ilogbl - get integer exponent of a floating-point value
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/math.h">math.h</A>&gt;</B>
+
+<P>
+<B>int ilogb(double </B><I>x</I><B>);</B>
+
+<BR>
+
+<B>int ilogbf(float </B><I>x</I><B>);</B>
+
+<BR>
+
+<B>int ilogbl(long double </B><I>x</I><B>);</B>
+
+<P>
+Link with <I>-lm</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>ilogb</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED ||
+_ISOC99_SOURCE ||
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+<BR>
+
+<B>ilogbf</B>(),
+
+<B>ilogbl</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600 || _ISOC99_SOURCE ||
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+These functions return the exponent part of their argument
+as a signed integer.
+When no error occurs, these functions
+are equivalent to the corresponding
+<B><A HREF="../man3/logb.3.html">logb</A></B>(3)
+
+functions, cast to
+<I>int</I>.
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these functions return the exponent of
+<I>x</I>,
+
+as a signed integer.
+<P>
+If
+<I>x</I>
+
+is zero, then a domain error occurs, and the functions return
+
+
+<B>FP_ILOGB0</B>.
+
+
+<P>
+If
+<I>x</I>
+
+is a NaN, then a domain error occurs, and the functions return
+<B>FP_ILOGBNAN</B>.
+
+
+
+<P>
+If
+<I>x</I>
+
+is negative infinity or positive infinity, then
+a domain error occurs, and the functions return
+<B>INT_MAX</B>.
+
+
+
+
+
+
+
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+See
+<B><A HREF="../man7/math_error.7.html">math_error</A></B>(7)
+
+for information on how to determine whether an error has occurred
+when calling these functions.
+<P>
+
+The following errors can occur:
+<DL COMPACT>
+<DT>Domain error: <I>x</I> is 0 or a NaN<DD>
+
+
+
+An invalid floating-point exception
+(<B>FE_INVALID</B>)
+
+is raised.
+<DT><DD>
+These functions do not set
+<I>errno</I>
+
+for this case.
+
+<DT>Domain error: <I>x</I> is an infinity<DD>
+
+
+
+
+
+
+<DT><DD>
+These functions do not set
+<I>errno</I>
+
+or raise an exception for this case.
+
+
+
+
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>ilogb</B>(),
+
+<B>ilogbf</B>(),
+
+and
+<B>ilogbl</B>()
+
+functions are thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+C99, POSIX.1-2001.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/log.3.html">log</A></B>(3),
+
+<B><A HREF="../man3/logb.3.html">logb</A></B>(3),
+
+<B><A HREF="../man3/significand.3.html">significand</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:09 GMT, September 18, 2014
+</BODY>
+</HTML>

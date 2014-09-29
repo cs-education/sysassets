@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of INOTIFY_INIT</TITLE>
+</HEAD><BODY>
+<H1>INOTIFY_INIT</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-03-28<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+inotify_init, inotify_init1 - initialize an inotify instance
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/inotify.h">sys/inotify.h</A>&gt;</B>
+
+<B>int inotify_init(void);</B>
+<B>int inotify_init1(int </B><I>flags</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+For an overview of the inotify API, see
+<B><A HREF="../man7/inotify.7.html">inotify</A></B>(7).
+
+<P>
+<B>inotify_init</B>()
+
+initializes a new inotify instance and returns a file descriptor associated
+with a new inotify event queue.
+<P>
+If
+<I>flags</I>
+
+is 0, then
+<B>inotify_init1</B>()
+
+is the same as
+<B>inotify_init</B>().
+
+The following values can be bitwise ORed in
+<I>flags</I>
+
+to obtain different behavior:
+<DL COMPACT>
+<DT><B>IN_NONBLOCK</B>
+
+<DD>
+Set the
+<B>O_NONBLOCK</B>
+
+file status flag on the new open file description.
+Using this flag saves extra calls to
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2)
+
+to achieve the same result.
+<DT><B>IN_CLOEXEC</B>
+
+<DD>
+Set the close-on-exec
+(<B>FD_CLOEXEC</B>)
+
+flag on the new file descriptor.
+See the description of the
+<B>O_CLOEXEC</B>
+
+flag in
+<B><A HREF="../man2/open.2.html">open</A></B>(2)
+
+for reasons why this may be useful.
+</DL>
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these system calls return a new file descriptor.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+(<B>inotify_init1</B>())
+
+An invalid value was specified in
+<I>flags</I>.
+
+<DT><B>EMFILE</B>
+
+<DD>
+The user limit on the total number of inotify instances has been reached.
+<DT><B>ENFILE</B>
+
+<DD>
+The system limit on the total number of file descriptors has been reached.
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient kernel memory is available.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>inotify_init</B>()
+
+first appeared in Linux 2.6.13;
+library support was added to glibc in version 2.4.
+<B>inotify_init1</B>()
+
+was added in Linux 2.6.27;
+library support was added to glibc in version 2.9.
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+These system calls are Linux-specific.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/inotify_add_watch.2.html">inotify_add_watch</A></B>(2),
+
+<B><A HREF="../man2/inotify_rm_watch.2.html">inotify_rm_watch</A></B>(2),
+
+<B><A HREF="../man7/inotify.7.html">inotify</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:48 GMT, September 18, 2014
+</BODY>
+</HTML>

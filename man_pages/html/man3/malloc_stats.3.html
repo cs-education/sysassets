@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MALLOC_STATS</TITLE>
+</HEAD><BODY>
+<H1>MALLOC_STATS</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2012-05-06<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+malloc_stats - print memory allocation statistics
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/malloc.h">malloc.h</A>&gt;</B>
+
+<P>
+<B>void malloc_stats(void);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>malloc_stats</B>()
+
+function prints (on standard error) statistics about memory allocated by
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3)
+
+and related functions.
+For each arena (allocation area), this function prints
+the total amount of memory allocated
+and the total number of bytes consumed by in-use allocations.
+(These two values correspond to the
+<I>arena</I>
+
+and
+<I>uordblks</I>
+
+fields retrieved by
+<B><A HREF="../man3/mallinfo.3.html">mallinfo</A></B>(3).)
+
+In addition,
+the function prints the sum of these two statistics for all arenas,
+and the maximum number of blocks and bytes that were ever simultaneously
+allocated using
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2).
+
+
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function is a GNU extension.
+<A NAME="lbAF">&nbsp;</A>
+<H2>NOTES</H2>
+
+More detailed information about memory allocations in the main arena
+can be obtained using
+<B><A HREF="../man3/mallinfo.3.html">mallinfo</A></B>(3).
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/mmap.2.html">mmap</A></B>(2),
+
+<B><A HREF="../man3/mallinfo.3.html">mallinfo</A></B>(3),
+
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3),
+
+<B><A HREF="../man3/malloc_info.3.html">malloc_info</A></B>(3),
+
+<B><A HREF="../man3/mallopt.3.html">mallopt</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAF">NOTES</A><DD>
+<DT><A HREF="#lbAG">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:03 GMT, September 18, 2014
+</BODY>
+</HTML>

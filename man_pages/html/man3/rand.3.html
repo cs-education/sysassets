@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of RAND</TITLE>
+</HEAD><BODY>
+<H1>RAND</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-01-18<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+rand, rand_r, srand - pseudo-random number generator
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;</B>
+
+<B>int rand(void);</B>
+
+<B>int rand_r(unsigned int *</B><I>seedp</I><B>);</B>
+
+<B>void srand(unsigned int </B><I>seed</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>rand_r</B>():
+
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;1 || _XOPEN_SOURCE || _POSIX_SOURCE
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>rand</B>()
+
+function returns a pseudo-random integer in the range 0 to
+<B>RAND_MAX</B>
+
+inclusive (i.e., the mathematical range [0,&nbsp;<B>RAND_MAX</B>]).
+<P>
+
+The
+<B>srand</B>()
+
+function sets its argument as the seed for a new
+sequence of pseudo-random integers to be returned by
+<B>rand</B>().
+
+These sequences are repeatable by calling
+<B>srand</B>()
+
+with the same seed value.
+<P>
+
+If no seed value is provided, the
+<B>rand</B>()
+
+function is automatically seeded with a value of 1.
+<P>
+
+The function
+<B>rand</B>()
+
+is not reentrant or thread-safe, since it
+uses hidden state that is modified on each call.
+This might just be the seed value to be used by the next call,
+or it might be something more elaborate.
+In order to get reproducible behavior in a threaded
+application, this state must be made explicit;
+this can be done using the reentrant function
+<B>rand_r</B>().
+
+<P>
+Like
+<B>rand</B>(),
+
+<B>rand_r</B>()
+
+returns a pseudo-random integer in the range [0,&nbsp;<B>RAND_MAX</B>].
+The
+<I>seedp</I>
+
+argument is a pointer to an
+<I>unsigned int</I>
+
+that is used to store state between calls.
+If
+<B>rand_r</B>()
+
+is called with the same initial value for the integer pointed to by
+<I>seedp</I>,
+
+and that value is not modified between calls,
+then the same pseudo-random sequence will result.
+<P>
+The value pointed to by the
+<I>seedp</I>
+
+argument of
+<B>rand_r</B>()
+
+provides only a very small amount of state,
+so this function will be a weak pseudo-random generator.
+Try
+<B><A HREF="../man3/drand48_r.3.html">drand48_r</A></B>(3)
+
+instead.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+The
+<B>rand</B>()
+
+and
+<B>rand_r</B>()
+
+functions return a value between 0 and
+<B>RAND_MAX</B>
+
+(inclusive).
+The
+<B>srand</B>()
+
+function returns no value.
+<A NAME="lbAF">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+The functions
+<B>rand</B>()
+
+and
+<B>srand</B>()
+
+conform to SVr4, 4.3BSD, C89, C99, POSIX.1-2001.
+The function
+<B>rand_r</B>()
+
+is from POSIX.1-2001.
+POSIX.1-2008 marks
+<B>rand_r</B>()
+
+as obsolete.
+<A NAME="lbAG">&nbsp;</A>
+<H2>NOTES</H2>
+
+The versions of
+<B>rand</B>()
+
+and
+<B>srand</B>()
+
+in the Linux C Library use the same random number generator as
+<B><A HREF="../man3/random.3.html">random</A></B>(3)
+
+and
+<B><A HREF="../man3/srandom.3.html">srandom</A></B>(3),
+
+so the lower-order bits should be as random as the higher-order bits.
+However, on older
+<B>rand</B>()
+
+implementations, and on current implementations on different systems,
+the lower-order bits are much less random than the higher-order bits.
+Do not use this function in applications intended to be portable
+when good randomness is needed.
+(Use
+<B><A HREF="../man3/random.3.html">random</A></B>(3)
+
+instead.)
+<A NAME="lbAH">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+POSIX.1-2001 gives the following example of an implementation of
+<B>rand</B>()
+
+and
+<B>srand</B>(),
+
+possibly useful when one needs the same sequence on two different machines.
+<P>
+
+<PRE>
+static unsigned long next = 1;
+
+/* RAND_MAX assumed to be 32767 */
+int myrand(void) {
+    next = next * 1103515245 + 12345;
+    return((unsigned)(next/65536) % 32768);
+}
+
+void mysrand(unsigned int seed) {
+    next = seed;
+}
+</PRE>
+
+
+<P>
+
+The following program can be used to display the
+pseudo-random sequence produced by
+<B>rand</B>()
+
+when given a particular seed.
+
+<PRE>
+
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+
+int
+main(int argc, char *argv[])
+{
+    int j, r, nloops;
+    unsigned int seed;
+
+    if (argc != 3) {
+        fprintf(stderr, &quot;Usage: %s &lt;seed&gt; &lt;nloops&gt;\n&quot;, argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    seed = atoi(argv[1]);
+    nloops = atoi(argv[2]);
+
+    srand(seed);
+    for (j = 0; j &lt; nloops; j++) {
+        r =  rand();
+        printf(&quot;%d\n&quot;, r);
+    }
+
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/drand48.3.html">drand48</A></B>(3),
+
+<B><A HREF="../man3/random.3.html">random</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAG">NOTES</A><DD>
+<DT><A HREF="#lbAH">EXAMPLE</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:02 GMT, September 18, 2014
+</BODY>
+</HTML>

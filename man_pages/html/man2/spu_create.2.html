@@ -1,0 +1,385 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SPU_CREATE</TITLE>
+</HEAD><BODY>
+<H1>SPU_CREATE</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2012-08-05<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+spu_create - create a new spu context
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/sys/spu.h">sys/spu.h</A>&gt;</B>
+
+<B>int spu_create(const char *</B><I>pathname</I><B>, int </B><I>flags</I><B>, mode_t </B><I>mode</I><B>);</B>
+<B>int spu_create(const char *</B><I>pathname</I><B>, int </B><I>flags</I><B>, mode_t </B><I>mode</I><B>,</B>
+<B>               int </B><I>neighbor_fd</I><B>);</B>
+</PRE>
+
+<P>
+<I>Note</I>:
+
+There is no glibc wrapper for this system call; see NOTES.
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>spu_create</B>()
+
+system call is used on PowerPC machines that implement the
+Cell Broadband Engine Architecture in order to access Synergistic
+Processor Units (SPUs).
+It creates a new logical context for an SPU in
+<I>pathname</I>
+
+and returns a file descriptor associated with it.
+<I>pathname</I>
+
+must refer to a nonexistent directory in the mount point of
+the SPU filesystem
+(<B>spufs</B>).
+
+If
+<B>spu_create</B>()
+
+is successful, a directory is created at
+<I>pathname</I>
+
+and it is populated with the files described in
+<B><A HREF="../man7/spufs.7.html">spufs</A></B>(7).
+
+<P>
+When a context is created,
+the returned file descriptor can only be passed to
+<B><A HREF="../man2/spu_run.2.html">spu_run</A></B>(2),
+
+used as the
+<I>dirfd</I>
+
+argument to the
+<B>*at</B>
+
+family of system calls (e.g.,
+<B><A HREF="../man2/openat.2.html">openat</A></B>(2)),
+
+or closed;
+other operations are not defined.
+A logical SPU
+context is destroyed (along with all files created within the context's
+<I>pathname</I>
+
+directory) once the last reference to the context has gone;
+this usually occurs when the file descriptor returned by
+<B>spu_create</B>()
+
+is closed.
+<P>
+The
+<I>flags</I>
+
+argument can be zero or any bitwise OR-ed
+combination of the following constants:
+<DL COMPACT>
+<DT><B>SPU_CREATE_EVENTS_ENABLED</B>
+
+<DD>
+Rather than using signals for reporting DMA errors, use the
+<I>event</I>
+
+argument to
+<B><A HREF="../man2/spu_run.2.html">spu_run</A></B>(2).
+
+<DT><B>SPU_CREATE_GANG</B>
+
+<DD>
+Create an SPU gang instead of a context.
+(A gang is a group of SPU contexts that are
+functionally related to each other and which share common scheduling
+parameters---priority and policy.
+In the future, gang scheduling may be implemented causing
+the group to be switched in and out as a single unit.)
+<P>
+A new directory will be created at the location specified by the
+<I>pathname</I>
+
+argument.
+This gang may be used to hold other SPU contexts, by providing
+a pathname that is within the gang directory to further calls to
+<B>spu_create</B>().
+
+<DT><B>SPU_CREATE_NOSCHED</B>
+
+<DD>
+Create a context that is not affected by the SPU scheduler.
+Once the context is run,
+it will not be scheduled out until it is destroyed by
+the creating process.
+<P>
+Because the context cannot be removed from the SPU, some functionality
+is disabled for
+<B>SPU_CREATE_NOSCHED</B>
+
+contexts.
+Only a subset of the files will be
+available in this context directory in
+<B>spufs</B>.
+
+Additionally,
+<B>SPU_CREATE_NOSCHED</B>
+
+contexts cannot dump a core file when crashing.
+<P>
+Creating
+<B>SPU_CREATE_NOSCHED</B>
+
+contexts requires the
+<B>CAP_SYS_NICE</B>
+
+capability.
+<DT><B>SPU_CREATE_ISOLATE</B>
+
+<DD>
+Create an isolated SPU context.
+Isolated contexts are protected from some
+PPE (PowerPC Processing Element)
+operations,
+such as access to the SPU local store and the NPC register.
+<P>
+Creating
+<B>SPU_CREATE_ISOLATE</B>
+
+contexts also requires the
+<B>SPU_CREATE_NOSCHED</B>
+
+flag.
+<DT><B>SPU_CREATE_AFFINITY_SPU</B>
+
+<DD>
+Create a context with affinity to another SPU context.
+This affinity information is used within the SPU scheduling algorithm.
+Using this flag requires that a file descriptor referring to
+the other SPU context be passed in the
+<I>neighbor_fd</I>
+
+argument.
+<DT><B>SPU_CREATE_AFFINITY_MEM</B>
+
+<DD>
+Create a context with affinity to system memory.
+This affinity information
+is used within the SPU scheduling algorithm.
+</DL>
+<P>
+
+The
+<I>mode</I>
+
+argument (minus any bits set in the process's
+<B><A HREF="../man2/umask.2.html">umask</A></B>(2))
+
+specifies the permissions used for creating the new directory in
+<B>spufs</B>.
+
+See
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2)
+
+for a full list of the possible
+<I>mode</I>
+
+values.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>spu_create</B>()
+
+returns a new file descriptor.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set to one of the error codes listed below.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EACCES</B>
+
+<DD>
+The current user does not have write access to the
+<B><A HREF="../man7/spufs.7.html">spufs</A></B>(7)
+
+mount point.
+<DT><B>EEXIST</B>
+
+<DD>
+An SPU context already exists at the given pathname.
+<DT><B>EFAULT</B>
+
+<DD>
+<I>pathname</I>
+
+is not a valid string pointer in the
+calling process's address space.
+<DT><B>EINVAL</B>
+
+<DD>
+<I>pathname</I>
+
+is not a directory in the
+<B><A HREF="../man7/spufs.7.html">spufs</A></B>(7)
+
+mount point, or invalid flags have been provided.
+<DT><B>ELOOP</B>
+
+<DD>
+Too many symbolic links were found while resolving
+<I>pathname</I>.
+
+<DT><B>EMFILE</B>
+
+<DD>
+The process has reached its maximum open files limit.
+<DT><B>ENAMETOOLONG</B>
+
+<DD>
+<I>pathname</I>
+
+is too long.
+<DT><B>ENFILE</B>
+
+<DD>
+The system has reached the global open files limit.
+<DT><B>ENODEV</B>
+
+<DD>
+An isolated context was requested, but the hardware does not support
+SPU isolation.
+<DT><B>ENOENT</B>
+
+<DD>
+Part of
+<I>pathname</I>
+
+could not be resolved.
+<DT><B>ENOMEM</B>
+
+<DD>
+The kernel could not allocate all resources required.
+<DT><B>ENOSPC</B>
+
+<DD>
+There are not enough SPU resources available to create
+a new context or the user-specific limit for the number
+of SPU contexts has been reached.
+<DT><B>ENOSYS</B>
+
+<DD>
+The functionality is not provided by the current system, because
+either the hardware does not provide SPUs or the spufs module is not
+loaded.
+<DT><B>ENOTDIR</B>
+
+<DD>
+A part of
+<I>pathname</I>
+
+is not a directory.
+<DT><B>EPERM</B>
+
+<DD>
+The
+<I>SPU_CREATE_NOSCHED</I>
+
+flag has been given, but the user does not have the
+<B>CAP_SYS_NICE</B>
+
+capability.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>FILES</H2>
+
+<I>pathname</I>
+
+must point to a location beneath the mount point of
+<B>spufs</B>.
+
+By convention, it gets mounted in
+<I>/spu</I>.
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>spu_create</B>()
+
+system call was added to Linux in kernel 2.6.16.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This call is Linux-specific and implemented only on the PowerPC
+architecture.
+Programs using this system call are not portable.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+Glibc does not provide a wrapper for this system call; call it using
+<B><A HREF="../man2/syscall.2.html">syscall</A></B>(2).
+
+Note however, that
+<B>spu_create</B>()
+
+is meant to be used from libraries that implement a more abstract
+interface to SPUs, not to be used from regular applications.
+See
+
+
+for the recommended libraries.
+<A NAME="lbAK">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+See
+<B><A HREF="../man2/spu_run.2.html">spu_run</A></B>(2)
+
+for an example of the use of
+<B>spu_create</B>()
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/close.2.html">close</A></B>(2),
+
+<B><A HREF="../man2/spu_run.2.html">spu_run</A></B>(2),
+
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7),
+
+<B><A HREF="../man7/spufs.7.html">spufs</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">FILES</A><DD>
+<DT><A HREF="#lbAH">VERSIONS</A><DD>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DT><A HREF="#lbAK">EXAMPLE</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:45 GMT, September 18, 2014
+</BODY>
+</HTML>

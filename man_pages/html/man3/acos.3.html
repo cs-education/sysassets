@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of ACOS</TITLE>
+</HEAD><BODY>
+<H1>ACOS</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2010-09-20<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+acos, acosf, acosl - arc cosine function
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/math.h">math.h</A>&gt;</B>
+
+<B>double acos(double </B><I>x</I><B>);</B>
+<B>float acosf(float </B><I>x</I><B>);</B>
+<B>long double acosl(long double </B><I>x</I><B>);</B>
+</PRE>
+
+<P>
+Link with <I>-lm</I>.
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+<B>acosf</B>(),
+
+<B>acosl</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;600 || _ISOC99_SOURCE ||
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200112L;
+<BR>
+
+or
+<I>cc&nbsp;-std=c99</I>
+
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>acos</B>()
+
+function calculates the arc cosine of
+<I>x</I>;
+
+that is
+the value whose cosine is
+<I>x</I>.
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, these functions return the arc cosine of
+<I>x</I>
+
+in radians; the return value is in the range [0,&nbsp;pi].
+<P>
+If
+<I>x</I>
+
+is a NaN, a NaN is returned.
+<P>
+If
+<I>x</I>
+
+is +1,
++0 is returned.
+<P>
+If
+<I>x</I>
+
+is positive infinity or negative infinity,
+a domain error occurs,
+and a NaN is returned.
+<P>
+If
+<I>x</I>
+
+is outside the range [-1,&nbsp;1],
+a domain error occurs,
+and a NaN is returned.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+See
+<B><A HREF="../man7/math_error.7.html">math_error</A></B>(7)
+
+for information on how to determine whether an error has occurred
+when calling these functions.
+<P>
+
+The following errors can occur:
+<DL COMPACT>
+<DT>Domain error: <I>x</I> is outside the range [-1,&nbsp;1]<DD>
+<I>errno</I>
+
+is set to
+<B>EDOM</B>.
+
+An invalid floating-point exception
+(<B>FE_INVALID</B>)
+
+is raised.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+C99, POSIX.1-2001.
+The variant returning
+<I>double</I>
+
+also conforms to
+SVr4, 4.3BSD, C89.
+<A NAME="lbAH">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/asin.3.html">asin</A></B>(3),
+
+<B><A HREF="../man3/atan.3.html">atan</A></B>(3),
+
+<B><A HREF="../man3/atan2.3.html">atan2</A></B>(3),
+
+<B><A HREF="../man3/cacos.3.html">cacos</A></B>(3),
+
+<B><A HREF="../man3/cos.3.html">cos</A></B>(3),
+
+<B><A HREF="../man3/sin.3.html">sin</A></B>(3),
+
+<B><A HREF="../man3/tan.3.html">tan</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:17 GMT, September 18, 2014
+</BODY>
+</HTML>

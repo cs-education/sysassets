@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of CANONICALIZE_FILE_NAME</TITLE>
+</HEAD><BODY>
+<H1>CANONICALIZE_FILE_NAME</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2013-05-11<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+canonicalize_file_name - return the canonicalized absolute pathname
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#define _GNU_SOURCE</B>         /* See <A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A>(7) */
+
+<BR>
+
+<B>#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;</B>
+
+<P>
+<B>char *canonicalize_file_name(const char *</B><I>path</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>canonicalize_file_name</B>()
+
+function returns a null-terminated string containing
+the canonicalized absolute pathname corresponding to
+<I>path</I>.
+
+In the returned string, symbolic links are resolved, as are
+<I>.</I>
+
+and
+<I>..</I>
+
+pathname components.
+Consecutive slash
+(<I>/</I>)
+
+characters are replaced by a single slash.
+<P>
+The returned string is dynamically allocated by
+<B>canonicalize_file_name</B>()
+
+and the caller should deallocate it with
+<B><A HREF="../man3/free.3.html">free</A></B>(3)
+
+when it is no longer required.
+<P>
+The call
+<I>canonicalize_file_name(path)</I>
+
+is equivalent to the call:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;realpath(path,&nbsp;NULL);
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>canonicalize_file_name</B>()
+
+returns a null-terminated string.
+On error (e.g., a pathname component is unreadable or does not exist),
+<B>canonicalize_file_name</B>()
+
+returns NULL and sets
+<I>errno</I>
+
+to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+See
+<B><A HREF="../man3/realpath.3.html">realpath</A></B>(3).
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This function is a GNU extension.
+<A NAME="lbAH">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/readlink.2.html">readlink</A></B>(2),
+
+<B><A HREF="../man3/realpath.3.html">realpath</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:19 GMT, September 18, 2014
+</BODY>
+</HTML>

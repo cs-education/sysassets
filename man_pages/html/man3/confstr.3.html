@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of CONFSTR</TITLE>
+</HEAD><BODY>
+<H1>CONFSTR</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-03-20<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+confstr - get configuration dependent string variables
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<B>size_t confstr(int </B><I>name</I><B>, char *</B><I>buf</I><B>, size_t </B><I>len</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>confstr</B>():
+
+_POSIX_C_SOURCE&nbsp;&gt;=&nbsp;2 || _XOPEN_SOURCE
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>confstr</B>()
+
+gets the value of configuration-dependent string variables.
+<P>
+
+The
+<I>name</I>
+
+argument is the system variable to be queried.
+The following variables are supported:
+<DL COMPACT>
+<DT><B>_CS_GNU_LIBC_VERSION</B> (GNU C library only; since glibc 2.3.2)
+
+<DD>
+A string which identifies the GNU C library version on this system
+(e.g, &quot;glibc 2.3.4&quot;).
+<DT><B>_CS_GNU_LIBPTHREAD_VERSION</B> (GNU C library only; since glibc 2.3.2)
+
+<DD>
+A string which identifies the POSIX implementation supplied by this
+C library (e.g, &quot;NPTL 2.3.4&quot; or &quot;linuxthreads-0.10&quot;).
+<DT><B>_CS_PATH</B>
+
+<DD>
+A value for the
+<B>PATH</B>
+
+variable which indicates where all the POSIX.2 standard utilities can
+be found.
+</DL>
+<P>
+
+If
+<I>buf</I>
+
+is not NULL and
+<I>len</I>
+
+is not zero,
+<B>confstr</B>()
+
+copies the value of the string to
+<I>buf</I>
+
+truncated to
+<I>len - 1</I>
+
+bytes if necessary, with a null byte ('\0') as terminator.
+This can be detected by comparing the return value of
+<B>confstr</B>()
+
+against
+<I>len</I>.
+
+<P>
+
+If
+<I>len</I>
+
+is zero and
+<I>buf</I>
+
+is NULL,
+<B>confstr</B>()
+
+just returns the value as defined below.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+If
+<I>name</I>
+
+is a valid configuration variable,
+<B>confstr</B>()
+
+returns the number of bytes (including the terminating null byte)
+that would be required to hold the entire value of that variable.
+This value may be greater than
+<I>len</I>,
+
+which means that the value in
+<I>buf</I>
+
+is truncated.
+<P>
+If
+<I>name</I>
+
+is a valid configuration variable,
+but that variable does not have a value, then
+<B>confstr</B>()
+
+returns 0.
+If
+<I>name</I>
+
+does not correspond to a valid configuration variable,
+<B>confstr</B>()
+
+returns 0, and
+<I>errno</I>
+
+is set to
+<B>EINVAL</B>.
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+The value of
+<I>name</I>
+
+is invalid.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001.
+<A NAME="lbAH">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The following code fragment determines the path where to find
+the POSIX.2 system utilities:
+<BR>
+
+<PRE>
+
+char *pathbuf;
+size_t n;
+
+n = confstr(_CS_PATH, NULL, (size_t) 0);
+pathbuf = <A HREF="../mann/malloc.n.html">malloc</A>(n);
+if (pathbuf == NULL)
+    abort();
+confstr(_CS_PATH, pathbuf, n);
+</PRE>
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/getconf.1.html">getconf</A></B>(1),
+
+<B><A HREF="../man1/sh.1.html">sh</A></B>(1),
+
+<B><A HREF="../man3/exec.3.html">exec</A></B>(3),
+
+<B><A HREF="../man3/fpathconf.3.html">fpathconf</A></B>(3)
+
+<B><A HREF="../man3/sysconf.3.html">sysconf</A></B>(3)
+
+<B><A HREF="../man3/pathconf.3.html">pathconf</A></B>(3)
+
+<B><A HREF="../man3/system.3.html">system</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">EXAMPLE</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:17 GMT, September 18, 2014
+</BODY>
+</HTML>

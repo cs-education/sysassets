@@ -1,0 +1,635 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of RENAME</TITLE>
+</HEAD><BODY>
+<H1>RENAME</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+rename, renameat, renameat2 - change the name or location of a file
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;</B>
+
+<B>int rename(const char *</B><I>oldpath</I><B>, const char *</B><I>newpath</I><B>);</B>
+
+<B>#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;           </B>/* Definition of AT_* constants */
+<B>#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;</B>
+
+<B>int renameat(int </B><I>olddirfd</I><B>, const char *</B><I>oldpath</I><B>,</B>
+<B>             int </B><I>newdirfd</I><B>, const char *</B><I>newpath</I><B>);</B>
+
+<B>int renameat2(int </B><I>olddirfd</I><B>, const char *</B><I>oldpath</I><B>,</B>
+<B>              int </B><I>newdirfd</I><B>, const char *</B><I>newpath</I><B>, unsigned int </B><I>flags</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>renameat</B>():
+
+
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Since glibc 2.10:<DD>
+_XOPEN_SOURCE&nbsp;&gt;=&nbsp;700 || _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+<DT>Before glibc 2.10:<DD>
+_ATFILE_SOURCE
+
+</DL>
+</DL>
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>rename</B>()
+
+renames a file, moving it between directories if required.
+Any other hard links to the file (as created using
+<B><A HREF="../man2/link.2.html">link</A></B>(2))
+
+are unaffected.
+Open file descriptors for
+<I>oldpath</I>
+
+are also unaffected.
+<P>
+If
+<I>newpath</I>
+
+already exists, it will be atomically replaced (subject to
+a few conditions; see ERRORS below), so that there is
+no point at which another process attempting to access
+<I>newpath</I>
+
+will find it missing.
+<P>
+If
+<I>oldpath</I>
+
+and
+<I>newpath</I>
+
+are existing hard links referring to the same file, then
+<B>rename</B>()
+
+does nothing, and returns a success status.
+<P>
+If
+<I>newpath</I>
+
+exists but the operation fails for some reason,
+<B>rename</B>()
+
+guarantees to leave an instance of
+<I>newpath</I>
+
+in place.
+<P>
+<I>oldpath</I>
+
+can specify a directory.
+In this case,
+<I>newpath</I>
+
+must either not exist, or it must specify an empty directory.
+<P>
+However, when overwriting there will probably be a window in which
+both
+<I>oldpath</I>
+
+and
+<I>newpath</I>
+
+refer to the file being renamed.
+<P>
+If
+<I>oldpath</I>
+
+refers to a symbolic link, the link is renamed; if
+<I>newpath</I>
+
+refers to a symbolic link, the link will be overwritten.
+<A NAME="lbAE">&nbsp;</A>
+<H3>renameat()</H3>
+
+The
+<B>renameat</B>()
+
+system call operates in exactly the same way as
+<B>rename</B>(),
+
+except for the differences described here.
+<P>
+If the pathname given in
+<I>oldpath</I>
+
+is relative, then it is interpreted relative to the directory
+referred to by the file descriptor
+<I>olddirfd</I>
+
+(rather than relative to the current working directory of
+the calling process, as is done by
+<B>rename</B>()
+
+for a relative pathname).
+<P>
+If
+<I>oldpath</I>
+
+is relative and
+<I>olddirfd</I>
+
+is the special value
+<B>AT_FDCWD</B>,
+
+then
+<I>oldpath</I>
+
+is interpreted relative to the current working
+directory of the calling process (like
+<B>rename</B>()).
+
+<P>
+If
+<I>oldpath</I>
+
+is absolute, then
+<I>olddirfd</I>
+
+is ignored.
+<P>
+The interpretation of
+<I>newpath</I>
+
+is as for
+<I>oldpath</I>,
+
+except that a relative pathname is interpreted relative
+to the directory referred to by the file descriptor
+<I>newdirfd</I>.
+
+<P>
+See
+<B><A HREF="../man2/openat.2.html">openat</A></B>(2)
+
+for an explanation of the need for
+<B>renameat</B>().
+
+<A NAME="lbAF">&nbsp;</A>
+<H3>renameat2()</H3>
+
+<B>renameat2</B>()
+
+has an additional
+<I>flags</I>
+
+argument.
+A
+<B>renameat2</B>()
+
+call with a zero
+<I>flags</I>
+
+argument is equivalent to
+<B>renameat</B>().
+
+<P>
+The
+<I>flags</I>
+
+argument is a bit mask consisting of zero or more of the following flags:
+<DL COMPACT>
+<DT><B>RENAME_NOREPLACE</B>
+
+<DD>
+Don't overwrite
+<I>newpath</I>.
+
+of the rename.
+Return an error if
+<I>newpath</I>
+
+already exists.
+<DT><B>RENAME_EXCHANGE</B>
+
+<DD>
+Atomically exchange
+<I>oldpath</I>
+
+and
+<I>newpath</I>.
+
+Both pathnames must exist
+but may be of different types (e.g., one could be a non-empty directory
+and the other a symbolic link).
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, zero is returned.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAH">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EACCES</B>
+
+<DD>
+Write permission is denied for the directory containing
+<I>oldpath</I>
+
+or
+<I>newpath</I>,
+
+or, search permission is denied for one of the directories
+in the path prefix of
+<I>oldpath</I>
+
+or
+<I>newpath</I>,
+
+or
+<I>oldpath</I>
+
+is a directory and does not allow write permission (needed to update
+the
+<I>..</I>
+
+entry).
+(See also
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7).)
+
+<DT><B>EBUSY</B>
+
+<DD>
+The rename fails because
+<I>oldpath</I> or <I>newpath</I>
+
+is a directory that is in use by some process (perhaps as
+current working directory, or as root directory, or because
+it was open for reading) or is in use by the system
+(for example as mount point), while the system considers
+this an error.
+(Note that there is no requirement to return
+<B>EBUSY</B>
+
+in such
+cases---there is nothing wrong with doing the rename anyway---but
+it is allowed to return
+<B>EBUSY</B>
+
+if the system cannot otherwise
+handle such situations.)
+<DT><B>EDQUOT</B>
+
+<DD>
+The user's quota of disk blocks on the filesystem has been exhausted.
+<DT><B>EFAULT</B>
+
+<DD>
+<I>oldpath</I> or <I>newpath</I> points outside your accessible address space.
+
+<DT><B>EINVAL</B>
+
+<DD>
+The new pathname contained a path prefix of the old, or, more generally,
+an attempt was made to make a directory a subdirectory of itself.
+<DT><B>EISDIR</B>
+
+<DD>
+<I>newpath</I>
+
+is an existing directory, but
+<I>oldpath</I>
+
+is not a directory.
+<DT><B>ELOOP</B>
+
+<DD>
+Too many symbolic links were encountered in resolving
+<I>oldpath</I> or <I>newpath</I>.
+
+<DT><B>EMLINK</B>
+
+<DD>
+<I>oldpath</I>
+
+already has the maximum number of links to it, or
+it was a directory and the directory containing
+<I>newpath</I>
+
+has the maximum number of links.
+<DT><B>ENAMETOOLONG</B>
+
+<DD>
+<I>oldpath</I> or <I>newpath</I> was too long.
+
+<DT><B>ENOENT</B>
+
+<DD>
+The link named by
+<I>oldpath</I>
+
+does not exist;
+or, a directory component in
+<I>newpath</I>
+
+does not exist;
+or,
+<I>oldpath</I>
+
+or
+<I>newpath</I>
+
+is an empty string.
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient kernel memory was available.
+<DT><B>ENOSPC</B>
+
+<DD>
+The device containing the file has no room for the new directory
+entry.
+<DT><B>ENOTDIR</B>
+
+<DD>
+A component used as a directory in
+<I>oldpath</I> or <I>newpath</I>
+
+is not, in fact, a directory.
+Or,
+<I>oldpath</I>
+
+is a directory, and
+<I>newpath</I>
+
+exists but is not a directory.
+<DT><B>ENOTEMPTY</B> or <B>EEXIST</B>
+
+<DD>
+<I>newpath</I>
+
+is a nonempty directory, that is, contains entries other than &quot;.&quot; and &quot;..&quot;.
+<DT><B>EPERM</B> or <B>EACCES</B>
+
+<DD>
+The directory containing
+<I>oldpath</I>
+
+has the sticky bit
+(<B>S_ISVTX</B>)
+
+set and the process's effective user ID is neither
+the user ID of the file to be deleted nor that of the directory
+containing it, and the process is not privileged
+(Linux: does not have the
+<B>CAP_FOWNER</B>
+
+capability);
+or
+<I>newpath</I>
+
+is an existing file and the directory containing it has the sticky bit set
+and the process's effective user ID is neither the user ID of the file
+to be replaced nor that of the directory containing it,
+and the process is not privileged
+(Linux: does not have the
+<B>CAP_FOWNER</B>
+
+capability);
+or the filesystem containing
+<I>pathname</I>
+
+does not support renaming of the type requested.
+<DT><B>EROFS</B>
+
+<DD>
+The file is on a read-only filesystem.
+<DT><B>EXDEV</B>
+
+<DD>
+<I>oldpath</I> and <I>newpath</I>
+
+are not on the same mounted filesystem.
+(Linux permits a filesystem to be mounted at multiple points, but
+<B>rename</B>()
+
+does not work across different mount points,
+even if the same filesystem is mounted on both.)
+</DL>
+<P>
+
+The following additional errors can occur for
+<B>renameat</B>()
+
+and
+<B>renameat2</B>():
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>olddirfd</I>
+
+or
+<I>newdirfd</I>
+
+is not a valid file descriptor.
+<DT><B>ENOTDIR</B>
+
+<DD>
+<I>oldpath</I>
+
+is relative and
+<I>olddirfd</I>
+
+is a file descriptor referring to a file other than a directory;
+or similar for
+<I>newpath</I>
+
+and
+<I>newdirfd</I>
+
+</DL>
+<P>
+
+The following additional errors can occur for
+<B>renameat2</B>():
+
+<DL COMPACT>
+<DT><B>EEXIST</B>
+
+<DD>
+<I>flags</I>
+
+contains
+<B>RENAME_NOREPLACE</B>
+
+and
+<I>newpath</I>
+
+already exists.
+<DT><B>EINVAL</B>
+
+<DD>
+An invalid flag was specified in
+<I>flags</I>,
+
+or both
+<B>RENAME_NOREPLACE</B>
+
+and
+<B>RENAME_EXCHANGE</B>
+
+were specified.
+<DT><B>EINVAL</B>
+
+<DD>
+The filesystem does not support one of the flags in
+<I>flags</I>.
+
+<DT><B>ENOENT</B>
+
+<DD>
+<I>flags</I>
+
+contains
+<B>RENAME_EXCHANGE</B>
+
+and
+<I>newpath</I>
+
+does not exist.
+</DL>
+<A NAME="lbAI">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>renameat</B>()
+
+was added to Linux in kernel 2.6.16;
+library support was added to glibc in version 2.4.
+<P>
+<B>renameat2</B>()
+
+was added to Linux in kernel 3.15.
+
+<A NAME="lbAJ">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>rename</B>():
+
+4.3BSD, C89, C99, POSIX.1-2001, POSIX.1-2008.
+<P>
+<B>renameat</B>():
+
+POSIX.1-2008.
+<P>
+<B>renameat2</B>()
+
+is Linux-specific.
+<A NAME="lbAK">&nbsp;</A>
+<H2>NOTES</H2>
+
+<A NAME="lbAL">&nbsp;</A>
+<H3>Glibc notes</H3>
+
+On older kernels where
+<B>renameat</B>()
+
+is unavailable, the glibc wrapper function falls back to the use of
+<B>rename</B>().
+
+When
+<I>oldpath</I>
+
+and
+<I>newpath</I>
+
+are relative pathnames,
+glibc constructs pathnames based on the symbolic links in
+<I>/proc/self/fd</I>
+
+that correspond to the
+<I>olddirfd</I>
+
+and
+<I>newdirfd</I>
+
+arguments.
+<A NAME="lbAM">&nbsp;</A>
+<H2>BUGS</H2>
+
+On NFS filesystems, you can not assume that if the operation
+failed, the file was not renamed.
+If the server does the rename operation
+and then crashes, the retransmitted RPC which will be processed when the
+server is up again causes a failure.
+The application is expected to
+deal with this.
+See
+<B><A HREF="../man2/link.2.html">link</A></B>(2)
+
+for a similar problem.
+<A NAME="lbAN">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/mv.1.html">mv</A></B>(1),
+
+<B><A HREF="../man2/chmod.2.html">chmod</A></B>(2),
+
+<B><A HREF="../man2/link.2.html">link</A></B>(2),
+
+<B><A HREF="../man2/symlink.2.html">symlink</A></B>(2),
+
+<B><A HREF="../man2/unlink.2.html">unlink</A></B>(2),
+
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7),
+
+<B><A HREF="../man7/symlink.7.html">symlink</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">renameat()</A><DD>
+<DT><A HREF="#lbAF">renameat2()</A><DD>
+</DL>
+<DT><A HREF="#lbAG">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAH">ERRORS</A><DD>
+<DT><A HREF="#lbAI">VERSIONS</A><DD>
+<DT><A HREF="#lbAJ">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAK">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAL">Glibc notes</A><DD>
+</DL>
+<DT><A HREF="#lbAM">BUGS</A><DD>
+<DT><A HREF="#lbAN">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:47 GMT, September 18, 2014
+</BODY>
+</HTML>

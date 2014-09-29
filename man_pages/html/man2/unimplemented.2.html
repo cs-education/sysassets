@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of UNIMPLEMENTED</TITLE>
+</HEAD><BODY>
+<H1>UNIMPLEMENTED</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2013-02-12<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+afs_syscall, break, fattach, fdetach, ftime, getmsg, getpmsg, gtty, isastream,
+lock, madvise1, mpx, prof, profil, putmsg, putpmsg, security,
+stty, tuxcall, ulimit, vserver - unimplemented system calls
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+Unimplemented system calls.
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+These system calls are not implemented in the Linux kernel.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+These system calls always return -1 and set
+<I>errno</I>
+
+to
+<B>ENOSYS</B>.
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>NOTES</H2>
+
+Note that
+<B><A HREF="../man3/ftime.3.html">ftime</A></B>(3),
+
+<B><A HREF="../man3/profil.3.html">profil</A></B>(3),
+
+and
+<B><A HREF="../man3/ulimit.3.html">ulimit</A></B>(3)
+
+are implemented as library functions.
+<P>
+Some system calls, like
+<B><A HREF="../man2/alloc_hugepages.2.html">alloc_hugepages</A></B>(2),
+
+<B><A HREF="../man2/free_hugepages.2.html">free_hugepages</A></B>(2),
+
+<B><A HREF="../man2/ioperm.2.html">ioperm</A></B>(2),
+
+<B><A HREF="../man2/iopl.2.html">iopl</A></B>(2),
+
+and
+<B><A HREF="../man2/vm86.2.html">vm86</A></B>(2)
+
+exist only on certain architectures.
+<P>
+Some system calls, like
+<B><A HREF="../man2/ipc.2.html">ipc</A></B>(2),
+
+<B><A HREF="../man2/create_module.2.html">create_module</A></B>(2),
+
+<B><A HREF="../man2/init_module.2.html">init_module</A></B>(2),
+
+and
+<B><A HREF="../man2/delete_module.2.html">delete_module</A></B>(2)
+
+exist only when the Linux kernel was built with support for them.
+<A NAME="lbAG">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/syscalls.2.html">syscalls</A></B>(2)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">NOTES</A><DD>
+<DT><A HREF="#lbAG">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:46 GMT, September 18, 2014
+</BODY>
+</HTML>

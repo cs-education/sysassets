@@ -1,0 +1,681 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of CHOWN</TITLE>
+</HEAD><BODY>
+<H1>CHOWN</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+chown, fchown, lchown, fchownat - change ownership of a file
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<B>int chown(const char *</B><I>pathname</I><B>, uid_t </B><I>owner</I><B>, gid_t </B><I>group</I><B>);</B>
+<BR>
+<B>int fchown(int </B><I>fd</I><B>, uid_t </B><I>owner</I><B>, gid_t </B><I>group</I><B>);</B>
+<BR>
+<B>int lchown(const char *</B><I>pathname</I><B>, uid_t </B><I>owner</I><B>, gid_t </B><I>group</I><B>);</B>
+
+<B>#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;           </B>/* Definition of AT_* constants */
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<B>int fchownat(int </B><I>dirfd</I><B>, const char *</B><I>pathname</I><B>,</B>
+<B>             uid_t </B><I>owner</I><B>, gid_t </B><I>group</I><B>, int </B><I>flags</I><B>);</B>
+</PRE>
+
+<P>
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>fchown</B>(),
+
+<B>lchown</B>():
+
+
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED
+<BR>
+
+|| /* Since glibc 2.12: */ _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+</DL>
+
+<P>
+<B>fchownat</B>():
+
+
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Since glibc 2.10:<DD>
+_XOPEN_SOURCE&nbsp;&gt;=&nbsp;700 || _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+<DT>Before glibc 2.10:<DD>
+_ATFILE_SOURCE
+</DL>
+</DL>
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+These system calls change the owner and group of a file.
+The
+<B>chown</B>(),
+
+<B>fchown</B>(),
+
+and
+<B>lchown</B>()
+
+system calls differ only in how the file is specified:
+<DL COMPACT>
+<DT>*<DD>
+<B>chown</B>()
+
+changes the ownership of the file specified by
+<I>pathname</I>,
+
+which is dereferenced if it is a symbolic link.
+<DT>*<DD>
+<B>fchown</B>()
+
+changes the ownership of the file referred to by the open file descriptor
+<I>fd</I>.
+
+<DT>*<DD>
+<B>lchown</B>()
+
+is like
+<B>chown</B>(),
+
+but does not dereference symbolic links.
+</DL>
+<P>
+
+Only a privileged process (Linux: one with the
+<B>CAP_CHOWN</B>
+
+capability) may change the owner of a file.
+The owner of a file may change the group of the file
+to any group of which that owner is a member.
+A privileged process (Linux: with
+<B>CAP_CHOWN</B>)
+
+may change the group arbitrarily.
+<P>
+If the
+<I>owner</I>
+
+or
+<I>group</I>
+
+is specified as -1, then that ID is not changed.
+<P>
+When the owner or group of an executable file are
+changed by an unprivileged user the
+<B>S_ISUID</B>
+
+and
+<B>S_ISGID</B>
+
+mode bits are cleared.
+POSIX does not specify whether
+this also should happen when root does the
+<B>chown</B>();
+
+the Linux behavior depends on the kernel version.
+
+
+
+In case of a non-group-executable file (i.e., one for which the
+<B>S_IXGRP</B>
+
+bit is not set) the
+<B>S_ISGID</B>
+
+bit indicates mandatory locking, and is not cleared by a
+<B>chown</B>().
+
+<A NAME="lbAE">&nbsp;</A>
+<H3>fchownat()</H3>
+
+The
+<B>fchownat</B>()
+
+system call operates in exactly the same way as
+<B>chown</B>(),
+
+except for the differences described here.
+<P>
+If the pathname given in
+<I>pathname</I>
+
+is relative, then it is interpreted relative to the directory
+referred to by the file descriptor
+<I>dirfd</I>
+
+(rather than relative to the current working directory of
+the calling process, as is done by
+<B>chown</B>()
+
+for a relative pathname).
+<P>
+If
+<I>pathname</I>
+
+is relative and
+<I>dirfd</I>
+
+is the special value
+<B>AT_FDCWD</B>,
+
+then
+<I>pathname</I>
+
+is interpreted relative to the current working
+directory of the calling process (like
+<B>chown</B>()).
+
+<P>
+If
+<I>pathname</I>
+
+is absolute, then
+<I>dirfd</I>
+
+is ignored.
+<P>
+The
+<I>flags</I>
+
+argument is a bit mask created by ORing together
+0 or more of the following values;
+<DL COMPACT>
+<DT><B>AT_EMPTY_PATH</B> (since Linux 2.6.39)
+
+<DD>
+
+If
+<I>pathname</I>
+
+is an empty string, operate on the file referred to by
+<I>dirfd</I>
+
+(which may have been obtained using the
+<B><A HREF="../man2/open.2.html">open</A></B>(2)
+
+<B>O_PATH</B>
+
+flag).
+In this case,
+<I>dirfd</I>
+
+can refer to any type of file, not just a directory.
+If
+<I>dirfd</I>
+
+is
+<B>AT_FDCWD</B>,
+
+the call operates on the current working directory.
+This flag is Linux-specific; define
+<B>_GNU_SOURCE</B>
+
+
+to obtain its definition.
+<P>
+<DT><B>AT_SYMLINK_NOFOLLOW</B>
+
+<DD>
+If
+<I>pathname</I>
+
+is a symbolic link, do not dereference it:
+instead operate on the link itself, like
+<B>lchown</B>().
+
+(By default,
+<B>fchownat</B>()
+
+dereferences symbolic links, like
+<B>chown</B>().)
+
+</DL>
+<P>
+
+See
+<B><A HREF="../man2/openat.2.html">openat</A></B>(2)
+
+for an explanation of the need for
+<B>fchownat</B>().
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, zero is returned.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+Depending on the filesystem,
+errors other than those listed below can be returned.
+<P>
+The more general errors for
+<B>chown</B>()
+
+are listed below.
+<DL COMPACT>
+<DT><B>EACCES</B>
+
+<DD>
+Search permission is denied on a component of the path prefix.
+(See also
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7).)
+
+<DT><B>EFAULT</B>
+
+<DD>
+<I>pathname</I>
+
+points outside your accessible address space.
+<DT><B>ELOOP</B>
+
+<DD>
+Too many symbolic links were encountered in resolving
+<I>pathname</I>.
+
+<DT><B>ENAMETOOLONG</B>
+
+<DD>
+<I>pathname</I>
+
+is too long.
+<DT><B>ENOENT</B>
+
+<DD>
+The file does not exist.
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient kernel memory was available.
+<DT><B>ENOTDIR</B>
+
+<DD>
+A component of the path prefix is not a directory.
+<DT><B>EPERM</B>
+
+<DD>
+The calling process did not have the required permissions
+(see above) to change owner and/or group.
+<DT><B>EROFS</B>
+
+<DD>
+The named file resides on a read-only filesystem.
+</DL>
+<P>
+
+The general errors for
+<B>fchown</B>()
+
+are listed below:
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+The descriptor is not valid.
+<DT><B>EIO</B>
+
+<DD>
+A low-level I/O error occurred while modifying the inode.
+<DT><B>ENOENT</B>
+
+<DD>
+See above.
+<DT><B>EPERM</B>
+
+<DD>
+See above.
+<DT><B>EROFS</B>
+
+<DD>
+See above.
+</DL>
+<P>
+
+The same errors that occur for
+<B>chown</B>()
+
+can also occur for
+<B>fchownat</B>().
+
+The following additional errors can occur for
+<B>fchownat</B>():
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>dirfd</I>
+
+is not a valid file descriptor.
+<DT><B>EINVAL</B>
+
+<DD>
+Invalid flag specified in
+<I>flags</I>.
+
+<DT><B>ENOTDIR</B>
+
+<DD>
+<I>pathname</I>
+
+is relative and
+<I>dirfd</I>
+
+is a file descriptor referring to a file other than a directory.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>fchownat</B>()
+
+was added to Linux in kernel 2.6.16;
+library support was added to glibc in version 2.4.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>chown</B>(),
+
+<B>fchown</B>(),
+
+<B>lchown</B>():
+
+4.4BSD, SVr4, POSIX.1-2001, POSIX.1-2008.
+<P>
+The 4.4BSD version can be
+used only by the superuser (that is, ordinary users cannot give away files).
+
+
+
+
+
+
+<P>
+<B>fchownat</B>():
+
+POSIX.1-2008.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+<A NAME="lbAK">&nbsp;</A>
+<H3>Ownership of new files</H3>
+
+When a new file is created (by, for example,
+<B><A HREF="../man2/open.2.html">open</A></B>(2)
+
+or
+<B><A HREF="../man2/mkdir.2.html">mkdir</A></B>(2)),
+
+its owner is made the same as the filesystem user ID of the
+creating process.
+The group of the file depends on a range of factors,
+including the type of filesystem,
+the options used to mount the filesystem,
+and whether or not the set-group-ID permission bit is enabled
+on the parent directory.
+If the filesystem supports the
+<I>-o&nbsp;grpid</I>
+
+(or, synonymously
+<I>-o&nbsp;bsdgroups</I>)
+
+and
+<I>-o&nbsp;nogrpid</I>
+
+(or, synonymously
+<I>-o&nbsp;sysvgroups</I>)
+
+<B><A HREF="../man8/mount.8.html">mount</A></B>(8)
+
+options, then the rules are as follows:
+<DL COMPACT>
+<DT>*<DD>
+If the filesystem is mounted with
+<I>-o&nbsp;grpid</I>,
+
+then the group of a new file is made
+the same as that of the parent directory.
+<DT>*<DD>
+If the filesystem is mounted with
+<I>-o&nbsp;nogrpid</I>
+
+and the set-group-ID bit is disabled on the parent directory,
+then the group of a new file is made the same as the
+process's filesystem GID.
+<DT>*<DD>
+If the filesystem is mounted with
+<I>-o&nbsp;nogrpid</I>
+
+and the set-group-ID bit is enabled on the parent directory,
+then the group of a new file is made
+the same as that of the parent directory.
+</DL>
+<P>
+
+As at Linux 2.6.25,
+the
+<I>-o&nbsp;grpid</I>
+
+and
+<I>-o&nbsp;nogrpid</I>
+
+mount options are supported by ext2, ext3, ext4, and XFS.
+Filesystems that don't support these mount options follow the
+<I>-o&nbsp;nogrpid</I>
+
+rules.
+<A NAME="lbAL">&nbsp;</A>
+<H3>Glibc notes</H3>
+
+On older kernels where
+<B>fchownat</B>()
+
+is unavailable, the glibc wrapper function falls back to the use of
+<B>chown</B>()
+
+and
+<B>lchown</B>().
+
+When
+<I>pathname</I>
+
+is a relative pathname,
+glibc constructs a pathname based on the symbolic link in
+<I>/proc/self/fd</I>
+
+that corresponds to the
+<I>dirfd</I>
+
+argument.
+<A NAME="lbAM">&nbsp;</A>
+<H3>NFS</H3>
+
+The
+<B>chown</B>()
+
+semantics are deliberately violated on NFS filesystems
+which have UID mapping enabled.
+Additionally, the semantics of all system
+calls which access the file contents are violated, because
+<B>chown</B>()
+
+may cause immediate access revocation on already open files.
+Client side
+caching may lead to a delay between the time where ownership have
+been changed to allow access for a user and the time where the file can
+actually be accessed by the user on other clients.
+<A NAME="lbAN">&nbsp;</A>
+<H3>Historical details</H3>
+
+The original Linux
+<B>chown</B>(),
+
+<B>fchown</B>(),
+
+and
+<B>lchown</B>()
+
+system calls supported only 16-bit user and group IDs.
+Subsequently, Linux 2.4 added
+<B>chown32</B>(),
+
+<B>fchown32</B>(),
+
+and
+<B>lchown32</B>(),
+
+supporting 32-bit IDs.
+The glibc
+<B>chown</B>(),
+
+<B>fchown</B>(),
+
+and
+<B>lchown</B>()
+
+wrapper functions transparently deal with the variations across kernel versions.
+<P>
+In versions of Linux prior to 2.1.81 (and distinct from 2.1.46),
+<B>chown</B>()
+
+did not follow symbolic links.
+Since Linux 2.1.81,
+<B>chown</B>()
+
+does follow symbolic links, and there is a new system call
+<B>lchown</B>()
+
+that does not follow symbolic links.
+Since Linux 2.1.86, this new call (that has the same semantics
+as the old
+<B>chown</B>())
+
+has got the same syscall number, and
+<B>chown</B>()
+
+got the newly introduced number.
+<A NAME="lbAO">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+<P>
+
+The following program changes the ownership of the file named in
+its second command-line argument to the value specified in its
+first command-line argument.
+The new owner can be specified either as a numeric user ID,
+or as a username (which is converted to a user ID by using
+<B><A HREF="../man3/getpwnam.3.html">getpwnam</A></B>(3)
+
+to perform a lookup in the system password file).
+<A NAME="lbAP">&nbsp;</A>
+<H3>Program source</H3>
+
+<PRE>
+#include &lt;<A HREF="file:///usr/include/pwd.h">pwd.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;
+
+int
+main(int argc, char *argv[])
+{
+    uid_t uid;
+    struct passwd *pwd;
+    char *endptr;
+
+    if (argc != 3 || argv[1][0] == '\0') {
+        fprintf(stderr, &quot;%s &lt;owner&gt; &lt;file&gt;\n&quot;, argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    uid = strtol(argv[1], &amp;endptr, 10);  /* Allow a numeric string */
+
+    if (*endptr != '\0') {         /* Was not pure numeric string */
+        pwd = getpwnam(argv[1]);   /* Try getting UID for username */
+        if (pwd == NULL) {
+            perror(&quot;getpwnam&quot;);
+            exit(EXIT_FAILURE);
+        }
+
+        uid = pwd-&gt;pw_uid;
+    }
+
+    if (chown(argv[2], uid, -1) == -1) {
+        perror(&quot;chown&quot;);
+        exit(EXIT_FAILURE);
+    }
+
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+<A NAME="lbAQ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/chmod.2.html">chmod</A></B>(2),
+
+<B><A HREF="../man2/flock.2.html">flock</A></B>(2),
+
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7),
+
+<B><A HREF="../man7/symlink.7.html">symlink</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">fchownat()</A><DD>
+</DL>
+<DT><A HREF="#lbAF">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">VERSIONS</A><DD>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAK">Ownership of new files</A><DD>
+<DT><A HREF="#lbAL">Glibc notes</A><DD>
+<DT><A HREF="#lbAM">NFS</A><DD>
+<DT><A HREF="#lbAN">Historical details</A><DD>
+</DL>
+<DT><A HREF="#lbAO">EXAMPLE</A><DD>
+<DL>
+<DT><A HREF="#lbAP">Program source</A><DD>
+</DL>
+<DT><A HREF="#lbAQ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:50 GMT, September 18, 2014
+</BODY>
+</HTML>

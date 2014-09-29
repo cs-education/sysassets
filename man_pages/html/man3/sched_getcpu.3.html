@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SCHED_GETCPU</TITLE>
+</HEAD><BODY>
+<H1>SCHED_GETCPU</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-05-10<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+sched_getcpu - determine CPU on which the calling thread is running
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sched.h">sched.h</A>&gt;</B>
+
+<B>int sched_getcpu(void);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>sched_getcpu</B>():
+
+
+<DL COMPACT><DT><DD>
+
+<DL COMPACT>
+<DT>Since glibc 2.14:<DD>
+_GNU_SOURCE
+<DT>Before glibc 2.14:<DD>
+_BSD_SOURCE || _SVID_SOURCE
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;_GNU_SOURCE&nbsp;also&nbsp;suffices&nbsp;*/
+
+</DL>
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>sched_getcpu</B>()
+
+returns the number of the CPU on which the calling thread is currently executing.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>sched_getcpu</B>()
+
+returns a nonnegative CPU number.
+On error, -1 is returned and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>ENOSYS</B>
+
+<DD>
+This kernel does not implement
+<B><A HREF="../man2/getcpu.2.html">getcpu</A></B>(2).
+
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+This function is available since glibc 2.6.
+<A NAME="lbAH">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAI">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>sched_getcpu</B>()
+
+function is thread-safe.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>sched_getcpu</B>()
+
+is glibc-specific.
+<A NAME="lbAK">&nbsp;</A>
+<H2>NOTES</H2>
+
+The call
+
+<PRE>
+
+cpu = sched_getcpu();
+
+</PRE>
+
+
+is equivalent to the following
+<B><A HREF="../man2/getcpu.2.html">getcpu</A></B>(2)
+
+call:
+
+<PRE>
+
+int c, s;
+s = getcpu(&amp;c, NULL, NULL);
+cpu = (s == -1) ? s : c;
+</PRE>
+
+
+<A NAME="lbAL">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/getcpu.2.html">getcpu</A></B>(2),
+
+<B><A HREF="../man7/sched.7.html">sched</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">VERSIONS</A><DD>
+<DT><A HREF="#lbAH">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAI">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAJ">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAK">NOTES</A><DD>
+<DT><A HREF="#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:58 GMT, September 18, 2014
+</BODY>
+</HTML>

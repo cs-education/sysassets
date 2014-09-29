@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of EXIT_GROUP</TITLE>
+</HEAD><BODY>
+<H1>EXIT_GROUP</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2008-11-27<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+exit_group - exit all threads in a process
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/linux/unistd.h">linux/unistd.h</A>&gt;</B>
+
+<B>void exit_group(int </B><I>status</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+This system call is equivalent to
+<B><A HREF="../man2/exit.2.html">exit</A></B>(2)
+
+except that it terminates not only the calling thread, but all threads
+in the calling process's thread group.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+This system call does not return.
+<A NAME="lbAF">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+This call is present since Linux 2.5.35.
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+This call is Linux-specific.
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+Since glibc 2.3, this is the system call invoked when the
+<B><A HREF="../man2/exit.2.html">exit</A></B>(2)
+
+wrapper function is called.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/exit.2.html">exit</A></B>(2)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">VERSIONS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:50 GMT, September 18, 2014
+</BODY>
+</HTML>

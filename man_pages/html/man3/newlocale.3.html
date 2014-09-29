@@ -1,0 +1,513 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of NEWLOCALE</TITLE>
+</HEAD><BODY>
+<H1>NEWLOCALE</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-05-28<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+newlocale, freelocale - create, modify, and free a locale object
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/locale.h">locale.h</A>&gt;</B>
+
+<B>locale_t newlocale(int </B><I>category_mask</I><B>, const char *</B><I>locale</I><B>,</B>
+<B>                   locale_t </B><I>base</I><B>);</B>
+
+<B>void freelocale(locale_t </B><I>locobj</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>newlocale</B>(),
+
+<B>freelocale</B>():
+
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Since glibc 2.10:<DD>
+_XOPEN_SOURCE&nbsp;&gt;=&nbsp;700
+<DT>Before glibc 2.10:<DD>
+_GNU_SOURCE
+</DL>
+</DL>
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>newlocale</B>()
+
+function creates a new locale object, or modifies an existing object,
+returning a reference to the new or modified object as the function result.
+Whether the call creates a new object or modifies an existing object
+is determined by the value of
+<I>base</I>:
+
+<DL COMPACT>
+<DT>*<DD>
+If
+<I>base</I>
+
+is
+<I>(locale_t)&nbsp;0</I>,
+
+a new object is created.
+<DT>*<DD>
+If
+<I>base</I>
+
+refers to valid existing locale object
+(i.e., an object returned by a previous call to
+<B>newlocale</B>()
+
+or
+<B><A HREF="../man3/duplocale.3.html">duplocale</A></B>(3)),
+
+then that object is modified by the call.
+If the call is successful, the contents of
+<I>base</I>
+
+are unspecified (in particular, the object referred to by
+<I>base</I>
+
+may be freed, and a new object created).
+Therefore, the caller should ensure that it stops using
+<I>base</I>
+
+before the call to
+<B>newlocale</B>(),
+
+and should subsequently refer to the modified object via the
+reference returned as the function result.
+If the call fails, the contents of
+<I>base</I>
+
+remain valid and unchanged.
+</DL>
+<P>
+
+If
+<I>base</I>
+
+is the special locale object
+<B>LC_GLOBAL_LOCALE</B>
+
+(see
+<B><A HREF="../man3/duplocale.3.html">duplocale</A></B>(3)),
+
+or is not
+<I>(locale_t)&nbsp;0</I>
+
+and is not a valid locale object handle,
+the behavior is undefined.
+<P>
+The
+<I>category_mask</I>
+
+argument is a bit mask that specifies the locale categories
+that are to be set in a newly created locale object
+or modified in an existing object.
+The mask is constructed by a bitwise OR of the constants
+<B>LC_ADDRESS_MASK</B>,
+
+<B>LC_CTYPE_MASK</B>,
+
+<B>LC_COLLATE_MASK</B>,
+
+<B>LC_IDENTIFICATION_MASK</B>,
+
+<B>LC_MEASUREMENT_MASK</B>,
+
+<B>LC_MESSAGES_MASK</B>,
+
+<B>LC_MONETARY_MASK</B>,
+
+<B>LC_NUMERIC_MASK</B>,
+
+<B>LC_NAME_MASK</B>,
+
+<B>LC_PAPER_MASK</B>,
+
+<B>LC_TELEPHONE_MASK</B>,
+
+and
+<B>LC_TIME_MASK</B>.
+
+Alternatively, the mask can be specified as
+<B>LC_ALL_MASK</B>,
+
+which is equivalent to ORing all of the preceding constants.
+<P>
+For each category specified in
+<I>category_mask</I>,
+
+the locale data from
+<I>locale</I>
+
+will be used in the object returned by
+<B>newlocale</B>().
+
+If a new locale object is being created,
+data for all categories not specified in
+<I>category_mask</I>
+
+is taken from the default (&quot;POSIX&quot;) locale.
+<P>
+The following preset values of
+<I>locale</I>
+
+are defined for all categories that can be specified in
+<I>category_mask</I>:
+
+<DL COMPACT>
+<DT>&quot;POSIX&quot;<DD>
+A minimal locale environment for C language programs.
+<DT>&quot;C&quot;<DD>
+Equivalent to &quot;POSIX&quot;.
+<DT>&quot;&quot;<DD>
+An implementation-defined native environment
+corresponding to the values of the
+<B>LC_*</B>
+
+and
+<B>LANG</B>
+
+environment variables (see
+<B><A HREF="../man7/locale.7.html">locale</A></B>(7)).
+
+</DL>
+<A NAME="lbAE">&nbsp;</A>
+<H3>freelocale()</H3>
+
+The
+<B>freelocale</B>()
+
+function deallocates the resources associated with
+<I>locobj</I>,
+
+a locale object previously returned by a call to
+<B>newlocale</B>()
+
+or
+<B><A HREF="../man3/duplocale.3.html">duplocale</A></B>(3).
+
+If
+<I>locobj</I>
+
+is
+<B>LC_GLOBAL_LOCALE</B>
+
+or is not valid locale object handle, the results are undefined.
+<P>
+Once a locale object has been freed,
+the program should make no further use of it.
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success,
+<B>newlocale</B>()
+
+returns a handle that can be used in calls to
+<B><A HREF="../man3/duplocale.3.html">duplocale</A></B>(3),
+
+<B>freelocale</B>(),
+
+and other functions that take a
+<I>locale_t</I>
+
+argument.
+On error,
+<B>newlocale</B>()
+
+returns
+<I>(locale_t)&nbsp;0,</I>
+
+and sets
+<I>errno</I>
+
+to indicate the cause of the error.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+One or more bits in
+<I>category_mask</I>
+
+do not correspond to a valid locale category.
+<DT><B>EINVAL</B>
+
+<DD>
+<I>locale</I>
+
+is NULL.
+<DT><B>ENOENT</B>
+
+<DD>
+<I>locale</I>
+
+is not a string pointer referring to a valid locale.
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient memory to create a locale object.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+The
+<B>newlocale</B>()
+
+and
+<B>freelocale</B>()
+
+functions first appeared in version 2.3 of the GNU C library.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2008.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+Each locale object created by
+<B>newlocale</B>()
+
+should be deallocated using
+<B><A HREF="../man3/freelocale.3.html">freelocale</A></B>(3).
+
+<A NAME="lbAK">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The program below takes up to two command-line arguments,
+which each identify locales.
+The first argument is required, and is used to set the
+<B>LC_NUMERIC</B>
+
+category in a locale object created using
+<B>newlocale</B>().
+
+The second command-line argument is optional;
+if it is present, it is used to set the
+<B>LC_TIME</B>
+
+category of the locale object.
+<P>
+Having created and initialized the locale object,
+the program then applies it using
+<B><A HREF="../man3/uselocale.3.html">uselocale</A></B>(3),
+
+and then tests the effect of the locale changes by:
+<DL COMPACT>
+<DT>1.<DD>
+Displaying a floating-point number with a fractional part.
+This output will be affected by the
+<B>LC_NUMERIC</B>
+
+setting.
+In many European-language locales,
+the fractional part of the number is separated from the integer part
+using a comma, rather than a period.
+<DT>2.<DD>
+Displaying the date.
+The format and language of the output will be affected by the
+<B>LC_TIME</B>
+
+setting.
+<P>
+</DL>
+<P>
+
+The following shell sessions show some example runs of this program.
+<P>
+Set the
+<B>LC_NUMERIC</B>
+
+category to
+<I>fr_FR</I>
+
+(French):
+
+<PRE>
+
+$ <B>./a.out fr_FR</B>
+123456,789
+Fri Mar  7 00:25:08 2014
+</PRE>
+
+
+<P>
+Set the
+<B>LC_NUMERIC</B>
+
+category to
+<I>fr_FR</I>
+
+(French),
+and the
+<B>LC_TIME</B>
+
+category to
+<I>it_IT</I>
+
+(Italian):
+
+<PRE>
+
+$ <B>./a.out fr_FR it_IT</B>
+123456,789
+ven 07 mar 2014 00:26:01 CET
+</PRE>
+
+
+<P>
+Specify the
+<B>LC_TIME</B>
+
+setting as an empty string,
+which causes the value to be taken from environment variable settings
+(which, here, specify
+<I>mi_NZ</I>,
+
+New Zealand Māori):
+
+<PRE>
+
+$ LC_ALL=mi_NZ ./a.out fr_FR &quot;&quot;
+123456,789
+Te Paraire, te 07 o Poutū-te-rangi, 2014 00:38:44 CET
+</PRE>
+
+<A NAME="lbAL">&nbsp;</A>
+<H3>Program source</H3>
+
+<PRE>
+#define _XOPEN_SOURCE 700
+#include &lt;<A HREF="file:///usr/include/stdio.h">stdio.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/stdlib.h">stdlib.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/locale.h">locale.h</A>&gt;
+#include &lt;<A HREF="file:///usr/include/time.h">time.h</A>&gt;
+
+#define errExit(msg)    do { perror(msg); exit(EXIT_FAILURE); \
+                        } while (0)
+
+int
+main(int argc, char *argv[])
+{
+    char buf[100];
+    time_t t;
+    size_t s;
+    struct tm *tm;
+    locale_t loc, nloc;
+
+    if (argc &lt; 2) {
+        fprintf(stderr, &quot;Usage: %s locale1 [locale2]\n&quot;, argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    /* Create a new locale object, taking the LC_NUMERIC settings
+       from the locale specified in argv[1] */
+
+    loc = newlocale(LC_NUMERIC_MASK, argv[1], (locale_t) 0);
+    if (loc == (locale_t) 0)
+        errExit(&quot;newlocale&quot;);
+
+    /* If a second command-line argument was specified, modify the
+       locale object to take the LC_TIME settings from the locale
+       specified in argv[2]. We assign the result of this newlocale()
+       call to 'nloc' rather than 'loc', since in some cases, we might
+       want to preserve 'loc' if this call fails. */
+
+    if (argc &gt; 2) {
+        nloc = newlocale(LC_TIME_MASK, argv[2], loc);
+        if (nloc == (locale_t) 0)
+            errExit(&quot;newlocale&quot;);
+        loc = nloc;
+    }
+
+    /* Apply the newly created locale to this thread */
+
+    uselocale(loc);
+
+    /* Test effect of LC_NUMERIC */
+
+    printf(&quot;%8.3f\n&quot;, 123456.789);
+
+    /* Test effect of LC_TIME */
+
+    t = time(NULL);
+    tm = localtime(&amp;t);
+    if (tm == NULL)
+        errExit(&quot;time&quot;);
+
+    s = strftime(buf, sizeof(buf), &quot;%c&quot;, tm);
+    if (s == 0)
+        errExit(&quot;strftime&quot;);
+
+    printf(&quot;%s\n&quot;, buf);
+
+    /* Free the locale object */
+
+    freelocale(loc);
+
+    exit(EXIT_SUCCESS);
+}
+</PRE>
+
+<A NAME="lbAM">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/locale.1.html">locale</A></B>(1),
+
+<B><A HREF="../man3/duplocale.3.html">duplocale</A></B>(3),
+
+<B><A HREF="../man3/setlocale.3.html">setlocale</A></B>(3),
+
+<B><A HREF="../man3/uselocale.3.html">uselocale</A></B>(3),
+
+<B><A HREF="../man5/locale.5.html">locale</A></B>(5),
+
+<B><A HREF="../man7/locale.7.html">locale</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">freelocale()</A><DD>
+</DL>
+<DT><A HREF="#lbAF">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">VERSIONS</A><DD>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DT><A HREF="#lbAK">EXAMPLE</A><DD>
+<DL>
+<DT><A HREF="#lbAL">Program source</A><DD>
+</DL>
+<DT><A HREF="#lbAM">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:04 GMT, September 18, 2014
+</BODY>
+</HTML>

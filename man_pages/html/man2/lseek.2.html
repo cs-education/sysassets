@@ -1,0 +1,349 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of LSEEK</TITLE>
+</HEAD><BODY>
+<H1>LSEEK</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-06-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+lseek - reposition read/write file offset
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+
+<BR>
+
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<P>
+<B>off_t lseek(int </B><I>fd</I><B>, off_t </B><I>offset</I><B>, int </B><I>whence</I><B>);</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>lseek</B>()
+
+function repositions the offset of the open file associated with the
+file descriptor
+<I>fd</I>
+
+to the argument
+<I>offset</I>
+
+according to the directive
+<I>whence</I>
+
+as follows:
+<DL COMPACT>
+<DT><B>SEEK_SET</B>
+
+<DD>
+The offset is set to
+<I>offset</I>
+
+bytes.
+<DT><B>SEEK_CUR</B>
+
+<DD>
+The offset is set to its current location plus
+<I>offset</I>
+
+bytes.
+<DT><B>SEEK_END</B>
+
+<DD>
+The offset is set to the size of the file plus
+<I>offset</I>
+
+bytes.
+</DL>
+<P>
+
+The
+<B>lseek</B>()
+
+function allows the file offset to be set beyond the end
+of the file (but this does not change the size of the file).
+If data is later written at this point, subsequent reads of the data
+in the gap (a &quot;hole&quot;) return null bytes ('\0') until
+data is actually written into the gap.
+<A NAME="lbAE">&nbsp;</A>
+<H3>Seeking file data and holes</H3>
+
+Since version 3.1, Linux supports the following additional values for
+<I>whence</I>:
+
+<DL COMPACT>
+<DT><B>SEEK_DATA</B>
+
+<DD>
+Adjust the file offset to the next location
+in the file greater than or equal to
+<I>offset</I>
+
+containing data.
+If
+<I>offset</I>
+
+points to data,
+then the file offset is set to
+<I>offset</I>.
+
+<DT><B>SEEK_HOLE</B>
+
+<DD>
+Adjust the file offset to the next hole in the file
+greater than or equal to
+<I>offset</I>.
+
+If
+<I>offset</I>
+
+points into the middle of a hole,
+then the file offset is set to
+<I>offset</I>.
+
+If there is no hole past
+<I>offset</I>,
+
+then the file offset is adjusted to the end of the file
+(i.e., there is an implicit hole at the end of any file).
+</DL>
+<P>
+
+In both of the above cases,
+<B>lseek</B>()
+
+fails if
+<I>offset</I>
+
+points past the end of the file.
+<P>
+These operations allow applications to map holes in a sparsely
+allocated file.
+This can be useful for applications such as file backup tools,
+which can save space when creating backups and preserve holes,
+if they have a mechanism for discovering holes.
+<P>
+For the purposes of these operations, a hole is a sequence of zeros that
+(normally) has not been allocated in the underlying file storage.
+However, a filesystem is not obliged to report holes,
+so these operations are not a guaranteed mechanism for
+mapping the storage space actually allocated to a file.
+(Furthermore, a sequence of zeros that actually has been written
+to the underlying storage may not be reported as a hole.)
+In the simplest implementation,
+a filesystem can support the operations by making
+<B>SEEK_HOLE</B>
+
+always return the offset of the end of the file,
+and making
+<B>SEEK_DATA</B>
+
+always return
+<I>offset</I>
+
+(i.e., even if the location referred to by
+<I>offset</I>
+
+is a hole,
+it can be considered to consist of data that is a sequence of zeros).
+
+
+
+<P>
+The
+<B>_GNU_SOURCE</B>
+
+feature test macro must be defined in order to obtain the definitions of
+<B>SEEK_DATA</B>
+
+and
+<B>SEEK_HOLE</B>
+
+from
+<I>&lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</I>.
+
+<P>
+The
+<B>SEEK_HOLE</B>
+
+and
+<B>SEEK_DATA</B>
+
+operations are supported for the following filesystems:
+<DL COMPACT>
+<DT>*<DD>
+Btrfs (since Linux 3.1)
+<DT>*<DD>
+OCFS (since Linux 3.2)
+
+<DT>*<DD>
+XFS (since Linux 3.5)
+<DT>*<DD>
+ext4 (since Linux 3.8)
+<DT>*<DD>
+tmpfs (since Linux 3.8)
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+Upon successful completion,
+<B>lseek</B>()
+
+returns the resulting offset location as measured in bytes from the
+beginning of the file.
+On error, the value <I>(off_t)&nbsp;-1</I> is returned and
+<I>errno</I>
+
+is set to indicate the error.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>fd</I>
+
+is not an open file descriptor.
+<DT><B>EINVAL</B>
+
+<DD>
+<I>whence</I>
+
+is not valid.
+Or: the resulting file offset would be negative,
+or beyond the end of a seekable device.
+
+
+<DT><B>EOVERFLOW</B>
+
+<DD>
+
+The resulting file offset cannot be represented in an
+<I>off_t</I>.
+
+<DT><B>ESPIPE</B>
+
+<DD>
+<I>fd</I>
+
+is associated with a pipe, socket, or FIFO.
+<DT><B>ENXIO</B>
+
+<DD>
+<I>whence</I>
+
+is
+<B>SEEK_DATA</B>
+
+or
+<B>SEEK_HOLE</B>,
+
+and the current file offset is beyond the end of the file.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+SVr4, 4.3BSD, POSIX.1-2001.
+<P>
+<B>SEEK_DATA</B>
+
+and
+<B>SEEK_HOLE</B>
+
+are nonstandard extensions also present in Solaris,
+FreeBSD, and DragonFly BSD;
+they are proposed for inclusion in the next POSIX revision (Issue 8).
+
+<A NAME="lbAI">&nbsp;</A>
+<H2>NOTES</H2>
+
+See
+<B><A HREF="../man2/open.2.html">open</A></B>(2)
+
+for a discussion of the relationship between file descriptors,
+open file descriptions, and files.
+<P>
+Some devices are incapable of seeking and POSIX does not specify which
+devices must support
+<B>lseek</B>().
+
+<P>
+On Linux, using
+<B>lseek</B>()
+
+on a terminal device returns
+<B>ESPIPE</B>.
+
+
+<P>
+When converting old code, substitute values for <I>whence</I> with the
+following macros:
+<TABLE>
+<TR VALIGN=top><TD ALIGN=center>old</TD><TD ALIGN=center>new<BR></TD></TR>
+<TR VALIGN=top><TD>0</TD><TD>SEEK_SET<BR></TD></TR>
+<TR VALIGN=top><TD>1</TD><TD>SEEK_CUR<BR></TD></TR>
+<TR VALIGN=top><TD>2</TD><TD>SEEK_END<BR></TD></TR>
+<TR VALIGN=top><TD>L_SET</TD><TD>SEEK_SET<BR></TD></TR>
+<TR VALIGN=top><TD>L_INCR</TD><TD>SEEK_CUR<BR></TD></TR>
+<TR VALIGN=top><TD>L_XTND</TD><TD>SEEK_END<BR></TD></TR>
+</TABLE>
+
+
+
+
+<P>
+
+Note that file descriptors created by
+<B><A HREF="../man2/dup.2.html">dup</A></B>(2)
+
+or
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2)
+
+share the current file position pointer, so seeking on such files may be
+subject to race conditions.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/dup.2.html">dup</A></B>(2),
+
+<B><A HREF="../man2/fork.2.html">fork</A></B>(2),
+
+<B><A HREF="../man2/open.2.html">open</A></B>(2),
+
+<B><A HREF="../man3/fseek.3.html">fseek</A></B>(3),
+
+<B><A HREF="../man3/lseek64.3.html">lseek64</A></B>(3),
+
+<B><A HREF="../man3/posix_fallocate.3.html">posix_fallocate</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">Seeking file data and holes</A><DD>
+</DL>
+<DT><A HREF="#lbAF">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAI">NOTES</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:49 GMT, September 18, 2014
+</BODY>
+</HTML>

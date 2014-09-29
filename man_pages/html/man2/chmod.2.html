@@ -1,0 +1,519 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of CHMOD</TITLE>
+</HEAD><BODY>
+<H1>CHMOD</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+chmod, fchmod, fchmodat - change permissions of a file
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</B>
+
+<B>int chmod(const char *</B><I>pathname</I><B>, mode_t </B><I>mode</I><B>);</B>
+<BR>
+<B>int fchmod(int </B><I>fd</I><B>, mode_t </B><I>mode</I><B>);</B>
+
+<B>#include &lt;<A HREF="file:///usr/include/fcntl.h">fcntl.h</A>&gt;</B>           /* Definition of AT_* constants */
+<B>#include &lt;<A HREF="file:///usr/include/sys/stat.h">sys/stat.h</A>&gt;</B>
+
+<B>int fchmodat(int </B><I>dirfd</I><B>, const char *</B><I>pathname</I><B>, mode_t </B><I>mode</I><B>, int </B><I>flags</I><B>);</B>
+</PRE>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+
+
+<B>fchmod</B>():
+
+<DL COMPACT><DT><DD>
+_BSD_SOURCE ||
+_XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED
+<BR>
+
+|| /* Since glibc 2.12: */ _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+</DL>
+
+
+<P>
+<B>fchmodat</B>():
+
+
+
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT>Since glibc 2.10:<DD>
+_XOPEN_SOURCE&nbsp;&gt;=&nbsp;700 || _POSIX_C_SOURCE&nbsp;&gt;=&nbsp;200809L
+<DT>Before glibc 2.10:<DD>
+_ATFILE_SOURCE
+</DL>
+</DL>
+
+
+
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+The
+<B>chmod</B>()
+
+and
+<B>fchmod</B>()
+
+system calls change the permissions of a file.
+They differ only in how the file is specified:
+<DL COMPACT>
+<DT>*<DD>
+<B>chmod</B>()
+
+changes the permissions of the file specified whose pathname is given in
+<I>pathname</I>,
+
+which is dereferenced if it is a symbolic link.
+<DT>*<DD>
+<B>fchmod</B>()
+
+changes the permissions of the file referred to by the open file descriptor
+<I>fd</I>.
+
+</DL>
+<P>
+
+The new file permissions are specified in
+<I>mode</I>,
+
+which is a bit mask created by ORing together zero or
+more of the following:
+<DL COMPACT>
+<DT><B>S_ISUID</B>  (04000)
+
+<DD>
+set-user-ID (set process effective user ID on
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2))
+
+<DT><B>S_ISGID</B>  (02000)
+
+<DD>
+set-group-ID (set process effective group ID on
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2);
+
+mandatory locking, as described in
+<B><A HREF="../man2/fcntl.2.html">fcntl</A></B>(2);
+
+take a new file's group from parent directory, as described in
+<B><A HREF="../man2/chown.2.html">chown</A></B>(2)
+
+and
+<B><A HREF="../man2/mkdir.2.html">mkdir</A></B>(2))
+
+<DT><B>S_ISVTX</B>  (01000)
+
+<DD>
+sticky bit (restricted deletion flag, as described in
+<B><A HREF="../man2/unlink.2.html">unlink</A></B>(2))
+
+<DT><B>S_IRUSR</B>  (00400)
+
+<DD>
+read by owner
+<DT><B>S_IWUSR</B>  (00200)
+
+<DD>
+write by owner
+<DT><B>S_IXUSR</B>  (00100)
+
+<DD>
+execute/search by owner (&quot;search&quot; applies for directories,
+and means that entries within the directory can be accessed)
+<DT><B>S_IRGRP</B>  (00040)
+
+<DD>
+read by group
+<DT><B>S_IWGRP</B>  (00020)
+
+<DD>
+write by group
+<DT><B>S_IXGRP</B>  (00010)
+
+<DD>
+execute/search by group
+<DT><B>S_IROTH</B>  (00004)
+
+<DD>
+read by others
+<DT><B>S_IWOTH</B>  (00002)
+
+<DD>
+write by others
+<DT><B>S_IXOTH</B>  (00001)
+
+<DD>
+execute/search by others
+</DL>
+<P>
+
+The effective UID of the calling process must match the owner of the file,
+or the process must be privileged (Linux: it must have the
+<B>CAP_FOWNER</B>
+
+capability).
+<P>
+If the calling process is not privileged (Linux: does not have the
+<B>CAP_FSETID</B>
+
+capability), and the group of the file does not match
+the effective group ID of the process or one of its
+supplementary group IDs, the
+<B>S_ISGID</B>
+
+bit will be turned off,
+but this will not cause an error to be returned.
+<P>
+As a security measure, depending on the filesystem,
+the set-user-ID and set-group-ID execution bits
+may be turned off if a file is written.
+(On Linux this occurs if the writing process does not have the
+<B>CAP_FSETID</B>
+
+capability.)
+On some filesystems, only the superuser can set the sticky bit,
+which may have a special meaning.
+For the sticky bit, and for set-user-ID and set-group-ID bits on
+directories, see
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2).
+
+<P>
+On NFS filesystems, restricting the permissions will immediately influence
+already open files, because the access control is done on the server, but
+open files are maintained by the client.
+Widening the permissions may be
+delayed for other clients if attribute caching is enabled on them.
+
+
+<A NAME="lbAE">&nbsp;</A>
+<H3>fchmodat()</H3>
+
+The
+<B>fchmodat</B>()
+
+system call operates in exactly the same way as
+<B>chmod</B>(),
+
+except for the differences described here.
+<P>
+If the pathname given in
+<I>pathname</I>
+
+is relative, then it is interpreted relative to the directory
+referred to by the file descriptor
+<I>dirfd</I>
+
+(rather than relative to the current working directory of
+the calling process, as is done by
+<B>chmod</B>()
+
+for a relative pathname).
+<P>
+If
+<I>pathname</I>
+
+is relative and
+<I>dirfd</I>
+
+is the special value
+<B>AT_FDCWD</B>,
+
+then
+<I>pathname</I>
+
+is interpreted relative to the current working
+directory of the calling process (like
+<B>chmod</B>()).
+
+<P>
+If
+<I>pathname</I>
+
+is absolute, then
+<I>dirfd</I>
+
+is ignored.
+<P>
+<I>flags</I>
+
+can either be 0, or include the following flag:
+<DL COMPACT>
+<DT><B>AT_SYMLINK_NOFOLLOW</B>
+
+<DD>
+If
+<I>pathname</I>
+
+is a symbolic link, do not dereference it:
+instead operate on the link itself.
+This flag is not currently implemented.
+</DL>
+<P>
+
+See
+<B><A HREF="../man2/openat.2.html">openat</A></B>(2)
+
+for an explanation of the need for
+<B>fchmodat</B>().
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, zero is returned.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ERRORS</H2>
+
+Depending on the filesystem,
+errors other than those listed below can be returned.
+<P>
+The more general errors for
+<B>chmod</B>()
+
+are listed below:
+<DL COMPACT>
+<DT><B>EACCES</B>
+
+<DD>
+Search permission is denied on a component of the path prefix.
+(See also
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7).)
+
+<DT><B>EFAULT</B>
+
+<DD>
+<I>pathname</I>
+
+points outside your accessible address space.
+<DT><B>EIO</B>
+
+<DD>
+An I/O error occurred.
+<DT><B>ELOOP</B>
+
+<DD>
+Too many symbolic links were encountered in resolving
+<I>pathname</I>.
+
+<DT><B>ENAMETOOLONG</B>
+
+<DD>
+<I>pathname</I>
+
+is too long.
+<DT><B>ENOENT</B>
+
+<DD>
+The file does not exist.
+<DT><B>ENOMEM</B>
+
+<DD>
+Insufficient kernel memory was available.
+<DT><B>ENOTDIR</B>
+
+<DD>
+A component of the path prefix is not a directory.
+<DT><B>EPERM</B>
+
+<DD>
+The effective UID does not match the owner of the file,
+and the process is not privileged (Linux: it does not have the
+<B>CAP_FOWNER</B>
+
+capability).
+<DT><B>EROFS</B>
+
+<DD>
+The named file resides on a read-only filesystem.
+</DL>
+<P>
+
+The general errors for
+<B>fchmod</B>()
+
+are listed below:
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+The file descriptor
+<I>fd</I>
+
+is not valid.
+<DT><B>EIO</B>
+
+<DD>
+See above.
+<DT><B>EPERM</B>
+
+<DD>
+See above.
+<DT><B>EROFS</B>
+
+<DD>
+See above.
+</DL>
+<P>
+
+The same errors that occur for
+<B>chmod</B>()
+
+can also occur for
+<B>fchmodat</B>().
+
+The following additional errors can occur for
+<B>fchmodat</B>():
+
+<DL COMPACT>
+<DT><B>EBADF</B>
+
+<DD>
+<I>dirfd</I>
+
+is not a valid file descriptor.
+<DT><B>EINVAL</B>
+
+<DD>
+Invalid flag specified in
+<I>flags</I>.
+
+<DT><B>ENOTDIR</B>
+
+<DD>
+<I>pathname</I>
+
+is relative and
+<I>dirfd</I>
+
+is a file descriptor referring to a file other than a directory.
+<DT><B>ENOTSUP</B>
+
+<DD>
+<I>flags</I>
+
+specified
+<B>AT_SYMLINK_NOFOLLOW</B>,
+
+which is not supported.
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+<B>fchmodat</B>()
+
+was added to Linux in kernel 2.6.16;
+library support was added to glibc in version 2.4.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+<B>chmod</B>(),
+
+<B>fchmod</B>():
+
+4.4BSD, SVr4, POSIX.1-2001i, POSIX.1-2008.
+<P>
+<B>fchmodat</B>():
+
+POSIX.1-2008.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>NOTES</H2>
+
+<A NAME="lbAK">&nbsp;</A>
+<H3>C library/kernel ABI differences</H3>
+
+The GNU C library
+<B>fchmodat</B>()
+
+wrapper function implements the POSIX-specified
+interface described in this page.
+This interface differs from the underlying Linux system call, which does
+<I>not</I>
+
+have a
+<I>flags</I>
+
+argument.
+<A NAME="lbAL">&nbsp;</A>
+<H3>Glibc notes</H3>
+
+On older kernels where
+<B>fchmodat</B>()
+
+is unavailable, the glibc wrapper function falls back to the use of
+<B>chmod</B>().
+
+When
+<I>pathname</I>
+
+is a relative pathname,
+glibc constructs a pathname based on the symbolic link in
+<I>/proc/self/fd</I>
+
+that corresponds to the
+<I>dirfd</I>
+
+argument.
+<A NAME="lbAM">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/chown.2.html">chown</A></B>(2),
+
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2),
+
+<B><A HREF="../man2/open.2.html">open</A></B>(2),
+
+<B><A HREF="../man2/stat.2.html">stat</A></B>(2),
+
+<B><A HREF="../man7/path_resolution.7.html">path_resolution</A></B>(7),
+
+<B><A HREF="../man7/symlink.7.html">symlink</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">fchmodat()</A><DD>
+</DL>
+<DT><A HREF="#lbAF">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAG">ERRORS</A><DD>
+<DT><A HREF="#lbAH">VERSIONS</A><DD>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">NOTES</A><DD>
+<DL>
+<DT><A HREF="#lbAK">C library/kernel ABI differences</A><DD>
+<DT><A HREF="#lbAL">Glibc notes</A><DD>
+</DL>
+<DT><A HREF="#lbAM">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:50 GMT, September 18, 2014
+</BODY>
+</HTML>

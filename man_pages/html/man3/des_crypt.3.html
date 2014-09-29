@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of DES_CRYPT</TITLE>
+</HEAD><BODY>
+<H1>DES_CRYPT</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2014-08-19<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+des_crypt, ecb_crypt, cbc_crypt, des_setparity, DES_FAILED - fast
+DES encryption
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/rpc/des_crypt.h">rpc/des_crypt.h</A>&gt;</B>
+
+<B>int ecb_crypt(char *</B><I>key</I><B>, char *</B><I>data</I><B>, unsigned </B><I>datalen</I><B>,</B>
+<B>              unsigned </B><I>mode</I><B>);</B>
+
+<B>int cbc_crypt(char *</B><I>key</I><B>, char *</B><I>data</I><B>, unsigned </B><I>datalen</I><B>,</B>
+<B>              unsigned </B><I>mode</I><B>, char *</B><I>ivec</I><B>);</B>
+
+<B>void des_setparity(char *</B><I>key</I><B>);</B>
+
+<B>int DES_FAILED(int </B><I>status</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>ecb_crypt</B>()
+
+and
+<B>cbc_crypt</B>()
+
+implement the
+NBS
+DES
+(Data Encryption Standard).
+These routines are faster and more general purpose than
+<B><A HREF="../man3/crypt.3.html">crypt</A></B>(3).
+
+They also are able to utilize
+DES
+hardware if it is available.
+<B>ecb_crypt</B>()
+
+encrypts in
+ECB
+(Electronic Code Book)
+mode, which encrypts blocks of data independently.
+<B>cbc_crypt</B>()
+
+encrypts in
+CBC
+(Cipher Block Chaining)
+mode, which chains together
+successive blocks.
+CBC
+mode protects against insertions, deletions and
+substitutions of blocks.
+Also, regularities in the clear text will
+not appear in the cipher text.
+<P>
+
+Here is how to use these routines.
+The first argument,
+<I>key</I>,
+
+is the 8-byte encryption key with parity.
+To set the key's parity, which for
+DES
+is in the low bit of each byte, use
+<B>des_setparity</B>().
+
+The second argument,
+<I>data</I>,
+
+contains the data to be encrypted or decrypted.
+The
+third argument,
+<I>datalen</I>,
+
+is the length in bytes of
+<I>data</I>,
+
+which must be a multiple of 8.
+The fourth argument,
+<I>mode</I>,
+
+is formed by ORing together some things.
+For the encryption direction OR in either
+<B>DES_ENCRYPT</B>
+
+or
+<B>DES_DECRYPT</B>.
+
+For software versus hardware
+encryption, OR in either
+<B>DES_HW</B>
+
+or
+<B>DES_SW</B>.
+
+If
+<B>DES_HW</B>
+
+is specified, and there is no hardware, then the encryption is performed
+in software and the routine returns
+<B>DESERR_NOHWDEVICE</B>.
+
+For
+<B>cbc_crypt</B>(),
+
+the argument
+<I>ivec</I>
+
+is the 8-byte initialization
+vector for the chaining.
+It is updated to the next initialization
+vector upon return.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+
+<DL COMPACT>
+<DT><B>DESERR_NONE</B>
+
+<DD>
+No error.
+<DT><B>DESERR_NOHWDEVICE</B>
+
+<DD>
+Encryption succeeded, but done in software instead of the requested hardware.
+<DT><B>DESERR_HWERROR</B>
+
+<DD>
+An error occurred in the hardware or driver.
+<DT><B>DESERR_BADPARAM</B>
+
+<DD>
+Bad argument to routine.
+
+</DL>
+<P>
+
+Given a result status
+<I>stat</I>,
+
+the macro
+
+
+<B>DES_FAILED(</B><I>stat</I><B>)</B>
+
+is false only for the first two statuses.
+
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>VERSIONS</H2>
+
+These functions are present in
+glibc 2.1 and later.
+<A NAME="lbAG">&nbsp;</A>
+<H2>ATTRIBUTES</H2>
+
+<A NAME="lbAH">&nbsp;</A>
+<H3>Multithreading (see <A HREF="../man7/pthreads.7.html">pthreads</A>(7))</H3>
+
+The
+<B>ecb_crypt</B>(),
+
+<B>cbc_crypt</B>(),
+
+and
+<B>des_setparity</B>()
+
+functions are thread-safe.
+<A NAME="lbAI">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+4.3BSD.
+Not in POSIX.1-2001.
+<A NAME="lbAJ">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man1/des.1.html">des</A></B>(1),
+
+<B><A HREF="../man3/crypt.3.html">crypt</A></B>(3),
+
+<B><A HREF="../man3/xcrypt.3.html">xcrypt</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">VERSIONS</A><DD>
+<DT><A HREF="#lbAG">ATTRIBUTES</A><DD>
+<DL>
+<DT><A HREF="#lbAH">Multithreading (see pthreads(7))</A><DD>
+</DL>
+<DT><A HREF="#lbAI">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:14 GMT, September 18, 2014
+</BODY>
+</HTML>

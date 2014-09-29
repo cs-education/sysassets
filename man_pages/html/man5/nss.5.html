@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of NSS</TITLE>
+</HEAD><BODY>
+<H1>NSS</H1>
+Section: Linux Programmer's Manual (5)<BR>Updated: 2013-02-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+nss - Name Service Switch configuration file
+<A NAME="lbAC">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+Each call to a function which retrieves data from a system database
+like the password or group database is handled by the Name Service
+Switch implementation in the GNU C library.
+The various services
+provided are implemented by independent modules, each of which
+naturally varies widely from the other.
+<P>
+
+The default implementations coming with the GNU C library are by
+default conservative and do not use unsafe data.
+This might be very costly in some situations, especially when the databases
+are large.
+Some modules allow the system administrator to request
+taking shortcuts if these are known to be safe.
+It is then the system administrator's responsibility to ensure the assumption
+is correct.
+<P>
+
+There are other modules where the implementation changed over time.
+If an implementation used to sacrifice speed for memory consumption,
+it might create problems if the preference is switched.
+<P>
+
+The
+<I>/etc/default/nss</I>
+
+file contains a number of variable assignments.
+Each variable controls the behavior of one or more
+NSS modules.
+White spaces are ignored.
+Lines beginning with '#'
+are treated as comments.
+<P>
+
+The variables currently recognized are:
+<DL COMPACT>
+<DT><B>NETID_AUTHORITATIVE =</B> <I>TRUE</I>|<I>FALSE</I><DD>
+If set to TRUE, the NIS backend for the
+<B><A HREF="../man3/initgroups.3.html">initgroups</A></B>(3)
+
+function will accept the information
+from the
+<I>netid.byname</I>
+
+NIS map as authoritative.
+This can speed up the function significantly if the
+<I>group.byname</I>
+
+map is large.
+The content of the
+<I>netid.byname</I>
+
+map is used <B>as is</B>.
+The system administrator has to make sure it is correctly generated.
+<DT><B>SERVICES_AUTHORITATIVE =</B> <I>TRUE</I>|<I>FALSE</I><DD>
+If set to TRUE, the NIS backend for the
+<B><A HREF="../man3/getservbyname.3.html">getservbyname</A></B>(3)
+
+and
+<B><A HREF="../man3/getservbyname_r.3.html">getservbyname_r</A></B>(3)
+
+functions will assume that the
+<I>services.byservicename</I>
+
+NIS map exists and is authoritative, particularly
+that it contains both keys with /proto and without /proto for both
+primary service names and service aliases.
+The system administrator has to make sure it is correctly generated.
+<DT><B>SETENT_BATCH_READ =</B> <I>TRUE</I>|<I>FALSE</I><DD>
+If set to TRUE, the NIS backend for the
+<B><A HREF="../man3/setpwent.3.html">setpwent</A></B>(3)
+
+and
+<B><A HREF="../man3/setgrent.3.html">setgrent</A></B>(3)
+
+functions will read the entire database at once and then
+hand out the requests one by one from memory with every corresponding
+<B><A HREF="../man3/getpwent.3.html">getpwent</A></B>(3)
+
+or
+<B><A HREF="../man3/getgrent.3.html">getgrent</A></B>(3)
+
+call respectively.
+Otherwise, each
+<B><A HREF="../man3/getpwent.3.html">getpwent</A></B>(3)
+
+or
+<B><A HREF="../man3/getgrent.3.html">getgrent</A></B>(3)
+
+call might result in a network communication with the server to get
+the next entry.
+</DL>
+<A NAME="lbAD">&nbsp;</A>
+<H2>FILES</H2>
+
+<I>/etc/default/nss</I>
+<A NAME="lbAE">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+The default configuration corresponds to the following configuration file:
+<P>
+<PRE>
+NETID_AUTHORITATIVE=FALSE
+SERVICES_AUTHORITATIVE=FALSE
+SETENT_BATCH_READ=FALSE
+</PRE><A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<I>nsswitch.conf</I>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAD">FILES</A><DD>
+<DT><A HREF="#lbAE">EXAMPLE</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:20 GMT, September 18, 2014
+</BODY>
+</HTML>

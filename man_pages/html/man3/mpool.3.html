@@ -1,0 +1,311 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of MPOOL</TITLE>
+</HEAD><BODY>
+<H1>MPOOL</H1>
+Section: Linux Programmer's Manual (3)<BR>Updated: 2012-04-26<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+mpool - shared memory buffer pool
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<PRE>
+<B>#include &lt;<A HREF="file:///usr/include/db.h">db.h</A>&gt;</B>
+<B>#include &lt;<A HREF="file:///usr/include/mpool.h">mpool.h</A>&gt;</B>
+
+<B>MPOOL *mpool_open(DBT *</B><I>key</I><B>, int </B><I>fd</I><B>, pgno_t </B><I>pagesize</I><B>, pgno_t </B><I>maxcache</I><B>);</B>
+
+<B>void mpool_filter(MPOOL *</B><I>mp</I><B>, void (*pgin)(void *, pgno_t, void *),</B>
+<B>                  void (*</B><I>pgout</I><B>)(void *, pgno_t, void *),</B>
+<B>                  void *</B><I>pgcookie</I><B>);</B>
+
+<B>void *mpool_new(MPOOL *</B><I>mp</I><B>, pgno_t *</B><I>pgnoaddr</I><B>);</B>
+
+<B>void *mpool_get(MPOOL *</B><I>mp</I><B>, pgno_t </B><I>pgno</I><B>, unsigned int </B><I>flags</I><B>);</B>
+
+<B>int mpool_put(MPOOL *</B><I>mp</I><B>, void *</B><I>pgaddr</I><B>, unsigned int </B><I>flags</I><B>);</B>
+
+<B>int mpool_sync(MPOOL *</B><I>mp</I><B>);</B>
+
+<B>int mpool_close(MPOOL *</B><I>mp</I><B>);</B>
+</PRE>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<I>Note well</I>:
+
+This page documents interfaces provided in glibc up until version 2.1.
+Since version 2.2, glibc no longer provides these interfaces.
+Probably, you are looking for the APIs provided by the
+<I>libdb</I>
+
+library instead.
+<P>
+<I>Mpool</I>
+
+is the library interface intended to provide page oriented buffer management
+of files.
+The buffers may be shared between processes.
+<P>
+
+The function
+<B>mpool_open</B>()
+
+initializes a memory pool.
+The
+<I>key</I>
+
+argument is the byte string used to negotiate between multiple
+processes wishing to share buffers.
+If the file buffers are mapped in shared memory, all processes using
+the same key will share the buffers.
+If
+<I>key</I>
+
+is NULL, the buffers are mapped into private memory.
+The
+<I>fd</I>
+
+argument is a file descriptor for the underlying file, which must be seekable.
+If
+<I>key</I>
+
+is non-NULL and matches a file already being mapped, the
+<I>fd</I>
+
+argument is ignored.
+<P>
+
+The
+<I>pagesize</I>
+
+argument is the size, in bytes, of the pages into which the file is broken up.
+The
+<I>maxcache</I>
+
+argument is the maximum number of pages from the underlying file to cache
+at any one time.
+This value is not relative to the number of processes which share a file's
+buffers, but will be the largest value specified by any of the processes
+sharing the file.
+<P>
+
+The
+<B>mpool_filter</B>()
+
+function is intended to make transparent input and output processing of the
+pages possible.
+If the
+<I>pgin</I>
+
+function is specified, it is called each time a buffer is read into the memory
+pool from the backing file.
+If the
+<I>pgout</I>
+
+function is specified, it is called each time a buffer is written into the
+backing file.
+Both functions are called with the
+<I>pgcookie</I>
+
+pointer, the page number and a pointer to the page to being read or written.
+<P>
+
+The function
+<B>mpool_new</B>()
+
+takes an
+<I>MPOOL</I>
+
+pointer and an address as arguments.
+If a new page can be allocated, a pointer to the page is returned and
+the page number is stored into the
+<I>pgnoaddr</I>
+
+address.
+Otherwise, NULL is returned and
+<I>errno</I>
+
+is set.
+<P>
+
+The function
+<B>mpool_get</B>()
+
+takes an
+<I>MPOOL</I>
+
+pointer and a page number as arguments.
+If the page exists, a pointer to the page is returned.
+Otherwise, NULL is returned and
+<I>errno</I>
+
+is set.
+The
+<I>flags</I>
+
+argument is not currently used.
+<P>
+
+The function
+<B>mpool_put</B>()
+
+unpins the page referenced by
+<I>pgaddr</I>.
+
+<I>pgaddr</I>
+
+must be an address previously returned by
+<B>mpool_get</B>()
+
+or
+<B>mpool_new</B>().
+
+The flag value is specified by ORing
+any of the following values:
+<DL COMPACT>
+<DT><B>MPOOL_DIRTY</B>
+
+<DD>
+The page has been modified and needs to be written to the backing file.
+</DL>
+<P>
+
+<B>mpool_put</B>()
+
+returns 0 on success and -1 if an error occurs.
+<P>
+
+The function
+<B>mpool_sync</B>()
+
+writes all modified pages associated with the
+<I>MPOOL</I>
+
+pointer to the
+backing file.
+<B>mpool_sync</B>()
+
+returns 0 on success and -1 if an error occurs.
+<P>
+
+The
+<B>mpool_close</B>()
+
+function free's up any allocated memory associated with the memory pool
+cookie.
+Modified pages are
+<B>not</B>
+
+written to the backing file.
+<B>mpool_close</B>()
+
+returns 0 on success and -1 if an error occurs.
+<A NAME="lbAE">&nbsp;</A>
+<H2>ERRORS</H2>
+
+The
+<B>mpool_open</B>()
+
+function may fail and set
+<I>errno</I>
+
+for any of the errors specified for the library routine
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3).
+
+<P>
+
+The
+<B>mpool_get</B>()
+
+function may fail and set
+<I>errno</I>
+
+for the following:
+<DL COMPACT>
+<DT><B>EINVAL</B>
+
+<DD>
+The requested record doesn't exist.
+</DL>
+<P>
+
+The
+<B>mpool_new</B>()
+
+and
+<B>mpool_get</B>()
+
+functions may fail and set
+<I>errno</I>
+
+for any of the errors specified for the library routines
+<B><A HREF="../man2/read.2.html">read</A></B>(2),
+
+<B><A HREF="../man2/write.2.html">write</A></B>(2),
+
+and
+<B><A HREF="../man3/malloc.3.html">malloc</A></B>(3).
+
+<P>
+
+The
+<B>mpool_sync</B>()
+
+function may fail and set
+<I>errno</I>
+
+for any of the errors specified for the library routine
+<B><A HREF="../man2/write.2.html">write</A></B>(2).
+
+<P>
+
+The
+<B>mpool_close</B>()
+
+function may fail and set
+<I>errno</I>
+
+for any of the errors specified for the library routine
+<B><A HREF="../man3/free.3.html">free</A></B>(3).
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+Not in POSIX.1-2001.
+Present on the BSDs.
+<A NAME="lbAG">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man3/btree.3.html">btree</A></B>(3),
+
+<B><A HREF="../man3/dbopen.3.html">dbopen</A></B>(3),
+
+<B><A HREF="../man3/hash.3.html">hash</A></B>(3),
+
+<B><A HREF="../man3/recno.3.html">recno</A></B>(3)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">ERRORS</A><DD>
+<DT><A HREF="#lbAF">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAG">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:55:03 GMT, September 18, 2014
+</BODY>
+</HTML>

@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of SETREUID</TITLE>
+</HEAD><BODY>
+<H1>SETREUID</H1>
+Section: Linux Programmer's Manual (2)<BR>Updated: 2014-06-13<BR><A HREF="#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+setreuid, setregid - set real and/or effective user or group ID
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;<A HREF="file:///usr/include/sys/types.h">sys/types.h</A>&gt;</B>
+
+<BR>
+
+<B>#include &lt;<A HREF="file:///usr/include/unistd.h">unistd.h</A>&gt;</B>
+
+<P>
+<B>int setreuid(uid_t </B><I>ruid</I><B>, uid_t </B><I>euid</I><B>);</B>
+
+<BR>
+
+<B>int setregid(gid_t </B><I>rgid</I><B>, gid_t </B><I>egid</I><B>);</B>
+
+<P>
+
+Feature Test Macro Requirements for glibc (see
+<B><A HREF="../man7/feature_test_macros.7.html">feature_test_macros</A></B>(7)):
+
+
+<P>
+<B>setreuid</B>(),
+
+<B>setregid</B>():
+
+<DL COMPACT><DT><DD>
+
+_BSD_SOURCE || _XOPEN_SOURCE&nbsp;&gt;=&nbsp;500 ||
+_XOPEN_SOURCE&nbsp;&amp;&amp;&nbsp;_XOPEN_SOURCE_EXTENDED
+
+</DL>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>setreuid</B>()
+
+sets real and effective user IDs of the calling process.
+<P>
+Supplying a value of -1 for either the real or effective user ID forces
+the system to leave that ID unchanged.
+<P>
+Unprivileged processes may only set the effective user ID to the real user ID,
+the effective user ID, or the saved set-user-ID.
+<P>
+Unprivileged users may only set the real user ID to
+the real user ID or the effective user ID.
+<P>
+If the real user ID is set (i.e.,
+<I>ruid</I>
+
+is not -1) or the effective user ID is set to a value
+not equal to the previous real user ID,
+the saved set-user-ID will be set to the new effective user ID.
+<P>
+Completely analogously,
+<B>setregid</B>()
+
+sets real and effective group ID's of the calling process,
+and all of the above holds with &quot;group&quot; instead of &quot;user&quot;.
+<A NAME="lbAE">&nbsp;</A>
+<H2>RETURN VALUE</H2>
+
+On success, zero is returned.
+On error, -1 is returned, and
+<I>errno</I>
+
+is set appropriately.
+<P>
+<I>Note</I>:
+
+there are cases where
+<B>setreuid</B>()
+
+can fail even when the caller is UID 0;
+it is a grave security error to omit checking for a failure return from
+<B>setreuid</B>().
+
+<A NAME="lbAF">&nbsp;</A>
+<H2>ERRORS</H2>
+
+<DL COMPACT>
+<DT><B>EAGAIN</B>
+
+<DD>
+The call would change the caller's real UID (i.e.,
+<I>ruid</I>
+
+does not match the caller's real UID),
+but there was a temporary failure allocating the
+necessary kernel data structures.
+<DT><B>EAGAIN</B>
+
+<DD>
+<I>ruid</I>
+
+does not match the caller's real UID and this call would
+bring the number of processes belonging to the real user ID
+<I>ruid</I>
+
+over the caller's
+<B>RLIMIT_NPROC</B>
+
+resource limit.
+Since Linux 3.1, this error case no longer occurs
+(but robust applications should check for this error);
+see the description of
+<B>EAGAIN</B>
+
+in
+<B><A HREF="../man2/execve.2.html">execve</A></B>(2).
+
+<DT><B>EPERM</B>
+
+<DD>
+The calling process is not privileged
+(Linux: does not have the
+<B>CAP_SETUID</B>
+
+capability in the case of
+<B>setreuid</B>(),
+
+or the
+<B>CAP_SETGID</B>
+
+capability in the case of
+<B>setregid</B>())
+
+and a change other than (i)
+swapping the effective user (group) ID with the real user (group) ID,
+or (ii) setting one to the value of the other or (iii) setting the
+effective user (group) ID to the value of the
+saved set-user-ID (saved set-group-ID) was specified.
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>CONFORMING TO</H2>
+
+POSIX.1-2001, 4.3BSD (the
+<B>setreuid</B>()
+
+and
+<B>setregid</B>()
+
+function calls first appeared in 4.2BSD).
+<A NAME="lbAH">&nbsp;</A>
+<H2>NOTES</H2>
+
+Setting the effective user (group) ID to the
+saved set-user-ID (saved set-group-ID) is
+possible since Linux 1.1.37 (1.1.38).
+<P>
+POSIX.1 does not specify all of possible ID changes that are permitted
+on Linux for an unprivileged process.
+For
+<B>setreuid</B>(),
+
+the effective user ID can be made the same as the
+real user ID or the save set-user-ID,
+and it is unspecified whether unprivileged processes may set the
+real user ID to the real user ID, the effective user ID, or the
+saved set-user-ID.
+For
+<B>setregid</B>(),
+
+the real group ID can be changed to the value of the saved set-group-ID,
+and the effective group ID can be changed to the value of
+the real group ID or the saved set-group-ID.
+The precise details of what ID changes are permitted vary
+across implementations.
+<P>
+POSIX.1 makes no specification about the effect of these calls
+on the saved set-user-ID and saved set-group-ID.
+<P>
+The original Linux
+<B>setreuid</B>()
+
+and
+<B>setregid</B>()
+
+system calls supported only 16-bit user and group IDs.
+Subsequently, Linux 2.4 added
+<B>setreuid32</B>()
+
+and
+<B>setregid32</B>(),
+
+supporting 32-bit IDs.
+The glibc
+<B>setreuid</B>()
+
+and
+<B>setregid</B>()
+
+wrapper functions transparently deal with the variations across kernel versions.
+<A NAME="lbAI">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="../man2/getgid.2.html">getgid</A></B>(2),
+
+<B><A HREF="../man2/getuid.2.html">getuid</A></B>(2),
+
+<B><A HREF="../man2/seteuid.2.html">seteuid</A></B>(2),
+
+<B><A HREF="../man2/setgid.2.html">setgid</A></B>(2),
+
+<B><A HREF="../man2/setresuid.2.html">setresuid</A></B>(2),
+
+<B><A HREF="../man2/setuid.2.html">setuid</A></B>(2),
+
+<B><A HREF="../man7/capabilities.7.html">capabilities</A></B>(7)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">RETURN VALUE</A><DD>
+<DT><A HREF="#lbAF">ERRORS</A><DD>
+<DT><A HREF="#lbAG">CONFORMING TO</A><DD>
+<DT><A HREF="#lbAH">NOTES</A><DD>
+<DT><A HREF="#lbAI">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 02:54:48 GMT, September 18, 2014
+</BODY>
+</HTML>
