@@ -5,6 +5,10 @@ from bs4 import BeautifulSoup
 import json
 import re
 
+if __name__ != '__main__':
+    print 'This script is not meant to be imported!'
+    exit()
+
 c_function_signature_re = re.compile(ur'(.*)[(](.*)[)];')
 include_re = re.compile(ur'#include\s+[<](.+)[>]\s*(.*)\s*')
 define_re = re.compile(ur'#define\s+(.+)\s*')
@@ -78,7 +82,12 @@ def parse_synopsis_text(text):
     return function_signatures, hash_includes, hash_defines
 
 # sysassets man pages directory
-man_pages_path = os.path.abspath('man_pages/')
+if os.path.basename(os.getcwd()) == 'scripts':
+    sysassets_dir = '../'
+else:
+    sysassets_dir = './'
+sysassets_dir = os.path.abspath(sysassets_dir)
+man_pages_path = os.path.join(sysassets_dir, 'man_pages/')
 
 # Man pages metadata output json file
 man_page_index_json_out_filename = os.path.join(man_pages_path, 'sys_man_page_index.json')
