@@ -1,2 +1,8 @@
 <!DOCTYPE HTML>
-<script src="//cdn.rawgit.com/jpillora/xdomain/0.6.17/dist/xdomain.min.js" master="http://abc.example.com"></script>
+<script src="//cdn.rawgit.com/jpillora/xdomain/0.6.17/dist/xdomain.min.js"></script>
+<script>
+    xdomain.masters({
+        'http://cs-education.github.io': '*',
+        'http://localhost': '*'
+    });
+</script>
