@@ -1,0 +1,185 @@
+WEBVTT
+
+00:00.000 --> 00:02.140
+<v Lawrence Angrave>Hello welcome
+
+00:02.140 --> 00:05.640
+<v Lawrence Angrave>so this video is a little introduction to signals
+
+00:05.640 --> 00:08.765
+<v Lawrence Angrave>so signals are like a software interrupt
+
+00:08.765 --> 00:13.828
+<v Lawrence Angrave>we can use them to control our processes and even do things asynchronously
+
+00:13.828 --> 00:19.062
+<v Lawrence Angrave>so let's have a look at a little program i have written so far that doesn't use signals yet
+
+00:19.062 --> 00:21.921
+<v Lawrence Angrave>all it does is ask for the environment of home
+
+00:21.921 --> 00:24.640
+<v Lawrence Angrave>in other words the user's home directory
+
+00:24.640 --> 00:29.578
+<v Lawrence Angrave>and then we have a little loop that prints it out and sleeps for three seconds
+
+00:29.578 --> 00:32.906
+<v Lawrence Angrave>so every three seconds it is going to print out my home directory
+
+00:32.906 --> 00:38.984
+<v Lawrence Angrave>and on this machine i am root so it just keeps on printing out slash root
+
+00:38.984 --> 00:45.000
+<v Lawrence Angrave>so of course we can stop this program by pressing control c
+
+00:45.000 --> 00:48.078
+<v Lawrence Angrave>and when you do that you actually are sending a signal
+
+00:48.078 --> 00:52.187
+<v Lawrence Angrave>sigint or sig interrupt to the process
+
+00:52.187 --> 00:55.312
+<v Lawrence Angrave>now it maybe that our process doesn't like being interrupted
+
+00:55.312 --> 01:00.328
+<v Lawrence Angrave>why don't we catch that signal and install our own little handle for that
+
+01:00.328 --> 01:02.828
+<v Lawrence Angrave>so here is how we will do this
+
+01:02.828 --> 01:15.312
+<v Lawrence Angrave>i am going to say at the beginning of my program that if you get a certain signal say sigint 
+
+01:15.312 --> 01:21.078
+<v Lawrence Angrave>rather than having the default behavior which as we know is to stop the program or quit the program
+
+01:21.078 --> 01:22.875
+<v Lawrence Angrave>let us run my code instead
+
+01:22.875 --> 01:26.453
+<v Lawrence Angrave>so i will call it say nothankyou
+
+01:26.453 --> 01:28.250
+<v Lawrence Angrave>so what is nothankyou
+
+01:28.250 --> 01:32.218
+<v Lawrence Angrave>it has to be a pointer to a function
+
+01:32.218 --> 01:33.203
+<v Lawrence Angrave>how do we do that
+
+01:33.203 --> 01:34.406
+<v Lawrence Angrave>easy just write a function
+
+01:34.406 --> 01:39.281
+<v Lawrence Angrave>and in this case the correct type is something that doesn't return anything
+
+01:39.281 --> 01:41.437
+<v Lawrence Angrave>but does take an integer
+
+01:41.437 --> 01:45.421
+<v Lawrence Angrave>in fact it is the signal that is being sent to our program
+
+01:45.421 --> 01:50.796
+<v Lawrence Angrave>and so that we know that this is being called let's write something out directly to standard output
+
+01:50.796 --> 01:54.250
+<v Lawrence Angrave>so i can say write and i can say no
+
+01:54.250 --> 01:57.843
+<v Lawrence Angrave>so what is that that is a little message of three bytes to send
+
+01:57.843 --> 02:00.296
+<v Lawrence Angrave>so let's run this now
+
+02:00.296 --> 02:04.203
+<v Lawrence Angrave>okay so here is my program every three seconds it is going to print root
+
+02:04.203 --> 02:09.843
+<v Lawrence Angrave>but now i am going to press control c
+
+02:09.843 --> 02:16.203
+<v Lawrence Angrave>and it prints no no so it's refusing to quit
+
+02:16.203 --> 02:20.015
+<v Lawrence Angrave>you might also notice that the sleep also immediately returns
+
+02:20.015 --> 02:21.593
+<v Lawrence Angrave>more about that later
+
+02:21.593 --> 02:24.437
+<v Lawrence Angrave>it is still possible to stop our program here
+
+02:24.437 --> 02:30.437
+<v Lawrence Angrave>if we do control backslash then we force it to quit
+
+02:30.437 --> 02:34.515
+<v Lawrence Angrave>so sigint is one common signal that we send our programs
+
+02:34.515 --> 02:35.984
+<v Lawrence Angrave>there are many others
+
+02:35.984 --> 02:39.750
+<v Lawrence Angrave>just for fun let me show you one called sigalarm
+
+02:39.750 --> 02:47.562
+<v Lawrence Angrave>so this time i am going to say alarm seven seconds
+
+02:47.562 --> 02:57.375
+<v Lawrence Angrave>and so when you call alarm you are going to say give me a special signal called sigalrm in this many seconds
+
+02:57.375 --> 02:58.687
+<v Lawrence Angrave>in seven seconds
+
+02:58.687 --> 03:00.468
+<v Lawrence Angrave>and we better install then
+
+03:00.468 --> 03:12.921
+<v Lawrence Angrave>well let's just run it and see what happens to begin with
+
+03:12.921 --> 03:17.625
+<v Lawrence Angrave>so the default behavior of this sigalrm is to actually stop our program
+
+03:17.625 --> 03:19.265
+<v Lawrence Angrave>it quits the program
+
+03:19.265 --> 03:22.031
+<v Lawrence Angrave>that's a pretty aggressive alarm clock i think you'll agree
+
+03:22.031 --> 03:25.703
+<v Lawrence Angrave>and it also as you see prints out alarm clock on the shell
+
+03:25.703 --> 03:30.546
+<v Lawrence Angrave>perhaps we don't want our alarm signal to be so menacing
+
+03:30.546 --> 03:37.640
+<v Lawrence Angrave>so this time instead of sigint i can say look for a certain signal called sigalrm
+
+03:37.640 --> 03:45.718
+<v Lawrence Angrave>please call my function instead
+
+03:45.718 --> 03:56.750
+<v Lawrence Angrave>okay so there we go our alarm went off after four seconds and this time we asynchronously ran our code that printed out no to standard out
+
+03:56.750 --> 03:58.312
+<v Lawrence Angrave>so this is pretty exciting right
+
+03:58.312 --> 04:01.906
+<v Lawrence Angrave>you probably thought about interrupts on the hardware level
+
+04:01.906 --> 04:09.109
+<v Lawrence Angrave>now we can do interrupts at the software level and we can respond to things which happen in our environment very quickly
+
+04:09.109 --> 04:15.093
+<v Lawrence Angrave>so we will find signals to be very useful when we start dealing working with more than one process
+
+04:15.093 --> 04:20.921
+<v Lawrence Angrave>we can control our programs and we can also work with very large amounts of data coming in
+
+04:20.921 --> 04:22.609
+<v Lawrence Angrave>alright that is enough for me
+
+04:22.609 --> 04:23.203
+<v Lawrence Angrave>bye
+

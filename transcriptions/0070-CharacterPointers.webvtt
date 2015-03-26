@@ -1,0 +1,215 @@
+WEBVTT
+
+00:00.000 --> 00:02.078
+<v Lawrence Angrave>so what about strings in c?
+
+00:02.078 --> 00:03.656
+<v Lawrence Angrave>what if I said
+
+00:03.656 --> 00:04.921
+<v Lawrence Angrave>"hello"
+
+00:04.921 --> 00:08.296
+<v Lawrence Angrave>how is this represented? well clearly it's made up of characters
+
+00:08.296 --> 00:11.734
+<v Lawrence Angrave>and I've got five characters to display
+
+00:11.734 --> 00:16.843
+<v Lawrence Angrave>h e l l o, but actually C strings contain an extra character at the end
+
+00:16.843 --> 00:22.859
+<v Lawrence Angrave>a zero value or null character to say "hey this is the end of the string"
+
+00:22.859 --> 00:25.953
+<v Lawrence Angrave>so this is going to take six bytes of storage
+
+00:25.953 --> 00:27.640
+<v Lawrence Angrave>let's see if we can prove that
+
+00:27.640 --> 00:34.234
+<v Lawrence Angrave>we'll say printf() and "Size of hello is %d"
+
+00:34.234 --> 00:44.546
+<v Lawrence Angrave>and we'll have a little expression here to say what is the sizeof() "hello"
+
+00:44.546 --> 00:52.031
+<v Lawrence Angrave>and we'll print it out and you see that size of hello is 6
+
+00:52.031 --> 00:58.468
+<v Lawrence Angrave>h e l l o that's five, plus an extra byte for the 0 to say that's the end
+
+00:58.468 --> 01:03.796
+<v Lawrence Angrave>so we can use sizeof() on constant strings
+
+01:03.796 --> 01:10.203
+<v Lawrence Angrave>we could also run through the string to actually find the 0 byte ourselves
+
+01:10.203 --> 01:11.468
+<v Lawrence Angrave>so let's do that
+
+01:11.468 --> 01:15.859
+<v Lawrence Angrave>let's have a pointer to a character
+
+01:15.859 --> 01:21.312
+<v Lawrence Angrave>I will initialize it to my string "hello"
+
+01:21.312 --> 01:28.343
+<v Lawrence Angrave>which means pointer is initially pointing to h the first character
+
+01:28.343 --> 01:30.890
+<v Lawrence Angrave>I'll have a little count variable here
+
+01:30.890 --> 01:41.484
+<v Lawrence Angrave>and let's say "while the pointer the value is not equal to 0"
+
+01:41.484 --> 01:42.812
+<v Lawrence Angrave>I want to do something
+
+01:42.812 --> 01:43.968
+<v Lawrence Angrave>lets increment the pointer
+
+01:43.968 --> 01:45.796
+<v Lawrence Angrave>lets move it onto the next character
+
+01:45.796 --> 01:48.718
+<v Lawrence Angrave>and let's increment our count as well
+
+01:48.718 --> 01:52.828
+<v Lawrence Angrave>so we can find out how many characters we have
+
+01:52.828 --> 02:00.062
+<v Lawrence Angrave>and then at the end we will say how many characters we found
+
+02:00.062 --> 02:04.406
+<v Lawrence Angrave>which are not the 0 byte
+
+02:04.406 --> 02:09.500
+<v Lawrence Angrave>so if our program works this should find five characters
+
+02:09.500 --> 02:20.578
+<v Lawrence Angrave>lets run it and i'll put in a new line at the end
+
+02:20.578 --> 02:25.328
+<v Lawrence Angrave>our little loop went around five times and all it did was increment count
+
+02:25.328 --> 02:29.328
+<v Lawrence Angrave>we could have made it of course print out each one of those letters
+
+02:29.328 --> 02:31.578
+<v Lawrence Angrave>we could also simplify our program a little bit
+
+02:31.578 --> 02:36.953
+<v Lawrence Angrave>because as you know any non-zero value is treated as true
+
+02:36.953 --> 02:40.812
+<v Lawrence Angrave>so let's remove that and say while star pointer
+
+02:40.812 --> 02:43.921
+<v Lawrence Angrave>and when we get to the null byte we will finish
+
+02:43.921 --> 02:53.375
+<v Lawrence Angrave>so just for fun lets change our program as well before we increment the pointer to print out the next characters
+
+02:53.375 --> 03:01.109
+<v Lawrence Angrave>my format string is just %c. and what character would I want? well the one pointed to by the pointer
+
+03:01.109 --> 03:06.656
+<v Lawrence Angrave>pointers to characters that  each character is exactly one byte
+
+03:06.656 --> 03:10.843
+<v Lawrence Angrave>so when we add one to our pointer, line ten here
+
+03:10.843 --> 03:13.625
+<v Lawrence Angrave>we are actually just going to add one to it
+
+03:13.625 --> 03:16.234
+<v Lawrence Angrave>because each character is exactly one byte
+
+03:16.234 --> 03:24.671
+<v Lawrence Angrave>so there's our program and it managed to print out exactly "hello"
+
+03:24.671 --> 03:30.906
+<v Lawrence Angrave>do we need to write this every time that we want to find out the number of characters in a string?
+
+03:30.906 --> 03:33.906
+<v Lawrence Angrave>no! guess what there's a function called strlen()
+
+03:33.906 --> 03:40.390
+<v Lawrence Angrave>so instead of my little loop if I include string.h
+
+03:40.390 --> 03:41.859
+<v Lawrence Angrave>I've now got strlen()
+
+03:41.859 --> 03:45.203
+<v Lawrence Angrave>so let me check the two results
+
+03:45.203 --> 03:51.390
+<v Lawrence Angrave>instead I'll say len is strlen() and pass it a pointer to my character
+
+03:51.390 --> 03:54.687
+<v Lawrence Angrave>I'm tempted to use pointer but that would be a bad idea
+
+03:54.687 --> 03:57.203
+<v Lawrence Angrave>perhaps you can figure out why
+
+03:57.203 --> 04:06.937
+<v Lawrence Angrave>so "Strlen returned" and we'll talk about how to fix my program in a moment
+
+04:06.937 --> 04:14.062
+<v Lawrence Angrave>so we'll run this
+
+04:14.062 --> 04:15.718
+<v Lawrence Angrave>strlen() returned 0
+
+04:15.718 --> 04:21.921
+<v Lawrence Angrave>why? because by the time my loop finished I'd advanced that pointer on until it had reached that null byte
+
+04:21.921 --> 04:25.218
+<v Lawrence Angrave>so when we passed that to strlen() it immediately found the null byte
+
+04:25.218 --> 04:40.281
+<v Lawrence Angrave>now what we should do is evaluate our strlen() before we change our pointer
+
+04:40.281 --> 04:43.453
+<v Lawrence Angrave>the last thing we'll do today is make our program crash
+
+04:43.453 --> 04:49.671
+<v Lawrence Angrave>let's try and change our first character to be someting else
+
+04:49.671 --> 04:54.125
+<v Lawrence Angrave>like 'J' turn it into Jello
+
+04:54.125 --> 05:00.359
+<v Lawrence Angrave>so let's dereference that pointer and use it to push in a character
+
+05:00.359 --> 05:05.421
+<v Lawrence Angrave>I don't want to have a string, i actually want to have a character
+
+05:05.421 --> 05:10.078
+<v Lawrence Angrave>let's try that and see what happens
+
+05:10.078 --> 05:13.062
+<v Lawrence Angrave>I get a segmentation fault when I try to run that line
+
+05:13.062 --> 05:21.671
+<v Lawrence Angrave>here's why, different parts of my proccesses' memory are valid for reading or reading and writing
+
+05:21.671 --> 05:28.234
+<v Lawrence Angrave>the program code, the actual assembly, the actual instructions for the cpu, can only be read
+
+05:28.234 --> 05:32.546
+<v Lawrence Angrave>and my constants, such as this "hello" can only be read
+
+05:32.546 --> 05:40.187
+<v Lawrence Angrave>and the hardware is sophisticated enough to know which parts of memory are read and which parts of memory are read/write
+
+05:40.187 --> 05:42.515
+<v Lawrence Angrave>and which parts of memory are invalid
+
+05:42.515 --> 05:48.531
+<v Lawrence Angrave>so that's why I get a segmentation fault if I try to change the constant memory
+
+05:48.531 --> 05:52.781
+<v Lawrence Angrave>alright time for you to play with character poitners, bye
+

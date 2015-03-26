@@ -1,0 +1,167 @@
+WEBVTT
+
+00:00.000 --> 00:03.156
+<v Lawrence Angrave>Okay welcome to systems programming
+
+00:03.156 --> 00:03.984
+<v Lawrence Angrave>so let's get started
+
+00:03.984 --> 00:05.625
+<v Lawrence Angrave>let's write our first c program
+
+00:05.625 --> 00:07.906
+<v Lawrence Angrave>that makes use of a system call
+
+00:07.906 --> 00:11.359
+<v Lawrence Angrave>i'll do an example and then I'll let you play as well
+
+00:11.359 --> 00:13.671
+<v Lawrence Angrave>so uh here's a little virtual machine
+
+00:13.671 --> 00:15.609
+<v Lawrence Angrave>i've got up and running
+
+00:15.609 --> 00:18.109
+<v Lawrence Angrave>and i can write a little c file here
+
+00:18.109 --> 00:22.921
+<v Lawrence Angrave>so what we're going to do is make use of a system call called write
+
+00:22.921 --> 00:23.765
+<v Lawrence Angrave>so let's try this
+
+00:23.765 --> 00:25.390
+<v Lawrence Angrave>we'll say okay write
+
+00:25.390 --> 00:28.750
+<v Lawrence Angrave>and then i need to give it a file descriptor
+
+00:28.750 --> 00:30.093
+<v Lawrence Angrave>more about that in a moment
+
+00:30.093 --> 00:33.265
+<v Lawrence Angrave>a little message like hello
+
+00:33.265 --> 00:37.468
+<v Lawrence Angrave>and then the number of characters or bytes that i actually want to send here
+
+00:37.468 --> 00:40.296
+<v Lawrence Angrave>so h e l l o
+
+00:40.296 --> 00:44.046
+<v Lawrence Angrave>that's five bytes we're going to send
+
+00:44.046 --> 00:47.250
+<v Lawrence Angrave>so let's try compiling this
+
+00:47.250 --> 00:50.921
+<v Lawrence Angrave>and once that's going we'll see that whoops
+
+00:50.921 --> 00:52.796
+<v Lawrence Angrave>we've got a little bit of a problem here
+
+00:52.796 --> 00:56.703
+<v Lawrence Angrave>that write was not declared before
+
+00:56.703 --> 01:05.140
+<v Lawrence Angrave>okay so the c compiler here is warning us that we're trying to call a function called write which hasn't yet been declared
+
+01:05.140 --> 01:06.875
+<v Lawrence Angrave>so we could declare it
+
+01:06.875 --> 01:10.984
+<v Lawrence Angrave>now i happen to know for example that the write signature looks a little something like this
+
+01:10.984 --> 01:14.140
+<v Lawrence Angrave>it takes um, it's called write 
+
+01:14.140 --> 01:16.687
+<v Lawrence Angrave>it takes a file descriptor which is going to be an integer
+
+01:16.687 --> 01:19.578
+<v Lawrence Angrave>it takes a pointer to a character
+
+01:19.578 --> 01:23.875
+<v Lawrence Angrave>and it takes another integer which is the number of characters to write
+
+01:23.875 --> 01:25.421
+<v Lawrence Angrave>so it looks a little bit like that
+
+01:25.421 --> 01:34.828
+<v Lawrence Angrave>in fact it takes a void pointer which means point to it without any particular type
+
+01:34.828 --> 01:38.296
+<v Lawrence Angrave>so i could attempt to compile this for example
+
+01:38.296 --> 01:40.703
+<v Lawrence Angrave>see if this works
+
+01:40.703 --> 01:41.265
+<v Lawrence Angrave>and oh ho ho
+
+01:41.265 --> 01:42.546
+<v Lawrence Angrave>if we look at the left hand side
+
+01:42.546 --> 01:46.515
+<v Lawrence Angrave>we can see we managed to compile a program called program here
+
+01:46.515 --> 01:48.140
+<v Lawrence Angrave>and when we ran it we got hello
+
+01:48.140 --> 01:51.921
+<v Lawrence Angrave>alright so let's do a little better then that though
+
+01:51.921 --> 01:56.843
+<v Lawrence Angrave>rather than me having to manually write the declaration in here
+
+01:56.843 --> 02:01.968
+<v Lawrence Angrave>these are already included inside an existing file which I get for free
+
+02:01.968 --> 02:05.578
+<v Lawrence Angrave>it's actually unistd.h
+
+02:05.578 --> 02:09.531
+<v Lawrence Angrave>okay so let's tell the preprocessor to read in the contents of the file
+
+02:09.531 --> 02:12.359
+<v Lawrence Angrave>go in and find a file named unistd.h
+
+02:12.359 --> 02:15.187
+<v Lawrence Angrave>and include all the text that is in that file
+
+02:15.187 --> 02:18.234
+<v Lawrence Angrave>okay so now when we run this
+
+02:18.234 --> 02:20.875
+<v Lawrence Angrave>we'll compile it and run it and great it prints out hello
+
+02:20.875 --> 02:23.937
+<v Lawrence Angrave>if i wanted to print out hello with a new line
+
+02:23.937 --> 02:26.375
+<v Lawrence Angrave>let's increment this to six
+
+02:26.375 --> 02:29.000
+<v Lawrence Angrave>and now i've got a program called Hello
+
+02:29.000 --> 02:40.781
+<v Lawrence Angrave>okay great and of course i could make my program print out hello world and do it on two different lines
+
+02:40.781 --> 02:43.484
+<v Lawrence Angrave>alright so uh that's my program working
+
+02:43.484 --> 02:45.390
+<v Lawrence Angrave>now it's time for you to play
+
+02:45.390 --> 02:49.125
+<v Lawrence Angrave>you create which uses a system call write
+
+02:49.125 --> 02:52.578
+<v Lawrence Angrave>to write a little message on the two lines
+
+02:52.578 --> 02:56.593
+<v Lawrence Angrave>see you in the next video after you've said hello to the world
+
+02:56.593 --> 02:58.703
+<v Lawrence Angrave>bye
+

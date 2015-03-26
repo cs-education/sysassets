@@ -1,0 +1,272 @@
+WEBVTT
+
+00:00.000 --> 00:01.765
+<v Lawrence Angrave>hello welcome
+
+00:01.765 --> 00:03.250
+<v Lawrence Angrave>let's talk about getline
+
+00:03.250 --> 00:10.125
+<v Lawrence Angrave>so it's very very common to read in a single line of text either from the user or from a file
+
+00:10.125 --> 00:16.156
+<v Lawrence Angrave>and we would like it to be very easy to say hey "let's not worry about making sure my buffer is large enough"
+
+00:16.156 --> 00:17.671
+<v Lawrence Angrave>I just want to get the whole line
+
+00:17.671 --> 00:19.734
+<v Lawrence Angrave>and thus getline was born
+
+00:19.734 --> 00:23.125
+<v Lawrence Angrave>this is being adopted into the posix standard
+
+00:23.125 --> 00:30.390
+<v Lawrence Angrave>if you are working however with older standard and an older compiler we have to ask gcc to explicitly enable it
+
+00:30.390 --> 00:39.406
+<v Lawrence Angrave>so before doing our includes with stdio we need to define _GNU_SOURCE
+
+00:39.406 --> 00:46.828
+<v Lawrence Angrave>so if we do that we would like the gnu source additions to the standard functions
+
+00:46.828 --> 00:54.328
+<v Lawrence Angrave>right so if we do that now we have got a getline declaration included as part of the #include <stdio.h>
+
+00:54.328 --> 00:57.921
+<v Lawrence Angrave>so here is how we can use getline
+
+00:57.921 --> 01:02.390
+<v Lawrence Angrave>with getline we actually set up two variables
+
+01:02.390 --> 01:06.906
+<v Lawrence Angrave>we get getline to manipulate these directly 
+
+01:06.906 --> 01:11.921
+<v Lawrence Angrave>we are going to have a pointer to a buffer
+
+01:11.921 --> 01:17.718
+<v Lawrence Angrave>and a little int to say how big is our buffer
+
+01:17.718 --> 01:21.281
+<v Lawrence Angrave>well let's just check to see really if it is an int or if we should be doing a different type
+
+01:21.281 --> 01:26.968
+<v Lawrence Angrave>so let me pull up my favorite manpage on getline
+
+01:26.968 --> 01:33.218
+<v Lawrence Angrave>see that actually the correct type to use is size_t
+
+01:33.218 --> 01:37.296
+<v Lawrence Angrave>which is essentially an unsigned int or larger on some systems
+
+01:37.296 --> 01:38.875
+<v Lawrence Angrave>so let's just make a note of that
+
+01:38.875 --> 01:42.187
+<v Lawrence Angrave>that is the declaration that we are going to be using
+
+01:42.187 --> 01:48.109
+<v Lawrence Angrave>and so we will have not just a buffer to our character array
+
+01:48.109 --> 01:53.265
+<v Lawrence Angrave>but also size as well to say how big is our buffer
+
+01:53.265 --> 01:55.921
+<v Lawrence Angrave>and i will call this say capacity
+
+01:55.921 --> 01:59.953
+<v Lawrence Angrave>right so we could start calling this and we could say okay
+
+01:59.953 --> 02:06.875
+<v Lawrence Angrave>get me a line and oh i need to pass in a pointer to my buffer variable
+
+02:06.875 --> 02:14.921
+<v Lawrence Angrave>right and notice that the declaration here is star star asteric so it's a pointer to a pointer
+
+02:14.921 --> 02:16.468
+<v Lawrence Angrave>right so how did i get that
+
+02:16.468 --> 02:19.984
+<v Lawrence Angrave>i say okay give me the address of my variable
+
+02:19.984 --> 02:22.359
+<v Lawrence Angrave>and similarly for the capacity as well
+
+02:22.359 --> 02:24.359
+<v Lawrence Angrave>the size of the variable
+
+02:24.359 --> 02:29.343
+<v Lawrence Angrave>so give me the address of my capacity
+
+02:29.343 --> 02:32.843
+<v Lawrence Angrave>and getline is going to modify those two variables directly
+
+02:32.843 --> 02:35.828
+<v Lawrence Angrave>essentially if my buffer is not large enough
+
+02:35.828 --> 02:43.953
+<v Lawrence Angrave>it is going to free up the old buffer and then call malloc so that we get a larger buffer
+
+02:43.953 --> 02:49.218
+<v Lawrence Angrave>okay technically it might call realloc but let's not worry about exactly which library call it calls
+
+02:49.218 --> 02:53.406
+<v Lawrence Angrave>we just know that it's going to do all that buffer maintenance for us automatically
+
+02:53.406 --> 02:59.890
+<v Lawrence Angrave>and now we need to give it a filestream so why don't we use say stdin
+
+02:59.890 --> 03:08.453
+<v Lawrence Angrave>now right now our code suffers from a terrible flaw which is that we've assumed that our automatic variables buffer capacity will be set to nothing
+
+03:08.453 --> 03:12.609
+<v Lawrence Angrave>so the getline knows that it can't reuse what it happens to be pointing to
+
+03:12.609 --> 03:18.937
+<v Lawrence Angrave>so we actually need to set these to explicitly to null and the capacity to zero
+
+03:18.937 --> 03:26.812
+<v Lawrence Angrave>so the first time we call getline getline will see that the buffer is certainly not large enough and will allocate enough space
+
+03:26.812 --> 03:34.953
+<v Lawrence Angrave>we can now find out what the result is which is the number of characters getline has managed to retrieve
+
+03:34.953 --> 03:36.968
+<v Lawrence Angrave>or a negative value if it failed
+
+03:36.968 --> 03:39.281
+<v Lawrence Angrave>so let's make a note of that
+
+03:39.281 --> 03:41.265
+<v Lawrence Angrave>and we'll print this out
+
+03:41.265 --> 03:48.250
+<v Lawrence Angrave>so i'll print it out as an integer and let's have a look to see what we can find inside our buffer
+
+03:48.250 --> 03:51.828
+<v Lawrence Angrave>so we want the result and we want the buffer
+
+03:51.828 --> 03:54.500
+<v Lawrence Angrave>and lastly let's put a newline here
+
+03:54.500 --> 04:00.546
+<v Lawrence Angrave>okay so we'll run our little program here
+
+04:00.546 --> 04:06.328
+<v Lawrence Angrave>and now it's waiting for me to type something
+
+04:06.328 --> 04:09.765
+<v Lawrence Angrave>okay great so it says i have got six characters
+
+04:09.765 --> 04:11.390
+<v Lawrence Angrave>wait and i printed ABCDE
+
+04:11.390 --> 04:16.968
+<v Lawrence Angrave>actually the last character might be a newline character
+
+04:16.968 --> 04:19.375
+<v Lawrence Angrave>and quite often we don't actually need that
+
+04:19.375 --> 04:26.265
+<v Lawrence Angrave>so why don't we overwrite the very last character with null with a terminating byte
+
+04:26.265 --> 04:28.796
+<v Lawrence Angrave>so let's write the code for that
+
+04:28.796 --> 04:33.343
+<v Lawrence Angrave>first of all we only want to do that if we get at least one character back from getline
+
+04:33.343 --> 04:38.062
+<v Lawrence Angrave>so let's check that the result was positive
+
+04:38.062 --> 04:44.109
+<v Lawrence Angrave>and also we only want to do this if we are going to overwrite the last character which truly is a newline
+
+04:44.109 --> 04:49.812
+<v Lawrence Angrave>we could imagine for example reading from a file where the very last byte is not actually a newline
+
+04:49.812 --> 04:53.484
+<v Lawrence Angrave>so we should just check to see what we're going to write here
+
+04:53.484 --> 04:57.812
+<v Lawrence Angrave>so let's look inside our buffer and where do we want to look?
+
+04:57.812 --> 05:04.140
+<v Lawrence Angrave>well if we read one character that would be at the beginning of the buffer
+
+05:04.140 --> 05:06.187
+<v Lawrence Angrave>so we need to look at result minus one
+
+05:06.187 --> 05:11.718
+<v Lawrence Angrave>so if that is equal to the character of a newline
+
+05:11.718 --> 05:15.843
+<v Lawrence Angrave>then let's truncate the string
+
+05:15.843 --> 05:18.843
+<v Lawrence Angrave>the easiest way to do that remember is strings are just terminated by zero
+
+05:18.843 --> 05:21.812
+<v Lawrence Angrave>so let's just put a zero directly into that byte
+
+05:21.812 --> 05:27.406
+<v Lawrence Angrave>so we are going to say at the same spot set that equal to zero
+
+05:27.406 --> 05:35.781
+<v Lawrence Angrave>right so let's run our program again
+
+05:35.781 --> 05:44.718
+<v Lawrence Angrave>okay so this time it read it correctly and in our printf we didn't get that unwanted extra newline
+
+05:44.718 --> 05:48.968
+<v Lawrence Angrave>alright our program right now is allocating memory on the heap
+
+05:48.968 --> 05:50.984
+<v Lawrence Angrave>we don't do it we let getline do it
+
+05:50.984 --> 05:56.671
+<v Lawrence Angrave>but it's actually up to us when we finish using getline to free that buffer
+
+05:56.671 --> 05:58.593
+<v Lawrence Angrave>right so let's do that
+
+05:58.593 --> 06:03.562
+<v Lawrence Angrave>let's at the very end here we can call free on the buffer
+
+06:03.562 --> 06:12.593
+<v Lawrence Angrave>we don't need to do that every time we call getline because getline by default will try to for performance try to reuse the buffer for each line it gets
+
+06:12.593 --> 06:20.609
+<v Lawrence Angrave>so for example we could call getline twice and it would try to use the same buffer
+
+06:20.609 --> 06:23.546
+<v Lawrence Angrave>but the big take home message for getline is first of all
+
+06:23.546 --> 06:30.921
+<v Lawrence Angrave>you are going to need a pointer to a buffer and a capacity variacle which getline itself is going to change the contents of
+
+06:30.921 --> 06:35.703
+<v Lawrence Angrave>as you call it it can make the buffer as large as
+
+06:35.703 --> 06:42.593
+<v Lawrence Angrave>each time you call getline it might change that buffer to point to some new memory if the buffer needs to be larger
+
+06:42.593 --> 06:49.953
+<v Lawrence Angrave>secondly it's a great idea to check the return value of getline to see how many characters it managed to read
+
+06:49.953 --> 06:52.140
+<v Lawrence Angrave>and also to see if there was an error or not
+
+06:52.140 --> 06:59.500
+<v Lawrence Angrave>and the return type for that is ssize_t for a signed size integer type
+
+06:59.500 --> 07:08.062
+<v Lawrence Angrave>and finally it's good practice to don't forget to free the memory that is pointed at by your buffer variable
+
+07:08.062 --> 07:09.453
+<v Lawrence Angrave>okay that's it for me
+
+07:09.453 --> 07:10.703
+<v Lawrence Angrave>have fun playing bye
+

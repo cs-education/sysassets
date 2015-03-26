@@ -1,0 +1,182 @@
+WEBVTT
+
+00:00.000 --> 00:08.500
+<v Lawrence Angrave>Hi, so C is designed to be a portable language in a sense that we could write a C compiler for many many different hardware architectures
+
+00:08.500 --> 00:12.968
+<v Lawrence Angrave>from small embedded machines to large mainframes
+
+00:12.968 --> 00:19.156
+<v Lawrence Angrave>so C does not specify a precise number of bits required for, say, and integer
+
+00:19.156 --> 00:24.625
+<v Lawrence Angrave>instead it specifies minimums that should be supported by the architecture
+
+00:24.625 --> 00:30.671
+<v Lawrence Angrave>let's have a look at that. let's see how we can find out how large or small of numbers we can store in different types
+
+00:30.671 --> 00:33.968
+<v Lawrence Angrave>and also how many bytes each different type is 
+
+00:33.968 --> 00:36.859
+<v Lawrence Angrave>and even further, what is a byte?
+
+00:36.859 --> 00:39.265
+<v Lawrence Angrave>so let's start with our integers
+
+00:39.265 --> 00:46.140
+<v Lawrence Angrave>I could say hello but what's the largest value I can store inside my integer type?
+
+00:46.140 --> 00:56.750
+<v Lawrence Angrave>fortunately, there's some macros, some constants, defined inside limits.h
+
+00:56.750 --> 01:00.046
+<v Lawrence Angrave>let's find out what these are
+
+01:00.046 --> 01:11.843
+<v Lawrence Angrave>the int min and max is going to be %d and %d and INT_MIN and INT_MAX
+
+01:11.843 --> 01:15.625
+<v Lawrence Angrave>so, we'll print that out. I'll get rid of my unnecessary variable here
+
+01:15.625 --> 01:17.078
+<v Lawrence Angrave>let's run that
+
+01:17.078 --> 01:27.250
+<v Lawrence Angrave>and we see that on this particular machine, that an integer can represent numbers from roughly minus 2 billion to plus 2 billion
+
+01:27.250 --> 01:29.390
+<v Lawrence Angrave>a very wide range of numbers
+
+01:29.390 --> 01:36.609
+<v Lawrence Angrave>C promises that we'll be able to store the numbers between minus 32768 and plus 32767
+
+01:36.609 --> 01:41.203
+<v Lawrence Angrave>in other words, an integer will be at least 16 bits
+
+01:41.203 --> 01:44.046
+<v Lawrence Angrave>what else do we have? how about a character?
+
+01:44.046 --> 01:47.593
+<v Lawrence Angrave>well, here's a surprising thing, a character is one byte
+
+01:47.593 --> 01:49.390
+<v Lawrence Angrave>so what do we mean by byte?
+
+01:49.390 --> 01:52.921
+<v Lawrence Angrave>surely we mean 8 bits? no.
+
+01:52.921 --> 01:59.531
+<v Lawrence Angrave>though we often say a byte means 8 bits in modern parlance, it doesn't have to be true
+
+01:59.531 --> 02:04.156
+<v Lawrence Angrave>and in fact, C is very careful to say that a byte does not mean 8 bits
+
+02:04.156 --> 02:05.765
+<v Lawrence Angrave>it means at least 8 bits
+
+02:05.765 --> 02:08.671
+<v Lawrence Angrave>our character, then, is at least 8 bits
+
+02:08.671 --> 02:10.609
+<v Lawrence Angrave>so why this distinction?
+
+02:10.609 --> 02:24.312
+<v Lawrence Angrave>well, in being portable, C needs to be able to read and write every bit inside memory and each bit inside each memory should only live inside one addressable memory location
+
+02:24.312 --> 02:32.390
+<v Lawrence Angrave>and, it could be that architecture have very different numbers of bits it can read or write
+
+02:32.390 --> 02:38.578
+<v Lawrence Angrave>for example, an early PDP machine had a 36 bit wide addressable memory
+
+02:38.578 --> 02:44.796
+<v Lawrence Angrave>so, C does not attempt to say it's going to be exactly 8 bits
+
+02:44.796 --> 02:48.796
+<v Lawrence Angrave>so how do we find out how many bits are actually in a character?
+
+02:48.796 --> 02:55.140
+<v Lawrence Angrave>well, again, the limits.h includes a useful constants here
+
+02:55.140 --> 02:58.250
+<v Lawrence Angrave>a character is %d bytes
+
+02:58.250 --> 03:00.062
+<v Lawrence Angrave>let's go and see what that is
+
+03:00.062 --> 03:02.109
+<v Lawrence Angrave>so CHAR_BITS
+
+03:02.109 --> 03:09.500
+<v Lawrence Angrave>and we'll print that out
+
+03:09.500 --> 03:12.359
+<v Lawrence Angrave>on this architecture, a character is 8 bits
+
+03:12.359 --> 03:16.812
+<v Lawrence Angrave>that's typical on modern machines
+
+03:16.812 --> 03:20.703
+<v Lawrence Angrave>so what if I wanted to know the actual number of bytes in different types?
+
+03:20.703 --> 03:25.515
+<v Lawrence Angrave>for that, we have something called sizeof
+
+03:25.515 --> 03:32.859
+<v Lawrence Angrave>we can give it a type and it will tell us how many bytes (or if you prefer, how many characters) are required to hold that particular kind
+
+03:32.859 --> 03:38.109
+<v Lawrence Angrave>so for example, let's find out how big an integer is on this machine
+
+03:38.109 --> 03:40.265
+<v Lawrence Angrave>perhaps you can guess the answer already
+
+03:40.265 --> 03:54.406
+<v Lawrence Angrave>so, sizeof int is %d and we'll have a newline as well
+
+03:54.406 --> 03:59.968
+<v Lawrence Angrave>is it any surprise that the size of an integer on this particular machine happens to be 4 bytes
+
+03:59.968 --> 04:08.265
+<v Lawrence Angrave>and that's not surprising because we need thirty two bits to represent all numbers between minus two billion and plus two billion
+
+04:08.265 --> 04:21.468
+<v Lawrence Angrave>there are other integer types you'll see things like short (which is generally shorter than an int), long (which is generally longer), long long (which is even longer, still)
+
+04:21.468 --> 04:25.515
+<v Lawrence Angrave>and compilers even occasionally provide their own custom types as well
+
+04:25.515 --> 04:32.140
+<v Lawrence Angrave>notice as well that these types are signed
+
+04:32.140 --> 04:34.921
+<v Lawrence Angrave>so we can represent negative numbers and plus numbers
+
+04:34.921 --> 04:41.984
+<v Lawrence Angrave>C also provides the idea of being able to say that we can have an unsigned version
+
+04:41.984 --> 04:46.000
+<v Lawrence Angrave>so, for example, I can have an unsigned int
+
+04:46.000 --> 04:52.890
+<v Lawrence Angrave>now there is no signed bit that is included in the bitwise representation
+
+04:52.890 --> 04:58.468
+<v Lawrence Angrave>so that's great if you wanted to represent all the numbers between zero and 4 billion on this particular machine
+
+04:58.468 --> 05:03.859
+<v Lawrence Angrave>the character type can actually be signed or unsigned
+
+05:03.859 --> 05:10.203
+<v Lawrence Angrave>depending on the particular implementation of the C language for this particular architecture
+
+05:10.203 --> 05:12.453
+<v Lawrence Angrave>so that's enough for now
+
+05:12.453 --> 05:14.625
+<v Lawrence Angrave>in the next video, we will talk about pointers
+
+05:14.625 --> 05:20.812
+<v Lawrence Angrave>now it's time for you to play and learn a little bit about the basic C primitives. Bye!
+

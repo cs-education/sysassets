@@ -1,0 +1,341 @@
+WEBVTT
+
+00:00.000 --> 00:04.703
+<v Lawrence Angrave>so usually we think about our programs as just turning into one single process
+
+00:04.703 --> 00:07.656
+<v Lawrence Angrave>now i am going to show you some systems programming magic
+
+00:07.656 --> 00:11.078
+<v Lawrence Angrave>where actually we can turn our single process into two
+
+00:11.078 --> 00:12.750
+<v Lawrence Angrave>here is how we are going to do it
+
+00:12.750 --> 00:16.156
+<v Lawrence Angrave>let us have a very simple program that says hello world
+
+00:16.156 --> 00:18.343
+<v Lawrence Angrave>and here it is
+
+00:18.343 --> 00:21.468
+<v Lawrence Angrave>so between these two lines however
+
+00:21.468 --> 00:28.156
+<v Lawrence Angrave>i am going to call fork
+
+00:28.156 --> 00:29.609
+<v Lawrence Angrave>and here's a surprise
+
+00:29.609 --> 00:31.046
+<v Lawrence Angrave>we get hello world world
+
+00:31.046 --> 00:33.093
+<v Lawrence Angrave>yes we get two worlds
+
+00:33.093 --> 00:34.140
+<v Lawrence Angrave>why is that
+
+00:34.140 --> 00:36.000
+<v Lawrence Angrave>well at the beginning there was a single process
+
+00:36.000 --> 00:41.343
+<v Lawrence Angrave>but then we called fork and now our single process is actually being cloned
+
+00:41.343 --> 00:43.109
+<v Lawrence Angrave>it has been split into two
+
+00:43.109 --> 00:45.703
+<v Lawrence Angrave>so both the processes print out world
+
+00:45.703 --> 00:50.375
+<v Lawrence Angrave>and so we see both their output on our little terminal here
+
+00:50.375 --> 00:51.921
+<v Lawrence Angrave>okay what else can we do with this
+
+00:51.921 --> 00:54.953
+<v Lawrence Angrave>well let us first of all show that there really are two different processes
+
+00:54.953 --> 01:00.468
+<v Lawrence Angrave>i am going to look at their processor id
+
+01:00.468 --> 01:03.125
+<v Lawrence Angrave>and we will print it out
+
+01:03.125 --> 01:04.750
+<v Lawrence Angrave>so i will call getpid()
+
+01:04.750 --> 01:08.812
+<v Lawrence Angrave>and you will see that yeah i have got two different processes
+
+01:08.812 --> 01:11.828
+<v Lawrence Angrave>both trying to run at the same time
+
+01:11.828 --> 01:16.375
+<v Lawrence Angrave>in fact i have got a parent child relationship here
+
+01:16.375 --> 01:18.406
+<v Lawrence Angrave>i have got the original process
+
+01:18.406 --> 01:19.421
+<v Lawrence Angrave>the parent
+
+01:19.421 --> 01:25.312
+<v Lawrence Angrave>and you can think of fork as saying let us clone this original process right here right now
+
+01:25.312 --> 01:27.734
+<v Lawrence Angrave>so that i get a child that looks just like me
+
+01:27.734 --> 01:29.500
+<v Lawrence Angrave>or at least almost like me
+
+01:29.500 --> 01:30.515
+<v Lawrence Angrave>in many many respects
+
+01:30.515 --> 01:32.921
+<v Lawrence Angrave>it is the same memory
+
+01:32.921 --> 01:33.937
+<v Lawrence Angrave>it has got it's own variables
+
+01:33.937 --> 01:37.890
+<v Lawrence Angrave>but because its got its own address space
+
+01:37.890 --> 01:43.687
+<v Lawrence Angrave>what the child now does in terms of its memory is seperate from the parents
+
+01:43.687 --> 01:48.875
+<v Lawrence Angrave>okay so let's show you what we can then do with this
+
+01:48.875 --> 01:51.312
+<v Lawrence Angrave>first of all fork actually returns something here
+
+01:51.312 --> 01:54.343
+<v Lawrence Angrave>it actually returns back an id
+
+01:54.343 --> 01:57.312
+<v Lawrence Angrave>so let's make a note of that
+
+01:57.312 --> 01:59.281
+<v Lawrence Angrave>and we'll print it out
+
+01:59.281 --> 02:07.937
+<v Lawrence Angrave>so we'll say %d and we'll print out just here
+
+02:07.937 --> 02:10.562
+<v Lawrence Angrave>okay so here is what we see
+
+02:10.562 --> 02:19.375
+<v Lawrence Angrave>that the process id 681 has fork value of 682
+
+02:19.375 --> 02:25.437
+<v Lawrence Angrave>and process 682 has a fork return value of 0
+
+02:25.437 --> 02:30.000
+<v Lawrence Angrave>so the fork value is different for the parent and the child
+
+02:30.000 --> 02:32.734
+<v Lawrence Angrave>and in fact fork
+
+02:32.734 --> 02:36.484
+<v Lawrence Angrave>if it returns a positive number is talking to the parent
+
+02:36.484 --> 02:41.718
+<v Lawrence Angrave>and is telling the parent here is the id number for your child
+
+02:41.718 --> 02:44.281
+<v Lawrence Angrave>so let us make a note of that
+
+02:44.281 --> 02:45.484
+<v Lawrence Angrave>let us call this
+
+02:45.484 --> 02:46.500
+<v Lawrence Angrave>here is my child
+
+02:46.500 --> 02:48.859
+<v Lawrence Angrave>so i can call my child
+
+02:48.859 --> 02:56.171
+<v Lawrence Angrave>and then i can write an if statement to decide if i am the parent or the newly created child or not
+
+02:56.171 --> 03:03.546
+<v Lawrence Angrave>so we will say look if the child id what i return from fork is actually greater than 0
+
+03:03.546 --> 03:06.609
+<v Lawrence Angrave>then i am the parent
+
+03:06.609 --> 03:15.625
+<v Lawrence Angrave>so let's put something like hey i'm the grouchy parent
+
+03:15.625 --> 03:29.796
+<v Lawrence Angrave>if it is zero however then hey I'm the carefree child!
+
+03:29.796 --> 03:33.796
+<v Lawrence Angrave>so we will let's remove this 
+
+03:33.796 --> 03:35.125
+<v Lawrence Angrave>i'll get rid of that line now
+
+03:35.125 --> 03:41.109
+<v Lawrence Angrave>okay so now we have a little program where the parent and child are going to do two different things
+
+03:41.109 --> 03:47.984
+<v Lawrence Angrave>and in fact it is standard for the parent to wait for the child to finish
+
+03:47.984 --> 03:54.828
+<v Lawrence Angrave>we don't have to but quite often we need the child process to do something for us
+
+03:54.828 --> 03:56.609
+<v Lawrence Angrave>perhaps in the background
+
+03:56.609 --> 04:00.296
+<v Lawrence Angrave>but we don't actually want to continue until the child has finished
+
+04:00.296 --> 04:01.703
+<v Lawrence Angrave>so let us do that
+
+04:01.703 --> 04:05.828
+<v Lawrence Angrave>what i am going to wait for my child to finish
+
+04:05.828 --> 04:14.703
+<v Lawrence Angrave>so i am going to say waitpid and i need to say okay what is the id i need to wait on well here is the childid
+
+04:14.703 --> 04:20.125
+<v Lawrence Angrave>and later on i can ask for some status information about my child
+
+04:20.125 --> 04:23.109
+<v Lawrence Angrave>and for now the last argument i am just going to put as 0
+
+04:23.109 --> 04:27.812
+<v Lawrence Angrave>so i need to have a variable called status just a little integer
+
+04:27.812 --> 04:34.093
+<v Lawrence Angrave>and in fact we are going to pass not just the value of status but the address of our little variable
+
+04:34.093 --> 04:41.812
+<v Lawrence Angrave>and later on we can use that to find out say did our child exit normally or was it terminated in a surprising way
+
+04:41.812 --> 04:49.953
+<v Lawrence Angrave>so let us run this now and what we will expect to see is that we'll wait for the child to finish before we print
+
+04:49.953 --> 04:50.968
+<v Lawrence Angrave>I'm the grouchy parent
+
+04:50.968 --> 04:57.140
+<v Lawrence Angrave>so let's run this
+
+04:57.140 --> 05:04.078
+<v Lawrence Angrave>okay so this time the child process got to print out I'm the carefree child
+
+05:04.078 --> 05:05.968
+<v Lawrence Angrave>then it exited
+
+05:05.968 --> 05:11.343
+<v Lawrence Angrave>meanwhile the parent was waiting for the async condition and when that happened
+
+05:11.343 --> 05:17.875
+<v Lawrence Angrave>the parent is able to continue and is able to print I'm the grouchy parent
+
+05:17.875 --> 05:26.718
+<v Lawrence Angrave>so i want to finish on a common programming error that can really bring down a server
+
+05:26.718 --> 05:33.093
+<v Lawrence Angrave>and that is suppose we made many many many processes
+
+05:33.093 --> 05:35.343
+<v Lawrence Angrave>so it is one thing to create a few
+
+05:35.343 --> 05:50.546
+<v Lawrence Angrave>let's call say fork a couple of times and perhaps you can guess how many worlds we'll see here
+
+05:50.546 --> 05:52.859
+<v Lawrence Angrave>that's right we see four worlds
+
+05:52.859 --> 06:01.328
+<v Lawrence Angrave>and in fact the parent finished early so this is the hash of the terminal saying what would you like to do now
+
+06:01.328 --> 06:04.671
+<v Lawrence Angrave>but we had four processes all printing out world
+
+06:04.671 --> 06:09.562
+<v Lawrence Angrave>and if we had three forks now we have eight
+
+06:09.562 --> 06:18.187
+<v Lawrence Angrave>okay so let us make something now called a fork bomb which is where we keep creating lots and lots of processes
+
+06:18.187 --> 06:23.312
+<v Lawrence Angrave>and this often happens by accident by people who are new to systems programming
+
+06:23.312 --> 06:32.437
+<v Lawrence Angrave>but just for fun because i am just doing this inside a browser it doesn't matter if i bring my little virtual machine to a halt
+
+06:32.437 --> 06:34.250
+<v Lawrence Angrave>i can always just reload the page
+
+06:34.250 --> 06:44.125
+<v Lawrence Angrave>so let's print out my id
+
+06:44.125 --> 06:49.265
+<v Lawrence Angrave>i will put this in a little loop that says while one let's fork
+
+06:49.265 --> 06:54.718
+<v Lawrence Angrave>let's print out my process id
+
+06:54.718 --> 07:01.937
+<v Lawrence Angrave>and then i will sleep two seconds
+
+07:01.937 --> 07:03.703
+<v Lawrence Angrave>so initially i have two processes
+
+07:03.703 --> 07:07.000
+<v Lawrence Angrave>and then each of those processes calls fork
+
+07:07.000 --> 07:07.828
+<v Lawrence Angrave>so we got four
+
+07:07.828 --> 07:10.531
+<v Lawrence Angrave>and then each of those processes call fork
+
+07:10.531 --> 07:12.015
+<v Lawrence Angrave>prints it out and sleeps
+
+07:12.015 --> 07:16.593
+<v Lawrence Angrave>and so every two seconds i am doubling the number of processes that are in my system
+
+07:16.593 --> 07:18.562
+<v Lawrence Angrave>so that's a lot of processes
+
+07:18.562 --> 07:23.656
+<v Lawrence Angrave>and in fact pretty soon the kernel will run out of space
+
+07:23.656 --> 07:25.843
+<v Lawrence Angrave>it won't be able to keep track of any more processes
+
+07:25.843 --> 07:29.312
+<v Lawrence Angrave>and fork will stop working
+
+07:29.312 --> 07:33.218
+<v Lawrence Angrave>and now we see here's the kernel printing out all sorts of debug messages
+
+07:33.218 --> 07:36.218
+<v Lawrence Angrave>desperately trying to make the system stable again
+
+07:36.218 --> 07:44.671
+<v Lawrence Angrave>as it arbitrarily starts to kill processes in an attempt to recover some memory and space in its process tables
+
+07:44.671 --> 07:52.515
+<v Lawrence Angrave>so amazingly my little kernel here has managed to recover to the point to where i have a working system
+
+07:52.515 --> 07:57.953
+<v Lawrence Angrave>but that is fork bombs and you should avoid from accidentally doing this
+
+07:57.953 --> 08:02.453
+<v Lawrence Angrave>otherwise you will have a system administrator telling you that you cannot log onto that machine anymore
+
+08:02.453 --> 08:05.515
+<v Lawrence Angrave>okay have fun and i'll see you in the next video
+
+08:05.515 --> 08:06.156
+<v Lawrence Angrave>bye
+

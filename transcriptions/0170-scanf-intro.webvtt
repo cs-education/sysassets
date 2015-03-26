@@ -1,0 +1,224 @@
+WEBVTT
+
+00:00.000 --> 00:11.578
+<v Lawrence Angrave>Hello! Let's talk about how we can use scanf and sscanf and fscanf to read some data and convert that into say integers or floats or strings
+
+00:11.578 --> 00:15.234
+<v Lawrence Angrave>so we can actually use those values inside our variables
+
+00:15.234 --> 00:18.500
+<v Lawrence Angrave>alright, so, I'll start by using sscanf
+
+00:18.500 --> 00:21.406
+<v Lawrence Angrave>which can parse data inside a string
+
+00:21.406 --> 00:23.140
+<v Lawrence Angrave>inside memory
+
+00:23.140 --> 00:25.296
+<v Lawrence Angrave>so for example, let's have a little bit of data here
+
+00:25.296 --> 00:32.421
+<v Lawrence Angrave>I'll have my data be my name and a score
+
+00:32.421 --> 00:38.468
+<v Lawrence Angrave>and I want to take that and pull it apart into a string and an integer
+
+00:38.468 --> 00:43.859
+<v Lawrence Angrave>so I'll have a little buffer here, say, up to twenty characters
+
+00:43.859 --> 00:45.484
+<v Lawrence Angrave>and a little integer here
+
+00:45.484 --> 00:52.296
+<v Lawrence Angrave>and I could set this to be equal to some arbitrary value. we'll see why in a little bit
+
+00:52.296 --> 01:10.234
+<v Lawrence Angrave>and then I'm going to say "okay, sscanf please read from this string array and what I'd like you to do is convert that into a string followed by one or more spaces and then an integer value"
+
+01:10.234 --> 01:15.875
+<v Lawrence Angrave>alright so scanf is going to look at our memory starting at wherever our data is pointing at
+
+01:15.875 --> 01:21.484
+<v Lawrence Angrave>and, it's going to first of all look for a string until it comes across one space
+
+01:21.484 --> 01:23.937
+<v Lawrence Angrave>and then there can be actually multiple spaces in our data
+
+01:23.937 --> 01:28.453
+<v Lawrence Angrave>and then after that, it's going to treat the rest of the string as an integer
+
+01:28.453 --> 01:39.890
+<v Lawrence Angrave>okay, now, our format specifiers say the kind of data that we want to interpret and also the number of bytes that should be written to when it is trying to parse its data
+
+01:39.890 --> 01:42.328
+<v Lawrence Angrave>so we better tell it where to exactly put these things
+
+01:42.328 --> 01:46.015
+<v Lawrence Angrave>so for our string, we want it to write it into a buffer
+
+01:46.015 --> 01:49.156
+<v Lawrence Angrave>and for the score, we want to write it into our score variable
+
+01:49.156 --> 01:50.968
+<v Lawrence Angrave>but hold on a moment
+
+01:50.968 --> 01:56.812
+<v Lawrence Angrave>when we say "buffer" yes that gives us the beginning address of our array
+
+01:56.812 --> 01:57.828
+<v Lawrence Angrave>but not for score
+
+01:57.828 --> 02:00.515
+<v Lawrence Angrave>score is just going to give us whatever value score happens to hold
+
+02:00.515 --> 02:02.484
+<v Lawrence Angrave>in this case, negative forty two
+
+02:02.484 --> 02:03.593
+<v Lawrence Angrave>that's not what we need
+
+02:03.593 --> 02:05.687
+<v Lawrence Angrave>we actually want the address of this variable
+
+02:05.687 --> 02:09.453
+<v Lawrence Angrave>so we're going to say ampersand score
+
+02:09.453 --> 02:13.718
+<v Lawrence Angrave>so, lets read that and we'll print it out
+
+02:13.718 --> 02:23.000
+<v Lawrence Angrave>so here's the result and we'll say %s %d and we'll print the contents of the buffer and print the value of score
+
+02:23.000 --> 02:27.187
+<v Lawrence Angrave>so notice that scanf and printf, the arguments don't always look the same
+
+02:27.187 --> 02:33.296
+<v Lawrence Angrave>when we want to print out the values, we don't actually want to just print out the address of score
+
+02:33.296 --> 02:34.984
+<v Lawrence Angrave>we actually wanted to know what the value is
+
+02:34.984 --> 02:38.171
+<v Lawrence Angrave>great so that read that correctly
+
+02:38.171 --> 02:44.890
+<v Lawrence Angrave>scanf actually tells us something else which is how many arguments it correctly managed to parse
+
+02:44.890 --> 02:49.593
+<v Lawrence Angrave>so let's make a note of that and we'll print that out
+
+02:49.593 --> 02:54.515
+<v Lawrence Angrave>so, we'll say %d here
+
+02:54.515 --> 02:57.406
+<v Lawrence Angrave>print out the result in our printf statement here
+
+02:57.406 --> 03:03.437
+<v Lawrence Angrave>so now when we run it, we'll see that sscanf managed to read both iterms
+
+03:03.437 --> 03:04.875
+<v Lawrence Angrave>I got result two
+
+03:04.875 --> 03:13.046
+<v Lawrence Angrave>fantastic. so that's useful. now we can write robust programs to check if we really did write into both variables
+
+03:13.046 --> 03:17.546
+<v Lawrence Angrave>now you might be worried that scanf could result in a buffer overflow
+
+03:17.546 --> 03:20.203
+<v Lawrence Angrave>and, in fact, in our current code, you'd be right
+
+03:20.203 --> 03:26.781
+<v Lawrence Angrave>so if I had a very long name with no spaces here
+
+03:26.781 --> 03:30.390
+<v Lawrence Angrave>then that's longer than our buffer
+
+03:30.390 --> 03:33.687
+<v Lawrence Angrave>so what we need to do is tell scanf just how big our buffer is
+
+03:33.687 --> 03:36.953
+<v Lawrence Angrave>so in this case, it should be nineteen
+
+03:36.953 --> 03:42.000
+<v Lawrence Angrave>because we're setting scanf how many character to read from the input
+
+03:42.000 --> 03:48.234
+<v Lawrence Angrave>and our buffer, of course, if going to need one extra one to hold the terminating byte for this string
+
+03:48.234 --> 03:55.812
+<v Lawrence Angrave>so let's run this now
+
+03:55.812 --> 04:04.250
+<v Lawrence Angrave>and you'll see that first of all the name is truncated and that secondly, the return value of our scanf call here was one
+
+04:04.250 --> 04:08.328
+<v Lawrence Angrave>and it only managed to read into the buffer
+
+04:08.328 --> 04:11.328
+<v Lawrence Angrave>it gave up trying to read the integer because our buffer wasn't long enough
+
+04:11.328 --> 04:16.125
+<v Lawrence Angrave>and, in fact, our score variable still contained its original value
+
+04:16.125 --> 04:18.078
+<v Lawrence Angrave>of negative forty two
+
+04:18.078 --> 04:24.187
+<v Lawrence Angrave>so good defensive programs must check that the return value is reasonable
+
+04:24.187 --> 04:36.453
+<v Lawrence Angrave>also, when writing scanf or sscanf or fscanf, it's always a good idea to carefully check to see whether you should be looking at the address of the variable or if the variable itself actually is a pointer
+
+04:36.453 --> 04:44.796
+<v Lawrence Angrave>and is already going to give you the memory address that you'd like scanf to change
+
+04:44.796 --> 04:48.937
+<v Lawrence Angrave>alright so we've read data from a string 
+
+04:48.937 --> 04:59.328
+<v Lawrence Angrave>we can also parse data from a file stream and how can we do that? well you can use not sscanf but fscanf
+
+04:59.328 --> 05:02.203
+<v Lawrence Angrave>and if you did that, you better give it a file stream
+
+05:02.203 --> 05:05.500
+<v Lawrence Angrave>there's one called stdin already
+
+05:05.500 --> 05:14.343
+<v Lawrence Angrave>if we didn't want to use that, then we could open up a file using fopen and then pass in the file handle here
+
+05:14.343 --> 05:25.296
+<v Lawrence Angrave>and reading from stdin is such a common occurance that in fact there's another form of this which is just say scanf
+
+05:25.296 --> 05:28.265
+<v Lawrence Angrave>and if you do that, that means "hey, just read from stdin"
+
+05:28.265 --> 05:36.968
+<v Lawrence Angrave>so now, let's run our program here
+
+05:36.968 --> 05:38.546
+<v Lawrence Angrave>and, now it's waiting for input
+
+05:38.546 --> 05:40.609
+<v Lawrence Angrave>so let me typing something
+
+05:40.609 --> 05:45.703
+<v Lawrence Angrave>I'll say "Angrave one hundred"
+
+05:45.703 --> 05:48.500
+<v Lawrence Angrave>great! and it managed to parse both variables
+
+05:48.500 --> 05:51.468
+<v Lawrence Angrave>okay so that's enough introduction to scanf
+
+05:51.468 --> 06:01.500
+<v Lawrence Angrave>remember this next time you're trying to read 3d data and points and you want to say convert those ASCII numbers into actual floats and doubles
+
+06:01.500 --> 06:11.281
+<v Lawrence Angrave>and also remember that its important to read exactly how scanf uses these format specifiers because its not quite the same as printf
+
+06:11.281 --> 06:15.656
+<v Lawrence Angrave>alright, that's it for me. time for you to play. bye for now
+

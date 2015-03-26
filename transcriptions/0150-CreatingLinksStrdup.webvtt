@@ -1,0 +1,185 @@
+WEBVTT
+
+00:00.000 --> 00:05.265
+<v Lawrence Angrave>Okay so let's talk about how we can make it easier to create links and destroy them
+
+00:05.265 --> 00:09.937
+<v Lawrence Angrave>so i've changed my link class a little bit so now each link can have a key and a value
+
+00:09.937 --> 00:11.984
+<v Lawrence Angrave>in addition to the next pointer
+
+00:11.984 --> 00:13.671
+<v Lawrence Angrave>the pointer to the next link
+
+00:13.671 --> 00:20.578
+<v Lawrence Angrave>okay so let's make some methods to create links and destroy them
+
+00:20.578 --> 00:22.531
+<v Lawrence Angrave>we'll do the create one first
+
+00:22.531 --> 00:26.109
+<v Lawrence Angrave>so it's going to return a pointer to a link
+
+00:26.109 --> 00:37.406
+<v Lawrence Angrave>and i might call it say link_create and I'll expect a key and I'll expect a value
+
+00:37.406 --> 00:39.921
+<v Lawrence Angrave>so that'll give me two pointers
+
+00:39.921 --> 00:51.468
+<v Lawrence Angrave>if i wish to debug this I could have a printf in here saying hey creating link and I could have what the key and values are for example
+
+00:51.468 --> 00:54.078
+<v Lawrence Angrave>right so i need to get some memory
+
+00:54.078 --> 01:01.062
+<v Lawrence Angrave>let's get some memory from the heap because we want our link to last for a long time until we decide to destroy it
+
+01:01.062 --> 01:09.609
+<v Lawrence Angrave>so i'll say malloc give me some memory and how much well i better ask for how big is my memory structure link_t
+
+01:09.609 --> 01:16.593
+<v Lawrence Angrave>and i will cast that return type as a pointer to my link object
+
+01:16.593 --> 01:17.609
+<v Lawrence Angrave>why do i do that
+
+01:17.609 --> 01:20.296
+<v Lawrence Angrave>well i want to be able to reference the sub parts
+
+01:20.296 --> 01:22.187
+<v Lawrence Angrave>the components of my struct
+
+01:22.187 --> 01:29.734
+<v Lawrence Angrave>and i will call that say result and i need to initialize my pointer
+
+01:29.734 --> 01:37.562
+<v Lawrence Angrave>so now i've got that I can set the key to be a key and the value to be the value
+
+01:37.562 --> 01:44.531
+<v Lawrence Angrave>now when i do this i am copying the pointers i'm not creating new strings
+
+01:44.531 --> 01:52.359
+<v Lawrence Angrave>so in other words i've now got a pointer called key and it's looking at exactly the same string array as the parameter is
+
+01:52.359 --> 01:55.562
+<v Lawrence Angrave>i haven't made any new string arrays
+
+01:55.562 --> 01:58.937
+<v Lawrence Angrave>so let's remember that when i return this
+
+01:58.937 --> 02:03.468
+<v Lawrence Angrave>that those pointers better be valid for the lifetime of the link
+
+02:03.468 --> 02:20.187
+<v Lawrence Angrave>well that's fine if I knew for example that this will always be used with string constants or I am taking control of those values that I send in and I happen to know that their lifetime is longer than the link's lifetime
+
+02:20.187 --> 02:23.562
+<v Lawrence Angrave>so if that's the case then my code is relatively simple like this
+
+02:23.562 --> 02:27.109
+<v Lawrence Angrave>and destroying the link is also relatively simple
+
+02:27.109 --> 02:30.343
+<v Lawrence Angrave>so let's write a link destroy method destroy
+
+02:30.343 --> 02:37.203
+<v Lawrence Angrave>which takes a pointer to the link that is going to disappear so we can call that just p
+
+02:37.203 --> 02:38.859
+<v Lawrence Angrave>and what do i need to do in here
+
+02:38.859 --> 02:41.859
+<v Lawrence Angrave>well i can simply return the memory back
+
+02:41.859 --> 02:45.843
+<v Lawrence Angrave>okay so this works we could do a little better than this
+
+02:45.843 --> 02:48.218
+<v Lawrence Angrave>we could actually do some defensive programming here
+
+02:48.218 --> 02:54.203
+<v Lawrence Angrave>where we also destroy the information inside that link
+
+02:54.203 --> 02:57.203
+<v Lawrence Angrave>so for that i can use memory set
+
+02:57.203 --> 03:02.312
+<v Lawrence Angrave>so memset where I give it a pointer that I want to use
+
+03:02.312 --> 03:06.703
+<v Lawrence Angrave>the value will be zero the number of bytes can be the size of my link
+
+03:06.703 --> 03:10.765
+<v Lawrence Angrave>so this assures that i don't have any dangling pointers
+
+03:10.765 --> 03:14.421
+<v Lawrence Angrave>i have destroyed the key and value pointers
+
+03:14.421 --> 03:18.312
+<v Lawrence Angrave>i've set them back to null and anything else inside my link has been set to null
+
+03:18.312 --> 03:26.484
+<v Lawrence Angrave>so if someone happens to have a pointer to this link and they try to use the contents straight away then it will fail it will be null
+
+03:26.484 --> 03:32.078
+<v Lawrence Angrave>and secondly we are freeing it to say okay this memory can now be reused for other purposes
+
+03:32.078 --> 03:34.578
+<v Lawrence Angrave>so that's my link destroy method
+
+03:34.578 --> 03:42.156
+<v Lawrence Angrave>now suppose we discover that our strings we don't control the lifetime of these string arrays
+
+03:42.156 --> 03:45.093
+<v Lawrence Angrave>and that actually we should make copies of them
+
+03:45.093 --> 03:46.515
+<v Lawrence Angrave>so how can i do that
+
+03:46.515 --> 03:57.437
+<v Lawrence Angrave>well there's a method called strdup so let's do that strdup and this gives me back a pointer to a new string 
+
+03:57.437 --> 04:00.953
+<v Lawrence Angrave>a new character array that has been created on the heap
+
+04:00.953 --> 04:05.609
+<v Lawrence Angrave>and it's just a copy of that existing character array that we passed it
+
+04:05.609 --> 04:10.265
+<v Lawrence Angrave>so let's create our new string arrays and use those
+
+04:10.265 --> 04:17.640
+<v Lawrence Angrave>if we do that then when I destroy the link I better free up the memory associated with my key and value
+
+04:17.640 --> 04:23.046
+<v Lawrence Angrave>so before ending here I should free up those pointers
+
+04:23.046 --> 04:33.093
+<v Lawrence Angrave>so I should call free on my key and free on my value pointer as well
+
+04:33.093 --> 04:45.312
+<v Lawrence Angrave>okay so there's my code now to start working with a link
+
+04:45.312 --> 04:52.343
+<v Lawrence Angrave>with my main method I will need to always know the beginning of my linked list
+
+04:52.343 --> 04:57.250
+<v Lawrence Angrave>so that sounds like a great thing to actually have as a global variable here
+
+04:57.250 --> 05:02.390
+<v Lawrence Angrave>so let me have my link pointer here and I can call it root
+
+05:02.390 --> 05:07.359
+<v Lawrence Angrave>and so the first link I make I can initialize root to that
+
+05:07.359 --> 05:09.843
+<v Lawrence Angrave>to that very first link
+
+05:09.843 --> 05:15.953
+<v Lawrence Angrave>okay so that's it for now, it's now time for you to play with creating more links
+
+05:15.953 --> 05:17.078
+<v Lawrence Angrave>bye
+

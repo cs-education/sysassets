@@ -1,0 +1,260 @@
+WEBVTT
+
+00:00.000 --> 00:04.906
+<v Lawrence Angrave>Hello, suppose we want to actually print out some integer values
+
+00:04.906 --> 00:08.156
+<v Lawrence Angrave>write() doesn't give us that fuctionality
+
+00:08.156 --> 00:12.125
+<v Lawrence Angrave>write() is the low level call that we make to the operating system
+
+00:12.125 --> 00:20.390
+<v Lawrence Angrave>to say "look, here's a pointer to some memory and please take so many bytes from that memory and send it out to a file"
+
+00:20.390 --> 00:22.187
+<v Lawrence Angrave>or, possibly, another device
+
+00:22.187 --> 00:30.546
+<v Lawrence Angrave>if we want to change a bit pattern into a sequence of characters because we want to read, say, one-seven for the value seventeen
+
+00:30.546 --> 00:32.421
+<v Lawrence Angrave>that's not something that the system does
+
+00:32.421 --> 00:36.453
+<v Lawrence Angrave>instead, we've got some C standard library calls that we can call
+
+00:36.453 --> 00:38.734
+<v Lawrence Angrave>that do this for us
+
+00:38.734 --> 00:41.671
+<v Lawrence Angrave>and they will wrap the call to write()
+
+00:41.671 --> 00:46.843
+<v Lawrence Angrave>so as an example, let's try printing something out
+
+00:46.843 --> 00:52.921
+<v Lawrence Angrave>we can say "printf my value is"
+
+00:52.921 --> 00:55.046
+<v Lawrence Angrave>and I can say "%d"
+
+00:55.046 --> 01:02.015
+<v Lawrence Angrave>this means that the next argument I give in printf() better be an integer value
+
+01:02.015 --> 01:06.640
+<v Lawrence Angrave>so the bit pattern we pass to printf() will be treated as an integer
+
+01:06.640 --> 01:07.812
+<v Lawrence Angrave>to be displayed
+
+01:07.812 --> 01:11.281
+<v Lawrence Angrave>so let's have a little variable called result
+
+01:11.281 --> 01:17.625
+<v Lawrence Angrave>and I can say result is sixty five
+
+01:17.625 --> 01:25.312
+<v Lawrence Angrave>if I attempt to run this, we're using printf(), we haven't declared it beforehand so we get a warning
+
+01:25.312 --> 01:34.406
+<v Lawrence Angrave>to say "oh, you're just using it." and, what we should've done is actually declare the function signature of printf()
+
+01:34.406 --> 01:38.312
+<v Lawrence Angrave>and that I know from looking at the man pages
+
+01:38.312 --> 01:41.390
+<v Lawrence Angrave>is inside stdio.h
+
+01:41.390 --> 01:45.078
+<v Lawrence Angrave>if you're coming from a cpp background, there's no IO streams
+
+01:45.078 --> 01:48.406
+<v Lawrence Angrave>we dont have operator overloading. instead, let's use printf()
+
+01:48.406 --> 01:50.828
+<v Lawrence Angrave>so we've got "my value is 65"
+
+01:50.828 --> 01:59.796
+<v Lawrence Angrave>and, you'll see that actually this was printed out after the hello hello hello hello
+
+01:59.796 --> 02:03.734
+<v Lawrence Angrave>here's why: printf() has a buffer. the C libraries have a buffer
+
+02:03.734 --> 02:07.640
+<v Lawrence Angrave>so it's only going to call write() when that buffer is full
+
+02:07.640 --> 02:09.281
+<v Lawrence Angrave>or if we explicitly tell it to
+
+02:09.281 --> 02:11.765
+<v Lawrence Angrave>or if we finish a line
+
+02:11.765 --> 02:16.171
+<v Lawrence Angrave>so let's put a newline in here and run it again
+
+02:16.171 --> 02:24.375
+<v Lawrence Angrave>this time, we've compiled it, and we should see that "my value is 65" appear before my hellos
+
+02:24.375 --> 02:31.328
+<v Lawrence Angrave>so this time, because we sent a new line, printf() will be making that call to write()
+
+02:31.328 --> 02:36.781
+<v Lawrence Angrave>to send its buffer out to standard out
+
+02:36.781 --> 02:41.781
+<v Lawrence Angrave>so now we can actually print out the value of our file descriptor
+
+02:41.781 --> 03:03.031
+<v Lawrence Angrave>let's do that. after we've opened our file, I'll send "fildes is" and, we will print out fildes.
+
+03:03.031 --> 03:05.515
+<v Lawrence Angrave>and, let's get rid of the first one
+
+03:05.515 --> 03:11.937
+<v Lawrence Angrave>and let's flush our little buffer by sending in a newline
+
+03:11.937 --> 03:17.640
+<v Lawrence Angrave>and we'll see that our value is three
+
+03:17.640 --> 03:20.890
+<v Lawrence Angrave>so, we've opened up a file descriptor who's value is three
+
+03:20.890 --> 03:33.562
+<v Lawrence Angrave>in fact, that is expected by specification because if we successfully open a file, we'll get back the lowest unused integer (the lowest unused file descriptor)
+
+03:33.562 --> 03:36.953
+<v Lawrence Angrave>as one and two are already being used, we get back three
+
+03:36.953 --> 03:45.531
+<v Lawrence Angrave>so just for fun, let's actually close one of the existing file descriptors before we do the open()
+
+03:45.531 --> 03:49.234
+<v Lawrence Angrave>so let's close standard error
+
+03:49.234 --> 03:53.203
+<v Lawrence Angrave>I'm sorry, we'll close standard out
+
+03:53.203 --> 04:01.750
+<v Lawrence Angrave>and, we won't close our own file descriptor until the very end of the program here
+
+04:01.750 --> 04:04.343
+<v Lawrence Angrave>so I'm going to move that line down to here
+
+04:04.343 --> 04:11.515
+<v Lawrence Angrave>great, so, let's run this
+
+04:11.515 --> 04:22.796
+<v Lawrence Angrave>so, what did we do? we opened a file descriptor and now if we look at the output of the program, you'll see we're only getting our dots printed out on standard error
+
+04:22.796 --> 04:23.812
+<v Lawrence Angrave>why is that?
+
+04:23.812 --> 04:24.828
+<v Lawrence Angrave>what happened to our standard output?
+
+04:24.828 --> 04:28.312
+<v Lawrence Angrave>well, we better check out file output.text
+
+04:28.312 --> 04:35.140
+<v Lawrence Angrave>and you'll see that everything printed to standard out has been sent to our file
+
+04:35.140 --> 04:49.156
+<v Lawrence Angrave>why? because when we called open(), it gave us back a file descriptor for stream number one. and, that is the. that is where all the standard output is going to go
+
+04:49.156 --> 04:53.093
+<v Lawrence Angrave>so, all future output is being sent to our file
+
+04:53.093 --> 04:57.062
+<v Lawrence Angrave>this is a neat way if you'd like to do logging
+
+04:57.062 --> 05:04.265
+<v Lawrence Angrave>and we've just changed our program so that all future output goes to output.text
+
+05:04.265 --> 05:07.406
+<v Lawrence Angrave>now what if we've got a problem with open() ?
+
+05:07.406 --> 05:10.890
+<v Lawrence Angrave>right now, our code doesn't check for any error
+
+05:10.890 --> 05:16.687
+<v Lawrence Angrave>and, a better program would actually check the return values of our different calls
+
+05:16.687 --> 05:27.265
+<v Lawrence Angrave>for example, it could be that open() could fail. suppose, for example, we gave it a bad file descriptor
+
+05:27.265 --> 05:32.234
+<v Lawrence Angrave>now so we can see what's going on, I'm not going to close standard out anymore.
+
+05:32.234 --> 05:35.921
+<v Lawrence Angrave>I'm just going to give it a bad file name
+
+05:35.921 --> 05:38.953
+<v Lawrence Angrave>now, our program compiles correctly of course
+
+05:38.953 --> 05:42.281
+<v Lawrence Angrave>but this time our file descriptor is negative one
+
+05:42.281 --> 05:45.671
+<v Lawrence Angrave>so, we should check that
+
+05:45.671 --> 05:53.125
+<v Lawrence Angrave>in fact, if we check the man page of open(), it's always a good idea to check the section called "return value"
+
+05:53.125 --> 05:58.125
+<v Lawrence Angrave>and you'll see, it's specified here that we'll get back a negative one if an error occurred
+
+05:58.125 --> 06:03.468
+<v Lawrence Angrave>so the last thing we'll do today is let's capture that and quit if we get a bad error
+
+06:03.468 --> 06:07.046
+<v Lawrence Angrave>so, if fildes equals negative one
+
+06:07.046 --> 06:12.875
+<v Lawrence Angrave>a common error is to write equals instead of double equals for comparison
+
+06:12.875 --> 06:15.578
+<v Lawrence Angrave>and we want to quit here
+
+06:15.578 --> 06:19.328
+<v Lawrence Angrave>so we'll leave our program, so let's exit with a value
+
+06:19.328 --> 06:23.265
+<v Lawrence Angrave>to say: "hey, we couldn't carry on"
+
+06:23.265 --> 06:28.406
+<v Lawrence Angrave>I could've returned zero but I wanted to show you an alternative way to quit a C program is to call exit
+
+06:28.406 --> 06:34.656
+<v Lawrence Angrave>and we'll print out an error
+
+06:34.656 --> 06:38.250
+<v Lawrence Angrave>so, something bad happened while calling open
+
+06:38.250 --> 06:42.484
+<v Lawrence Angrave>so, we'll use perror()
+
+06:42.484 --> 06:46.359
+<v Lawrence Angrave>let's run this
+
+06:46.359 --> 06:57.859
+<v Lawrence Angrave>and, I get some implicit problem here that we're calling exit(). I need to find the right #include to call for that.
+
+06:57.859 --> 07:05.500
+<v Lawrence Angrave>but, you'll see on the lefthand side that we've got open() failed, so that's the part of the error message that I supplied
+
+07:05.500 --> 07:08.859
+<v Lawrence Angrave>followed by a colon followed by no such file or directories
+
+07:08.859 --> 07:13.453
+<v Lawrence Angrave>so it's complaining that my file name is bad
+
+07:13.453 --> 07:21.953
+<v Lawrence Angrave>if I had included a dot here, this is also an invalid file name because a single dot corresponds to the current directory
+
+07:21.953 --> 07:28.453
+<v Lawrence Angrave>and, it's complaining that it can't open that because dot corresponds to a directory
+
+07:28.453 --> 07:32.234
+<v Lawrence Angrave>so now it's your turn to play. bye!
+

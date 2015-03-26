@@ -1,0 +1,158 @@
+WEBVTT
+
+00:00.000 --> 00:03.531
+<v Lawrence Angrave>Now let's talk about pointers and arrays
+
+00:03.531 --> 00:06.359
+<v Lawrence Angrave>how might I make an array of integers?
+
+00:06.359 --> 00:10.156
+<v Lawrence Angrave>let's say I had some data and I did this
+
+00:10.156 --> 00:14.437
+<v Lawrence Angrave>well, on this particular architecture we just found out that an integer is four bytes
+
+00:14.437 --> 00:18.000
+<v Lawrence Angrave>so I've now got thirty two bytes of storage
+
+00:18.000 --> 00:21.296
+<v Lawrence Angrave>and in fact, it's going to be thirty two bytes on the stack
+
+00:21.296 --> 00:23.203
+<v Lawrence Angrave>so what do I have here?
+
+00:23.203 --> 00:30.359
+<v Lawrence Angrave>when I say data square brackets eight, I'm going to get back four times eight, thirty two bytes all together
+
+00:30.359 --> 00:32.218
+<v Lawrence Angrave>all contiguous in memory
+
+00:32.218 --> 00:36.000
+<v Lawrence Angrave>and in fact, data is going to point to  the very first four bytes
+
+00:36.000 --> 00:41.718
+<v Lawrence Angrave>so I've got four bytes and then four bytes and then four bytes and then four bytes and so on
+
+00:41.718 --> 00:43.562
+<v Lawrence Angrave>let's have a look at that
+
+00:43.562 --> 00:55.468
+<v Lawrence Angrave>so, if I say printf data is at and this time do %p, that means treat data as and print it out as an address
+
+00:55.468 --> 01:03.906
+<v Lawrence Angrave>so we'll print this out
+
+01:03.906 --> 01:07.890
+<v Lawrence Angrave>and we see we've got a value here in memory
+
+01:07.890 --> 01:10.906
+<v Lawrence Angrave>that data points to the very first element
+
+01:10.906 --> 01:13.015
+<v Lawrence Angrave>let's do something a little bit surprising here
+
+01:13.015 --> 01:17.062
+<v Lawrence Angrave>let's add one to data and print that out
+
+01:17.062 --> 01:19.609
+<v Lawrence Angrave>so, data plus one
+
+01:19.609 --> 01:23.453
+<v Lawrence Angrave>and we'll do data plus two
+
+01:23.453 --> 01:33.265
+<v Lawrence Angrave>and so on
+
+01:33.265 --> 01:42.093
+<v Lawrence Angrave>so, if we look over here at our output, we'll see that each time we add one, our address in hexadecimal is going up by four each time
+
+01:42.093 --> 01:47.171
+<v Lawrence Angrave>so we've got 9d40, 9d44, 9d48
+
+01:47.171 --> 01:47.875
+<v Lawrence Angrave>here's why
+
+01:47.875 --> 01:52.718
+<v Lawrence Angrave>when you add an integer to an address pointer
+
+01:52.718 --> 01:56.015
+<v Lawrence Angrave>C knows the type of that pointer
+
+01:56.015 --> 01:58.156
+<v Lawrence Angrave>so in this case, we're pointing at integers
+
+01:58.156 --> 02:02.968
+<v Lawrence Angrave>so each time we add one, we actually want to progress to the next integer stored in memory
+
+02:02.968 --> 02:10.546
+<v Lawrence Angrave>and as each integer takes four bytes, that's why our address is going up by four each time
+
+02:10.546 --> 02:12.156
+<v Lawrence Angrave>so how could I use this?
+
+02:12.156 --> 02:26.890
+<v Lawrence Angrave>well, one way is to use asterisk which means use the address so, for example, I can say data the parenthesis are not strictly necessary but we'll use them in a moment
+
+02:26.890 --> 02:29.859
+<v Lawrence Angrave>and let's say store the value a hundred in there
+
+02:29.859 --> 02:35.875
+<v Lawrence Angrave>what about if I wanted to store some value at the next entry?
+
+02:35.875 --> 02:37.828
+<v Lawrence Angrave>ok so, hundred, hundred one
+
+02:37.828 --> 02:43.734
+<v Lawrence Angrave>so now I've stored the value a hundred that integer pattern into the first four bytes
+
+02:43.734 --> 02:49.359
+<v Lawrence Angrave>and the integer pattern for a hundred and one in the next four bytes
+
+02:49.359 --> 02:55.234
+<v Lawrence Angrave>and I guess you could figure out what this would do as well
+
+02:55.234 --> 03:01.656
+<v Lawrence Angrave>the asterisks means use the pointer follow the pointer dereference the pointer
+
+03:01.656 --> 03:06.234
+<v Lawrence Angrave>in other word, we've got an expression which is a memory address, now I want to use it
+
+03:06.234 --> 03:13.593
+<v Lawrence Angrave>now I actually want to use that pattern that bitwise pattern to actually read or write some memory
+
+03:13.593 --> 03:18.125
+<v Lawrence Angrave>so that's what the asterisk does means actually okay it's time to go and talk to memory
+
+03:18.125 --> 03:20.140
+<v Lawrence Angrave>this is so useful with arrays
+
+03:20.140 --> 03:23.734
+<v Lawrence Angrave>there is an alternative syntax which is to use the square brackets
+
+03:23.734 --> 03:28.453
+<v Lawrence Angrave>so for example I could have written the following
+
+03:28.453 --> 03:35.875
+<v Lawrence Angrave>which means take my address pointer add two to it and use that address for the array
+
+03:35.875 --> 03:37.984
+<v Lawrence Angrave>so these last two lines are the same
+
+03:37.984 --> 03:43.000
+<v Lawrence Angrave>in fact, here's a little secret about C that I could actually swap these around
+
+03:43.000 --> 03:49.562
+<v Lawrence Angrave>so we could also write this in this slightly crazy way
+
+03:49.562 --> 03:55.781
+<v Lawrence Angrave>so this is crazy but actually two square bracket data would evaluate to the same thing
+
+03:55.781 --> 04:01.703
+<v Lawrence Angrave>so that's something to confuse your non-C friends with
+
+04:01.703 --> 04:05.984
+<v Lawrence Angrave>that's enough with me playing with integer pointers
+
+04:05.984 --> 04:08.953
+<v Lawrence Angrave>now, it's your turn. Bye!
+

@@ -1,0 +1,176 @@
+WEBVTT
+
+00:00.000 --> 00:05.500
+<v Lawrence Angrave>welcome so let's talk about some options other than automatic variables
+
+00:05.500 --> 00:07.421
+<v Lawrence Angrave>so here's a little problem i've got so far
+
+00:07.421 --> 00:11.718
+<v Lawrence Angrave>in my main method i want to print out the current time 
+
+00:11.718 --> 00:18.937
+<v Lawrence Angrave>and i'm going to write my function called currenttime that returns a new string array
+
+00:18.937 --> 00:24.984
+<v Lawrence Angrave>i already know that i cannot make an array in here to hold the result
+
+00:24.984 --> 00:30.218
+<v Lawrence Angrave>say with two hundred and fifty because when I go to return from this function
+
+00:30.218 --> 00:36.875
+<v Lawrence Angrave>the array variable won't be pointing to memory that is valid any longer
+
+00:36.875 --> 00:38.500
+<v Lawrence Angrave>so here is two options
+
+00:38.500 --> 00:40.562
+<v Lawrence Angrave>i could make my array static
+
+00:40.562 --> 00:42.578
+<v Lawrence Angrave>so how do i do that
+
+00:42.578 --> 00:44.265
+<v Lawrence Angrave>just by the keyword static
+
+00:44.265 --> 00:51.250
+<v Lawrence Angrave>so for example if i were to just say okay i've got myself a static array out here outside of that method
+
+00:51.250 --> 00:57.171
+<v Lawrence Angrave>then my array lives forever or at least for the length of my process
+
+00:57.171 --> 01:01.265
+<v Lawrence Angrave>so that gets rid of the problem of having some space
+
+01:01.265 --> 01:06.281
+<v Lawrence Angrave>i cheated i said look just give me some space for the lifetime of my program here 
+
+01:06.281 --> 01:08.921
+<v Lawrence Angrave>so that's what static does
+
+01:08.921 --> 01:11.671
+<v Lawrence Angrave>i can also put this inside the function
+
+01:11.671 --> 01:13.656
+<v Lawrence Angrave>that doesn't change the lifetime of the variable
+
+01:13.656 --> 01:15.656
+<v Lawrence Angrave>it just changes the scoping
+
+01:15.656 --> 01:27.500
+<v Lawrence Angrave>so as always that means simply that now the variable name array can only be connected to that piece of memory inside my little method
+
+01:27.500 --> 01:33.468
+<v Lawrence Angrave>so it's just changing how the actual name of the variable is bound to the memory
+
+01:33.468 --> 01:35.593
+<v Lawrence Angrave>so that's one method
+
+01:35.593 --> 01:41.546
+<v Lawrence Angrave>but instead i want to talk about a completely different way which is to use malloc
+
+01:41.546 --> 01:52.562
+<v Lawrence Angrave>so you're going to come across malloc calloc and realloc
+
+01:52.562 --> 01:54.531
+<v Lawrence Angrave>today let's talk about malloc 
+
+01:54.531 --> 01:57.562
+<v Lawrence Angrave>which essentially means give me some bytes
+
+01:57.562 --> 02:00.781
+<v Lawrence Angrave>and i can say how many bytes i need
+
+02:00.781 --> 02:05.046
+<v Lawrence Angrave>and that storage space is found inside the program's heap
+
+02:05.046 --> 02:09.375
+<v Lawrence Angrave>so for example if I want one hundred and twenty eight bytes I would say malloc one hundred and twenty eight
+
+02:09.375 --> 02:13.234
+<v Lawrence Angrave>so this is going to give me a pointer to the very first byte
+
+02:13.234 --> 02:17.859
+<v Lawrence Angrave>so let's store that inside my little character pointer here
+
+02:17.859 --> 02:22.343
+<v Lawrence Angrave>and i'll say there is my result
+
+02:22.343 --> 02:26.562
+<v Lawrence Angrave>it is possible that malloc fails
+
+02:26.562 --> 02:32.546
+<v Lawrence Angrave>if it is unable to give me one hundred and twenty eight bytes it would give me back an invalid pointer pointed to null or pointed to nothing
+
+02:32.546 --> 02:43.265
+<v Lawrence Angrave>so i could say look if result is zero or null or if i wanted to be really terse I could say if not result
+
+02:43.265 --> 02:45.093
+<v Lawrence Angrave>in other words result is null
+
+02:45.093 --> 02:47.875
+<v Lawrence Angrave>then just return that null pointer
+
+02:47.875 --> 02:49.937
+<v Lawrence Angrave>i am not going to try and use it
+
+02:49.937 --> 02:52.078
+<v Lawrence Angrave>it's not a valid pointer
+
+02:52.078 --> 03:01.796
+<v Lawrence Angrave>otherwise let's put some things inside this and I could turn the current time and store it inside that array
+
+03:01.796 --> 03:10.765
+<v Lawrence Angrave>so let me use a function called strcpy to put in the current time which is two fifty one pm
+
+03:10.765 --> 03:24.656
+<v Lawrence Angrave>#include <string.h> let's run this
+
+03:24.656 --> 03:30.546
+<v Lawrence Angrave>and my program calls currenttime creates some memory and then returns it
+
+03:30.546 --> 03:31.562
+<v Lawrence Angrave>this is fantastic right
+
+03:31.562 --> 03:37.296
+<v Lawrence Angrave>i've now got a way to make long lived pieces of memory and put data inside them
+
+03:37.296 --> 03:40.562
+<v Lawrence Angrave>but with great opportunity comes great responsibility here 
+
+03:40.562 --> 03:50.593
+<v Lawrence Angrave>so what we should do is let our programs is with every malloc we should at some point free up that memory to say hey i've finished with it
+
+03:50.593 --> 03:53.609
+<v Lawrence Angrave>so the correct way to do this is to keep a pointer around
+
+03:53.609 --> 03:58.015
+<v Lawrence Angrave>so let's have a pointer down here
+
+03:58.015 --> 04:00.687
+<v Lawrence Angrave>and when i finished using that memory
+
+04:00.687 --> 04:02.625
+<v Lawrence Angrave>i can free it
+
+04:02.625 --> 04:04.656
+<v Lawrence Angrave>to say hey this memory is no longer being used
+
+04:04.656 --> 04:09.203
+<v Lawrence Angrave>this block of memory of one hundred and twenty eight bytes is no longer being used
+
+04:09.203 --> 04:18.078
+<v Lawrence Angrave>please put it back into the heap and maybe we will reuse that memory again for a future malloc
+
+04:18.078 --> 04:23.625
+<v Lawrence Angrave>so good programs will have one free for every malloc 
+
+04:23.625 --> 04:28.875
+<v Lawrence Angrave>in the next video i'll talk about some of the mistakes that we can make with heap allocation
+
+04:28.875 --> 04:31.437
+<v Lawrence Angrave>but now it's time for you to play with malloc 
+
+04:31.437 --> 04:32.281
+<v Lawrence Angrave>bye
+

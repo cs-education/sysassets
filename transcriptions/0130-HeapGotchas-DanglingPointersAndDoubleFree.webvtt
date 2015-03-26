@@ -1,0 +1,182 @@
+WEBVTT
+
+00:00.000 --> 00:01.843
+<v Lawrence Angrave>hi welcome
+
+00:01.843 --> 00:04.000
+<v Lawrence Angrave>so we have got a little function so far called currenttime()
+
+00:04.000 --> 00:08.828
+<v Lawrence Angrave>that requests 128 bytes from the heap
+
+00:08.828 --> 00:12.968
+<v Lawrence Angrave>and then providing we get a non-null pointer back from malloc
+
+00:12.968 --> 00:17.500
+<v Lawrence Angrave>we will copy in the time 2:51 PM into that memory
+
+00:17.500 --> 00:21.625
+<v Lawrence Angrave>and then return a pointer to the first byte of that memory so that's our little currenttime
+
+00:21.625 --> 00:28.078
+<v Lawrence Angrave>we've been careful to make sure that if malloc fails, perhaps our program has used all of the heap memory
+
+00:28.078 --> 00:31.343
+<v Lawrence Angrave>then we don't try to use that null pointer
+
+00:31.343 --> 00:39.812
+<v Lawrence Angrave>but now let's actually make it so that it actually makes a call to find out what the current time is
+
+00:39.812 --> 00:41.625
+<v Lawrence Angrave>the current time is known by the system
+
+00:41.625 --> 00:49.921
+<v Lawrence Angrave>so it's time to make a system call and then we will format that using a c function called ctime()
+
+00:49.921 --> 00:55.078
+<v Lawrence Angrave>to actually give us a human readable version of the time
+
+00:55.078 --> 00:59.890
+<v Lawrence Angrave>both of these functions can be found inside the include time.h
+
+00:59.890 --> 01:01.687
+<v Lawrence Angrave>I've commented them up here
+
+01:01.687 --> 01:12.921
+<v Lawrence Angrave>so the first think we can do is call time so when you call time you can pass it a pointer to a time_t variable
+
+01:12.921 --> 01:20.953
+<v Lawrence Angrave>or you can say actuall I'm not going to give you anything and it will still give you back the time in its result
+
+01:20.953 --> 01:23.250
+<v Lawrence Angrave>so let's just use the result
+
+01:23.250 --> 01:31.625
+<v Lawrence Angrave>so here's the number of seconds since 1970
+
+01:31.625 --> 01:37.265
+<v Lawrence Angrave>we'll store that inside our little variable called secondsSince1970
+
+01:37.265 --> 01:40.796
+<v Lawrence Angrave>but I don't want that as a value, I just want to turn that into a string
+
+01:40.796 --> 01:50.671
+<v Lawrence Angrave>for that there's a function called ctime, this a library function. there are other functions that give greater control to the precise formatting
+
+01:50.671 --> 02:00.343
+<v Lawrence Angrave>but for this demo let's just use ctime() which has some reasonable formatting that most people can understand
+
+02:00.343 --> 02:05.359
+<v Lawrence Angrave>this will give us back a pointer to the time
+
+02:05.359 --> 02:12.953
+<v Lawrence Angrave>so the time in ASCII, in otherwords in letters, in readable time
+
+02:12.953 --> 02:21.203
+<v Lawrence Angrave>and then we can use that and copy that result into new memory, into our result
+
+02:21.203 --> 02:26.531
+<v Lawrence Angrave>so one problem with ctime() is that it uses static storage
+
+02:26.531 --> 02:37.093
+<v Lawrence Angrave>in other words it's great if you just want to call it once, and it will use it's static storage to give you back the time in a readable format
+
+02:37.093 --> 02:44.234
+<v Lawrence Angrave>but don't expect that to stay around because if you call ctime() again in the future it is going to overwrite those bytes
+
+02:44.234 --> 02:47.390
+<v Lawrence Angrave>and that's why our little function here called currenttime() is useful
+
+02:47.390 --> 02:53.718
+<v Lawrence Angrave>we are going to take that temporary result and put it into some memory that is ours to control
+
+02:53.718 --> 02:56.468
+<v Lawrence Angrave>so it can't be overwritten
+
+02:56.468 --> 02:59.984
+<v Lawrence Angrave>we need to pass in seconds since midnight
+
+02:59.984 --> 03:03.265
+<v Lawrence Angrave>except we've got a problem here
+
+03:03.265 --> 03:11.953
+<v Lawrence Angrave>it doesn't actually want the value, it wants a pointer to this variable, it wants to know where in memory this variable is
+
+03:11.953 --> 03:16.203
+<v Lawrence Angrave>for that I have to introduce some new syntax, which is the &
+
+03:16.203 --> 03:24.406
+<v Lawrence Angrave>when you see & it means that I don't want to know about the variable itself, but where it is stored in memory
+
+03:24.406 --> 03:29.203
+<v Lawrence Angrave>tell me the address of the variable
+
+03:29.203 --> 03:32.734
+<v Lawrence Angrave>we didn't need this for arrays because that's what the array name gives us automatically
+
+03:32.734 --> 03:40.578
+<v Lawrence Angrave>but for other items we can use the & to find out where it is stored in memory
+
+03:40.578 --> 03:46.453
+<v Lawrence Angrave>let's compile and run it
+
+03:46.453 --> 03:52.562
+<v Lawrence Angrave>and we find out that my little virtual machine thinks it's Jan 1 2014
+
+03:52.562 --> 04:00.203
+<v Lawrence Angrave>not very accurate, we should probably change it, but it did print out what it thinks the current time
+
+04:00.203 --> 04:07.718
+<v Lawrence Angrave>I promised you that I'd mention a few more mistakes that we can make with heap memory
+
+04:07.718 --> 04:14.359
+<v Lawrence Angrave>one mistake we can make is to double free the same pointer
+
+04:14.359 --> 04:25.625
+<v Lawrence Angrave>this can lead to all sorts of horrendous problems because when you tell the heap that you've freed with some memory it might actually use that memory for it's own book keeping
+
+04:25.625 --> 04:29.953
+<v Lawrence Angrave>so it knows that the particular block of memory is free
+
+04:29.953 --> 04:40.671
+<v Lawrence Angrave>if you free it again it can confuse the book keeping, the pointers that the heap is using itself
+
+04:40.671 --> 04:43.953
+<v Lawrence Angrave>once we've freed some memory, dont free it by accident a second time!
+
+04:43.953 --> 04:52.359
+<v Lawrence Angrave>another common mistake in C programs is to continue using memory after we've freed it
+
+04:52.359 --> 04:55.125
+<v Lawrence Angrave>we shouldn't consider that memory to be valid anymore
+
+04:55.125 --> 05:02.312
+<v Lawrence Angrave>perhaps it's going to be reused by some other part of the program that is about to call malloc()
+
+05:02.312 --> 05:09.671
+<v Lawrence Angrave>and certainly we shouldn't expect anything that we've previously stored in there to be valid
+
+05:09.671 --> 05:12.640
+<v Lawrence Angrave>once we've freed it don't try to use the pointer again
+
+05:12.640 --> 05:16.062
+<v Lawrence Angrave>so for example, this would be an error
+
+05:16.062 --> 05:19.203
+<v Lawrence Angrave>so how can we guard against some of these errors?
+
+05:19.203 --> 05:27.015
+<v Lawrence Angrave>one common defensive programming technique is once we free a pointer set that pointer to be NULL
+
+05:27.015 --> 05:30.359
+<v Lawrence Angrave>to mean that I'm not pointing to anything anymore
+
+05:30.359 --> 05:37.093
+<v Lawrence Angrave>so this avoids the problem of what is called a dangling pointer error
+
+05:37.093 --> 05:45.578
+<v Lawrence Angrave>that now our pointer is no longer pointing to invalid memory
+
+05:45.578 --> 05:49.218
+<v Lawrence Angrave>that's it for me. time for you to play, bye!
+
