@@ -1,0 +1,176 @@
+WEBVTT
+
+00:00.000 --> 00:02.921
+<v Lawrence Angrave>so let's talk more about that file descriptor
+
+00:02.921 --> 00:08.031
+<v Lawrence Angrave>I'm gonna make my program be a little bit more useful by printing out "Hello World" a few times
+
+00:08.031 --> 00:13.296
+<v Lawrence Angrave>so for example, I have a variable 'count' here and a little for-loop
+
+00:13.296 --> 00:17.625
+<v Lawrence Angrave>Start with count equal to five, while count is greater than zero
+
+00:17.625 --> 00:21.875
+<v Lawrence Angrave>each time around the loop we're going to decrement 'count'
+
+00:21.875 --> 00:24.765
+<v Lawrence Angrave>In C, there is no boolean type.
+
+00:24.765 --> 00:30.812
+<v Lawrence Angrave>instead, if I've got an integer value which is nonzero, that is treated as a true value
+
+00:30.812 --> 00:35.890
+<v Lawrence Angrave>So, I could actually write this more tersely just by saying "hey, count!"
+
+00:35.890 --> 00:38.937
+<v Lawrence Angrave>meaning is count a non-zero value
+
+00:38.937 --> 00:46.734
+<v Lawrence Angrave>and if you compare two things, you'll learn that with an integer value of either 0 or 1 to mean for example if they are either the same or different
+
+00:46.734 --> 00:53.671
+<v Lawrence Angrave>so, we're going to print out "hello world" 5 times
+
+00:53.671 --> 01:01.812
+<v Lawrence Angrave>I want to show you just a little idea here that actually I've got two file descriptors which are valid when my program starts.
+
+01:01.812 --> 01:04.562
+<v Lawrence Angrave>And they're called 1 and 2.
+
+01:04.562 --> 01:08.281
+<v Lawrence Angrave>Why might it be useful to have two output streams?
+
+01:08.281 --> 01:12.468
+<v Lawrence Angrave>well, you can imagine we have a program that is calculating something
+
+01:12.468 --> 01:16.906
+<v Lawrence Angrave>for example it's thinking of something to say or it's going to write to a file
+
+01:16.906 --> 01:19.906
+<v Lawrence Angrave>but we may also want to display some error messages back to the user
+
+01:19.906 --> 01:25.562
+<v Lawrence Angrave>or we might want to print some progress information
+
+01:25.562 --> 01:32.718
+<v Lawrence Angrave>the first output stream identified by the number '1' is the regular output, standard output
+
+01:32.718 --> 01:38.281
+<v Lawrence Angrave>The second one is reserved for error messages.
+
+01:38.281 --> 01:44.859
+<v Lawrence Angrave>Let's, for example, use this. Instead of error messages, we'll put a little dot to see this
+
+01:44.859 --> 01:56.937
+<v Lawrence Angrave>We'll run this and we should (if we got everything correct) see "Hello" and...lib lib lib lib
+
+01:56.937 --> 02:10.812
+<v Lawrence Angrave>Now, why do we see ".lib", because we said "hey, I'm going to give you a pointer and I want you to use that pointer and take the next 6 bytes from it which is the next  six character
+
+02:10.812 --> 02:20.937
+<v Lawrence Angrave>So we just got whatever happened to be in memory after our dot. So, we only wanted to do the dot
+
+02:20.937 --> 02:24.015
+<v Lawrence Angrave>Change that and run it again
+
+02:24.015 --> 02:27.093
+<v Lawrence Angrave>And great, we've got Hello and dot Hello dot Hello
+
+02:27.093 --> 02:32.625
+<v Lawrence Angrave>So, right now, both the output and the standard error are going to different places
+
+02:32.625 --> 02:36.984
+<v Lawrence Angrave>we could actually change that over here in the console before we start the program
+
+02:36.984 --> 02:41.015
+<v Lawrence Angrave>Our terminal can actually control where the output goes
+
+02:41.015 --> 02:46.421
+<v Lawrence Angrave>So, for example, I might say, I want to take the standard output and put that into a file.
+
+02:46.421 --> 02:48.843
+<v Lawrence Angrave>So, "output.txt"
+
+02:48.843 --> 02:57.171
+<v Lawrence Angrave>So now, if I run this before the program starts, I'm going to redirect it's output into this new file
+
+02:57.171 --> 03:02.015
+<v Lawrence Angrave>Okay, so what we see on the console output is anything written to standard error
+
+03:02.015 --> 03:05.109
+<v Lawrence Angrave>The standard output is inside output.txt
+
+03:05.109 --> 03:08.343
+<v Lawrence Angrave>To prove it, let me have a look at that file.
+
+03:08.343 --> 03:09.843
+<v Lawrence Angrave>Let me cat that file
+
+03:09.843 --> 03:12.140
+<v Lawrence Angrave>So, output.txt
+
+03:12.140 --> 03:15.906
+<v Lawrence Angrave>And here it is! It says "hello, hello, hello, hello"
+
+03:15.906 --> 03:21.546
+<v Lawrence Angrave>Now, rather than writing 1 and 2 over here, perhaps we should actually have some constants
+
+03:21.546 --> 03:25.296
+<v Lawrence Angrave>which signify what those values actually mean
+
+03:25.296 --> 03:36.375
+<v Lawrence Angrave>so we could say start define things to say have a constant here, I'll call it say "STDOUT_FILENO 1"
+
+03:36.375 --> 03:43.906
+<v Lawrence Angrave>And I'll say define STDERRFILENO 2
+
+03:43.906 --> 04:00.875
+<v Lawrence Angrave>so anytime you do hash define, you're talking to the preprocessor to say "hey, in the future, parts of this file, if you come across this character sequence, then replace it (in this case) with either a 1 or a 2 depending on what it is"
+
+04:00.875 --> 04:11.921
+<v Lawrence Angrave>We can compile this, except I've got a surprise for you which is that these particular macros are already defined inside unistd.h
+
+04:11.921 --> 04:16.671
+<v Lawrence Angrave>So, I don't actually need to define them here in my program.
+
+04:16.671 --> 04:26.640
+<v Lawrence Angrave>So that's my little program. You see it's got a return value of zero. Which is a convention for being correct (no errors)
+
+04:26.640 --> 04:35.343
+<v Lawrence Angrave>But it's up to us. We could choose a different value, for example we could choose the value 42.
+
+04:35.343 --> 04:44.265
+<v Lawrence Angrave>And, I don't see an output value, but I can find out what the last exit value was of the last process
+
+04:44.265 --> 04:46.375
+<v Lawrence Angrave>Let me print it out
+
+04:46.375 --> 04:48.593
+<v Lawrence Angrave>It happens to beinside special variables
+
+04:48.593 --> 04:53.437
+<v Lawrence Angrave>so I could say "Hello terminal value of this dollar question mark."
+
+04:53.437 --> 04:58.890
+<v Lawrence Angrave>which means give me the exit value (or the exit status) of the last command run.
+
+04:58.890 --> 05:01.312
+<v Lawrence Angrave>So there's our forty-two.
+
+05:01.312 --> 05:13.906
+<v Lawrence Angrave>Okay so, we've covered quite a bit of ground. We've talked about how in C, any non-zero integer is considered "true"
+
+05:13.906 --> 05:17.609
+<v Lawrence Angrave>and zero is considered "false"
+
+05:17.609 --> 05:30.625
+<v Lawrence Angrave>And, we've talked about these two different output streams. Now it's your turn to play with this. After that, let's have a go at creating some new files directly from C
+
+05:30.625 --> 05:33.156
+<v Lawrence Angrave>by making system calls
+
+05:33.156 --> 05:37.875
+<v Lawrence Angrave>So, now it's your turn. Have fun playing! Bye.
+

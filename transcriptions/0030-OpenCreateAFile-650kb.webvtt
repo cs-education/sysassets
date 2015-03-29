@@ -1,0 +1,188 @@
+WEBVTT
+
+00:00.000 --> 00:05.250
+<v Lawrence Angrave>Welcome so let's start creating some files
+
+00:05.250 --> 00:08.312
+<v Lawrence Angrave>for that we can use the system call open()
+
+00:08.312 --> 00:19.015
+<v Lawrence Angrave>and for open we need to say whether we want to append to an existing file, create a brand new file, and we need to give it a filename
+
+00:19.015 --> 00:25.234
+<v Lawrence Angrave>For example, I might have a file name called "output.txt"
+
+00:25.234 --> 00:33.968
+<v Lawrence Angrave>so the open call takes 2 or 3 arguments. the second argument will be exactly what we want to do
+
+00:33.968 --> 00:41.328
+<v Lawrence Angrave>so in this case we want to say create a brand new file and truncate it back to 0 if it doesn't exist
+
+00:41.328 --> 00:45.062
+<v Lawrence Angrave>so, I want to truncate as well
+
+00:45.062 --> 00:53.421
+<v Lawrence Angrave>if we are creating a new file we better say who can read this file and who can write to this file and who can execute this file
+
+00:53.421 --> 00:58.859
+<v Lawrence Angrave>so we are going to have to say something about the mode flags 
+
+00:58.859 --> 01:00.281
+<v Lawrence Angrave>who is allowed to do what
+
+01:00.281 --> 01:04.562
+<v Lawrence Angrave>finally this call is going to give us back an integer, a file descriptor
+
+01:04.562 --> 01:07.890
+<v Lawrence Angrave>just like we've seen so far with file number 1 and file number 2
+
+01:07.890 --> 01:11.343
+<v Lawrence Angrave>so lets store that inside a little variable
+
+01:11.343 --> 01:17.218
+<v Lawrence Angrave>ok, so now I better actually find out what the correct syntax is
+
+01:17.218 --> 01:21.953
+<v Lawrence Angrave>and the correct arguments are in order to create a file
+
+01:21.953 --> 01:24.375
+<v Lawrence Angrave>so lets go and look that up
+
+01:24.375 --> 01:27.328
+<v Lawrence Angrave>and that we'll find inside the manual
+
+01:27.328 --> 01:41.218
+<v Lawrence Angrave>And, if, for example, I type "man open" on a command line on a real linux machine. it doesn't quite work yet in my small virtual one. we didn't have enough memory to include all the manual pages yet
+
+01:41.218 --> 01:46.593
+<v Lawrence Angrave>but heres a linux manual page I found on the web for the open()
+
+01:46.593 --> 01:51.328
+<v Lawrence Angrave>and you'll see here's the function signature here
+
+01:51.328 --> 01:56.000
+<v Lawrence Angrave>where we're going to pass in an integer for the flags and the mode type
+
+01:56.000 --> 02:03.265
+<v Lawrence Angrave>so, I'm going to look up now the flags I need to open and create a new file
+
+02:03.265 --> 02:04.953
+<v Lawrence Angrave>I don't want to do append()
+
+02:04.953 --> 02:11.296
+<v Lawrence Angrave>I want to use "create" and I want to truncate it as well
+
+02:11.296 --> 02:31.781
+<v Lawrence Angrave>let's include "O_CREAT" here. I'm going to say "O_CREAT" which is a constant and I'm going to bitwise OR it with the flag to say "truncate" so let's look that up as well
+
+02:31.781 --> 02:41.062
+<v Lawrence Angrave>alright and i want to say when i open it that i am going to open it for say reading and writing
+
+02:41.062 --> 02:44.531
+<v Lawrence Angrave>so let us grab that as well
+
+02:44.531 --> 02:47.062
+<v Lawrence Angrave>so that is the first thing
+
+02:47.062 --> 02:48.796
+<v Lawrence Angrave>now we need to do the mode
+
+02:48.796 --> 02:50.921
+<v Lawrence Angrave>Let's write this as a variable.
+
+02:50.921 --> 02:53.953
+<v Lawrence Angrave>and there is actually a typedef
+
+02:53.953 --> 03:02.109
+<v Lawrence Angrave>it is essentially an integer but it is wrapped up in this type here called mode
+
+03:02.109 --> 03:03.375
+<v Lawrence Angrave>mode_t
+
+03:03.375 --> 03:12.687
+<v Lawrence Angrave>and we'll say that with our file we want to be fairly private and only the owner of the file can access it
+
+03:12.687 --> 03:18.765
+<v Lawrence Angrave>Let's go back up and find those flags, where are you? Here we go.
+
+03:18.765 --> 03:24.156
+<v Lawrence Angrave>We'll say that the user has read and write permission
+
+03:24.156 --> 03:37.296
+<v Lawrence Angrave>We'll copy the read one and we'll have write permission as well.
+
+03:37.296 --> 03:44.765
+<v Lawrence Angrave>But no one else in my linux system will be allowed to read it and write it.
+
+03:44.765 --> 03:48.171
+<v Lawrence Angrave>So that's the permissions we want
+
+03:48.171 --> 03:49.484
+<v Lawrence Angrave>What can we do with this?
+
+03:49.484 --> 03:56.906
+<v Lawrence Angrave>Well let's write something out to this file.
+
+03:56.906 --> 04:04.843
+<v Lawrence Angrave>We will write a little message "Great!" and a newline
+
+04:04.843 --> 04:14.437
+<v Lawrence Angrave>so how many characters is that? I've got "one, two, three, four, five, six, and a new line so that's seven characters"
+
+04:14.437 --> 04:21.281
+<v Lawrence Angrave>then we'll close this file descriptor meaning we don't want to use this descriptor anymore
+
+04:21.281 --> 04:31.015
+<v Lawrence Angrave>that will ensure as well that all of the bytes that we send to the file stream have been saved
+
+04:31.015 --> 04:39.843
+<v Lawrence Angrave>We're not doing any error checking right now, we're just trying to write the smallest possible program to create a file and send something to it
+
+04:39.843 --> 04:43.609
+<v Lawrence Angrave>let's run this and see what we get
+
+04:43.609 --> 04:49.421
+<v Lawrence Angrave>we'll run into an error which is: we haven't defined what this mode_t is
+
+04:49.421 --> 04:51.781
+<v Lawrence Angrave>what we forgot to do, was to do the includes
+
+04:51.781 --> 05:01.765
+<v Lawrence Angrave>the good news is that the man pages tell us which includes we need to put at the top of our program
+
+05:01.765 --> 05:06.250
+<v Lawrence Angrave>so let's grab those and insert them in here
+
+05:06.250 --> 05:10.640
+<v Lawrence Angrave>i will just get the formatting correct
+
+05:10.640 --> 05:17.078
+<v Lawrence Angrave>and, run it again
+
+05:17.078 --> 05:23.640
+<v Lawrence Angrave>Right so our program ran and it's still printing "Hello" to standard out and dot to standard error
+
+05:23.640 --> 05:27.031
+<v Lawrence Angrave>but hopefully, it also secretly created another file
+
+05:27.031 --> 05:29.187
+<v Lawrence Angrave>let's have a look at that file
+
+05:29.187 --> 05:36.921
+<v Lawrence Angrave>I can do "ls" and see if anything exists starting with "out"
+
+05:36.921 --> 05:39.140
+<v Lawrence Angrave>yes we've got output.txt. great!
+
+05:39.140 --> 05:41.578
+<v Lawrence Angrave>let's look at the contents of that file
+
+05:41.578 --> 05:43.203
+<v Lawrence Angrave>and it says "Great!" Fantastic
+
+05:43.203 --> 05:51.328
+<v Lawrence Angrave>Right so now it's your turn to play: create a file and see if you can send some bytes to that file.
+
+05:51.328 --> 05:55.984
+<v Lawrence Angrave>so you'll be using open(), write(), and close(). Bye.
+

@@ -1,0 +1,245 @@
+WEBVTT
+
+00:00.000 --> 00:01.500
+<v Lawrence Angrave>Hi, welcome!
+
+00:01.500 --> 00:06.125
+<v Lawrence Angrave>let's talk about creating more complicated data types in C
+
+00:06.125 --> 00:09.593
+<v Lawrence Angrave>so far, we've talked about integer and character pointers
+
+00:09.593 --> 00:12.687
+<v Lawrence Angrave>what if we wanted to make something more complicated like a linked list?
+
+00:12.687 --> 00:15.734
+<v Lawrence Angrave>for that, we will use a struct
+
+00:15.734 --> 00:24.531
+<v Lawrence Angrave>so, let's say we've got a struct and we'll say my struct I'll call it say Link
+
+00:24.531 --> 00:25.812
+<v Lawrence Angrave>and what should we have inside this?
+
+00:25.812 --> 00:30.687
+<v Lawrence Angrave>well, we've have a value to store and we'll need a pointer to the next link
+
+00:30.687 --> 00:32.546
+<v Lawrence Angrave>we'll need to know where the next link is in memory
+
+00:32.546 --> 00:38.328
+<v Lawrence Angrave>so, we can say struct Link and it's a pointer to that
+
+00:38.328 --> 00:39.609
+<v Lawrence Angrave>so, don't forget the asterisk
+
+00:39.609 --> 00:44.281
+<v Lawrence Angrave>so that's our little struct here. a semicolon is required at the end
+
+00:44.281 --> 00:50.750
+<v Lawrence Angrave>but it's kind of painful to keep saying "struct Link" every time I want to refer to this type
+
+00:50.750 --> 00:53.968
+<v Lawrence Angrave>so I can have a link here called "one" for example
+
+00:53.968 --> 00:58.328
+<v Lawrence Angrave>so quite often, we can use, or you'll find that people use "typedef"
+
+00:58.328 --> 01:04.875
+<v Lawrence Angrave>to say "here's an alias" and I can use typedef with any kind of type
+
+01:04.875 --> 01:07.078
+<v Lawrence Angrave>I can even use it with integers
+
+01:07.078 --> 01:09.734
+<v Lawrence Angrave>for example, I can say typedef number
+
+01:09.734 --> 01:15.515
+<v Lawrence Angrave>now I can say "number x" instead of "int x"
+
+01:15.515 --> 01:18.515
+<v Lawrence Angrave>but today we're going to use typedef for our link
+
+01:18.515 --> 01:25.046
+<v Lawrence Angrave>so we'll say instead of having to write struct Link, I'll call this my link type
+
+01:25.046 --> 01:28.796
+<v Lawrence Angrave>so now I've got my link type, I can make a link
+
+01:28.796 --> 01:29.812
+<v Lawrence Angrave>here's one
+
+01:29.812 --> 01:39.437
+<v Lawrence Angrave>and if I declare variables like this, outside of my functions, then they live forever
+
+01:39.437 --> 01:44.562
+<v Lawrence Angrave>and, let me write my main method here
+
+01:44.562 --> 01:50.765
+<v Lawrence Angrave>so, my link called "one" and my value live forever
+
+01:50.765 --> 01:52.156
+<v Lawrence Angrave>and in fact, they're initialized
+
+01:52.156 --> 01:55.500
+<v Lawrence Angrave>so their bitwise pattern is just all zeros
+
+01:55.500 --> 02:07.093
+<v Lawrence Angrave>so in other words, my value will be zero and the link "one" will have a value of zero and its next pointer will have a value of zero as well
+
+02:07.093 --> 02:12.890
+<v Lawrence Angrave>if we wanted to change that, then we could say one.value equals fourty two
+
+02:12.890 --> 02:16.625
+<v Lawrence Angrave>and one.next equals well, where should we put it?
+
+02:16.625 --> 02:18.187
+<v Lawrence Angrave>well where should we send it next?
+
+02:18.187 --> 02:27.125
+<v Lawrence Angrave>we could say "NULL" if we wish to use NULL, actually we have to #include <stdlib.h>
+
+02:27.125 --> 02:30.046
+<v Lawrence Angrave>to have NULL defined
+
+02:30.046 --> 02:35.609
+<v Lawrence Angrave>and now our Link says "I'm the last thing. there's no one after me"
+
+02:35.609 --> 02:42.281
+<v Lawrence Angrave>if we wanted to be particularly crazy, we can make the next pointer point to the very same link
+
+02:42.281 --> 02:47.781
+<v Lawrence Angrave>we do that by saying "one" except we don't want "one" we want the address of "one"
+
+02:47.781 --> 02:48.906
+<v Lawrence Angrave>we need a pointer to "one"
+
+02:48.906 --> 02:53.328
+<v Lawrence Angrave>so how do I do that? I use ampersand to say "give me the address" of this
+
+02:53.328 --> 02:55.250
+<v Lawrence Angrave>so that gives me a pointer to a link
+
+02:55.250 --> 02:57.062
+<v Lawrence Angrave>well thats great if we only need one link
+
+02:57.062 --> 02:59.437
+<v Lawrence Angrave>but that's not much of a linked list
+
+02:59.437 --> 03:04.031
+<v Lawrence Angrave>let's actually work out then how we can actually make a whole load of links
+
+03:04.031 --> 03:06.375
+<v Lawrence Angrave>for that, we'll use some heap memory
+
+03:06.375 --> 03:10.593
+<v Lawrence Angrave>and I'm going to use malloc which is also declared inside stdlib.h
+
+03:10.593 --> 03:13.125
+<v Lawrence Angrave>so, I need some memory
+
+03:13.125 --> 03:14.859
+<v Lawrence Angrave>how many bytes do I need?
+
+03:14.859 --> 03:18.406
+<v Lawrence Angrave>for that, I can say: "give me the sizeof my link structure"
+
+03:18.406 --> 03:20.671
+<v Lawrence Angrave>in other words, give me the size of link_t
+
+03:20.671 --> 03:26.359
+<v Lawrence Angrave>be careful you don't put an asterisk here otherwise, you'll only be reserving enough bytes for a pointer
+
+03:26.359 --> 03:28.093
+<v Lawrence Angrave>in other words, 4 bytes or so
+
+03:28.093 --> 03:29.750
+<v Lawrence Angrave>that's not enough for what we need
+
+03:29.750 --> 03:33.640
+<v Lawrence Angrave>we need the size of our whole struct
+
+03:33.640 --> 03:41.921
+<v Lawrence Angrave>so that gives me back a pointer and I actually want to cast it so that it's type pointer to a link_t
+
+03:41.921 --> 03:45.500
+<v Lawrence Angrave>so I can now store that inside a variable
+
+03:45.500 --> 03:49.609
+<v Lawrence Angrave>and I can have it as my first pointer
+
+03:49.609 --> 03:55.437
+<v Lawrence Angrave>so, malloc does not initialize the actual memory. it just simply reserves it for us
+
+03:55.437 --> 03:56.859
+<v Lawrence Angrave>just allocates it for us.
+
+03:56.859 --> 04:00.453
+<v Lawrence Angrave>we better make sure that our Link is properly initialized
+
+04:00.453 --> 04:06.000
+<v Lawrence Angrave>so for my first Link, I want to set its value to something
+
+04:06.000 --> 04:09.546
+<v Lawrence Angrave>and I need to set its "next" pointer to something
+
+04:09.546 --> 04:11.250
+<v Lawrence Angrave>so for example, I can set it to NULL
+
+04:11.250 --> 04:15.515
+<v Lawrence Angrave>or if I, oops, let me change that to put a one
+
+04:15.515 --> 04:21.093
+<v Lawrence Angrave>or if I wanted to make it point to itself, I can say "ptr1"
+
+04:21.093 --> 04:26.546
+<v Lawrence Angrave>if I had two links, let's do that
+
+04:26.546 --> 04:35.062
+<v Lawrence Angrave>then I can again set up the values. be very careful when copying and pasting code that you've actually edited it correctly
+
+04:35.062 --> 04:41.453
+<v Lawrence Angrave>I can now make my first link ptr1 its next point to next ptr
+
+04:41.453 --> 04:48.359
+<v Lawrence Angrave>and the next link, its next pointer can go nowhere
+
+04:48.359 --> 04:51.593
+<v Lawrence Angrave>so, there's my simple linked list
+
+04:51.593 --> 04:55.468
+<v Lawrence Angrave>more complicated links might have a previous pointer as well
+
+04:55.468 --> 05:03.406
+<v Lawrence Angrave>so you can navigate both in the forwards and backwards direction throughout the linked list
+
+05:03.406 --> 05:09.734
+<v Lawrence Angrave>okay, so, let's now finally compile this and check that it works
+
+05:09.734 --> 05:21.015
+<v Lawrence Angrave>our program compiles correctly, but to be a well-behaved program, really we should free up the memory as well
+
+05:21.015 --> 05:29.890
+<v Lawrence Angrave>so don't forget for every malloc you do, we should responsible for freeing up that memory once and once only
+
+05:29.890 --> 05:34.984
+<v Lawrence Angrave>so free(ptr1) and free(ptr2)
+
+05:34.984 --> 05:40.906
+<v Lawrence Angrave>also, a more robust version of this program would check that malloc actually succeeded
+
+05:40.906 --> 05:43.171
+<v Lawrence Angrave>that we actually really got the bytes
+
+05:43.171 --> 05:48.234
+<v Lawrence Angrave>that would be something important to do if your program ran for a very long time
+
+05:48.234 --> 05:53.250
+<v Lawrence Angrave>or needed very large unknown amounts of memory
+
+05:53.250 --> 05:56.156
+<v Lawrence Angrave>so that's how we make linked lists in C
+
+05:56.156 --> 05:58.703
+<v Lawrence Angrave>now it's time for you to play. bye!
+

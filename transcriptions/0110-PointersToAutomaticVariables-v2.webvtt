@@ -1,0 +1,197 @@
+WEBVTT
+
+00:00.000 --> 00:03.218
+<v Lawrence Angrave>Hello! Let's talk about automatic variables
+
+00:03.218 --> 00:08.375
+<v Lawrence Angrave>so here's my main method I've got two function calls f1 f2
+
+00:08.375 --> 00:12.562
+<v Lawrence Angrave>and today I'm going to actually define them before my main method
+
+00:12.562 --> 00:15.890
+<v Lawrence Angrave>so I don't need to put in the additional declares in
+
+00:15.890 --> 00:21.437
+<v Lawrence Angrave>so let's have f1 here and f2...ok
+
+00:21.437 --> 00:25.484
+<v Lawrence Angrave>so now I've got a syntactically correct program
+
+00:25.484 --> 00:28.359
+<v Lawrence Angrave>but I want to talk about the variables that we might put inside these
+
+00:28.359 --> 00:39.609
+<v Lawrence Angrave>so if I create a variable like this to say "hey I've got a value here, something I need to compute inside f1" or maybe I want to make an array
+
+00:39.609 --> 00:47.906
+<v Lawrence Angrave>so here's my array and I can initialize it to, say, "f1f1" here we go
+
+00:47.906 --> 00:55.062
+<v Lawrence Angrave>then the lifetime of my array (this variable) is only for the lifetime of the function
+
+00:55.062 --> 00:59.890
+<v Lawrence Angrave>when I return from f1, then the variable goes out of scope
+
+00:59.890 --> 01:04.156
+<v Lawrence Angrave>which means the name "array" doesn't mean anything anymore inside our program
+
+01:04.156 --> 01:08.843
+<v Lawrence Angrave>but secondly, the memory that we were using for the array is automatically free'd up
+
+01:08.843 --> 01:11.953
+<v Lawrence Angrave>it can be reused for other purposes in a moment by the rest of the program
+
+01:11.953 --> 01:14.031
+<v Lawrence Angrave>so isn't that fantastic
+
+01:14.031 --> 01:16.562
+<v Lawrence Angrave>that's why it's called an automatic variable
+
+01:16.562 --> 01:18.781
+<v Lawrence Angrave>so automatic variables are very easy to use
+
+01:18.781 --> 01:23.078
+<v Lawrence Angrave>they also come with a big warning sticker and that's this
+
+01:23.078 --> 01:29.984
+<v Lawrence Angrave>which is to be very wary of just how long they live for
+
+01:29.984 --> 01:31.984
+<v Lawrence Angrave>let's do a couple of things here
+
+01:31.984 --> 01:42.500
+<v Lawrence Angrave>first of all, let's make it so that we can actually see the pointer in memory where array is pointing to
+
+01:42.500 --> 01:47.859
+<v Lawrence Angrave>so, let's print that out inside our function here
+
+01:47.859 --> 01:54.140
+<v Lawrence Angrave>remember that the name of the array (when converted to address) gives us the very beginning of the array
+
+01:54.140 --> 01:56.859
+<v Lawrence Angrave>and, we'll do that for our second function too
+
+01:56.859 --> 02:00.328
+<v Lawrence Angrave>okay, so, f2 f2
+
+02:00.328 --> 02:03.718
+<v Lawrence Angrave>just to prove that they're making different arrays
+
+02:03.718 --> 02:06.718
+<v Lawrence Angrave>okay, so we'll compile and run this
+
+02:06.718 --> 02:20.250
+<v Lawrence Angrave>and, when we run it, we see that both f1 and f2 both these functions the array is actually stored inside the same memory location
+
+02:20.250 --> 02:22.703
+<v Lawrence Angrave>isn't that fantastic. we didn't need any additional memory
+
+02:22.703 --> 02:32.078
+<v Lawrence Angrave>and that's because after we return from f1, any of those automatic variables are free'd so they are no longer needed so we can reuse that space
+
+02:32.078 --> 02:39.875
+<v Lawrence Angrave>internally, later we'll discover that a stack data structure is used to implement this
+
+02:39.875 --> 02:49.453
+<v Lawrence Angrave>and I can show a little bit of this by having a either a recursive function or we can make another function call these
+
+02:49.453 --> 02:56.062
+<v Lawrence Angrave>so for example, I could have a function called eg
+
+02:56.062 --> 02:58.375
+<v Lawrence Angrave>and, this calls f1
+
+02:58.375 --> 03:04.078
+<v Lawrence Angrave>so now let's have a look in the case that I'm not using f2 anymore
+
+03:04.078 --> 03:06.921
+<v Lawrence Angrave>so that can go away
+
+03:06.921 --> 03:12.656
+<v Lawrence Angrave>instead, I've got a function called eg and that can say have its own space
+
+03:12.656 --> 03:21.609
+<v Lawrence Angrave>so, blah and maybe say a thousand and twenty four bytes here
+
+03:21.609 --> 03:23.859
+<v Lawrence Angrave>and then we call f1 again
+
+03:23.859 --> 03:31.296
+<v Lawrence Angrave>so let's run this now
+
+03:31.296 --> 03:43.578
+<v Lawrence Angrave>so, in the output, you'll see that f1 is printed twice and the second time it's because it's being called from our function eg
+
+03:43.578 --> 03:49.046
+<v Lawrence Angrave>and in this case, it's further down in the stack. it's in lower memory
+
+03:49.046 --> 03:51.484
+<v Lawrence Angrave>f948 as opposed to fd50
+
+03:51.484 --> 03:56.750
+<v Lawrence Angrave>because it's being called from eg
+
+03:56.750 --> 03:59.312
+<v Lawrence Angrave>so, we'll see more about the stack in a moment
+
+03:59.312 --> 04:04.437
+<v Lawrence Angrave>later on. I just wanted to show you that they really are stored in different places
+
+04:04.437 --> 04:09.906
+<v Lawrence Angrave>finally, to reinforce this idea, let's make a little recursive function
+
+04:09.906 --> 04:17.562
+<v Lawrence Angrave>so, I can have something which takes an integer say I'll call it "level"
+
+04:17.562 --> 04:28.015
+<v Lawrence Angrave>and if level is greater than zero, let's call ourselves again with a slightly reduced value
+
+04:28.015 --> 04:32.296
+<v Lawrence Angrave>and I can of course make that simpler by just saying "if level"
+
+04:32.296 --> 04:34.281
+<v Lawrence Angrave>so if level is nonzero, then call it again
+
+04:34.281 --> 04:37.093
+<v Lawrence Angrave>and let's call it with say five
+
+04:37.093 --> 04:41.859
+<v Lawrence Angrave>okay, a semicolon would help
+
+04:41.859 --> 04:51.062
+<v Lawrence Angrave>each case as we go deeper and deeper into recursion, our array is getting lower and lower and lower in memory
+
+04:51.062 --> 04:56.875
+<v Lawrence Angrave>so we have all of these arrays created. all of these different activation records in different places
+
+04:56.875 --> 04:59.734
+<v Lawrence Angrave>inside our processes's memory
+
+04:59.734 --> 05:07.140
+<v Lawrence Angrave>so the last point we'll make, which is the most important, which is that it's very dangerous to return pointers to memory that is no longer valid
+
+05:07.140 --> 05:17.468
+<v Lawrence Angrave>for example, rather than returning nothing returning void, suppose we try to return a pointer to our array
+
+05:17.468 --> 05:26.203
+<v Lawrence Angrave>then though this code might compile, okay, I can get rid of "level" now
+
+05:26.203 --> 05:36.093
+<v Lawrence Angrave>it's certainly not a valid program because the pointer we get back from f1 now points to stale memory
+
+05:36.093 --> 05:38.734
+<v Lawrence Angrave>that memory is no longer ours to control
+
+05:38.734 --> 05:41.609
+<v Lawrence Angrave>it will be used in a moment for other function calls
+
+05:41.609 --> 05:48.093
+<v Lawrence Angrave>so always be careful if you are returning a pointer to something. make sure that that memory is still valid
+
+05:48.093 --> 05:51.375
+<v Lawrence Angrave>and never return a pointer to an automatic variable
+
+05:51.375 --> 05:54.328
+<v Lawrence Angrave>that's it for me. time for you to play. bye!
+

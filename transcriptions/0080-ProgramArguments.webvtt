@@ -1,0 +1,176 @@
+WEBVTT
+
+00:00.000 --> 00:02.750
+<v Lawrence Angrave>So this video is about how to have an argument
+
+00:02.750 --> 00:07.171
+<v Lawrence Angrave>let's have a look inside some directories that we've got on our little system
+
+00:07.171 --> 00:09.859
+<v Lawrence Angrave>so if I type ls /bin
+
+00:09.859 --> 00:14.546
+<v Lawrence Angrave>you'll see here's a whole lot of programs that I can run from my terminal window
+
+00:14.546 --> 00:16.500
+<v Lawrence Angrave>and some of them you might recognize already
+
+00:16.500 --> 00:20.328
+<v Lawrence Angrave>including ls for list the contents of a directory (what we just did)
+
+00:20.328 --> 00:23.687
+<v Lawrence Angrave>cat to list the contents of a file and print it out
+
+00:23.687 --> 00:27.781
+<v Lawrence Angrave>and echo simply to echo back whatever we type
+
+00:27.781 --> 00:30.875
+<v Lawrence Angrave>so I can say echo Hello World
+
+00:30.875 --> 00:36.593
+<v Lawrence Angrave>and we also can used echo to print out the result of the exit value of the last program run
+
+00:36.593 --> 00:43.750
+<v Lawrence Angrave>how is it that these programs then can find out the parameters (the arguments) that we supply?
+
+00:43.750 --> 00:45.187
+<v Lawrence Angrave>when they are run?
+
+00:45.187 --> 00:50.515
+<v Lawrence Angrave>and the answer is that actually our main method can have two parameters here
+
+00:50.515 --> 00:59.937
+<v Lawrence Angrave>we have an integer (the number of arguments here) and also an array of character pointers
+
+00:59.937 --> 01:03.187
+<v Lawrence Angrave>called argv for value
+
+01:03.187 --> 01:06.625
+<v Lawrence Angrave>so let's actually print out some of these things
+
+01:06.625 --> 01:16.031
+<v Lawrence Angrave>so we'll say printf and we'll have the argv, the very first entry, the zero-th index is this
+
+01:16.031 --> 01:18.515
+<v Lawrence Angrave>and we'll say argv of zero
+
+01:18.515 --> 01:24.546
+<v Lawrence Angrave>and we will also print out what the last thing points to
+
+01:24.546 --> 01:27.546
+<v Lawrence Angrave>so that's going to be argc
+
+01:27.546 --> 01:29.812
+<v Lawrence Angrave>so that's %p
+
+01:29.812 --> 01:31.953
+<v Lawrence Angrave>we'll have a new line or two
+
+01:31.953 --> 01:36.843
+<v Lawrence Angrave>alright, and change that argc
+
+01:36.843 --> 01:39.625
+<v Lawrence Angrave>so here's two surprising things
+
+01:39.625 --> 01:44.203
+<v Lawrence Angrave>first of all, the very first entry is actually the execution name of the program
+
+01:44.203 --> 01:46.578
+<v Lawrence Angrave>how we started the program
+
+01:46.578 --> 01:51.265
+<v Lawrence Angrave>here, our program is just called "program"
+
+01:51.265 --> 01:57.812
+<v Lawrence Angrave>and secondly, there is actually one extra argument at the end and that points to the null string
+
+01:57.812 --> 02:01.968
+<v Lawrence Angrave>our pointer is null, it's zero
+
+02:01.968 --> 02:07.609
+<v Lawrence Angrave>so, let's now actually print out the other values
+
+02:07.609 --> 02:17.453
+<v Lawrence Angrave>we'll find out what the other values of argv is
+
+02:17.453 --> 02:21.515
+<v Lawrence Angrave>and we'll loop through and we'll print out all of those values
+
+02:21.515 --> 02:25.078
+<v Lawrence Angrave>so I'll have a little count. I'll start from 1 this time.
+
+02:25.078 --> 02:30.468
+<v Lawrence Angrave>because we don't want to print out the program name
+
+02:30.468 --> 02:37.640
+<v Lawrence Angrave>I can say: while count is less than argc, because I don't need the null pointer at the end
+
+02:37.640 --> 02:41.953
+<v Lawrence Angrave>and each time around the loop, increment count
+
+02:41.953 --> 02:50.812
+<v Lawrence Angrave>I'll print out the value of my count that's %d and print out its value as a string
+
+02:50.812 --> 02:57.750
+<v Lawrence Angrave>ok so that's going to be count and argv at index of count
+
+02:57.750 --> 03:00.484
+<v Lawrence Angrave>finally, let's put a new line in here
+
+03:00.484 --> 03:05.156
+<v Lawrence Angrave>here's my mistake: I should have said argc here for count
+
+03:05.156 --> 03:09.812
+<v Lawrence Angrave>ok, let's print it out
+
+03:09.812 --> 03:12.921
+<v Lawrence Angrave>when we start, argc is just 1. we've got just the program
+
+03:12.921 --> 03:17.281
+<v Lawrence Angrave>run it again but this time but this time have "cat hat sat"
+
+03:17.281 --> 03:21.281
+<v Lawrence Angrave>and you'll see I've got three additional arguments
+
+03:21.281 --> 03:30.140
+<v Lawrence Angrave>if I had put that inside double quotes then the hat and sat would be one argument
+
+03:30.140 --> 03:33.281
+<v Lawrence Angrave>so you see that we can now send our arguments
+
+03:33.281 --> 03:39.093
+<v Lawrence Angrave>for example, I could write a little program that helps me add up some numbers
+
+03:39.093 --> 03:46.062
+<v Lawrence Angrave>and I need a simple way to turn a string of digits into an integer
+
+03:46.062 --> 03:48.218
+<v Lawrence Angrave>in other words, I want to go from ASCII to an integer
+
+03:48.218 --> 03:55.531
+<v Lawrence Angrave>so this is the simplest way of turning a string into an integer number
+
+03:55.531 --> 03:57.484
+<v Lawrence Angrave>but this function doesn't give us much error checking
+
+03:57.484 --> 03:59.406
+<v Lawrence Angrave>if it can't read it, it simply returns zero
+
+03:59.406 --> 04:03.156
+<v Lawrence Angrave>I'll talk about how we can do a better job using scanf in a different lecture
+
+04:03.156 --> 04:09.828
+<v Lawrence Angrave>so we'll add those up and we'll print the result. right so we've got a result of zero
+
+04:09.828 --> 04:14.234
+<v Lawrence Angrave>let's try running our program again with 10 20 30
+
+04:14.234 --> 04:17.468
+<v Lawrence Angrave>and we see we get a result of 60
+
+04:17.468 --> 04:30.328
+<v Lawrence Angrave>if I had put some non-numbers in here, I get the result ten because the string I've got here it's converted into a zero
+
+04:30.328 --> 04:34.375
+<v Lawrence Angrave>alright, that's enough from me. now it's time for you to play. bye!
+

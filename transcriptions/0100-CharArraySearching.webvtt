@@ -1,0 +1,209 @@
+WEBVTT
+
+00:00.000 --> 00:02.609
+<v Lawrence Angrave>let's talk about strings today
+
+00:02.609 --> 00:05.312
+<v Lawrence Angrave>first of all, these two things are very different
+
+00:05.312 --> 00:11.640
+<v Lawrence Angrave>I could have a pointer to "hello world"
+
+00:11.640 --> 00:19.359
+<v Lawrence Angrave>or I could have an array of characters to "hello world"
+
+00:19.359 --> 00:24.906
+<v Lawrence Angrave>though both ptr and array points to the first letters
+
+00:24.906 --> 00:29.671
+<v Lawrence Angrave>some things that are noteworthy here is first of all they have different sizes
+
+00:29.671 --> 00:36.031
+<v Lawrence Angrave>so let's look at the sizes of each of these, perhaps you can guess what the result is going to be
+
+00:36.031 --> 00:40.859
+<v Lawrence Angrave>so you'll see the size of the pointer is the number of bytes to actually hold the character pointer
+
+00:40.859 --> 00:44.421
+<v Lawrence Angrave>which as this is a 32-bit machine is four bytes
+
+00:44.421 --> 00:51.015
+<v Lawrence Angrave>the size of array is the total size required to hold the whole array
+
+00:51.015 --> 00:59.859
+<v Lawrence Angrave>so when this code runs it's actually going to copy the contents of that string literal "hello world" into the new array object
+
+00:59.859 --> 01:11.906
+<v Lawrence Angrave>so in this case we need twelve bytes for that, eleven for "hello world" plus a twelfth to hold the null character at the end the bit pattern zero to say okay we've reached the end of the string
+
+01:11.906 --> 01:19.687
+<v Lawrence Angrave>their sizes is very different, plus remember that because we've made additional memory on the stack
+
+01:19.687 --> 01:23.968
+<v Lawrence Angrave>we can change it so I can change it to "jello world" for example
+
+01:23.968 --> 01:27.656
+<v Lawrence Angrave>let's start manipulating our string
+
+01:27.656 --> 01:31.437
+<v Lawrence Angrave>we'll do this on our array so we can actually make modifications to it
+
+01:31.437 --> 01:35.250
+<v Lawrence Angrave>how about we change all the 'l's to a different letter
+
+01:35.250 --> 01:39.265
+<v Lawrence Angrave>so we'll change and we'll pass the beggining of the array
+
+01:39.265 --> 01:54.687
+<v Lawrence Angrave>so let's pass in the array and afterwards we'll print what the array is so that's %s
+
+01:54.687 --> 02:00.625
+<v Lawrence Angrave>alright so I'll have my function called change down here and it takes a pointer to that memory
+
+02:00.625 --> 02:08.562
+<v Lawrence Angrave>so we don't need to return anything because we are actually going to be using the parameter to point to some memory that we are going to change
+
+02:08.562 --> 02:10.484
+<v Lawrence Angrave>what can we do with this?
+
+02:10.484 --> 02:17.281
+<v Lawrence Angrave>well let's have a little loop that says while(p) that says while p is non zero
+
+02:17.281 --> 02:22.250
+<v Lawrence Angrave>actually what we care about is whether p is pointing to memory that holds zero
+
+02:22.250 --> 02:24.500
+<v Lawrence Angrave>in other words, we've reached the end of the string
+
+02:24.500 --> 02:29.062
+<v Lawrence Angrave>we want to follow the pointer we want to dereference the pointer and for that we need the asterisk
+
+02:29.062 --> 02:35.796
+<v Lawrence Angrave>okay so what should we do with this. well we could change all of the letters
+
+02:35.796 --> 02:38.531
+<v Lawrence Angrave>for example we could blank it out
+
+02:38.531 --> 02:40.859
+<v Lawrence Angrave>we could say star p equals
+
+02:40.859 --> 02:46.765
+<v Lawrence Angrave>and it might be tempting to write an astericks here
+
+02:46.765 --> 02:54.187
+<v Lawrence Angrave>but that's not right because the asterisk means I've given the address of the asterisk
+
+02:54.187 --> 03:01.765
+<v Lawrence Angrave>so I'd be writing an asterisk into the address of the asterisk into that occasion
+
+03:01.765 --> 03:03.890
+<v Lawrence Angrave>if I run this I get a few warnings
+
+03:03.890 --> 03:07.937
+<v Lawrence Angrave>but it runs and it runs it for forever because my loops runs forever
+
+03:07.937 --> 03:10.640
+<v Lawrence Angrave>so let me ctrl-c that to break it
+
+03:10.640 --> 03:18.546
+<v Lawrence Angrave>this time change the loop so I add one to p each time
+
+03:18.546 --> 03:27.250
+<v Lawrence Angrave>so now I've got a very strange character because it's taken the lowest eight bits and copied that into my character
+
+03:27.250 --> 03:32.375
+<v Lawrence Angrave>instead let's change that to the actual bitwise pattern of my character
+
+03:32.375 --> 03:41.359
+<v Lawrence Angrave>now I've got something which can get rid of swear words by over writing them with asterisks or perhaps a password or something
+
+03:41.359 --> 03:44.640
+<v Lawrence Angrave>but we didn't want to do that for all the characters, we just wanted to do that for the l's
+
+03:44.640 --> 03:53.953
+<v Lawrence Angrave>so let's see if my p is, at when I look at that memory location, whether it's a lowercase l
+
+03:53.953 --> 04:02.625
+<v Lawrence Angrave>and as I said before because we are working with characters it is ok to compare them so note the use of double equals here
+
+04:02.625 --> 04:07.984
+<v Lawrence Angrave>okay so let's run that
+
+04:07.984 --> 04:11.203
+<v Lawrence Angrave>we have a couple of errors here
+
+04:11.203 --> 04:13.578
+<v Lawrence Angrave>for starters we're not using pointer
+
+04:13.578 --> 04:15.343
+<v Lawrence Angrave>so I can comment out that line
+
+04:15.343 --> 04:19.890
+<v Lawrence Angrave>I've got another problem here which is that change is implicitly declared
+
+04:19.890 --> 04:24.625
+<v Lawrence Angrave>that's because we haven't declared what the function signature of change() looks like
+
+04:24.625 --> 04:26.046
+<v Lawrence Angrave>let's do that now
+
+04:26.046 --> 04:37.015
+<v Lawrence Angrave>I'm going to say later on compiler, I expect to actually define a function and I'll give you the actual code to create this change method
+
+04:37.015 --> 04:39.437
+<v Lawrence Angrave>but for now here is what it's signature looks like
+
+04:39.437 --> 04:43.718
+<v Lawrence Angrave>it's called change, it takes a pointer to a character and it doesn't return anything
+
+04:43.718 --> 04:48.171
+<v Lawrence Angrave>so if I compile that now my warnings should go away
+
+04:48.171 --> 04:54.484
+<v Lawrence Angrave>great so I've got a function that can walk through
+
+04:54.484 --> 04:57.421
+<v Lawrence Angrave>I could have another function that finds letters as well
+
+04:57.421 --> 05:05.312
+<v Lawrence Angrave>so for example suppose we wanted to find the first o in this
+
+05:05.312 --> 05:11.796
+<v Lawrence Angrave>I could change this so that rather than changing the letters
+
+05:11.796 --> 05:19.109
+<v Lawrence Angrave>if the contents of p is an 'o', let's return p
+
+05:19.109 --> 05:22.937
+<v Lawrence Angrave>now I'm going to change my method signature
+
+05:22.937 --> 05:28.250
+<v Lawrence Angrave>and I'd better have a return value that returns something if I get to the very end
+
+05:28.250 --> 05:33.343
+<v Lawrence Angrave>so for example, it returns where p is
+
+05:33.343 --> 05:47.062
+<v Lawrence Angrave>we can now update my original code so that it finds the first 'o' and gives you back a pointer to that
+
+05:47.062 --> 05:48.546
+<v Lawrence Angrave>if I print that out
+
+05:48.546 --> 05:54.937
+<v Lawrence Angrave>hopefully you can guess what my program should do
+
+05:54.937 --> 06:02.046
+<v Lawrence Angrave>okay so it gave us back a string and it this time the pointer was half way through "hello world"
+
+06:02.046 --> 06:06.421
+<v Lawrence Angrave>that's OK, our pointers don't care what they point to
+
+06:06.421 --> 06:12.453
+<v Lawrence Angrave>we know that strings will continue until we reach the null byte at the end
+
+06:12.453 --> 06:16.500
+<v Lawrence Angrave>so that's how we were able to print out hello world
+
+06:16.500 --> 06:17.828
+<v Lawrence Angrave>okay that's enough for me, time for you to play. bye!
+
