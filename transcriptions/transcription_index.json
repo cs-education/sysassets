@@ -1,5 +1,4 @@
-[{"videoIndex":1,
-		"startTime":38.9375,
+[{"videoIndex":1,"startTime":38.9375,
 		"snippet":"and if you compare two things, you'll learn that with an integer value of either 0 or 1 to mean for example if they are either the same or different"},
 	{"videoIndex":2,
 		"startTime":33.96875,
@@ -10,8 +9,8 @@
 	{"videoIndex":6,
 		"startTime":63.796875,
 		"snippet":"we could also run through the string to actually find the 0 byte ourselves"},
-	{"videoIndex":6,"
-		startTime":90.890625,
+	{"videoIndex":6,
+		"startTime":90.890625,
 		"snippet":"and let's say \"while the pointer the value is not equal to 0\""},
 	{"videoIndex":6,
 		"startTime":120.0625,
