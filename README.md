@@ -1,7 +1,7 @@
 sysassets
 =========
 
-Larger precompiled assets for the sys/ project
+Larger precompiled assets for the [system programming playground](https://github.com/cs-education/sysbuild) project.
 
 ## Setup
 
