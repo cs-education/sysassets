@@ -6,3 +6,5 @@ cd $workdir/userdata
 chmod 644 home/user/*
 tar -cvjSf userdata.tar.bz2 *
 cp userdata.tar.bz2 $currentdir/
+cd $currentdir
+rm -rf $workdir
