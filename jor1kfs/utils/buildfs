@@ -115,7 +115,11 @@ do
 done
 echo All files downloaded
 
+# Add user data
+./builduserdata
+list+=userdata.tar.bz2
+
 echo Compile converter
-gcc -O2 fs2xml.c -lbz2 -o fs2xml
+#gcc -O2 fs2xml.c -lbz2 -o fs2xml
 
 ./fs2xml $list

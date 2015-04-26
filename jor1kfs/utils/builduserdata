@@ -1,0 +1,8 @@
+# Work in a Unix directory for correct permissions
+workdir=$(mktemp -d)
+currentdir=$(pwd)
+cp -r userdata $workdir/
+cd $workdir/userdata
+chmod 644 home/user/*
+tar -cvjSf userdata.tar.bz2 *
+cp userdata.tar.bz2 $currentdir/
