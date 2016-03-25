@@ -59,7 +59,6 @@ The following steps are taken from
     ```
 
 5. Mount the partition:
-
     ```sh
     $ fuse-ext2 -o force ThePartition /Volumes/mountpoint
     ```
