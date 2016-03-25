@@ -19,13 +19,15 @@ $ git remote add -f s-macke-jor1k-sysroot https://github.com/s-macke/jor1k-sysro
 
 Then use specific commands to fetch and merge updates:
 
-* To compare what is in your `jor1kfs/sysroot` subdirectory with what the
-  master branch on the upstream was the last time you fetched, you can run
+* To compare what is in your `jor1kfs/sysroot` subdirectory with what
+  the master branch on the upstream was the last time you fetched, you
+  can run:
     ```sh
     $ git diff-tree -p s-macke-jor1k-sysroot/master
     ```
 
 * To update the subproject with the upstream changes:
     ```sh
-    $ git pull -s subtree s-macke-jor1k-sysroot master
+    $ git pull -s subtree --squash --no-commit s-macke-jor1k-sysroot master
     ```
+    Note: You need to perform a commit manually after the merge.
