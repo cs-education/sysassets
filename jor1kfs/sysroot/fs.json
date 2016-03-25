@@ -3966,7 +3966,12 @@
 			]},
 			{ "name":".toppler", "mode":"40755", "uid":1000, "gid":1000, "child":[] },
 			{ "name":".gitconfig", "mode":"100644", "size":52, "uid":1000, "gid":1000, "src":"home/user/gitconfig"},
-			{ "name":".mikmodrc", "mode":"100644", "size":9025, "uid":1000, "gid":1000, "src":"home/user/mikmodrc"}
+			{ "name":".mikmodrc", "mode":"100644", "size":9025, "uid":1000, "gid":1000, "src":"home/user/mikmodrc"},
+			{ "name":"pascal.c", "mode":"100644", "size":569, "uid":1000, "gid":1000},
+			{ "name":"sms_abbreviations.txt", "mode":"100644", "size":5741, "uid":1000, "gid":1000},
+			{ "name":"hello.c", "mode":"100644", "size":71, "uid":1000, "gid":1000},
+			{ "name":"earthquakes.csv", "mode":"100644", "size":52085, "uid":1000, "gid":1000, "c":1},
+			{ "name":"data_sources.txt", "mode":"100644", "size":344, "uid":1000, "gid":1000}
 		]}
 	]},
 	{ "name":"lib", "mode":"40755", "child":[
