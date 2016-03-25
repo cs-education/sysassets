@@ -1,8 +1,0 @@
-earthquakes.csv
-======================
-Contains Worldwide earthquakes in the past 30 days above 4.5 magnitude, available from the USGS Earthquake data feed:
-http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.csv
-
-sms_abbreviations.txt
-======================
-A list of SMS code abbreviations and their expansions in a text file.
