@@ -11,47 +11,23 @@ html = response.read()
 soup = BeautifulSoup(html, 'html.parser')
 
 data = {}
-syscall_paths = []
 library_paths = []
 for item in soup.findAll('li'):
 	children = item.findChildren()
 	for child in children:
 		page = child.attrs['href'][:4]
-		if page == 'man2' or page == 'man3':
+		if page == 'man3':
 			raw_call = child.attrs['href'][5:-7]
 			data[raw_call] = []
 			path = child.attrs['href'][5:]
-			if page == 'man2':
-				syscall_paths.append((path, raw_call))
-			else:
+			if page == 'man3':
 				library_paths.append((path, raw_call))
 		else:
 			break
 
-for path, raw_call in syscall_paths:
-	link = man + "man2/" + path
-	request = url.Request(link, headers={'User-Agent': 'Magic Browser'})
-	try:
-		response = url.urlopen(request)
-	except:
-		continue
-	html = response.read()
-	soup = BeautifulSoup(html, 'html.parser')
-	tokens = soup.get_text().split('\n')
-	for token in tokens:
-		if token:
-			subtokens = token.split()
-			if len(subtokens) > 0:
-				if subtokens[0] == '#define' or subtokens[0] == '#include':
-					header = ' '.join(subtokens)
-					if header not in data[raw_call]:
-						if subtokens[0] == '#define':
-							data[raw_call].insert(0, header)
-						else:
-							data[raw_call].append(header)
-
 for path, raw_call in library_paths:
-	link = man + "man3/" + path
+	link = "http://man7.org/linux/man-pages/man3/" + path
+	print(link)
 	request = url.Request(link, headers={'User-Agent': 'Magic Browser'})
 	try:
 		response = url.urlopen(request)
@@ -60,10 +36,19 @@ for path, raw_call in library_paths:
 	html = response.read()
 	soup = BeautifulSoup(html, 'html.parser')
 	tokens = soup.get_text().split('\n')
+	found = 0
 	for token in tokens:
+		if found:
+			break
 		if token:
 			subtokens = token.split()
 			if len(subtokens) > 0:
+				for sub in subtokens:
+					if raw_call in sub and len(data[raw_call]) > 0:
+						found = 1
+						break
+				if found:
+					break
 				if subtokens[0] == 'DESCRIPTION':
 					break
 				if subtokens[0] == '#define' or subtokens[0] == '#include':
