@@ -1,0 +1,4686 @@
+{
+    "CIRCLEQ_ENTRY": [
+        "#include <sys/queue.h>"
+    ],
+    "CIRCLEQ_HEAD": [
+        "#include <sys/queue.h>"
+    ],
+    "CIRCLEQ_INIT": [
+        "#include <sys/queue.h>"
+    ],
+    "CIRCLEQ_INSERT_AFTER": [
+        "#include <sys/queue.h>"
+    ],
+    "CIRCLEQ_INSERT_BEFORE": [
+        "#include <sys/queue.h>"
+    ],
+    "CIRCLEQ_INSERT_HEAD": [
+        "#include <sys/queue.h>"
+    ],
+    "CIRCLEQ_INSERT_TAIL": [
+        "#include <sys/queue.h>"
+    ],
+    "CIRCLEQ_REMOVE": [
+        "#include <sys/queue.h>"
+    ],
+    "CMSG_ALIGN": [
+        "#include <sys/socket.h>"
+    ],
+    "CMSG_FIRSTHDR": [
+        "#include <sys/socket.h>"
+    ],
+    "CMSG_NXTHDR": [
+        "#include <sys/socket.h>"
+    ],
+    "CMSG_SPACE": [
+        "#include <sys/socket.h>"
+    ],
+    "CPU_ALLOC": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_ALLOC_SIZE": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_AND": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_AND_S": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_CLR": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_CLR_S": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_COUNT": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_COUNT_S": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_EQUAL": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_EQUAL_S": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_FREE": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_ISSET": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_ISSET_S": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_OR": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_OR_S": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_SET": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_SET_S": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_XOR": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_XOR_S": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_ZERO": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "CPU_ZERO_S": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sched.h>"
+    ],
+    "DES_FAILED": [
+        "#include <rpc/des_crypt.h>"
+    ],
+    "FD_CLR": [
+        "#include <sys/select.h>",
+        "#include <sys/time.h>",
+        "#include <sys/types.h>",
+        "#include <unistd.h>"
+    ],
+    "FD_ISSET": [
+        "#include <sys/select.h>",
+        "#include <sys/time.h>",
+        "#include <sys/types.h>",
+        "#include <unistd.h>"
+    ],
+    "FD_SET": [
+        "#include <sys/select.h>",
+        "#include <sys/time.h>",
+        "#include <sys/types.h>",
+        "#include <unistd.h>"
+    ],
+    "FD_ZERO": [
+        "#include <sys/select.h>",
+        "#include <sys/time.h>",
+        "#include <sys/types.h>",
+        "#include <unistd.h>"
+    ],
+    "HUGE_VAL": [
+        "#define _ISOC99_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "HUGE_VALF": [
+        "#define _ISOC99_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "HUGE_VALL": [
+        "#define _ISOC99_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "INFINITY": [
+        "#define _ISOC99_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "LIST_ENTRY": [
+        "#include <sys/queue.h>"
+    ],
+    "LIST_HEAD": [
+        "#include <sys/queue.h>"
+    ],
+    "LIST_INIT": [
+        "#include <sys/queue.h>"
+    ],
+    "LIST_INSERT_AFTER": [
+        "#include <sys/queue.h>"
+    ],
+    "LIST_INSERT_HEAD": [
+        "#include <sys/queue.h>"
+    ],
+    "LIST_REMOVE": [
+        "#include <sys/queue.h>"
+    ],
+    "MB_CUR_MAX": [
+        "#include <stdlib.h>"
+    ],
+    "MB_LEN_MAX": [
+        "#include <limits.h>"
+    ],
+    "TAILQ_ENTRY": [
+        "#include <sys/queue.h>"
+    ],
+    "TAILQ_HEAD": [
+        "#include <sys/queue.h>"
+    ],
+    "TAILQ_INIT": [
+        "#include <sys/queue.h>"
+    ],
+    "TAILQ_INSERT_AFTER": [
+        "#include <sys/queue.h>"
+    ],
+    "TAILQ_INSERT_HEAD": [
+        "#include <sys/queue.h>"
+    ],
+    "TAILQ_INSERT_TAIL": [
+        "#include <sys/queue.h>"
+    ],
+    "TAILQ_REMOVE": [
+        "#include <sys/queue.h>"
+    ],
+    "__after_morecore_hook": [
+        "#include <malloc.h>"
+    ],
+    "__fbufsize": [
+        "#include <stdio.h>",
+        "#include <stdio_ext.h>"
+    ],
+    "__flbf": [
+        "#include <stdio.h>",
+        "#include <stdio_ext.h>"
+    ],
+    "__fpending": [
+        "#include <stdio.h>",
+        "#include <stdio_ext.h>"
+    ],
+    "__fpurge": [
+        "#include <stdio.h>",
+        "#include <stdio_ext.h>"
+    ],
+    "__freadable": [
+        "#include <stdio.h>",
+        "#include <stdio_ext.h>"
+    ],
+    "__freading": [
+        "#include <stdio.h>",
+        "#include <stdio_ext.h>"
+    ],
+    "__free_hook": [
+        "#include <malloc.h>"
+    ],
+    "__fsetlocking": [
+        "#include <stdio.h>",
+        "#include <stdio_ext.h>"
+    ],
+    "__fwritable": [
+        "#include <stdio.h>",
+        "#include <stdio_ext.h>"
+    ],
+    "__fwriting": [
+        "#include <stdio.h>",
+        "#include <stdio_ext.h>"
+    ],
+    "__malloc_hook": [
+        "#include <malloc.h>"
+    ],
+    "__malloc_initialize_hook": [
+        "#include <malloc.h>"
+    ],
+    "__memalign_hook": [
+        "#include <malloc.h>"
+    ],
+    "__realloc_hook": [
+        "#include <malloc.h>"
+    ],
+    "__setfpucw": [
+        "#include <i386/fpu_control.h>"
+    ],
+    "_flushlbf": [
+        "#include <stdio.h>",
+        "#include <stdio_ext.h>"
+    ],
+    "a64l": [
+        "#include <stdlib.h>"
+    ],
+    "abort": [
+        "#include <stdlib.h>"
+    ],
+    "abs": [
+        "#include <stdlib.h>"
+    ],
+    "acos": [
+        "#include <math.h>"
+    ],
+    "acosf": [
+        "#include <math.h>"
+    ],
+    "acosh": [
+        "#include <math.h>"
+    ],
+    "acoshf": [
+        "#include <math.h>"
+    ],
+    "acoshl": [
+        "#include <math.h>"
+    ],
+    "acosl": [
+        "#include <math.h>"
+    ],
+    "addmntent": [
+        "#include <stdio.h>",
+        "#include <mntent.h>"
+    ],
+    "addseverity": [
+        "#include <fmtmsg.h>"
+    ],
+    "adjtime": [
+        "#include <sys/time.h>"
+    ],
+    "aio_cancel": [
+        "#include <aio.h>"
+    ],
+    "aio_error": [
+        "#include <aio.h>"
+    ],
+    "aio_fsync": [
+        "#include <aio.h>"
+    ],
+    "aio_init": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <aio.h>"
+    ],
+    "aio_read": [
+        "#include <aio.h>"
+    ],
+    "aio_return": [
+        "#include <aio.h>"
+    ],
+    "aio_suspend": [
+        "#include <aio.h>"
+    ],
+    "aio_write": [
+        "#include <aio.h>"
+    ],
+    "aligned_alloc": [
+        "#include <stdlib.h>"
+    ],
+    "alloca": [
+        "#include <alloca.h>"
+    ],
+    "alphasort": [
+        "#include <dirent.h>"
+    ],
+    "argz": [
+        "#include <argz.h>"
+    ],
+    "argz_add": [
+        "#include <argz.h>"
+    ],
+    "argz_add_sep": [
+        "#include <argz.h>"
+    ],
+    "argz_append": [
+        "#include <argz.h>"
+    ],
+    "argz_count": [
+        "#include <argz.h>"
+    ],
+    "argz_create": [
+        "#include <argz.h>"
+    ],
+    "argz_create_sep": [
+        "#include <argz.h>"
+    ],
+    "argz_delete": [
+        "#include <argz.h>"
+    ],
+    "argz_extract": [
+        "#include <argz.h>"
+    ],
+    "argz_insert": [
+        "#include <argz.h>"
+    ],
+    "argz_next": [
+        "#include <argz.h>"
+    ],
+    "argz_replace": [
+        "#include <argz.h>"
+    ],
+    "argz_stringify": [
+        "#include <argz.h>"
+    ],
+    "asctime": [
+        "#include <time.h>"
+    ],
+    "asctime_r": [
+        "#include <time.h>"
+    ],
+    "asin": [
+        "#include <math.h>"
+    ],
+    "asinf": [
+        "#include <math.h>"
+    ],
+    "asinh": [
+        "#include <math.h>"
+    ],
+    "asinhf": [
+        "#include <math.h>"
+    ],
+    "asinhl": [
+        "#include <math.h>"
+    ],
+    "asinl": [
+        "#include <math.h>"
+    ],
+    "asprintf": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <stdio.h>"
+    ],
+    "assert": [
+        "#include <assert.h>"
+    ],
+    "assert_perror": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <assert.h>"
+    ],
+    "atan": [
+        "#include <math.h>"
+    ],
+    "atan2": [
+        "#include <math.h>"
+    ],
+    "atan2f": [
+        "#include <math.h>"
+    ],
+    "atan2l": [
+        "#include <math.h>"
+    ],
+    "atanf": [
+        "#include <math.h>"
+    ],
+    "atanh": [
+        "#include <math.h>"
+    ],
+    "atanhf": [
+        "#include <math.h>"
+    ],
+    "atanhl": [
+        "#include <math.h>"
+    ],
+    "atanl": [
+        "#include <math.h>"
+    ],
+    "atexit": [
+        "#include <stdlib.h>"
+    ],
+    "atof": [
+        "#include <stdlib.h>"
+    ],
+    "atoi": [
+        "#include <stdlib.h>"
+    ],
+    "atol": [
+        "#include <stdlib.h>"
+    ],
+    "atoll": [
+        "#include <stdlib.h>"
+    ],
+    "atoq": [
+        "#include <stdlib.h>"
+    ],
+    "auth_destroy": [],
+    "authnone_create": [],
+    "authunix_create": [],
+    "authunix_create_default": [],
+    "backtrace": [
+        "#include <execinfo.h>"
+    ],
+    "backtrace_symbols": [
+        "#include <execinfo.h>"
+    ],
+    "backtrace_symbols_fd": [
+        "#include <execinfo.h>"
+    ],
+    "basename": [
+        "#include <libgen.h>"
+    ],
+    "bcmp": [
+        "#include <strings.h>"
+    ],
+    "bcopy": [
+        "#include <strings.h>"
+    ],
+    "be16toh": [
+        "#include <endian.h>"
+    ],
+    "be32toh": [
+        "#include <endian.h>"
+    ],
+    "be64toh": [
+        "#include <endian.h>"
+    ],
+    "bindresvport": [
+        "#include <sys/types.h>",
+        "#include <netinet/in.h>"
+    ],
+    "bsd_signal": [
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <signal.h>"
+    ],
+    "bsearch": [
+        "#include <stdlib.h>"
+    ],
+    "bstring": [
+        "#include <string.h>"
+    ],
+    "btowc": [
+        "#include <wchar.h>"
+    ],
+    "btree": [
+        "#include <sys/types.h>",
+        "#include <db.h>"
+    ],
+    "byteorder": [
+        "#include <arpa/inet.h>"
+    ],
+    "bzero": [
+        "#include <strings.h>"
+    ],
+    "cabs": [
+        "#include <complex.h>"
+    ],
+    "cabsf": [
+        "#include <complex.h>"
+    ],
+    "cabsl": [
+        "#include <complex.h>"
+    ],
+    "cacos": [
+        "#include <complex.h>"
+    ],
+    "cacosf": [
+        "#include <complex.h>"
+    ],
+    "cacosh": [
+        "#include <complex.h>"
+    ],
+    "cacoshf": [
+        "#include <complex.h>"
+    ],
+    "cacoshl": [
+        "#include <complex.h>"
+    ],
+    "cacosl": [
+        "#include <complex.h>"
+    ],
+    "calloc": [
+        "#include <stdlib.h>"
+    ],
+    "callrpc": [],
+    "canonicalize_file_name": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <stdlib.h>"
+    ],
+    "carg": [
+        "#include <complex.h>"
+    ],
+    "cargf": [
+        "#include <complex.h>"
+    ],
+    "cargl": [
+        "#include <complex.h>"
+    ],
+    "casin": [
+        "#include <complex.h>"
+    ],
+    "casinf": [
+        "#include <complex.h>"
+    ],
+    "casinh": [
+        "#include <complex.h>"
+    ],
+    "casinhf": [
+        "#include <complex.h>"
+    ],
+    "casinhl": [
+        "#include <complex.h>"
+    ],
+    "casinl": [
+        "#include <complex.h>"
+    ],
+    "catan": [
+        "#include <complex.h>"
+    ],
+    "catanf": [
+        "#include <complex.h>"
+    ],
+    "catanh": [
+        "#include <complex.h>"
+    ],
+    "catanhf": [
+        "#include <complex.h>"
+    ],
+    "catanhl": [
+        "#include <complex.h>"
+    ],
+    "catanl": [
+        "#include <complex.h>"
+    ],
+    "catclose": [
+        "#include <nl_types.h>"
+    ],
+    "catgets": [
+        "#include <nl_types.h>"
+    ],
+    "catopen": [
+        "#include <nl_types.h>"
+    ],
+    "cbc_crypt": [
+        "#include <rpc/des_crypt.h>"
+    ],
+    "cbrt": [
+        "#include <math.h>"
+    ],
+    "cbrtf": [
+        "#include <math.h>"
+    ],
+    "cbrtl": [
+        "#include <math.h>"
+    ],
+    "ccos": [
+        "#include <complex.h>"
+    ],
+    "ccosf": [
+        "#include <complex.h>"
+    ],
+    "ccosh": [
+        "#include <complex.h>"
+    ],
+    "ccoshf": [
+        "#include <complex.h>"
+    ],
+    "ccoshl": [
+        "#include <complex.h>"
+    ],
+    "ccosl": [
+        "#include <complex.h>"
+    ],
+    "ceil": [
+        "#include <math.h>"
+    ],
+    "ceilf": [
+        "#include <math.h>"
+    ],
+    "ceill": [
+        "#include <math.h>"
+    ],
+    "cerf": [
+        "#include <complex.h>"
+    ],
+    "cerfc": [
+        "#include <complex.h>"
+    ],
+    "cerfcf": [
+        "#include <complex.h>"
+    ],
+    "cerfcl": [
+        "#include <complex.h>"
+    ],
+    "cerff": [
+        "#include <complex.h>"
+    ],
+    "cerfl": [
+        "#include <complex.h>"
+    ],
+    "cexp": [
+        "#include <complex.h>"
+    ],
+    "cexp2": [
+        "#include <complex.h>"
+    ],
+    "cexp2f": [
+        "#include <complex.h>"
+    ],
+    "cexp2l": [
+        "#include <complex.h>"
+    ],
+    "cexpf": [
+        "#include <complex.h>"
+    ],
+    "cexpl": [
+        "#include <complex.h>"
+    ],
+    "cfgetispeed": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "cfgetospeed": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "cfmakeraw": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "cfree": [
+        "#include <stdlib.h>"
+    ],
+    "cfsetispeed": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "cfsetospeed": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "cfsetspeed": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "cimag": [
+        "#include <complex.h>"
+    ],
+    "cimagf": [
+        "#include <complex.h>"
+    ],
+    "cimagl": [
+        "#include <complex.h>"
+    ],
+    "clearenv": [
+        "#include <stdlib.h>"
+    ],
+    "clearerr": [
+        "#include <stdio.h>"
+    ],
+    "clearerr_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "clnt_broadcast": [],
+    "clnt_call": [],
+    "clnt_control": [],
+    "clnt_create": [],
+    "clnt_destroy": [],
+    "clnt_freeres": [],
+    "clnt_geterr": [],
+    "clnt_pcreateerror": [],
+    "clnt_perrno": [],
+    "clnt_perror": [],
+    "clnt_spcreateerror": [],
+    "clnt_sperrno": [],
+    "clnt_sperror": [],
+    "clntraw_create": [],
+    "clnttcp_create": [],
+    "clntudp_bufcreate": [],
+    "clntudp_create": [],
+    "clock": [
+        "#include <time.h>"
+    ],
+    "clock_getcpuclockid": [
+        "#include <time.h>"
+    ],
+    "clock_getres": [
+        "#include <time.h>"
+    ],
+    "clock_gettime": [
+        "#include <time.h>"
+    ],
+    "clock_settime": [
+        "#include <time.h>"
+    ],
+    "clog": [
+        "#include <complex.h>"
+    ],
+    "clog10": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <complex.h>"
+    ],
+    "clog10f": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <complex.h>"
+    ],
+    "clog10l": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <complex.h>"
+    ],
+    "clog2": [
+        "#include <complex.h>"
+    ],
+    "clog2f": [
+        "#include <complex.h>"
+    ],
+    "clog2l": [
+        "#include <complex.h>"
+    ],
+    "clogf": [
+        "#include <complex.h>"
+    ],
+    "clogl": [
+        "#include <complex.h>"
+    ],
+    "closedir": [
+        "#include <sys/types.h>",
+        "#include <dirent.h>"
+    ],
+    "closelog": [
+        "#include <syslog.h>"
+    ],
+    "cmsg": [
+        "#include <sys/socket.h>"
+    ],
+    "confstr": [
+        "#include <unistd.h>"
+    ],
+    "conj": [
+        "#include <complex.h>"
+    ],
+    "conjf": [
+        "#include <complex.h>"
+    ],
+    "conjl": [
+        "#include <complex.h>"
+    ],
+    "copysign": [
+        "#include <math.h>"
+    ],
+    "copysignf": [
+        "#include <math.h>"
+    ],
+    "copysignl": [
+        "#include <math.h>"
+    ],
+    "cos": [
+        "#include <math.h>"
+    ],
+    "cosf": [
+        "#include <math.h>"
+    ],
+    "cosh": [
+        "#include <math.h>"
+    ],
+    "coshf": [
+        "#include <math.h>"
+    ],
+    "coshl": [
+        "#include <math.h>"
+    ],
+    "cosl": [
+        "#include <math.h>"
+    ],
+    "cpow": [
+        "#include <complex.h>"
+    ],
+    "cpowf": [
+        "#include <complex.h>"
+    ],
+    "cpowl": [
+        "#include <complex.h>"
+    ],
+    "cproj": [
+        "#include <complex.h>"
+    ],
+    "cprojf": [
+        "#include <complex.h>"
+    ],
+    "cprojl": [
+        "#include <complex.h>"
+    ],
+    "creal": [
+        "#include <complex.h>"
+    ],
+    "crealf": [
+        "#include <complex.h>"
+    ],
+    "creall": [
+        "#include <complex.h>"
+    ],
+    "crypt": [
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <unistd.h>"
+    ],
+    "crypt_r": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <unistd.h>",
+        "#include <crypt.h>"
+    ],
+    "csin": [
+        "#include <complex.h>"
+    ],
+    "csinf": [
+        "#include <complex.h>"
+    ],
+    "csinh": [
+        "#include <complex.h>"
+    ],
+    "csinhf": [
+        "#include <complex.h>"
+    ],
+    "csinhl": [
+        "#include <complex.h>"
+    ],
+    "csinl": [
+        "#include <complex.h>"
+    ],
+    "csqrt": [
+        "#include <complex.h>"
+    ],
+    "csqrtf": [
+        "#include <complex.h>"
+    ],
+    "csqrtl": [
+        "#include <complex.h>"
+    ],
+    "ctan": [
+        "#include <complex.h>"
+    ],
+    "ctanf": [
+        "#include <complex.h>"
+    ],
+    "ctanh": [
+        "#include <complex.h>"
+    ],
+    "ctanhf": [
+        "#include <complex.h>"
+    ],
+    "ctanhl": [
+        "#include <complex.h>"
+    ],
+    "ctanl": [
+        "#include <complex.h>"
+    ],
+    "ctermid": [
+        "#include <stdio.h>"
+    ],
+    "ctime": [
+        "#include <time.h>"
+    ],
+    "ctime_r": [
+        "#include <time.h>"
+    ],
+    "cuserid": [
+        "#include <unistd.h>",
+        "#include <stdio.h>"
+    ],
+    "daemon": [
+        "#include <unistd.h>"
+    ],
+    "daylight": [
+        "#include <time.h>"
+    ],
+    "db": [
+        "#include <sys/types.h>",
+        "#include <limits.h>"
+    ],
+    "dbopen": [
+        "#include <sys/types.h>",
+        "#include <limits.h>",
+        "#include <db.h>",
+        "#include <fcntl.h>"
+    ],
+    "des_crypt": [
+        "#include <rpc/des_crypt.h>"
+    ],
+    "des_setparity": [
+        "#include <rpc/des_crypt.h>"
+    ],
+    "difftime": [
+        "#include <time.h>"
+    ],
+    "dirfd": [
+        "#include <sys/types.h>",
+        "#include <dirent.h>"
+    ],
+    "dirname": [
+        "#include <libgen.h>"
+    ],
+    "div": [
+        "#include <stdlib.h>"
+    ],
+    "dl_iterate_phdr": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <link.h>"
+    ],
+    "dladdr": [
+        "#define _GNU_SOURCE",
+        "#include <dlfcn.h>"
+    ],
+    "dlclose": [
+        "#include <dlfcn.h>"
+    ],
+    "dlerror": [
+        "#include <dlfcn.h>"
+    ],
+    "dlopen": [
+        "#include <dlfcn.h>"
+    ],
+    "dlsym": [
+        "#include <dlfcn.h>"
+    ],
+    "dlvsym": [
+        "#define _GNU_SOURCE",
+        "#include <dlfcn.h>"
+    ],
+    "dn_comp": [
+        "#include <netinet/in.h>",
+        "#include <arpa/nameser.h>",
+        "#include <resolv.h>"
+    ],
+    "dn_expand": [
+        "#include <netinet/in.h>",
+        "#include <arpa/nameser.h>",
+        "#include <resolv.h>"
+    ],
+    "dprintf": [
+        "#include <stdio.h>"
+    ],
+    "drand48": [
+        "#include <stdlib.h>"
+    ],
+    "drand48_r": [
+        "#include <stdlib.h>"
+    ],
+    "drem": [
+        "#include <math.h>"
+    ],
+    "dremf": [
+        "#include <math.h>"
+    ],
+    "dreml": [
+        "#include <math.h>"
+    ],
+    "duplocale": [
+        "#include <locale.h>"
+    ],
+    "dysize": [
+        "#include <time.h>"
+    ],
+    "eaccess": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <unistd.h>"
+    ],
+    "ecb_crypt": [
+        "#include <rpc/des_crypt.h>"
+    ],
+    "ecvt": [
+        "#include <stdlib.h>"
+    ],
+    "ecvt_r": [
+        "#include <stdlib.h>"
+    ],
+    "edata": [],
+    "encrypt": [
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <unistd.h>"
+    ],
+    "encrypt_r": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <unistd.h>",
+        "#include <stdlib.h>",
+        "#include <crypt.h>"
+    ],
+    "end": [],
+    "endaliasent": [
+        "#include <aliases.h>"
+    ],
+    "endfsent": [
+        "#include <fstab.h>"
+    ],
+    "endgrent": [
+        "#include <sys/types.h>",
+        "#include <grp.h>"
+    ],
+    "endhostent": [
+        "#include <netdb.h>",
+        "#include <sys/socket.h> /* for AF_INET */"
+    ],
+    "endian": [
+        "#include <endian.h>"
+    ],
+    "endmntent": [
+        "#include <stdio.h>",
+        "#include <mntent.h>"
+    ],
+    "endnetent": [
+        "#include <netdb.h>"
+    ],
+    "endnetgrent": [
+        "#include <netdb.h>"
+    ],
+    "endprotoent": [
+        "#include <netdb.h>"
+    ],
+    "endpwent": [
+        "#include <sys/types.h>",
+        "#include <pwd.h>"
+    ],
+    "endrpcent": [
+        "#include <netdb.h>"
+    ],
+    "endservent": [
+        "#include <netdb.h>"
+    ],
+    "endspent": [
+        "#include <shadow.h>"
+    ],
+    "endttyent": [
+        "#include <ttyent.h>"
+    ],
+    "endusershell": [
+        "#include <unistd.h>"
+    ],
+    "endutent": [
+        "#include <utmp.h>"
+    ],
+    "endutxent": [
+        "#include <utmp.h>"
+    ],
+    "envz": [
+        "#include <envz.h>"
+    ],
+    "envz_add": [
+        "#include <envz.h>"
+    ],
+    "envz_entry": [
+        "#include <envz.h>"
+    ],
+    "envz_get": [
+        "#include <envz.h>"
+    ],
+    "envz_merge": [
+        "#include <envz.h>"
+    ],
+    "envz_remove": [
+        "#include <envz.h>"
+    ],
+    "envz_strip": [
+        "#include <envz.h>"
+    ],
+    "erand48": [
+        "#include <stdlib.h>"
+    ],
+    "erand48_r": [
+        "#include <stdlib.h>"
+    ],
+    "erf": [
+        "#include <math.h>"
+    ],
+    "erfc": [
+        "#include <math.h>"
+    ],
+    "erfcf": [
+        "#include <math.h>"
+    ],
+    "erfcl": [
+        "#include <math.h>"
+    ],
+    "erff": [
+        "#include <math.h>"
+    ],
+    "erfl": [
+        "#include <math.h>"
+    ],
+    "err": [
+        "#include <err.h>"
+    ],
+    "errno": [
+        "#include <errno.h>"
+    ],
+    "error": [
+        "#include <error.h>"
+    ],
+    "error_at_line": [
+        "#include <error.h>"
+    ],
+    "error_message_count": [
+        "#include <error.h>"
+    ],
+    "error_one_per_line": [
+        "#include <error.h>"
+    ],
+    "error_print_progname": [
+        "#include <error.h>"
+    ],
+    "errx": [
+        "#include <err.h>"
+    ],
+    "etext": [],
+    "ether_aton": [
+        "#include <netinet/ether.h>"
+    ],
+    "ether_aton_r": [
+        "#include <netinet/ether.h>"
+    ],
+    "ether_hostton": [
+        "#include <netinet/ether.h>"
+    ],
+    "ether_line": [
+        "#include <netinet/ether.h>"
+    ],
+    "ether_ntoa": [
+        "#include <netinet/ether.h>"
+    ],
+    "ether_ntoa_r": [
+        "#include <netinet/ether.h>"
+    ],
+    "ether_ntohost": [
+        "#include <netinet/ether.h>"
+    ],
+    "euidaccess": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <unistd.h>"
+    ],
+    "eventfd_read": [
+        "#include <sys/eventfd.h>"
+    ],
+    "eventfd_write": [
+        "#include <sys/eventfd.h>"
+    ],
+    "exec": [
+        "#include <unistd.h>"
+    ],
+    "execl": [
+        "#include <unistd.h>"
+    ],
+    "execle": [
+        "#include <unistd.h>"
+    ],
+    "execlp": [
+        "#include <unistd.h>"
+    ],
+    "execv": [
+        "#include <unistd.h>"
+    ],
+    "execvp": [
+        "#include <unistd.h>"
+    ],
+    "execvpe": [
+        "#include <unistd.h>"
+    ],
+    "exit": [
+        "#include <stdlib.h>"
+    ],
+    "exp": [
+        "#include <math.h>"
+    ],
+    "exp10": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "exp10f": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "exp10l": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "exp2": [
+        "#include <math.h>"
+    ],
+    "exp2f": [
+        "#include <math.h>"
+    ],
+    "exp2l": [
+        "#include <math.h>"
+    ],
+    "expf": [
+        "#include <math.h>"
+    ],
+    "expl": [
+        "#include <math.h>"
+    ],
+    "expm1": [
+        "#include <math.h>"
+    ],
+    "expm1f": [
+        "#include <math.h>"
+    ],
+    "expm1l": [
+        "#include <math.h>"
+    ],
+    "fabs": [
+        "#include <math.h>"
+    ],
+    "fabsf": [
+        "#include <math.h>"
+    ],
+    "fabsl": [
+        "#include <math.h>"
+    ],
+    "fclose": [
+        "#include <stdio.h>"
+    ],
+    "fcloseall": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <stdio.h>"
+    ],
+    "fcvt": [
+        "#include <stdlib.h>"
+    ],
+    "fcvt_r": [
+        "#include <stdlib.h>"
+    ],
+    "fdim": [
+        "#include <math.h>"
+    ],
+    "fdimf": [
+        "#include <math.h>"
+    ],
+    "fdiml": [
+        "#include <math.h>"
+    ],
+    "fdopen": [
+        "#include <stdio.h>"
+    ],
+    "fdopendir": [
+        "#include <sys/types.h>",
+        "#include <dirent.h>"
+    ],
+    "feclearexcept": [
+        "#include <fenv.h>"
+    ],
+    "fedisableexcept": [
+        "#include <fenv.h>"
+    ],
+    "feenableexcept": [
+        "#include <fenv.h>"
+    ],
+    "fegetenv": [
+        "#include <fenv.h>"
+    ],
+    "fegetexcept": [
+        "#include <fenv.h>"
+    ],
+    "fegetexceptflag": [
+        "#include <fenv.h>"
+    ],
+    "fegetround": [
+        "#include <fenv.h>"
+    ],
+    "feholdexcept": [
+        "#include <fenv.h>"
+    ],
+    "fenv": [
+        "#include <fenv.h>"
+    ],
+    "feof": [
+        "#include <stdio.h>"
+    ],
+    "feof_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "feraiseexcept": [
+        "#include <fenv.h>"
+    ],
+    "ferror": [
+        "#include <stdio.h>"
+    ],
+    "ferror_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "fesetenv": [
+        "#include <fenv.h>"
+    ],
+    "fesetexceptflag": [
+        "#include <fenv.h>"
+    ],
+    "fesetround": [
+        "#include <fenv.h>"
+    ],
+    "fetestexcept": [
+        "#include <fenv.h>"
+    ],
+    "feupdateenv": [
+        "#include <fenv.h>"
+    ],
+    "fexecve": [
+        "#include <unistd.h>"
+    ],
+    "fflush": [
+        "#include <stdio.h>"
+    ],
+    "fflush_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "ffs": [
+        "#include <strings.h>"
+    ],
+    "ffsl": [
+        "#include <strings.h>",
+        "#include <string.h>"
+    ],
+    "ffsll": [
+        "#include <strings.h>",
+        "#include <string.h>"
+    ],
+    "fgetc": [
+        "#include <stdio.h>"
+    ],
+    "fgetc_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "fgetgrent": [
+        "#include <stdio.h>",
+        "#include <sys/types.h>",
+        "#include <grp.h>"
+    ],
+    "fgetgrent_r": [
+        "#include <grp.h>"
+    ],
+    "fgetpos": [
+        "#include <stdio.h>"
+    ],
+    "fgetpwent": [
+        "#include <stdio.h>",
+        "#include <sys/types.h>",
+        "#include <pwd.h>"
+    ],
+    "fgetpwent_r": [
+        "#include <pwd.h>"
+    ],
+    "fgets": [
+        "#include <stdio.h>"
+    ],
+    "fgets_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "fgetspent": [
+        "#include <shadow.h>"
+    ],
+    "fgetspent_r": [
+        "#include <shadow.h>"
+    ],
+    "fgetwc": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "fgetwc_unlocked": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "fgetws": [
+        "#include <wchar.h>"
+    ],
+    "fgetws_unlocked": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "fileno": [
+        "#include <stdio.h>"
+    ],
+    "fileno_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "finite": [
+        "#include <math.h>"
+    ],
+    "finitef": [
+        "#include <math.h>"
+    ],
+    "finitel": [
+        "#include <math.h>"
+    ],
+    "flockfile": [
+        "#include <stdio.h>"
+    ],
+    "floor": [
+        "#include <math.h>"
+    ],
+    "floorf": [
+        "#include <math.h>"
+    ],
+    "floorl": [
+        "#include <math.h>"
+    ],
+    "fma": [
+        "#include <math.h>"
+    ],
+    "fmaf": [
+        "#include <math.h>"
+    ],
+    "fmal": [
+        "#include <math.h>"
+    ],
+    "fmax": [
+        "#include <math.h>"
+    ],
+    "fmaxf": [
+        "#include <math.h>"
+    ],
+    "fmaxl": [
+        "#include <math.h>"
+    ],
+    "fmemopen": [
+        "#include <stdio.h>"
+    ],
+    "fmin": [
+        "#include <math.h>"
+    ],
+    "fminf": [
+        "#include <math.h>"
+    ],
+    "fminl": [
+        "#include <math.h>"
+    ],
+    "fmod": [
+        "#include <math.h>"
+    ],
+    "fmodf": [
+        "#include <math.h>"
+    ],
+    "fmodl": [
+        "#include <math.h>"
+    ],
+    "fmtmsg": [
+        "#include <fmtmsg.h>"
+    ],
+    "fnmatch": [
+        "#include <fnmatch.h>"
+    ],
+    "fopen": [
+        "#include <stdio.h>"
+    ],
+    "fopencookie": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <stdio.h>"
+    ],
+    "forkpty": [
+        "#include <pty.h>"
+    ],
+    "fpathconf": [
+        "#include <unistd.h>"
+    ],
+    "fpclassify": [
+        "#include <math.h>"
+    ],
+    "fprintf": [
+        "#include <stdio.h>"
+    ],
+    "fpurge": [
+        "#include <stdio.h>"
+    ],
+    "fputc": [
+        "#include <stdio.h>"
+    ],
+    "fputc_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "fputs": [
+        "#include <stdio.h>"
+    ],
+    "fputs_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "fputwc": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "fputwc_unlocked": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "fputws": [
+        "#include <wchar.h>"
+    ],
+    "fputws_unlocked": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "fread": [
+        "#include <stdio.h>"
+    ],
+    "fread_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "free": [
+        "#include <stdlib.h>"
+    ],
+    "freeaddrinfo": [
+        "#include <sys/types.h>",
+        "#include <sys/socket.h>",
+        "#include <netdb.h>"
+    ],
+    "freehostent": [
+        "#include <sys/types.h>",
+        "#include <sys/socket.h>",
+        "#include <netdb.h>"
+    ],
+    "freeifaddrs": [
+        "#include <sys/types.h>",
+        "#include <ifaddrs.h>"
+    ],
+    "freelocale": [
+        "#include <locale.h>"
+    ],
+    "freopen": [
+        "#include <stdio.h>"
+    ],
+    "frexp": [
+        "#include <math.h>"
+    ],
+    "frexpf": [
+        "#include <math.h>"
+    ],
+    "frexpl": [
+        "#include <math.h>"
+    ],
+    "fscanf": [
+        "#include <stdio.h>"
+    ],
+    "fseek": [
+        "#include <stdio.h>"
+    ],
+    "fseeko": [
+        "#include <stdio.h>"
+    ],
+    "fsetpos": [
+        "#include <stdio.h>"
+    ],
+    "fstatvfs": [
+        "#include <sys/statvfs.h>"
+    ],
+    "ftell": [
+        "#include <stdio.h>"
+    ],
+    "ftello": [
+        "#include <stdio.h>"
+    ],
+    "ftime": [
+        "#include <sys/timeb.h>"
+    ],
+    "ftok": [
+        "#include <sys/types.h>",
+        "#include <sys/ipc.h>"
+    ],
+    "ftrylockfile": [
+        "#include <stdio.h>"
+    ],
+    "fts": [
+        "#include <sys/types.h>",
+        "#include <sys/stat.h>"
+    ],
+    "fts_children": [
+        "#include <sys/types.h>",
+        "#include <sys/stat.h>",
+        "#include <fts.h>"
+    ],
+    "fts_close": [
+        "#include <sys/types.h>",
+        "#include <sys/stat.h>",
+        "#include <fts.h>"
+    ],
+    "fts_open": [
+        "#include <sys/types.h>",
+        "#include <sys/stat.h>",
+        "#include <fts.h>"
+    ],
+    "fts_read": [
+        "#include <sys/types.h>",
+        "#include <sys/stat.h>",
+        "#include <fts.h>"
+    ],
+    "fts_set": [
+        "#include <sys/types.h>",
+        "#include <sys/stat.h>",
+        "#include <fts.h>"
+    ],
+    "ftw": [
+        "#include <ftw.h>"
+    ],
+    "funlockfile": [
+        "#include <stdio.h>"
+    ],
+    "futimens": [
+        "#include <fcntl.h> /* Definition of AT_* constants */",
+        "#include <sys/stat.h>"
+    ],
+    "futimes": [
+        "#include <sys/time.h>"
+    ],
+    "fwide": [
+        "#include <wchar.h>"
+    ],
+    "fwprintf": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "fwrite": [
+        "#include <stdio.h>"
+    ],
+    "fwrite_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "gai_cancel": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <netdb.h>"
+    ],
+    "gai_error": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <netdb.h>"
+    ],
+    "gai_strerror": [
+        "#include <sys/types.h>",
+        "#include <sys/socket.h>",
+        "#include <netdb.h>"
+    ],
+    "gai_suspend": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <netdb.h>"
+    ],
+    "gamma": [
+        "#include <math.h>"
+    ],
+    "gammaf": [
+        "#include <math.h>"
+    ],
+    "gammal": [
+        "#include <math.h>"
+    ],
+    "gcvt": [
+        "#include <stdlib.h>"
+    ],
+    "get_current_dir_name": [
+        "#include <unistd.h>"
+    ],
+    "get_myaddress": [],
+    "get_nprocs": [
+        "#include <sys/sysinfo.h>"
+    ],
+    "get_nprocs_conf": [
+        "#include <sys/sysinfo.h>"
+    ],
+    "getaddrinfo": [
+        "#include <sys/types.h>",
+        "#include <sys/socket.h>",
+        "#include <netdb.h>"
+    ],
+    "getaddrinfo_a": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <netdb.h>"
+    ],
+    "getaliasbyname": [
+        "#include <aliases.h>"
+    ],
+    "getaliasbyname_r": [
+        "#include <aliases.h>"
+    ],
+    "getaliasent": [
+        "#include <aliases.h>"
+    ],
+    "getaliasent_r": [
+        "#include <aliases.h>"
+    ],
+    "getauxval": [
+        "#include <sys/auxv.h>"
+    ],
+    "getc": [
+        "#include <stdio.h>"
+    ],
+    "getc_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "getchar": [
+        "#include <stdio.h>"
+    ],
+    "getchar_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "getcontext": [
+        "#include <ucontext.h>"
+    ],
+    "getcwd": [
+        "#include <unistd.h>"
+    ],
+    "getdate": [
+        "#include <time.h>"
+    ],
+    "getdate_err": [
+        "#include <time.h>"
+    ],
+    "getdate_r": [
+        "#include <time.h>"
+    ],
+    "getdelim": [
+        "#include <stdio.h>"
+    ],
+    "getdirentries": [
+        "#include <dirent.h>"
+    ],
+    "getdtablesize": [
+        "#include <unistd.h>"
+    ],
+    "getenv": [
+        "#include <stdlib.h>"
+    ],
+    "getfsent": [
+        "#include <fstab.h>"
+    ],
+    "getfsfile": [
+        "#include <fstab.h>"
+    ],
+    "getfsspec": [
+        "#include <fstab.h>"
+    ],
+    "getgrent": [
+        "#include <sys/types.h>",
+        "#include <grp.h>"
+    ],
+    "getgrent_r": [
+        "#include <grp.h>"
+    ],
+    "getgrgid": [
+        "#include <sys/types.h>",
+        "#include <grp.h>"
+    ],
+    "getgrgid_r": [
+        "#include <sys/types.h>",
+        "#include <grp.h>"
+    ],
+    "getgrnam": [
+        "#include <sys/types.h>",
+        "#include <grp.h>"
+    ],
+    "getgrnam_r": [
+        "#include <sys/types.h>",
+        "#include <grp.h>"
+    ],
+    "getgrouplist": [
+        "#include <grp.h>"
+    ],
+    "gethostbyaddr": [
+        "#include <netdb.h>",
+        "#include <sys/socket.h> /* for AF_INET */"
+    ],
+    "gethostbyaddr_r": [
+        "#include <netdb.h>",
+        "#include <sys/socket.h> /* for AF_INET */"
+    ],
+    "gethostbyname": [
+        "#include <netdb.h>"
+    ],
+    "gethostbyname2": [
+        "#include <netdb.h>",
+        "#include <sys/socket.h> /* for AF_INET */"
+    ],
+    "gethostbyname2_r": [
+        "#include <netdb.h>",
+        "#include <sys/socket.h> /* for AF_INET */"
+    ],
+    "gethostbyname_r": [
+        "#include <netdb.h>",
+        "#include <sys/socket.h> /* for AF_INET */"
+    ],
+    "gethostent": [
+        "#include <netdb.h>",
+        "#include <sys/socket.h> /* for AF_INET */"
+    ],
+    "gethostent_r": [
+        "#include <netdb.h>",
+        "#include <sys/socket.h> /* for AF_INET */"
+    ],
+    "gethostid": [
+        "#include <unistd.h>"
+    ],
+    "getifaddrs": [
+        "#include <sys/types.h>",
+        "#include <ifaddrs.h>"
+    ],
+    "getipnodebyaddr": [
+        "#include <sys/types.h>",
+        "#include <sys/socket.h>",
+        "#include <netdb.h>"
+    ],
+    "getipnodebyname": [
+        "#include <sys/types.h>",
+        "#include <sys/socket.h>",
+        "#include <netdb.h>"
+    ],
+    "getline": [
+        "#include <stdio.h>"
+    ],
+    "getloadavg": [
+        "#include <stdlib.h>"
+    ],
+    "getlogin": [
+        "#include <unistd.h>"
+    ],
+    "getlogin_r": [
+        "#include <unistd.h>"
+    ],
+    "getmntent": [
+        "#include <stdio.h>",
+        "#include <mntent.h>"
+    ],
+    "getmntent_r": [
+        "#include <stdio.h>",
+        "#include <mntent.h>"
+    ],
+    "getnameinfo": [
+        "#include <sys/socket.h>",
+        "#include <netdb.h>"
+    ],
+    "getnetbyaddr": [
+        "#include <netdb.h>"
+    ],
+    "getnetbyaddr_r": [
+        "#include <netdb.h>"
+    ],
+    "getnetbyname": [
+        "#include <netdb.h>"
+    ],
+    "getnetbyname_r": [
+        "#include <netdb.h>"
+    ],
+    "getnetent": [
+        "#include <netdb.h>"
+    ],
+    "getnetent_r": [
+        "#include <netdb.h>"
+    ],
+    "getnetgrent": [
+        "#include <netdb.h>"
+    ],
+    "getnetgrent_r": [
+        "#include <netdb.h>"
+    ],
+    "getopt": [
+        "#include <unistd.h>"
+    ],
+    "getopt_long": [
+        "#include <unistd.h>",
+        "#include <getopt.h>"
+    ],
+    "getopt_long_only": [
+        "#include <unistd.h>",
+        "#include <getopt.h>"
+    ],
+    "getpass": [
+        "#include <unistd.h>"
+    ],
+    "getprotobyname": [
+        "#include <netdb.h>"
+    ],
+    "getprotobyname_r": [
+        "#include <netdb.h>"
+    ],
+    "getprotobynumber": [
+        "#include <netdb.h>"
+    ],
+    "getprotobynumber_r": [
+        "#include <netdb.h>"
+    ],
+    "getprotoent": [
+        "#include <netdb.h>"
+    ],
+    "getprotoent_r": [
+        "#include <netdb.h>"
+    ],
+    "getpt": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <stdlib.h>"
+    ],
+    "getpw": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sys/types.h>",
+        "#include <pwd.h>"
+    ],
+    "getpwent": [
+        "#include <sys/types.h>",
+        "#include <pwd.h>"
+    ],
+    "getpwent_r": [
+        "#include <pwd.h>"
+    ],
+    "getpwnam": [
+        "#include <sys/types.h>",
+        "#include <pwd.h>"
+    ],
+    "getpwnam_r": [
+        "#include <sys/types.h>",
+        "#include <pwd.h>"
+    ],
+    "getpwuid": [
+        "#include <sys/types.h>",
+        "#include <pwd.h>"
+    ],
+    "getpwuid_r": [
+        "#include <sys/types.h>",
+        "#include <pwd.h>"
+    ],
+    "getrpcbyname": [
+        "#include <netdb.h>"
+    ],
+    "getrpcbyname_r": [
+        "#include <netdb.h>"
+    ],
+    "getrpcbynumber": [
+        "#include <netdb.h>"
+    ],
+    "getrpcbynumber_r": [
+        "#include <netdb.h>"
+    ],
+    "getrpcent": [
+        "#include <netdb.h>"
+    ],
+    "getrpcent_r": [
+        "#include <netdb.h>"
+    ],
+    "getrpcport": [
+        "#include <rpc/rpc.h>"
+    ],
+    "gets": [
+        "#include <stdio.h>"
+    ],
+    "getservbyname": [
+        "#include <netdb.h>"
+    ],
+    "getservbyname_r": [
+        "#include <netdb.h>"
+    ],
+    "getservbyport": [
+        "#include <netdb.h>"
+    ],
+    "getservbyport_r": [
+        "#include <netdb.h>"
+    ],
+    "getservent": [
+        "#include <netdb.h>"
+    ],
+    "getservent_r": [
+        "#include <netdb.h>"
+    ],
+    "getspent": [
+        "#include <shadow.h>"
+    ],
+    "getspent_r": [
+        "#include <shadow.h>"
+    ],
+    "getspnam": [
+        "#include <shadow.h>"
+    ],
+    "getspnam_r": [
+        "#include <shadow.h>"
+    ],
+    "getsubopt": [
+        "#include <stdlib.h>"
+    ],
+    "getttyent": [
+        "#include <ttyent.h>"
+    ],
+    "getttynam": [
+        "#include <ttyent.h>"
+    ],
+    "getumask": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <sys/types.h>",
+        "#include <sys/stat.h>"
+    ],
+    "getusershell": [
+        "#include <unistd.h>"
+    ],
+    "getutent": [
+        "#include <utmp.h>"
+    ],
+    "getutent_r": [
+        "#include <utmp.h>"
+    ],
+    "getutid": [
+        "#include <utmp.h>"
+    ],
+    "getutid_r": [
+        "#include <utmp.h>"
+    ],
+    "getutline": [
+        "#include <utmp.h>"
+    ],
+    "getutline_r": [
+        "#include <utmp.h>"
+    ],
+    "getutmp": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <utmpx.h>"
+    ],
+    "getutmpx": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <utmpx.h>"
+    ],
+    "getutxent": [
+        "#include <utmp.h>"
+    ],
+    "getutxid": [
+        "#include <utmp.h>"
+    ],
+    "getutxline": [
+        "#include <utmp.h>"
+    ],
+    "getw": [
+        "#include <stdio.h>"
+    ],
+    "getwc": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "getwc_unlocked": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "getwchar": [
+        "#include <wchar.h>"
+    ],
+    "getwchar_unlocked": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "getwd": [
+        "#include <unistd.h>"
+    ],
+    "glob": [
+        "#include <glob.h>"
+    ],
+    "globfree": [
+        "#include <glob.h>"
+    ],
+    "gmtime": [
+        "#include <time.h>"
+    ],
+    "gmtime_r": [
+        "#include <time.h>"
+    ],
+    "gnu_dev_major": [
+        "#include <sys/types.h>"
+    ],
+    "gnu_dev_makedev": [
+        "#include <sys/types.h>"
+    ],
+    "gnu_dev_minor": [
+        "#include <sys/types.h>"
+    ],
+    "gnu_get_libc_release": [
+        "#include <gnu/libc-version.h>"
+    ],
+    "gnu_get_libc_version": [
+        "#include <gnu/libc-version.h>"
+    ],
+    "grantpt": [
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <stdlib.h>"
+    ],
+    "group_member": [
+        "#include <unistd.h>"
+    ],
+    "gsignal": [
+        "#include <signal.h>"
+    ],
+    "h_errno": [
+        "#include <netdb.h>"
+    ],
+    "hash": [
+        "#include <sys/types.h>",
+        "#include <db.h>"
+    ],
+    "hasmntopt": [
+        "#include <stdio.h>",
+        "#include <mntent.h>"
+    ],
+    "hcreate": [
+        "#include <search.h>"
+    ],
+    "hcreate_r": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <search.h>"
+    ],
+    "hdestroy": [
+        "#include <search.h>"
+    ],
+    "hdestroy_r": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <search.h>"
+    ],
+    "herror": [
+        "#include <netdb.h>",
+        "#include <sys/socket.h> /* for AF_INET */"
+    ],
+    "hsearch": [
+        "#include <search.h>"
+    ],
+    "hsearch_r": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <search.h>"
+    ],
+    "hstrerror": [
+        "#include <netdb.h>",
+        "#include <sys/socket.h> /* for AF_INET */"
+    ],
+    "htobe16": [
+        "#include <endian.h>"
+    ],
+    "htobe32": [
+        "#include <endian.h>"
+    ],
+    "htobe64": [
+        "#include <endian.h>"
+    ],
+    "htole16": [
+        "#include <endian.h>"
+    ],
+    "htole32": [
+        "#include <endian.h>"
+    ],
+    "htole64": [
+        "#include <endian.h>"
+    ],
+    "htonl": [
+        "#include <arpa/inet.h>"
+    ],
+    "htons": [
+        "#include <arpa/inet.h>"
+    ],
+    "hypot": [
+        "#include <math.h>"
+    ],
+    "hypotf": [
+        "#include <math.h>"
+    ],
+    "hypotl": [
+        "#include <math.h>"
+    ],
+    "iconv": [
+        "#include <iconv.h>"
+    ],
+    "iconv_close": [
+        "#include <iconv.h>"
+    ],
+    "iconv_open": [
+        "#include <iconv.h>"
+    ],
+    "if_freenameindex": [
+        "#include <net/if.h>"
+    ],
+    "if_indextoname": [
+        "#include <net/if.h>"
+    ],
+    "if_nameindex": [
+        "#include <net/if.h>"
+    ],
+    "if_nametoindex": [
+        "#include <net/if.h>"
+    ],
+    "ilogb": [
+        "#include <math.h>"
+    ],
+    "ilogbf": [
+        "#include <math.h>"
+    ],
+    "ilogbl": [
+        "#include <math.h>"
+    ],
+    "imaxabs": [
+        "#include <stdlib.h>",
+        "#include <inttypes.h>"
+    ],
+    "imaxdiv": [
+        "#include <stdlib.h>",
+        "#include <inttypes.h>"
+    ],
+    "index": [
+        "#include <strings.h>"
+    ],
+    "inet": [
+        "#include <sys/socket.h>"
+    ],
+    "inet_addr": [
+        "#include <sys/socket.h>",
+        "#include <netinet/in.h>",
+        "#include <arpa/inet.h>"
+    ],
+    "inet_aton": [
+        "#include <sys/socket.h>",
+        "#include <netinet/in.h>",
+        "#include <arpa/inet.h>"
+    ],
+    "inet_lnaof": [
+        "#include <sys/socket.h>",
+        "#include <netinet/in.h>",
+        "#include <arpa/inet.h>"
+    ],
+    "inet_makeaddr": [
+        "#include <sys/socket.h>",
+        "#include <netinet/in.h>",
+        "#include <arpa/inet.h>"
+    ],
+    "inet_net_ntop": [
+        "#include <arpa/inet.h>"
+    ],
+    "inet_net_pton": [
+        "#include <arpa/inet.h>"
+    ],
+    "inet_netof": [
+        "#include <sys/socket.h>",
+        "#include <netinet/in.h>",
+        "#include <arpa/inet.h>"
+    ],
+    "inet_network": [
+        "#include <sys/socket.h>",
+        "#include <netinet/in.h>",
+        "#include <arpa/inet.h>"
+    ],
+    "inet_ntoa": [
+        "#include <sys/socket.h>",
+        "#include <netinet/in.h>",
+        "#include <arpa/inet.h>"
+    ],
+    "inet_ntop": [
+        "#include <arpa/inet.h>"
+    ],
+    "inet_pton": [
+        "#include <arpa/inet.h>"
+    ],
+    "infnan": [
+        "#include <math.h>"
+    ],
+    "initgroups": [
+        "#include <sys/types.h>",
+        "#include <grp.h>"
+    ],
+    "initstate": [
+        "#include <stdlib.h>"
+    ],
+    "initstate_r": [
+        "#include <stdlib.h>"
+    ],
+    "innetgr": [
+        "#include <netdb.h>"
+    ],
+    "insque": [
+        "#include <search.h>"
+    ],
+    "intro": [],
+    "iruserok": [
+        "#include <netdb.h> /* Or <unistd.h> on some systems */"
+    ],
+    "iruserok_af": [
+        "#include <netdb.h> /* Or <unistd.h> on some systems */"
+    ],
+    "isalnum": [
+        "#include <ctype.h>"
+    ],
+    "isalnum_l": [
+        "#include <ctype.h>"
+    ],
+    "isalpha": [
+        "#include <ctype.h>"
+    ],
+    "isascii": [
+        "#include <ctype.h>"
+    ],
+    "isascii_l": [
+        "#include <ctype.h>"
+    ],
+    "isatty": [
+        "#include <unistd.h>"
+    ],
+    "isblank": [
+        "#include <ctype.h>"
+    ],
+    "isblank_l": [
+        "#include <ctype.h>"
+    ],
+    "iscntrl": [
+        "#include <ctype.h>"
+    ],
+    "iscntrl_l": [
+        "#include <ctype.h>"
+    ],
+    "isdigit": [
+        "#include <ctype.h>"
+    ],
+    "isdigit_l": [
+        "#include <ctype.h>"
+    ],
+    "isfdtype": [
+        "#include <sys/stat.h>",
+        "#include <sys/socket.h>"
+    ],
+    "isfinite": [
+        "#include <math.h>"
+    ],
+    "isgraph": [
+        "#include <ctype.h>"
+    ],
+    "isgraph_l": [
+        "#include <ctype.h>"
+    ],
+    "isgreater": [
+        "#include <math.h>"
+    ],
+    "isgreaterequal": [
+        "#include <math.h>"
+    ],
+    "isinf": [
+        "#include <math.h>"
+    ],
+    "isinff": [
+        "#include <math.h>"
+    ],
+    "isinfl": [
+        "#include <math.h>"
+    ],
+    "isless": [
+        "#include <math.h>"
+    ],
+    "islessequal": [
+        "#include <math.h>"
+    ],
+    "islessgreater": [
+        "#include <math.h>"
+    ],
+    "islower": [
+        "#include <ctype.h>"
+    ],
+    "islower_l": [
+        "#include <ctype.h>"
+    ],
+    "isnan": [
+        "#include <math.h>"
+    ],
+    "isnanf": [
+        "#include <math.h>"
+    ],
+    "isnanl": [
+        "#include <math.h>"
+    ],
+    "isnormal": [
+        "#include <math.h>"
+    ],
+    "isprint": [
+        "#include <ctype.h>"
+    ],
+    "isprint_l": [
+        "#include <ctype.h>"
+    ],
+    "ispunct": [
+        "#include <ctype.h>"
+    ],
+    "ispunct_l": [
+        "#include <ctype.h>"
+    ],
+    "isspace": [
+        "#include <ctype.h>"
+    ],
+    "isspace_l": [
+        "#include <ctype.h>"
+    ],
+    "isunordered": [
+        "#include <math.h>"
+    ],
+    "isupper": [
+        "#include <ctype.h>"
+    ],
+    "isupper_l": [
+        "#include <ctype.h>"
+    ],
+    "iswalnum": [
+        "#include <wctype.h>"
+    ],
+    "iswalpha": [
+        "#include <wctype.h>"
+    ],
+    "iswblank": [
+        "#include <wctype.h>"
+    ],
+    "iswcntrl": [
+        "#include <wctype.h>"
+    ],
+    "iswctype": [
+        "#include <wctype.h>"
+    ],
+    "iswdigit": [
+        "#include <wctype.h>"
+    ],
+    "iswgraph": [
+        "#include <wctype.h>"
+    ],
+    "iswlower": [
+        "#include <wctype.h>"
+    ],
+    "iswprint": [
+        "#include <wctype.h>"
+    ],
+    "iswpunct": [
+        "#include <wctype.h>"
+    ],
+    "iswspace": [
+        "#include <wctype.h>"
+    ],
+    "iswupper": [
+        "#include <wctype.h>"
+    ],
+    "iswxdigit": [
+        "#include <wctype.h>"
+    ],
+    "isxdigit": [
+        "#include <ctype.h>"
+    ],
+    "isxdigit_l": [
+        "#include <ctype.h>"
+    ],
+    "j0": [
+        "#include <math.h>"
+    ],
+    "j0f": [
+        "#include <math.h>"
+    ],
+    "j0l": [
+        "#include <math.h>"
+    ],
+    "j1": [
+        "#include <math.h>"
+    ],
+    "j1f": [
+        "#include <math.h>"
+    ],
+    "j1l": [
+        "#include <math.h>"
+    ],
+    "jn": [
+        "#include <math.h>"
+    ],
+    "jnf": [
+        "#include <math.h>"
+    ],
+    "jnl": [
+        "#include <math.h>"
+    ],
+    "jrand48": [
+        "#include <stdlib.h>"
+    ],
+    "jrand48_r": [
+        "#include <stdlib.h>"
+    ],
+    "key_decryptsession": [
+        "#include <rpc/rpc.h>"
+    ],
+    "key_encryptsession": [
+        "#include <rpc/rpc.h>"
+    ],
+    "key_gendes": [
+        "#include <rpc/rpc.h>"
+    ],
+    "key_secretkey_is_set": [
+        "#include <rpc/rpc.h>"
+    ],
+    "key_setsecret": [
+        "#include <rpc/rpc.h>"
+    ],
+    "klogctl": [
+        "#include <sys/klog.h>"
+    ],
+    "l64a": [
+        "#include <stdlib.h>"
+    ],
+    "labs": [
+        "#include <stdlib.h>"
+    ],
+    "lckpwdf": [
+        "#include <shadow.h>"
+    ],
+    "lcong48": [
+        "#include <stdlib.h>"
+    ],
+    "lcong48_r": [
+        "#include <stdlib.h>"
+    ],
+    "ldexp": [
+        "#include <math.h>"
+    ],
+    "ldexpf": [
+        "#include <math.h>"
+    ],
+    "ldexpl": [
+        "#include <math.h>"
+    ],
+    "ldiv": [
+        "#include <stdlib.h>"
+    ],
+    "le16toh": [
+        "#include <endian.h>"
+    ],
+    "le32toh": [
+        "#include <endian.h>"
+    ],
+    "le64toh": [
+        "#include <endian.h>"
+    ],
+    "lfind": [
+        "#include <search.h>"
+    ],
+    "lgamma": [
+        "#include <math.h>"
+    ],
+    "lgamma_r": [
+        "#include <math.h>"
+    ],
+    "lgammaf": [
+        "#include <math.h>"
+    ],
+    "lgammaf_r": [
+        "#include <math.h>"
+    ],
+    "lgammal": [
+        "#include <math.h>"
+    ],
+    "lgammal_r": [
+        "#include <math.h>"
+    ],
+    "lio_listio": [
+        "#include <aio.h>"
+    ],
+    "llabs": [
+        "#include <stdlib.h>"
+    ],
+    "lldiv": [
+        "#include <stdlib.h>"
+    ],
+    "llrint": [
+        "#include <math.h>"
+    ],
+    "llrintf": [
+        "#include <math.h>"
+    ],
+    "llrintl": [
+        "#include <math.h>"
+    ],
+    "llround": [
+        "#include <math.h>"
+    ],
+    "llroundf": [
+        "#include <math.h>"
+    ],
+    "llroundl": [
+        "#include <math.h>"
+    ],
+    "localeconv": [
+        "#include <locale.h>"
+    ],
+    "localtime": [
+        "#include <time.h>"
+    ],
+    "localtime_r": [
+        "#include <time.h>"
+    ],
+    "lockf": [
+        "#include <unistd.h>"
+    ],
+    "log": [
+        "#include <math.h>"
+    ],
+    "log10": [
+        "#include <math.h>"
+    ],
+    "log10f": [
+        "#include <math.h>"
+    ],
+    "log10l": [
+        "#include <math.h>"
+    ],
+    "log1p": [
+        "#include <math.h>"
+    ],
+    "log1pf": [
+        "#include <math.h>"
+    ],
+    "log1pl": [
+        "#include <math.h>"
+    ],
+    "log2": [
+        "#include <math.h>"
+    ],
+    "log2f": [
+        "#include <math.h>"
+    ],
+    "log2l": [
+        "#include <math.h>"
+    ],
+    "logb": [
+        "#include <math.h>"
+    ],
+    "logbf": [
+        "#include <math.h>"
+    ],
+    "logbl": [
+        "#include <math.h>"
+    ],
+    "logf": [
+        "#include <math.h>"
+    ],
+    "login": [
+        "#include <utmp.h>"
+    ],
+    "login_tty": [
+        "#include <pty.h>",
+        "#include <utmp.h>"
+    ],
+    "logl": [
+        "#include <math.h>"
+    ],
+    "logout": [
+        "#include <utmp.h>"
+    ],
+    "logwtmp": [
+        "#include <utmp.h>"
+    ],
+    "longjmp": [
+        "#include <setjmp.h>"
+    ],
+    "lrand48": [
+        "#include <stdlib.h>"
+    ],
+    "lrand48_r": [
+        "#include <stdlib.h>"
+    ],
+    "lrint": [
+        "#include <math.h>"
+    ],
+    "lrintf": [
+        "#include <math.h>"
+    ],
+    "lrintl": [
+        "#include <math.h>"
+    ],
+    "lround": [
+        "#include <math.h>"
+    ],
+    "lroundf": [
+        "#include <math.h>"
+    ],
+    "lroundl": [
+        "#include <math.h>"
+    ],
+    "lsearch": [
+        "#include <search.h>"
+    ],
+    "lseek64": [
+        "#define _LARGEFILE64_SOURCE /* See feature_test_macros(7) */",
+        "#include <sys/types.h>",
+        "#include <unistd.h>"
+    ],
+    "lutimes": [
+        "#include <sys/time.h>"
+    ],
+    "major": [
+        "#include <sys/types.h>"
+    ],
+    "makecontext": [
+        "#include <ucontext.h>"
+    ],
+    "makedev": [
+        "#include <sys/types.h>"
+    ],
+    "mallinfo": [
+        "#include <malloc.h>"
+    ],
+    "malloc": [
+        "#include <stdlib.h>"
+    ],
+    "malloc_get_state": [
+        "#include <malloc.h>"
+    ],
+    "malloc_hook": [
+        "#include <malloc.h>"
+    ],
+    "malloc_info": [
+        "#include <malloc.h>"
+    ],
+    "malloc_set_state": [
+        "#include <malloc.h>"
+    ],
+    "malloc_stats": [
+        "#include <malloc.h>"
+    ],
+    "malloc_trim": [
+        "#include <malloc.h>"
+    ],
+    "malloc_usable_size": [
+        "#include <malloc.h>"
+    ],
+    "mallopt": [
+        "#include <malloc.h>"
+    ],
+    "matherr": [
+        "#include <math.h>"
+    ],
+    "mblen": [
+        "#include <stdlib.h>"
+    ],
+    "mbrlen": [
+        "#include <wchar.h>"
+    ],
+    "mbrtowc": [
+        "#include <wchar.h>"
+    ],
+    "mbsinit": [
+        "#include <wchar.h>"
+    ],
+    "mbsnrtowcs": [
+        "#include <wchar.h>"
+    ],
+    "mbsrtowcs": [
+        "#include <wchar.h>"
+    ],
+    "mbstowcs": [
+        "#include <stdlib.h>"
+    ],
+    "mbtowc": [
+        "#include <stdlib.h>"
+    ],
+    "mcheck": [
+        "#include <mcheck.h>"
+    ],
+    "mcheck_check_all": [
+        "#include <mcheck.h>"
+    ],
+    "mcheck_pedantic": [
+        "#include <mcheck.h>"
+    ],
+    "memalign": [
+        "#include <stdlib.h>"
+    ],
+    "memccpy": [
+        "#include <string.h>"
+    ],
+    "memchr": [
+        "#include <string.h>"
+    ],
+    "memcmp": [
+        "#include <string.h>"
+    ],
+    "memcpy": [
+        "#include <string.h>"
+    ],
+    "memfrob": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <string.h>"
+    ],
+    "memmem": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <string.h>"
+    ],
+    "memmove": [
+        "#include <string.h>"
+    ],
+    "mempcpy": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <string.h>"
+    ],
+    "memrchr": [
+        "#include <string.h>"
+    ],
+    "memset": [
+        "#include <string.h>"
+    ],
+    "minor": [
+        "#include <sys/types.h>"
+    ],
+    "mkdtemp": [
+        "#include <stdlib.h>"
+    ],
+    "mkfifo": [
+        "#include <sys/types.h>",
+        "#include <sys/stat.h>"
+    ],
+    "mkfifoat": [
+        "#include <sys/types.h>",
+        "#include <sys/stat.h>",
+        "#include <fcntl.h> /* Definition of AT_* constants */"
+    ],
+    "mkostemp": [
+        "#include <stdlib.h>"
+    ],
+    "mkostemps": [
+        "#include <stdlib.h>"
+    ],
+    "mkstemp": [
+        "#include <stdlib.h>"
+    ],
+    "mkstemps": [
+        "#include <stdlib.h>"
+    ],
+    "mktemp": [
+        "#include <stdlib.h>"
+    ],
+    "mktime": [
+        "#include <time.h>"
+    ],
+    "mmap64": [
+        "#include <sys/mman.h>"
+    ],
+    "modf": [
+        "#include <math.h>"
+    ],
+    "modff": [
+        "#include <math.h>"
+    ],
+    "modfl": [
+        "#include <math.h>"
+    ],
+    "mpool": [
+        "#include <db.h>"
+    ],
+    "mprobe": [
+        "#include <mcheck.h>"
+    ],
+    "mq_close": [
+        "#include <mqueue.h>"
+    ],
+    "mq_getattr": [
+        "#include <mqueue.h>"
+    ],
+    "mq_notify": [
+        "#include <mqueue.h>"
+    ],
+    "mq_open": [
+        "#include <fcntl.h> /* For O_* constants */",
+        "#include <sys/stat.h> /* For mode constants */",
+        "#include <mqueue.h>"
+    ],
+    "mq_receive": [
+        "#include <mqueue.h>"
+    ],
+    "mq_send": [
+        "#include <mqueue.h>"
+    ],
+    "mq_setattr": [
+        "#include <mqueue.h>"
+    ],
+    "mq_timedreceive": [
+        "#include <mqueue.h>",
+        "#include <time.h>"
+    ],
+    "mq_timedsend": [
+        "#include <mqueue.h>",
+        "#include <time.h>"
+    ],
+    "mq_unlink": [
+        "#include <mqueue.h>"
+    ],
+    "mrand48": [
+        "#include <stdlib.h>"
+    ],
+    "mrand48_r": [
+        "#include <stdlib.h>"
+    ],
+    "mtrace": [
+        "#include <mcheck.h>"
+    ],
+    "muntrace": [
+        "#include <mcheck.h>"
+    ],
+    "nan": [
+        "#include <math.h>"
+    ],
+    "nanf": [
+        "#include <math.h>"
+    ],
+    "nanl": [
+        "#include <math.h>"
+    ],
+    "nearbyint": [
+        "#include <math.h>"
+    ],
+    "nearbyintf": [
+        "#include <math.h>"
+    ],
+    "nearbyintl": [
+        "#include <math.h>"
+    ],
+    "netlink": [
+        "#include <asm/types.h>"
+    ],
+    "newlocale": [
+        "#include <locale.h>"
+    ],
+    "nextafter": [
+        "#include <math.h>"
+    ],
+    "nextafterf": [
+        "#include <math.h>"
+    ],
+    "nextafterl": [
+        "#include <math.h>"
+    ],
+    "nexttoward": [
+        "#include <math.h>"
+    ],
+    "nexttowardf": [
+        "#include <math.h>"
+    ],
+    "nexttowardl": [
+        "#include <math.h>"
+    ],
+    "nftw": [
+        "#include <ftw.h>"
+    ],
+    "nl_langinfo": [
+        "#include <langinfo.h>"
+    ],
+    "nrand48": [
+        "#include <stdlib.h>"
+    ],
+    "nrand48_r": [
+        "#include <stdlib.h>"
+    ],
+    "ntohl": [
+        "#include <arpa/inet.h>"
+    ],
+    "ntohs": [
+        "#include <arpa/inet.h>"
+    ],
+    "offsetof": [
+        "#include <stddef.h>"
+    ],
+    "on_exit": [
+        "#include <stdlib.h>"
+    ],
+    "open_memstream": [
+        "#include <stdio.h>"
+    ],
+    "open_wmemstream": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "opendir": [
+        "#include <sys/types.h>",
+        "#include <dirent.h>"
+    ],
+    "openlog": [
+        "#include <syslog.h>"
+    ],
+    "openpty": [
+        "#include <pty.h>"
+    ],
+    "optarg": [
+        "#include <unistd.h>"
+    ],
+    "opterr": [
+        "#include <unistd.h>"
+    ],
+    "optind": [
+        "#include <unistd.h>"
+    ],
+    "optopt": [
+        "#include <unistd.h>"
+    ],
+    "passwd2des": [
+        "#include <rpc/des_crypt.h>"
+    ],
+    "pathconf": [
+        "#include <unistd.h>"
+    ],
+    "pclose": [
+        "#include <stdio.h>"
+    ],
+    "perror": [
+        "#include <stdio.h>"
+    ],
+    "pmap_getmaps": [],
+    "pmap_getport": [],
+    "pmap_rmtcall": [],
+    "pmap_set": [],
+    "pmap_unset": [],
+    "popen": [
+        "#include <stdio.h>"
+    ],
+    "posix_fallocate": [
+        "#include <fcntl.h>"
+    ],
+    "posix_memalign": [
+        "#include <stdlib.h>"
+    ],
+    "posix_openpt": [
+        "#include <stdlib.h>",
+        "#include <fcntl.h>"
+    ],
+    "pow": [
+        "#include <math.h>"
+    ],
+    "pow10": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "pow10f": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "pow10l": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "powf": [
+        "#include <math.h>"
+    ],
+    "powl": [
+        "#include <math.h>"
+    ],
+    "printf": [
+        "#include <stdio.h>"
+    ],
+    "profil": [
+        "#include <unistd.h>"
+    ],
+    "program_invocation_name": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <errno.h>"
+    ],
+    "program_invocation_short_name": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <errno.h>"
+    ],
+    "psiginfo": [
+        "#include <signal.h>"
+    ],
+    "psignal": [
+        "#include <signal.h>"
+    ],
+    "pthread_attr_destroy": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_getaffinity_np": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_getdetachstate": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_getguardsize": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_getinheritsched": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_getschedparam": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_getschedpolicy": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_getscope": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_getstack": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_getstackaddr": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_getstacksize": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_init": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_setaffinity_np": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_setdetachstate": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_setguardsize": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_setinheritsched": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_setschedparam": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_setschedpolicy": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_setscope": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_setstack": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_setstackaddr": [
+        "#include <pthread.h>"
+    ],
+    "pthread_attr_setstacksize": [
+        "#include <pthread.h>"
+    ],
+    "pthread_cancel": [
+        "#include <pthread.h>"
+    ],
+    "pthread_cleanup_pop": [
+        "#include <pthread.h>"
+    ],
+    "pthread_cleanup_pop_restore_np": [
+        "#include <pthread.h>"
+    ],
+    "pthread_cleanup_push": [
+        "#include <pthread.h>"
+    ],
+    "pthread_cleanup_push_defer_np": [
+        "#include <pthread.h>"
+    ],
+    "pthread_create": [
+        "#include <pthread.h>"
+    ],
+    "pthread_detach": [
+        "#include <pthread.h>"
+    ],
+    "pthread_equal": [
+        "#include <pthread.h>"
+    ],
+    "pthread_exit": [
+        "#include <pthread.h>"
+    ],
+    "pthread_getaffinity_np": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <pthread.h>"
+    ],
+    "pthread_getattr_np": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <pthread.h>"
+    ],
+    "pthread_getconcurrency": [
+        "#include <pthread.h>"
+    ],
+    "pthread_getcpuclockid": [
+        "#include <pthread.h>",
+        "#include <time.h>"
+    ],
+    "pthread_getname_np": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <pthread.h>"
+    ],
+    "pthread_getschedparam": [
+        "#include <pthread.h>"
+    ],
+    "pthread_join": [
+        "#include <pthread.h>"
+    ],
+    "pthread_kill": [
+        "#include <signal.h>"
+    ],
+    "pthread_kill_other_threads_np": [
+        "#include <pthread.h>"
+    ],
+    "pthread_self": [
+        "#include <pthread.h>"
+    ],
+    "pthread_setaffinity_np": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <pthread.h>"
+    ],
+    "pthread_setcancelstate": [
+        "#include <pthread.h>"
+    ],
+    "pthread_setcanceltype": [
+        "#include <pthread.h>"
+    ],
+    "pthread_setconcurrency": [
+        "#include <pthread.h>"
+    ],
+    "pthread_setname_np": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <pthread.h>"
+    ],
+    "pthread_setschedparam": [
+        "#include <pthread.h>"
+    ],
+    "pthread_setschedprio": [
+        "#include <pthread.h>"
+    ],
+    "pthread_sigmask": [
+        "#include <signal.h>"
+    ],
+    "pthread_sigqueue": [
+        "#include <signal.h>",
+        "#include <pthread.h>"
+    ],
+    "pthread_testcancel": [
+        "#include <pthread.h>"
+    ],
+    "pthread_timedjoin_np": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <pthread.h>"
+    ],
+    "pthread_tryjoin_np": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <pthread.h>"
+    ],
+    "pthread_yield": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <pthread.h>"
+    ],
+    "ptsname": [
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <stdlib.h>"
+    ],
+    "ptsname_r": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <stdlib.h>"
+    ],
+    "putc": [
+        "#include <stdio.h>"
+    ],
+    "putc_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "putchar": [
+        "#include <stdio.h>"
+    ],
+    "putchar_unlocked": [
+        "#include <stdio.h>"
+    ],
+    "putenv": [
+        "#include <stdlib.h>"
+    ],
+    "putgrent": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <grp.h>"
+    ],
+    "putpwent": [
+        "#include <stdio.h>",
+        "#include <sys/types.h>",
+        "#include <pwd.h>"
+    ],
+    "puts": [
+        "#include <stdio.h>"
+    ],
+    "putspent": [
+        "#include <shadow.h>"
+    ],
+    "pututline": [
+        "#include <utmp.h>"
+    ],
+    "pututxline": [
+        "#include <utmp.h>"
+    ],
+    "putw": [
+        "#include <stdio.h>"
+    ],
+    "putwc": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "putwc_unlocked": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "putwchar": [
+        "#include <wchar.h>"
+    ],
+    "putwchar_unlocked": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "pvalloc": [
+        "#include <stdlib.h>",
+        "#include <malloc.h>"
+    ],
+    "qecvt": [
+        "#include <stdlib.h>"
+    ],
+    "qecvt_r": [
+        "#include <stdlib.h>"
+    ],
+    "qfcvt": [
+        "#include <stdlib.h>"
+    ],
+    "qfcvt_r": [
+        "#include <stdlib.h>"
+    ],
+    "qgcvt": [
+        "#include <stdlib.h>"
+    ],
+    "qsort": [
+        "#include <stdlib.h>"
+    ],
+    "qsort_r": [
+        "#include <stdlib.h>"
+    ],
+    "queue": [
+        "#include <sys/queue.h>"
+    ],
+    "raise": [
+        "#include <signal.h>"
+    ],
+    "rand": [
+        "#include <stdlib.h>"
+    ],
+    "rand_r": [
+        "#include <stdlib.h>"
+    ],
+    "random": [
+        "#include <stdlib.h>"
+    ],
+    "random_r": [
+        "#include <stdlib.h>"
+    ],
+    "rawmemchr": [
+        "#include <string.h>"
+    ],
+    "rcmd": [
+        "#include <netdb.h> /* Or <unistd.h> on some systems */"
+    ],
+    "rcmd_af": [
+        "#include <netdb.h> /* Or <unistd.h> on some systems */"
+    ],
+    "re_comp": [
+        "#define _REGEX_RE_COMP",
+        "#include <sys/types.h>",
+        "#include <regex.h>"
+    ],
+    "re_exec": [
+        "#define _REGEX_RE_COMP",
+        "#include <sys/types.h>",
+        "#include <regex.h>"
+    ],
+    "readdir": [
+        "#include <dirent.h>"
+    ],
+    "readdir_r": [
+        "#include <dirent.h>"
+    ],
+    "realloc": [
+        "#include <stdlib.h>"
+    ],
+    "realpath": [
+        "#include <limits.h>",
+        "#include <stdlib.h>"
+    ],
+    "recno": [
+        "#include <sys/types.h>",
+        "#include <db.h>"
+    ],
+    "regcomp": [
+        "#include <sys/types.h>",
+        "#include <regex.h>"
+    ],
+    "regerror": [
+        "#include <sys/types.h>",
+        "#include <regex.h>"
+    ],
+    "regex": [
+        "#include <sys/types.h>"
+    ],
+    "regexec": [
+        "#include <sys/types.h>",
+        "#include <regex.h>"
+    ],
+    "regfree": [
+        "#include <sys/types.h>",
+        "#include <regex.h>"
+    ],
+    "registerrpc": [],
+    "remainder": [
+        "#include <math.h>"
+    ],
+    "remainderf": [
+        "#include <math.h>"
+    ],
+    "remainderl": [
+        "#include <math.h>"
+    ],
+    "remove": [
+        "#include <stdio.h>"
+    ],
+    "remque": [
+        "#include <search.h>"
+    ],
+    "remquo": [
+        "#include <math.h>"
+    ],
+    "remquof": [
+        "#include <math.h>"
+    ],
+    "remquol": [
+        "#include <math.h>"
+    ],
+    "res_init": [
+        "#include <netinet/in.h>",
+        "#include <arpa/nameser.h>",
+        "#include <resolv.h>"
+    ],
+    "res_mkquery": [
+        "#include <netinet/in.h>",
+        "#include <arpa/nameser.h>",
+        "#include <resolv.h>"
+    ],
+    "res_query": [
+        "#include <netinet/in.h>",
+        "#include <arpa/nameser.h>",
+        "#include <resolv.h>"
+    ],
+    "res_querydomain": [
+        "#include <netinet/in.h>",
+        "#include <arpa/nameser.h>",
+        "#include <resolv.h>"
+    ],
+    "res_search": [
+        "#include <netinet/in.h>",
+        "#include <arpa/nameser.h>",
+        "#include <resolv.h>"
+    ],
+    "res_send": [
+        "#include <netinet/in.h>",
+        "#include <arpa/nameser.h>",
+        "#include <resolv.h>"
+    ],
+    "resolver": [
+        "#include <netinet/in.h>",
+        "#include <arpa/nameser.h>",
+        "#include <resolv.h>"
+    ],
+    "rewind": [
+        "#include <stdio.h>"
+    ],
+    "rewinddir": [
+        "#include <sys/types.h>",
+        "#include <dirent.h>"
+    ],
+    "rexec": [
+        "#include <netdb.h>"
+    ],
+    "rexec_af": [
+        "#include <netdb.h>"
+    ],
+    "rindex": [
+        "#include <strings.h>"
+    ],
+    "rint": [
+        "#include <math.h>"
+    ],
+    "rintf": [
+        "#include <math.h>"
+    ],
+    "rintl": [
+        "#include <math.h>"
+    ],
+    "round": [
+        "#include <math.h>"
+    ],
+    "roundf": [
+        "#include <math.h>"
+    ],
+    "roundl": [
+        "#include <math.h>"
+    ],
+    "rpc": [],
+    "rpmatch": [
+        "#include <stdlib.h>"
+    ],
+    "rresvport": [
+        "#include <netdb.h> /* Or <unistd.h> on some systems */"
+    ],
+    "rresvport_af": [
+        "#include <netdb.h> /* Or <unistd.h> on some systems */"
+    ],
+    "rtime": [
+        "#include <rpc/auth_des.h>"
+    ],
+    "rtnetlink": [
+        "#include <asm/types.h>",
+        "#include <linux/netlink.h>"
+    ],
+    "ruserok": [
+        "#include <netdb.h> /* Or <unistd.h> on some systems */"
+    ],
+    "ruserok_af": [
+        "#include <netdb.h> /* Or <unistd.h> on some systems */"
+    ],
+    "scalb": [
+        "#include <math.h>"
+    ],
+    "scalbf": [
+        "#include <math.h>"
+    ],
+    "scalbl": [
+        "#include <math.h>"
+    ],
+    "scalbln": [
+        "#include <math.h>"
+    ],
+    "scalblnf": [
+        "#include <math.h>"
+    ],
+    "scalblnl": [
+        "#include <math.h>"
+    ],
+    "scalbn": [
+        "#include <math.h>"
+    ],
+    "scalbnf": [
+        "#include <math.h>"
+    ],
+    "scalbnl": [
+        "#include <math.h>"
+    ],
+    "scandir": [
+        "#include <dirent.h>"
+    ],
+    "scandirat": [
+        "#include <dirent.h>",
+        "#include <fcntl.h> /* Definition of AT_* constants */"
+    ],
+    "scanf": [
+        "#include <stdio.h>"
+    ],
+    "sched_getcpu": [
+        "#include <sched.h>"
+    ],
+    "secure_getenv": [
+        "#include <stdlib.h>"
+    ],
+    "seed48": [
+        "#include <stdlib.h>"
+    ],
+    "seed48_r": [
+        "#include <stdlib.h>"
+    ],
+    "seekdir": [
+        "#include <dirent.h>"
+    ],
+    "sem_close": [
+        "#include <semaphore.h>"
+    ],
+    "sem_destroy": [
+        "#include <semaphore.h>"
+    ],
+    "sem_getvalue": [
+        "#include <semaphore.h>"
+    ],
+    "sem_init": [
+        "#include <semaphore.h>"
+    ],
+    "sem_open": [
+        "#include <fcntl.h> /* For O_* constants */",
+        "#include <sys/stat.h> /* For mode constants */",
+        "#include <semaphore.h>"
+    ],
+    "sem_post": [
+        "#include <semaphore.h>"
+    ],
+    "sem_timedwait": [
+        "#include <semaphore.h>"
+    ],
+    "sem_trywait": [
+        "#include <semaphore.h>"
+    ],
+    "sem_unlink": [
+        "#include <semaphore.h>"
+    ],
+    "sem_wait": [
+        "#include <semaphore.h>"
+    ],
+    "setaliasent": [
+        "#include <aliases.h>"
+    ],
+    "setbuf": [
+        "#include <stdio.h>"
+    ],
+    "setbuffer": [
+        "#include <stdio.h>"
+    ],
+    "setcontext": [
+        "#include <ucontext.h>"
+    ],
+    "setenv": [
+        "#include <stdlib.h>"
+    ],
+    "setfsent": [
+        "#include <fstab.h>"
+    ],
+    "setgrent": [
+        "#include <sys/types.h>",
+        "#include <grp.h>"
+    ],
+    "sethostent": [
+        "#include <netdb.h>",
+        "#include <sys/socket.h> /* for AF_INET */"
+    ],
+    "sethostid": [
+        "#include <unistd.h>"
+    ],
+    "setjmp": [
+        "#include <setjmp.h>"
+    ],
+    "setkey": [
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <unistd.h>",
+        "#include <stdlib.h>"
+    ],
+    "setkey_r": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <unistd.h>",
+        "#include <stdlib.h>",
+        "#include <crypt.h>"
+    ],
+    "setlinebuf": [
+        "#include <stdio.h>"
+    ],
+    "setlocale": [
+        "#include <locale.h>"
+    ],
+    "setlogmask": [
+        "#include <syslog.h>"
+    ],
+    "setmntent": [
+        "#include <stdio.h>",
+        "#include <mntent.h>"
+    ],
+    "setnetent": [
+        "#include <netdb.h>"
+    ],
+    "setnetgrent": [
+        "#include <netdb.h>"
+    ],
+    "setprotoent": [
+        "#include <netdb.h>"
+    ],
+    "setpwent": [
+        "#include <sys/types.h>",
+        "#include <pwd.h>"
+    ],
+    "setrpcent": [
+        "#include <netdb.h>"
+    ],
+    "setservent": [
+        "#include <netdb.h>"
+    ],
+    "setspent": [
+        "#include <shadow.h>"
+    ],
+    "setstate": [
+        "#include <stdlib.h>"
+    ],
+    "setstate_r": [
+        "#include <stdlib.h>"
+    ],
+    "setttyent": [
+        "#include <ttyent.h>"
+    ],
+    "setusershell": [
+        "#include <unistd.h>"
+    ],
+    "setutent": [
+        "#include <utmp.h>"
+    ],
+    "setutxent": [
+        "#include <utmp.h>"
+    ],
+    "setvbuf": [
+        "#include <stdio.h>"
+    ],
+    "sgetspent": [
+        "#include <shadow.h>"
+    ],
+    "sgetspent_r": [
+        "#include <shadow.h>"
+    ],
+    "shm_open": [
+        "#include <sys/mman.h>",
+        "#include <sys/stat.h> /* For mode constants */",
+        "#include <fcntl.h> /* For O_* constants */"
+    ],
+    "shm_unlink": [
+        "#include <sys/mman.h>",
+        "#include <sys/stat.h> /* For mode constants */",
+        "#include <fcntl.h> /* For O_* constants */"
+    ],
+    "sigaddset": [
+        "#include <signal.h>"
+    ],
+    "sigandset": [
+        "#include <signal.h>"
+    ],
+    "sigblock": [
+        "#include <signal.h>"
+    ],
+    "sigdelset": [
+        "#include <signal.h>"
+    ],
+    "sigemptyset": [
+        "#include <signal.h>"
+    ],
+    "sigfillset": [
+        "#include <signal.h>"
+    ],
+    "siggetmask": [
+        "#include <signal.h>"
+    ],
+    "sighold": [
+        "#include <signal.h>"
+    ],
+    "sigignore": [
+        "#include <signal.h>"
+    ],
+    "siginterrupt": [
+        "#include <signal.h>"
+    ],
+    "sigisemptyset": [
+        "#include <signal.h>"
+    ],
+    "sigismember": [
+        "#include <signal.h>"
+    ],
+    "siglongjmp": [
+        "#include <setjmp.h>"
+    ],
+    "sigmask": [
+        "#include <signal.h>"
+    ],
+    "signbit": [
+        "#include <math.h>"
+    ],
+    "signgam": [
+        "#include <math.h>"
+    ],
+    "significand": [
+        "#include <math.h>"
+    ],
+    "significandf": [
+        "#include <math.h>"
+    ],
+    "significandl": [
+        "#include <math.h>"
+    ],
+    "sigorset": [
+        "#include <signal.h>"
+    ],
+    "sigpause": [
+        "#include <signal.h>"
+    ],
+    "sigqueue": [
+        "#include <signal.h>"
+    ],
+    "sigrelse": [
+        "#include <signal.h>"
+    ],
+    "sigset": [
+        "#include <signal.h>"
+    ],
+    "sigsetjmp": [
+        "#include <setjmp.h>"
+    ],
+    "sigsetmask": [
+        "#include <signal.h>"
+    ],
+    "sigsetops": [
+        "#include <signal.h>"
+    ],
+    "sigstack": [
+        "#include <signal.h>"
+    ],
+    "sigvec": [
+        "#include <signal.h>"
+    ],
+    "sigwait": [
+        "#include <signal.h>"
+    ],
+    "sin": [
+        "#include <math.h>"
+    ],
+    "sincos": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "sincosf": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "sincosl": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <math.h>"
+    ],
+    "sinf": [
+        "#include <math.h>"
+    ],
+    "sinh": [
+        "#include <math.h>"
+    ],
+    "sinhf": [
+        "#include <math.h>"
+    ],
+    "sinhl": [
+        "#include <math.h>"
+    ],
+    "sinl": [
+        "#include <math.h>"
+    ],
+    "sleep": [
+        "#include <unistd.h>"
+    ],
+    "snprintf": [
+        "#include <stdio.h>"
+    ],
+    "sockatmark": [
+        "#include <sys/socket.h>"
+    ],
+    "sprintf": [
+        "#include <stdio.h>"
+    ],
+    "sqrt": [
+        "#include <math.h>"
+    ],
+    "sqrtf": [
+        "#include <math.h>"
+    ],
+    "sqrtl": [
+        "#include <math.h>"
+    ],
+    "srand": [
+        "#include <stdlib.h>"
+    ],
+    "srand48": [
+        "#include <stdlib.h>"
+    ],
+    "srand48_r": [
+        "#include <stdlib.h>"
+    ],
+    "srandom": [
+        "#include <stdlib.h>"
+    ],
+    "srandom_r": [
+        "#include <stdlib.h>"
+    ],
+    "sscanf": [
+        "#include <stdio.h>"
+    ],
+    "ssignal": [
+        "#include <signal.h>"
+    ],
+    "statvfs": [
+        "#include <sys/statvfs.h>"
+    ],
+    "stdarg": [
+        "#include <stdarg.h>"
+    ],
+    "stderr": [
+        "#include <stdio.h>"
+    ],
+    "stdin": [
+        "#include <stdio.h>"
+    ],
+    "stdio": [
+        "#include <stdio.h>"
+    ],
+    "stdio_ext": [
+        "#include <stdio.h>"
+    ],
+    "stdout": [
+        "#include <stdio.h>"
+    ],
+    "stpcpy": [
+        "#include <string.h>"
+    ],
+    "stpncpy": [
+        "#include <string.h>"
+    ],
+    "strcasecmp": [
+        "#include <strings.h>"
+    ],
+    "strcasestr": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <string.h>"
+    ],
+    "strcat": [
+        "#include <string.h>"
+    ],
+    "strchr": [
+        "#include <string.h>"
+    ],
+    "strchrnul": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <string.h>"
+    ],
+    "strcmp": [
+        "#include <string.h>"
+    ],
+    "strcoll": [
+        "#include <string.h>"
+    ],
+    "strcpy": [
+        "#include <string.h>"
+    ],
+    "strcspn": [
+        "#include <string.h>"
+    ],
+    "strdup": [
+        "#include <string.h>"
+    ],
+    "strdupa": [
+        "#include <string.h>"
+    ],
+    "strerror": [
+        "#include <string.h>"
+    ],
+    "strerror_r": [
+        "#include <string.h>"
+    ],
+    "strfmon": [
+        "#include <monetary.h>"
+    ],
+    "strfry": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <string.h>"
+    ],
+    "strftime": [
+        "#include <time.h>"
+    ],
+    "string": [
+        "#include <strings.h>"
+    ],
+    "strlen": [
+        "#include <string.h>"
+    ],
+    "strncasecmp": [
+        "#include <strings.h>"
+    ],
+    "strncat": [
+        "#include <string.h>"
+    ],
+    "strncmp": [
+        "#include <string.h>"
+    ],
+    "strncpy": [
+        "#include <string.h>"
+    ],
+    "strndup": [
+        "#include <string.h>"
+    ],
+    "strndupa": [
+        "#include <string.h>"
+    ],
+    "strnlen": [
+        "#include <string.h>"
+    ],
+    "strpbrk": [
+        "#include <string.h>"
+    ],
+    "strptime": [
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <time.h>"
+    ],
+    "strrchr": [
+        "#include <string.h>"
+    ],
+    "strsep": [
+        "#include <string.h>"
+    ],
+    "strsignal": [
+        "#include <string.h>"
+    ],
+    "strspn": [
+        "#include <string.h>"
+    ],
+    "strstr": [
+        "#include <string.h>"
+    ],
+    "strtod": [
+        "#include <stdlib.h>"
+    ],
+    "strtof": [
+        "#include <stdlib.h>"
+    ],
+    "strtoimax": [
+        "#include <inttypes.h>"
+    ],
+    "strtok": [
+        "#include <string.h>"
+    ],
+    "strtok_r": [
+        "#include <string.h>"
+    ],
+    "strtol": [
+        "#include <stdlib.h>"
+    ],
+    "strtold": [
+        "#include <stdlib.h>"
+    ],
+    "strtoll": [
+        "#include <stdlib.h>"
+    ],
+    "strtoq": [
+        "#include <stdlib.h>"
+    ],
+    "strtoul": [
+        "#include <stdlib.h>"
+    ],
+    "strtoull": [
+        "#include <stdlib.h>"
+    ],
+    "strtoumax": [
+        "#include <inttypes.h>"
+    ],
+    "strtouq": [
+        "#include <stdlib.h>"
+    ],
+    "strverscmp": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <string.h>"
+    ],
+    "strxfrm": [
+        "#include <string.h>"
+    ],
+    "svc_destroy": [],
+    "svc_freeargs": [],
+    "svc_getargs": [],
+    "svc_getcaller": [],
+    "svc_getreq": [],
+    "svc_getreqset": [],
+    "svc_register": [],
+    "svc_run": [],
+    "svc_sendreply": [],
+    "svc_unregister": [],
+    "svcerr_auth": [],
+    "svcerr_decode": [],
+    "svcerr_noproc": [],
+    "svcerr_noprog": [],
+    "svcerr_progvers": [],
+    "svcerr_systemerr": [],
+    "svcerr_weakauth": [],
+    "svcfd_create": [],
+    "svcraw_create": [],
+    "svctcp_create": [],
+    "svcudp_bufcreate": [],
+    "svcudp_create": [],
+    "swab": [
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <unistd.h>"
+    ],
+    "swapcontext": [
+        "#include <ucontext.h>"
+    ],
+    "swprintf": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "sys_errlist": [
+        "#include <stdio.h>",
+        "#include <errno.h>"
+    ],
+    "sys_nerr": [
+        "#include <stdio.h>",
+        "#include <errno.h>"
+    ],
+    "sysconf": [
+        "#include <unistd.h>"
+    ],
+    "syslog": [
+        "#include <syslog.h>"
+    ],
+    "system": [
+        "#include <stdlib.h>"
+    ],
+    "sysv_signal": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <signal.h>"
+    ],
+    "tan": [
+        "#include <math.h>"
+    ],
+    "tanf": [
+        "#include <math.h>"
+    ],
+    "tanh": [
+        "#include <math.h>"
+    ],
+    "tanhf": [
+        "#include <math.h>"
+    ],
+    "tanhl": [
+        "#include <math.h>"
+    ],
+    "tanl": [
+        "#include <math.h>"
+    ],
+    "tcdrain": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "tcflow": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "tcflush": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "tcgetattr": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "tcgetpgrp": [
+        "#include <unistd.h>"
+    ],
+    "tcgetsid": [
+        "#define _XOPEN_SOURCE 500 /* See feature_test_macros(7) */",
+        "#include <termios.h>"
+    ],
+    "tcsendbreak": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "tcsetattr": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "tcsetpgrp": [
+        "#include <unistd.h>"
+    ],
+    "tdelete": [
+        "#include <search.h>"
+    ],
+    "tdestroy": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <search.h>"
+    ],
+    "telldir": [
+        "#include <dirent.h>"
+    ],
+    "tempnam": [
+        "#include <stdio.h>"
+    ],
+    "termios": [
+        "#include <termios.h>",
+        "#include <unistd.h>"
+    ],
+    "tfind": [
+        "#include <search.h>"
+    ],
+    "tgamma": [
+        "#include <math.h>"
+    ],
+    "tgammaf": [
+        "#include <math.h>"
+    ],
+    "tgammal": [
+        "#include <math.h>"
+    ],
+    "timegm": [
+        "#include <time.h>"
+    ],
+    "timelocal": [
+        "#include <time.h>"
+    ],
+    "timeradd": [
+        "#include <sys/time.h>"
+    ],
+    "timerclear": [
+        "#include <sys/time.h>"
+    ],
+    "timercmp": [
+        "#include <sys/time.h>"
+    ],
+    "timerisset": [
+        "#include <sys/time.h>"
+    ],
+    "timersub": [
+        "#include <sys/time.h>"
+    ],
+    "timezone": [
+        "#include <time.h>"
+    ],
+    "tmpfile": [
+        "#include <stdio.h>"
+    ],
+    "tmpnam": [
+        "#include <stdio.h>"
+    ],
+    "tmpnam_r": [
+        "#include <stdio.h>"
+    ],
+    "toascii": [
+        "#include <ctype.h>"
+    ],
+    "tolower": [
+        "#include <ctype.h>"
+    ],
+    "tolower_l": [
+        "#include <ctype.h>"
+    ],
+    "toupper": [
+        "#include <ctype.h>"
+    ],
+    "toupper_l": [
+        "#include <ctype.h>"
+    ],
+    "towctrans": [
+        "#include <wctype.h>"
+    ],
+    "towlower": [
+        "#include <wctype.h>"
+    ],
+    "towlower_l": [
+        "#include <wctype.h>"
+    ],
+    "towupper": [
+        "#include <wctype.h>"
+    ],
+    "towupper_l": [
+        "#include <wctype.h>"
+    ],
+    "trunc": [
+        "#include <math.h>"
+    ],
+    "truncf": [
+        "#include <math.h>"
+    ],
+    "truncl": [
+        "#include <math.h>"
+    ],
+    "tsearch": [
+        "#include <search.h>"
+    ],
+    "ttyname": [
+        "#include <unistd.h>"
+    ],
+    "ttyname_r": [
+        "#include <unistd.h>"
+    ],
+    "ttyslot": [
+        "#include <unistd.h> /* on BSD-like systems, and Linux */",
+        "#include <stdlib.h> /* on System V-like systems */"
+    ],
+    "twalk": [
+        "#include <search.h>"
+    ],
+    "tzname": [
+        "#include <time.h>"
+    ],
+    "tzset": [
+        "#include <time.h>"
+    ],
+    "ualarm": [
+        "#include <unistd.h>"
+    ],
+    "ulckpwdf": [
+        "#include <shadow.h>"
+    ],
+    "ulimit": [
+        "#include <ulimit.h>"
+    ],
+    "undocumented": [],
+    "ungetc": [
+        "#include <stdio.h>"
+    ],
+    "ungetwc": [
+        "#include <wchar.h>"
+    ],
+    "unlocked_stdio": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "unlockpt": [
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <stdlib.h>"
+    ],
+    "unsetenv": [
+        "#include <stdlib.h>"
+    ],
+    "updwtmp": [
+        "#include <utmp.h>"
+    ],
+    "updwtmpx": [
+        "#include <utmp.h>"
+    ],
+    "uselocale": [
+        "#include <locale.h>"
+    ],
+    "usleep": [
+        "#include <unistd.h>"
+    ],
+    "utmpname": [
+        "#include <utmp.h>"
+    ],
+    "utmpxname": [
+        "#include <utmp.h>"
+    ],
+    "va_arg": [
+        "#include <stdarg.h>"
+    ],
+    "va_copy": [
+        "#include <stdarg.h>"
+    ],
+    "va_end": [
+        "#include <stdarg.h>"
+    ],
+    "va_start": [
+        "#include <stdarg.h>"
+    ],
+    "valloc": [
+        "#include <stdlib.h>"
+    ],
+    "vasprintf": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <stdio.h>"
+    ],
+    "vdprintf": [
+        "#include <stdio.h>",
+        "#include <stdarg.h>"
+    ],
+    "verr": [
+        "#include <err.h>",
+        "#include <stdarg.h>"
+    ],
+    "verrx": [
+        "#include <err.h>",
+        "#include <stdarg.h>"
+    ],
+    "versionsort": [
+        "#include <dirent.h>"
+    ],
+    "vfprintf": [
+        "#include <stdio.h>",
+        "#include <stdarg.h>"
+    ],
+    "vfscanf": [
+        "#include <stdio.h>",
+        "#include <stdarg.h>"
+    ],
+    "vfwprintf": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "vlimit": [
+        "#include <sys/time.h>",
+        "#include <sys/resource.h>"
+    ],
+    "vprintf": [
+        "#include <stdio.h>",
+        "#include <stdarg.h>"
+    ],
+    "vscanf": [
+        "#include <stdio.h>",
+        "#include <stdarg.h>"
+    ],
+    "vsnprintf": [
+        "#include <stdio.h>",
+        "#include <stdarg.h>"
+    ],
+    "vsprintf": [
+        "#include <stdio.h>",
+        "#include <stdarg.h>"
+    ],
+    "vsscanf": [
+        "#include <stdio.h>",
+        "#include <stdarg.h>"
+    ],
+    "vswprintf": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "vsyslog": [
+        "#include <syslog.h>"
+    ],
+    "vtimes": [
+        "#include <sys/time.h>",
+        "#include <sys/resource.h>"
+    ],
+    "vwarn": [
+        "#include <err.h>",
+        "#include <stdarg.h>"
+    ],
+    "vwarnx": [
+        "#include <err.h>",
+        "#include <stdarg.h>"
+    ],
+    "vwprintf": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "warn": [
+        "#include <err.h>"
+    ],
+    "warnx": [
+        "#include <err.h>"
+    ],
+    "wcpcpy": [
+        "#include <wchar.h>"
+    ],
+    "wcpncpy": [
+        "#include <wchar.h>"
+    ],
+    "wcrtomb": [
+        "#include <wchar.h>"
+    ],
+    "wcscasecmp": [
+        "#include <wchar.h>"
+    ],
+    "wcscat": [
+        "#include <wchar.h>"
+    ],
+    "wcschr": [
+        "#include <wchar.h>"
+    ],
+    "wcscmp": [
+        "#include <wchar.h>"
+    ],
+    "wcscpy": [
+        "#include <wchar.h>"
+    ],
+    "wcscspn": [
+        "#include <wchar.h>"
+    ],
+    "wcsdup": [
+        "#include <wchar.h>"
+    ],
+    "wcslen": [
+        "#include <wchar.h>"
+    ],
+    "wcsncasecmp": [
+        "#include <wchar.h>"
+    ],
+    "wcsncat": [
+        "#include <wchar.h>"
+    ],
+    "wcsncmp": [
+        "#include <wchar.h>"
+    ],
+    "wcsncpy": [
+        "#include <wchar.h>"
+    ],
+    "wcsnlen": [
+        "#include <wchar.h>"
+    ],
+    "wcsnrtombs": [
+        "#include <wchar.h>"
+    ],
+    "wcspbrk": [
+        "#include <wchar.h>"
+    ],
+    "wcsrchr": [
+        "#include <wchar.h>"
+    ],
+    "wcsrtombs": [
+        "#include <wchar.h>"
+    ],
+    "wcsspn": [
+        "#include <wchar.h>"
+    ],
+    "wcsstr": [
+        "#include <wchar.h>"
+    ],
+    "wcstoimax": [
+        "#include <stddef.h>",
+        "#include <inttypes.h>"
+    ],
+    "wcstok": [
+        "#include <wchar.h>"
+    ],
+    "wcstombs": [
+        "#include <stdlib.h>"
+    ],
+    "wcstoumax": [
+        "#include <stddef.h>",
+        "#include <inttypes.h>"
+    ],
+    "wcswidth": [
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <wchar.h>"
+    ],
+    "wctob": [
+        "#include <wchar.h>"
+    ],
+    "wctomb": [
+        "#include <stdlib.h>"
+    ],
+    "wctrans": [
+        "#include <wctype.h>"
+    ],
+    "wctype": [
+        "#include <wctype.h>"
+    ],
+    "wcwidth": [
+        "#define _XOPEN_SOURCE /* See feature_test_macros(7) */",
+        "#include <wchar.h>"
+    ],
+    "wmemchr": [
+        "#include <wchar.h>"
+    ],
+    "wmemcmp": [
+        "#include <wchar.h>"
+    ],
+    "wmemcpy": [
+        "#include <wchar.h>"
+    ],
+    "wmemmove": [
+        "#include <wchar.h>"
+    ],
+    "wmempcpy": [
+        "#define _GNU_SOURCE /* See feature_test_macros(7) */",
+        "#include <string.h>",
+        "#include <wchar.h>"
+    ],
+    "wmemset": [
+        "#include <wchar.h>"
+    ],
+    "wordexp": [
+        "#include <wordexp.h>"
+    ],
+    "wordfree": [
+        "#include <wordexp.h>"
+    ],
+    "wprintf": [
+        "#include <stdio.h>",
+        "#include <wchar.h>"
+    ],
+    "xcrypt": [
+        "#include <rpc/des_crypt.h>"
+    ],
+    "xdecrypt": [
+        "#include <rpc/des_crypt.h>"
+    ],
+    "xdr": [],
+    "xdr_accepted_reply": [],
+    "xdr_array": [],
+    "xdr_authunix_parms": [],
+    "xdr_bool": [],
+    "xdr_bytes": [],
+    "xdr_callhdr": [],
+    "xdr_callmsg": [],
+    "xdr_char": [],
+    "xdr_destroy": [],
+    "xdr_double": [],
+    "xdr_enum": [],
+    "xdr_float": [],
+    "xdr_free": [],
+    "xdr_getpos": [],
+    "xdr_inline": [],
+    "xdr_int": [],
+    "xdr_long": [],
+    "xdr_opaque": [],
+    "xdr_opaque_auth": [],
+    "xdr_pmap": [],
+    "xdr_pmaplist": [],
+    "xdr_pointer": [],
+    "xdr_reference": [],
+    "xdr_rejected_reply": [],
+    "xdr_replymsg": [],
+    "xdr_setpos": [],
+    "xdr_short": [],
+    "xdr_string": [],
+    "xdr_u_char": [],
+    "xdr_u_int": [],
+    "xdr_u_long": [],
+    "xdr_u_short": [],
+    "xdr_union": [],
+    "xdr_vector": [],
+    "xdr_void": [],
+    "xdr_wrapstring": [],
+    "xdrmem_create": [],
+    "xdrrec_create": [],
+    "xdrrec_endofrecord": [],
+    "xdrrec_eof": [],
+    "xdrrec_skiprecord": [],
+    "xdrstdio_create": [],
+    "xencrypt": [
+        "#include <rpc/des_crypt.h>"
+    ],
+    "xprt_register": [],
+    "xprt_unregister": [],
+    "y0": [
+        "#include <math.h>"
+    ],
+    "y0f": [
+        "#include <math.h>"
+    ],
+    "y0l": [
+        "#include <math.h>"
+    ],
+    "y1": [
+        "#include <math.h>"
+    ],
+    "y1f": [
+        "#include <math.h>"
+    ],
+    "y1l": [
+        "#include <math.h>"
+    ],
+    "yn": [
+        "#include <math.h>"
+    ],
+    "ynf": [
+        "#include <math.h>"
+    ],
+    "ynl": [
+        "#include <math.h>"
+    ]
+}
