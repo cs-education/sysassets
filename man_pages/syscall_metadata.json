@@ -23837,41 +23837,23 @@
                     }, 
                     {
                         "type": "void *", 
-                        "var": "data"
+                        "var": "buf"
                     }, 
                     {
                         "type": "size_t", 
-                        "var": "length"
+                        "var": "count"
                     }
                 ], 
-                "return_type": "ssize_t read(int fd, void *data, size_t length); ssize_t"
-            }, 
-            {
-                "name": "ioctl", 
-                "parameters": [
-                    {
-                        "type": "int", 
-                        "var": "fd"
-                    }, 
-                    {
-                        "type": "", 
-                        "var": "DSP56K_HOST_CMD"
-                    }, 
-                    {
-                        "type": "int", 
-                        "var": "cmd"
-                    }
-                ], 
-                "return_type": "int ioctl(int fd, DSP56K_UPLOAD, struct dsp56k_upload *program); int ioctl(int fd, DSP56K_SET_TX_WSIZE, int wsize); int ioctl(int fd, DSP56K_SET_RX_WSIZE, int wsize); int ioctl(int fd, DSP56K_HOST_FLAGS, struct dsp56k_host_flags *flags); int"
+                "return_type": "ssize_t"
             }
         ], 
         "includes": [
             {
                 "comments": "", 
-                "file_path": "asm/dsp56k.h"
+                "file_path": "unistd.h"
             }
         ], 
-        "man_page": "dsp56k"
+        "man_page": "write"
     }, 
     {
         "defines": [], 
